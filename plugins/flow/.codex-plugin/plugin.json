@@ -1,0 +1,38 @@
+{
+  "name": "flow",
+  "version": "1.5.0",
+  "description": "Flow agentic workflow plugin with setup, update, and execution skills.",
+  "author": {
+    "name": "Egor Merkushev",
+    "url": "https://github.com/SoundBlaster"
+  },
+  "homepage": "https://github.com/SoundBlaster/Flow",
+  "repository": "https://github.com/SoundBlaster/Flow",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "agentic",
+    "planning",
+    "execution",
+    "review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Flow",
+    "shortDescription": "Set up, update, and run the FLOW workflow",
+    "longDescription": "Provides flow-setup to install/init Flow, flow-update to refresh Flow-managed files safely, and flow-run to execute BRANCH -> SELECT -> PLAN -> EXECUTE -> ARCHIVE -> REVIEW -> FOLLOW-UP -> ARCHIVE-REVIEW.",
+    "developerName": "Egor Merkushev",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/SoundBlaster/Flow",
+    "defaultPrompt": [
+      "Use $flow-setup to install Flow in this repository.",
+      "Use $flow-update to refresh this repository to the latest Flow version.",
+      "Run the next task end-to-end using $flow-run."
+    ],
+    "brandColor": "#1F6FEB"
+  }
+}

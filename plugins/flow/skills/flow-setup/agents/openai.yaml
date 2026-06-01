@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flow Setup"
+  short_description: "Install and initialize Flow in a new repository"
+  default_prompt: "Use $flow-setup to install Flow into this repository and configure it for my stack."
