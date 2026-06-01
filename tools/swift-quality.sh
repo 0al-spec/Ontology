@@ -16,7 +16,11 @@ require_tool() {
 
 run_tests() {
     local scratch="$1"
-    swift test --build-system swiftbuild --scratch-path "$scratch"
+    # Use the default (native) build system: it works on the package's
+    # declared Swift 6.0 floor (`--build-system swiftbuild` requires 6.2+)
+    # and matches the coverage path, which must stay native because
+    # swiftbuild does not emit a usable default.profdata.
+    swift test --scratch-path "$scratch"
 }
 
 run_coverage() {
@@ -51,11 +55,13 @@ if [[ "${GITHUB_ACTIONS:-}" == "true" ]]; then
 else
     swiftlint lint --config .swiftlint.yml
 fi
-swift build --explicit-target-dependency-import-check error
-
 tmp_root="${TMPDIR:-/tmp}"
 scratch="$(mktemp -d "${tmp_root%/}/ontology-quality.XXXXXX")"
 trap 'rm -rf "$scratch"' EXIT
+
+# Run the build gate inside the scratch path too, so it does not write to
+# the repo's default .build/ and all gate artifacts stay contained.
+swift build --explicit-target-dependency-import-check error --scratch-path "$scratch"
 
 if [[ "${RUN_COVERAGE:-0}" == "1" ]]; then
     run_coverage "$scratch"
