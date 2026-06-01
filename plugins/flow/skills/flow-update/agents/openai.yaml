@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flow Update"
+  short_description: "Update Flow files safely in an existing repository"
+  default_prompt: "Use $flow-update to update this repository to the latest pinned Flow version without losing project data."

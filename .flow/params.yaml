@@ -1,0 +1,22 @@
+# Project config for Flow.
+# Safe to edit freely; Flow updates preserve this file.
+
+project:
+  name: Ontology
+  description: Documentation and ontology specifications for the 0AL agent operating system work.
+  language: Markdown
+  package_manager: none
+  default_branch: main
+
+verify:
+  tests: test -f README.md
+  lint: test -f SPECS/Workplan.md
+
+task_system:
+  kind: file
+  project_key: ONT
+  task_url_template: "SPECS/Workplan.md#{task_id}-{task_name_slug}"
+
+structure:
+  source: SPECS/
+  tests: SPECS/
