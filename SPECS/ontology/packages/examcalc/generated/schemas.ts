@@ -85,3 +85,7 @@ export const AnyOntologyEntitySchema = z.discriminatedUnion("$type", [
 ]);
 
 export type AnyOntologyEntity = z.infer<typeof AnyOntologyEntitySchema>;
+
+export function toJsonSchemaFor<T extends z.ZodTypeAny>(schema: T) {
+  return z.toJSONSchema(schema);
+}

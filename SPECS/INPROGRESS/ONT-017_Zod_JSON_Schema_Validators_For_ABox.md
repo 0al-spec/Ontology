@@ -1,6 +1,6 @@
 # PRD: ONT-017 - Zod/JSON Schema Validators for ABox Instances
 
-**Status:** Partially implemented; JSON Schema follow-up required
+**Status:** Implemented; archive pending
 **Priority:** P2  
 **Phase:** Protocol Interfaces and Advanced Validation  
 **Reasoning Effort:** medium  

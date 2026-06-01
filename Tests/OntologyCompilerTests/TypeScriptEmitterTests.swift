@@ -59,4 +59,23 @@ final class TypeScriptEmitterTests: XCTestCase {
         )
         XCTAssertTrue(types.contains("export interface Exam {"), types)
     }
+
+    func testEmitSchemasExportsJsonSchemaHelper() {
+        let ir: [String: Any] = [
+            "classes": [
+                [
+                    "id": "Exam",
+                    "fqid": "examcalc:Exam"
+                ] as [String: Any]
+            ]
+        ]
+
+        let schemas = OntologyCompiler().emitSchemas(ir)
+
+        XCTAssertTrue(
+            schemas.contains("export function toJsonSchemaFor<T extends z.ZodTypeAny>(schema: T)"),
+            schemas
+        )
+        XCTAssertTrue(schemas.contains("return z.toJSONSchema(schema);"), schemas)
+    }
 }
