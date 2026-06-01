@@ -18,4 +18,5 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-001 | Archived REVIEW_ONT-001 report |
 | 2026-06-01 | ONT-001 | Archived Ontology_Layer_And_SpecGraph_Semantic_Import (PASS) |
