@@ -3,21 +3,6 @@ import Foundation
 public final class OntologyCompiler {
     let apiVersion = "ontology.specgraph.io/v1alpha1"
     let kind = "DomainOntologyPackage"
-    let namePattern = #"^[A-Za-z][A-Za-z0-9_]*$"#
-    let statePattern = #"^[a-z][a-z0-9_]*$"#
-    let conceptPattern = #"^([A-Za-z][A-Za-z0-9_]*|[A-Za-z][A-Za-z0-9_.-]*:[A-Za-z][A-Za-z0-9_]*)$"#
-    let idPattern = #"^[a-z][a-z0-9]*(\.[a-z0-9][a-z0-9-]*)+$"#
-    let namespacePattern = #"^[a-z][a-z0-9-]*$"#
-    let versionPattern = #"^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)([-+][0-9A-Za-z.-]+)?$"#
-    let unsafeKeys = Set([
-        "eval", "exec", "executable", "expression", "hook", "hooks",
-        "plugin", "plugins", "posthook", "prehook", "script", "scripts"
-    ])
-    let unsafeValuePatterns = [
-        #"\$\("#, #"`"#, #"<%"#, #"eval\("#, #"child_process"#,
-        #"subprocess"#, #"os\.system"#, #"Runtime\.getRuntime"#
-    ]
-    let unsafeTagPattern = #"!![A-Za-z0-9_.:-]+|!<[^>]+>"#
 
     var diagnostics: [Diagnostic] = []
 

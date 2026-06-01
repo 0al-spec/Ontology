@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 
 extension OntologyCompiler {
     func validate(_ package: LoadedPackage) {
@@ -87,7 +88,9 @@ extension OntologyCompiler {
     ) {
         for name in classes.keys.sorted() {
             let path = "spec.classes.\(name)"
-            validatePattern(name, namePattern, path: path, code: "class.name.invalid")
+            validate(name, path: path, code: "class.name.invalid") {
+                OntologySymbolNameSpec().isSatisfiedBy($0)
+            }
             guard let definition = classes[name] as? JSONObject else {
                 add("class.type", path, "Class definition must be an object")
                 continue
@@ -120,8 +123,7 @@ extension OntologyCompiler {
                 }
                 for (index, refValue) in refs.enumerated() {
                     guard let ref = string(refValue),
-                          matches(ref, conceptPattern),
-                          (isImported(ref, importNamespaces) || isLocal(ref, localNames: classNames, packageNamespace: packageNamespace))
+                          resolves(ref, localNames: classNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces)
                     else {
                         add("protocol.unresolved", "\(path).implements[\(index)]", "Implemented protocol/class reference cannot be resolved")
                         continue
@@ -143,7 +145,9 @@ extension OntologyCompiler {
     ) {
         for name in relations.keys.sorted() {
             let path = "spec.relations.\(name)"
-            validatePattern(name, namePattern, path: path, code: "relation.name.invalid")
+            validate(name, path: path, code: "relation.name.invalid") {
+                OntologySymbolNameSpec().isSatisfiedBy($0)
+            }
             guard let definition = relations[name] as? JSONObject else {
                 add("relation.type", path, "Relation definition must be an object")
                 continue
@@ -177,10 +181,11 @@ extension OntologyCompiler {
         importNamespaces: Set<String>,
         packageNamespace: String
     ) {
-        let allowedEnforceability = Set(["design", "runtime", "manual", "audit"])
         for name in policies.keys.sorted() {
             let path = "spec.policies.\(name)"
-            validatePattern(name, namePattern, path: path, code: "policy.name.invalid")
+            validate(name, path: path, code: "policy.name.invalid") {
+                OntologySymbolNameSpec().isSatisfiedBy($0)
+            }
             guard let definition = policies[name] as? JSONObject else {
                 add("policy.type", path, "Policy definition must be an object")
                 continue
@@ -193,7 +198,7 @@ extension OntologyCompiler {
             }
 
             if let enforceability = requiredString(definition, "enforceability", path: "\(path).enforceability", code: "policy.enforceability.required"),
-               !allowedEnforceability.contains(enforceability) {
+               !AllowedPolicyEnforceabilitySpec().isSatisfiedBy(enforceability) {
                 add("policy.enforceability.invalid", "\(path).enforceability", "Policy enforceability \(enforceability) is invalid")
             }
 
@@ -222,7 +227,9 @@ extension OntologyCompiler {
     ) {
         for name in stateMachines.keys.sorted() {
             let path = "spec.stateMachines.\(name)"
-            validatePattern(name, namePattern, path: path, code: "stateMachine.name.invalid")
+            validate(name, path: path, code: "stateMachine.name.invalid") {
+                OntologySymbolNameSpec().isSatisfiedBy($0)
+            }
             guard let definition = stateMachines[name] as? JSONObject else {
                 add("stateMachine.type", path, "State machine definition must be an object")
                 continue
@@ -235,7 +242,9 @@ extension OntologyCompiler {
                 add("state.states.empty", "\(path).states", "State machine must contain at least one state")
             }
             for (index, state) in states.enumerated() {
-                validatePattern(state, statePattern, path: "\(path).states[\(index)]", code: "state.name.invalid")
+                validate(state, path: "\(path).states[\(index)]", code: "state.name.invalid") {
+                    OntologyStateNameSpec().isSatisfiedBy($0)
+                }
             }
 
             let transitions = requiredArray(definition, "transitions", path: "\(path).transitions", code: "state.transitions.required")
@@ -250,11 +259,11 @@ extension OntologyCompiler {
                 }
                 validateKnownKeys(transition, allowed: ["from", "to", "command", "event"], path: transitionPath)
                 if let from = requiredString(transition, "from", path: "\(transitionPath).from", code: "state.transition.from.required"),
-                   !stateSet.contains(from) {
+                   !DeclaredStateSpec().isSatisfiedBy(StateMembershipContext(state: from, states: stateSet)) {
                     add("state.transition.invalid_state", "\(transitionPath).from", "Transition source state \(from) does not exist")
                 }
                 if let to = requiredString(transition, "to", path: "\(transitionPath).to", code: "state.transition.to.required"),
-                   !stateSet.contains(to) {
+                   !DeclaredStateSpec().isSatisfiedBy(StateMembershipContext(state: to, states: stateSet)) {
                     add("state.transition.invalid_state", "\(transitionPath).to", "Transition target state \(to) does not exist")
                 }
                 if let command = string(transition["command"]),

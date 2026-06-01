@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 import Yams
 
 extension OntologyCompiler {
@@ -30,10 +31,10 @@ extension OntologyCompiler {
         scanUnsafeNode(root, path: "package")
         validateKnownKeys(root, allowed: ["apiVersion", "kind", "metadata", "spec"], path: "package")
 
-        if string(root["apiVersion"]) != apiVersion {
+        if !ExpectedOntologyApiVersionSpec().isSatisfiedBy(string(root["apiVersion"]) ?? "") {
             add("apiVersion.invalid", "apiVersion", "apiVersion must be \(apiVersion)")
         }
-        if string(root["kind"]) != kind {
+        if !ExpectedDomainOntologyPackageKindSpec().isSatisfiedBy(string(root["kind"]) ?? "") {
             add("kind.invalid", "kind", "kind must be \(kind)")
         }
 
@@ -52,9 +53,15 @@ extension OntologyCompiler {
         let namespace = requiredString(metadata, "namespace", path: "metadata.namespace", code: "metadata.required") ?? ""
         let version = requiredString(metadata, "version", path: "metadata.version", code: "metadata.required") ?? ""
 
-        validatePattern(id, idPattern, path: "metadata.id", code: "metadata.invalid")
-        validatePattern(namespace, namespacePattern, path: "metadata.namespace", code: "metadata.invalid")
-        validatePattern(version, versionPattern, path: "metadata.version", code: "metadata.invalid")
+        validate(id, path: "metadata.id", code: "metadata.invalid") {
+            OntologyIdPatternSpec().isSatisfiedBy($0)
+        }
+        validate(namespace, path: "metadata.namespace", code: "metadata.invalid") {
+            OntologyNamespacePatternSpec().isSatisfiedBy($0)
+        }
+        validate(version, path: "metadata.version", code: "metadata.invalid") {
+            OntologySemVerPatternSpec().isSatisfiedBy($0)
+        }
 
         return LoadedPackage(
             path: path,

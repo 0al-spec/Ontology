@@ -23,7 +23,7 @@ let package = Package(
         ),
         .target(
             name: "OntologyCompiler",
-            dependencies: ["Yams"]
+            dependencies: ["Yams", "OntologyRules"]
         ),
         .executableTarget(
             name: "OntologyC",
