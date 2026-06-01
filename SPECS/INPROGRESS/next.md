@@ -4,7 +4,7 @@
 **Phase:** Code Quality and Maintainability
 **Effort:** 9h
 **Dependencies:** ONT-008
-**Status:** Not Started
+**Status:** INPROGRESS
 **PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
 
 ## Description

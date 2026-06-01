@@ -132,7 +132,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-008
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
 - **Acceptance Criteria:**
   - Relation range classification uses a typed decision spec.
