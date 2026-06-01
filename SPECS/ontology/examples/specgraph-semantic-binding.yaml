@@ -7,7 +7,7 @@ spec:
     - ontology: edu.university.examcalc
       namespace: examcalc
       version: 0.1.0
-      source: SPECS/ontology/examples/examcalc.ontology.yaml
+      source: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
       digest: sha256:REPLACE_WITH_RESOLVED_DIGEST
 ---
 apiVersion: specgraph.io/v1alpha1

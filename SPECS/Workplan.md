@@ -43,11 +43,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-001
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-003_examcalc_Golden_Ontology_Package/ONT-003_examcalc_Golden_Ontology_Package.md`
 - **Acceptance Criteria:**
-  - Ontology defines `Exam`, `ExamPolicyProfile`, `CalculatorFunction`, `FunctionSet`, `ExamModeSession`, and audit concepts.
-  - Relations and policies match the PRD.
-  - Example SpecGraph requirement resolves all `examcalc:*` semantic refs.
+  - Complete: Ontology defines `Exam`, `ExamPolicyProfile`, `CalculatorFunction`, `FunctionSet`, `ExamModeSession`, and audit concepts.
+  - Complete: Relations and policies match the PRD.
+  - Complete: Example SpecGraph requirement resolves all `examcalc:*` semantic refs.
 
 #### ONT-004: Ontology Compiler Prototype
 - **Description:** Prototype `ontologyc check` and `ontologyc compile` from YAML to normalized IR and TypeScript SDK artifacts.
