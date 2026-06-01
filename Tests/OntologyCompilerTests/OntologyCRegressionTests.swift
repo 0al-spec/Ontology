@@ -101,6 +101,30 @@ final class OntologyCRegressionTests: XCTestCase {
         XCTAssertTrue(result.stderr.contains("ontologyc compile <package.yaml>"), result.stderr)
     }
 
+    func testOptionValueMayStartWithDash() throws {
+        let output = try makeTemporaryDirectory(name: "ontologyc-compile-dash-value")
+        let result = try ontologyc([
+            "compile",
+            "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml",
+            "--target",
+            "-typescript",
+            "--out",
+            output.path
+        ])
+
+        XCTAssertEqual(result.status, 2, result.combinedOutput)
+        XCTAssertTrue(result.stderr.contains("unsupported target -typescript"), result.stderr)
+        XCTAssertFalse(result.stderr.contains("missing value for --target"), result.stderr)
+    }
+
+    func testDoubleDashAllowsDashPrefixedPositionalArgument() throws {
+        let result = try ontologyc(["check", "--", "-missing-package.yaml"])
+
+        XCTAssertEqual(result.status, 1, result.combinedOutput)
+        XCTAssertTrue(result.combinedOutput.contains("-missing-package.yaml"), result.combinedOutput)
+        XCTAssertFalse(result.stderr.contains("unknown option -missing-package.yaml"), result.stderr)
+    }
+
     func testInvalidFixturesFail() throws {
         let fixtures = [
             "SPECS/ontology/fixtures/invalid/invalid-inheritance.yaml",

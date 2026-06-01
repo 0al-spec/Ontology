@@ -75,15 +75,32 @@ private func parseArguments(
 
     while index < raw.endIndex {
         let value = raw[index]
-        if value.hasPrefix("--") {
-            guard allowedOptions.contains(value) else {
-                usageError("unknown option \(value)", command: command)
+        if value == "--" {
+            index = raw.index(after: index)
+            positional.append(contentsOf: raw[index...])
+            break
+        } else if value.hasPrefix("--") {
+            let parts = value.split(separator: "=", maxSplits: 1).map(String.init)
+            let optionName = parts[0]
+            guard allowedOptions.contains(optionName) else {
+                usageError("unknown option \(optionName)", command: command)
+            }
+            if parts.count == 2 {
+                guard !parts[1].isEmpty else {
+                    usageError("missing value for \(optionName)", command: command)
+                }
+                options[optionName] = parts[1]
+                index = raw.index(after: index)
+                continue
             }
             let next = raw.index(after: index)
-            guard next < raw.endIndex, !raw[next].hasPrefix("-") else {
-                usageError("missing value for \(value)", command: command)
+            guard next < raw.endIndex, raw[next] != "--" else {
+                usageError("missing value for \(optionName)", command: command)
             }
-            options[value] = raw[next]
+            if raw[next].hasPrefix("--"), allowedOptions.contains(raw[next]) {
+                usageError("missing value for \(optionName)", command: command)
+            }
+            options[optionName] = raw[next]
             index = raw.index(after: next)
         } else if value.hasPrefix("-") {
             usageError("unknown option \(value)", command: command)
