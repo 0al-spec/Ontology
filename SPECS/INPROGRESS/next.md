@@ -2,9 +2,9 @@
 
 **Priority:** P1
 **Phase:** Implementation Candidates
-**Effort:** TBD
+**Effort:** 10h
 **Dependencies:** ONT-001
-**Status:** Candidate
+**Status:** Selected
 
 ## Description
 
@@ -12,7 +12,7 @@ Materialize the exam-controlled calculator ontology package from the PRD.
 
 ## Next Step
 
-Run SELECT for ONT-003 after ONT-002 review/archive-review completes.
+Run PLAN for ONT-003 and define the golden `examcalc` ontology package deliverables.
 
 ## Recently Archived
 
