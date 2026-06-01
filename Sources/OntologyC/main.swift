@@ -70,6 +70,80 @@ final class OntologyCompiler {
         return diagnostics
     }
 
+    func validateSpecGraph(bindingPath: String, ontologyIRPath: String, outDirectory: String) throws -> (resolved: Int, gaps: Int) {
+        let ir = try loadJSON(path: ontologyIRPath)
+        let namespace = string(ir["namespace"]) ?? ""
+        let index = conceptRefIndex(ir)
+        let documents = try loadYAMLDocuments(path: bindingPath)
+        let imports = collectOntologyImports(documents)
+        let occurrences = collectRefOccurrences(documents, namespace: namespace)
+
+        var resolvedRefs = [JSONObject]()
+        var gaps = [JSONObject]()
+        var seenResolved = Set<String>()
+        var seenGaps = Set<String>()
+
+        for occurrence in occurrences.sorted(by: { $0.ref < $1.ref }) {
+            if let conceptRef = index[occurrence.ref] {
+                if !seenResolved.contains(occurrence.ref) {
+                    resolvedRefs.append(conceptRef)
+                    seenResolved.insert(occurrence.ref)
+                }
+            } else if !seenGaps.contains(occurrence.ref) {
+                gaps.append(ontologyGap(for: occurrence, ir: ir, ordinal: gaps.count + 1))
+                seenGaps.insert(occurrence.ref)
+            }
+        }
+
+        let outURL = URL(fileURLWithPath: outDirectory)
+        try FileManager.default.createDirectory(at: outURL, withIntermediateDirectories: true)
+        try writeYAML([
+            "apiVersion": "specgraph.io/v1alpha1",
+            "kind": "ConceptRefSet",
+            "metadata": [
+                "ontology": string(ir["id"]) ?? "",
+                "namespace": namespace,
+                "version": string(ir["version"]) ?? ""
+            ],
+            "spec": [
+                "refs": resolvedRefs
+            ]
+        ], to: outURL.appendingPathComponent("concept-refs.yaml"))
+
+        try writeYAML(lockfile(imports: imports, ir: ir, index: index), to: outURL.appendingPathComponent("ontology.lock.yaml"))
+
+        try writeYAML([
+            "apiVersion": "specgraph.io/v1alpha1",
+            "kind": "OntologyGapSet",
+            "metadata": [
+                "source": bindingPath
+            ],
+            "spec": [
+                "gaps": gaps
+            ]
+        ], to: outURL.appendingPathComponent("ontology-gaps.yaml"))
+
+        return (resolvedRefs.count, gaps.count)
+    }
+
+    func diffPackages(from fromPath: String, to toPath: String, outPath: String) throws -> [Diagnostic] {
+        diagnostics = []
+        guard let fromPackage = load(path: fromPath), let toPackage = load(path: toPath) else {
+            return diagnostics
+        }
+        validate(fromPackage)
+        validate(toPackage)
+        if hasErrors(diagnostics) {
+            return diagnostics
+        }
+
+        let fromIR = normalize(fromPackage)
+        let toIR = normalize(toPackage)
+        let report = compatibilityReport(fromIR: fromIR, toIR: toIR)
+        try writeYAML(report, to: URL(fileURLWithPath: outPath))
+        return diagnostics
+    }
+
     func hasErrors(_ diagnostics: [Diagnostic]) -> Bool {
         diagnostics.contains { $0.severity == "error" }
     }
@@ -690,6 +764,230 @@ final class OntologyCompiler {
         """
     }
 
+    private func loadJSON(path: String) throws -> JSONObject {
+        let data = try Data(contentsOf: URL(fileURLWithPath: path))
+        guard let object = try JSONSerialization.jsonObject(with: data) as? JSONObject else {
+            throw NSError(domain: "ontologyc", code: 1, userInfo: [NSLocalizedDescriptionKey: "\(path) is not a JSON object"])
+        }
+        return object
+    }
+
+    private func loadYAMLDocuments(path: String) throws -> [JSONObject] {
+        let source = try String(contentsOf: URL(fileURLWithPath: path), encoding: .utf8)
+        return try source
+            .components(separatedBy: "\n---")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .compactMap { document -> JSONObject? in
+                guard let parsed = try Yams.load(yaml: document) else { return nil }
+                return parsed as? JSONObject
+            }
+    }
+
+    private struct RefOccurrence {
+        let ref: String
+        let artifactKind: String
+        let artifactId: String
+    }
+
+    private func collectRefOccurrences(_ documents: [JSONObject], namespace: String) -> [RefOccurrence] {
+        var occurrences = [RefOccurrence]()
+        for document in documents {
+            let artifactKind = string(document["kind"]) ?? "SpecGraphArtifact"
+            let artifactId = ((document["metadata"] as? JSONObject).flatMap { string($0["id"]) }) ?? "unknown"
+            var refs = Set<String>()
+            collectNamespaceRefs(document, namespace: namespace, refs: &refs)
+            for ref in refs.sorted() {
+                occurrences.append(RefOccurrence(ref: ref, artifactKind: artifactKind, artifactId: artifactId))
+            }
+        }
+        return occurrences
+    }
+
+    private func collectNamespaceRefs(_ value: Any, namespace: String, refs: inout Set<String>) {
+        if let object = value as? JSONObject {
+            for key in object.keys.sorted() {
+                if let child = object[key] {
+                    collectNamespaceRefs(child, namespace: namespace, refs: &refs)
+                }
+            }
+        } else if let array = value as? [Any] {
+            for child in array {
+                collectNamespaceRefs(child, namespace: namespace, refs: &refs)
+            }
+        } else if let scalar = value as? String, scalar.hasPrefix("\(namespace):") {
+            refs.insert(scalar)
+        }
+    }
+
+    private func collectOntologyImports(_ documents: [JSONObject]) -> [JSONObject] {
+        var imports = [JSONObject]()
+        for document in documents {
+            collectOntologyImports(document, imports: &imports)
+        }
+        return imports.sorted {
+            (string($0["namespace"]) ?? "") < (string($1["namespace"]) ?? "")
+        }
+    }
+
+    private func collectOntologyImports(_ value: Any, imports: inout [JSONObject]) {
+        if let object = value as? JSONObject {
+            if let ontologyImports = object["ontologyImports"] as? [Any] {
+                imports.append(contentsOf: ontologyImports.compactMap { $0 as? JSONObject })
+            }
+            for key in object.keys.sorted() {
+                if let child = object[key] {
+                    collectOntologyImports(child, imports: &imports)
+                }
+            }
+        } else if let array = value as? [Any] {
+            for child in array {
+                collectOntologyImports(child, imports: &imports)
+            }
+        }
+    }
+
+    private func conceptRefIndex(_ ir: JSONObject) -> [String: JSONObject] {
+        let ontologyId = string(ir["id"]) ?? ""
+        let namespace = string(ir["namespace"]) ?? ""
+        let version = string(ir["version"]) ?? ""
+        var index = [String: JSONObject]()
+
+        func addRefs(from items: [JSONObject], kind: (JSONObject) -> String, uriPrefix: String) {
+            for item in items {
+                guard let id = string(item["id"]) else { continue }
+                let alias = "\(namespace):\(id)"
+                index[alias] = [
+                    "ontology": ontologyId,
+                    "version": version,
+                    "namespace": namespace,
+                    "concept": id,
+                    "kindOfConcept": kind(item),
+                    "alias": alias,
+                    "uri": string(item["uri"]) ?? "ontology://\(ontologyId)/\(version)/\(uriPrefix)/\(id)"
+                ]
+            }
+        }
+
+        addRefs(from: ir["classes"] as? [JSONObject] ?? [], kind: { self.string($0["kind"]) ?? "Class" }, uriPrefix: "classes")
+        addRefs(from: ir["relations"] as? [JSONObject] ?? [], kind: { _ in "Relation" }, uriPrefix: "relations")
+        addRefs(from: ir["policies"] as? [JSONObject] ?? [], kind: { _ in "Policy" }, uriPrefix: "policies")
+        addRefs(from: ir["stateMachines"] as? [JSONObject] ?? [], kind: { _ in "StateMachine" }, uriPrefix: "stateMachines")
+        return index
+    }
+
+    private func ontologyGap(for occurrence: RefOccurrence, ir: JSONObject, ordinal: Int) -> JSONObject {
+        [
+            "apiVersion": "specgraph.io/v1alpha1",
+            "kind": "OntologyGap",
+            "metadata": [
+                "id": String(format: "gap-%03d", ordinal)
+            ],
+            "spec": [
+                "sourceArtifact": [
+                    "kind": occurrence.artifactKind,
+                    "id": occurrence.artifactId
+                ],
+                "missingConcept": occurrence.ref,
+                "targetOntology": string(ir["id"]) ?? "",
+                "requestedAction": [
+                    "type": "proposeOntologyDelta"
+                ]
+            ]
+        ]
+    }
+
+    private func lockfile(imports: [JSONObject], ir: JSONObject, index: [String: JSONObject]) -> JSONObject {
+        let namespace = string(ir["namespace"]) ?? ""
+        let aliases = index.keys.sorted().reduce(into: JSONObject()) { output, alias in
+            output[refName(alias)] = alias
+        }
+        let importObject = imports.first { string($0["namespace"]) == namespace }
+        return [
+            "apiVersion": "specgraph.io/v1alpha1",
+            "kind": "OntologyLockfile",
+            "metadata": [
+                "project": "semantic-validation"
+            ],
+            "spec": [
+                "resolved": [[
+                    "ontology": string(importObject?["ontology"]) ?? string(ir["id"]) ?? "",
+                    "namespace": namespace,
+                    "version": string(importObject?["version"]) ?? string(ir["version"]) ?? "",
+                    "digest": string(ir["sourceDigest"]) ?? "",
+                    "registryUri": string(importObject?["source"]) ?? "",
+                    "aliases": aliases
+                ]]
+            ]
+        ]
+    }
+
+    private func compatibilityReport(fromIR: JSONObject, toIR: JSONObject) -> JSONObject {
+        let fromClasses = mapById(fromIR["classes"] as? [JSONObject] ?? [])
+        let toClasses = mapById(toIR["classes"] as? [JSONObject] ?? [])
+        let fromRelations = mapById(fromIR["relations"] as? [JSONObject] ?? [])
+        let toRelations = mapById(toIR["relations"] as? [JSONObject] ?? [])
+
+        let addedClasses = sortedDifference(Set(toClasses.keys), Set(fromClasses.keys)).map { "\(string(toIR["namespace"]) ?? ""):\($0)" }
+        let removedClasses = sortedDifference(Set(fromClasses.keys), Set(toClasses.keys)).map { "\(string(fromIR["namespace"]) ?? ""):\($0)" }
+        let addedRelations = sortedDifference(Set(toRelations.keys), Set(fromRelations.keys)).map { "\(string(toIR["namespace"]) ?? ""):\($0)" }
+        let removedRelations = sortedDifference(Set(fromRelations.keys), Set(toRelations.keys)).map { "\(string(fromIR["namespace"]) ?? ""):\($0)" }
+
+        var breakingChanges = [String]()
+        breakingChanges.append(contentsOf: removedClasses.map { "remove class \($0)" })
+        breakingChanges.append(contentsOf: removedRelations.map { "remove relation \($0)" })
+
+        for relationId in Set(fromRelations.keys).intersection(Set(toRelations.keys)).sorted() {
+            guard let before = fromRelations[relationId], let after = toRelations[relationId] else { continue }
+            if jsonComparable(before["domain"]) != jsonComparable(after["domain"]) {
+                breakingChanges.append("change relation domain \(string(fromIR["namespace"]) ?? ""):\(relationId)")
+            }
+            if jsonComparable(before["range"]) != jsonComparable(after["range"]) {
+                breakingChanges.append("change relation range \(string(fromIR["namespace"]) ?? ""):\(relationId)")
+            }
+        }
+
+        return [
+            "apiVersion": "ontology.specgraph.io/v1alpha1",
+            "kind": "OntologyCompatibilityReport",
+            "metadata": [
+                "from": "\(string(fromIR["id"]) ?? "")@\(string(fromIR["version"]) ?? "")",
+                "to": "\(string(toIR["id"]) ?? "")@\(string(toIR["version"]) ?? "")"
+            ],
+            "result": [
+                "compatible": breakingChanges.isEmpty,
+                "requiredSpecGraphActions": breakingChanges.isEmpty ? ["updateLockfile"] : ["reviewBreakingOntologyChange"]
+            ],
+            "changes": [
+                "addedClasses": addedClasses,
+                "addedRelations": addedRelations,
+                "removedClasses": removedClasses,
+                "removedRelations": removedRelations,
+                "breakingChanges": breakingChanges
+            ]
+        ]
+    }
+
+    private func mapById(_ items: [JSONObject]) -> [String: JSONObject] {
+        items.reduce(into: [String: JSONObject]()) { output, item in
+            if let id = string(item["id"]) {
+                output[id] = item
+            }
+        }
+    }
+
+    private func sortedDifference(_ lhs: Set<String>, _ rhs: Set<String>) -> [String] {
+        Array(lhs.subtracting(rhs)).sorted()
+    }
+
+    private func jsonComparable(_ value: Any?) -> String {
+        guard let value else { return "" }
+        if !JSONSerialization.isValidJSONObject(value) {
+            return String(describing: value)
+        }
+        return jsonText(value)
+    }
+
     private func refLiteral(ir: JSONObject, item: JSONObject, kindKey: String? = nil, fixedKind: String? = nil) -> JSONObject {
         let id = string(item["id"]) ?? ""
         let namespace = string(ir["namespace"]) ?? ""
@@ -876,6 +1174,11 @@ final class OntologyCompiler {
         try text.write(to: url, atomically: true, encoding: .utf8)
     }
 
+    private func writeYAML(_ object: Any, to url: URL) throws {
+        let text = try Yams.dump(object: object) + "\n"
+        try text.write(to: url, atomically: true, encoding: .utf8)
+    }
+
     private func write(text: String, to url: URL) throws {
         try text.write(to: url, atomically: true, encoding: .utf8)
     }
@@ -919,6 +1222,8 @@ func usage() -> Never {
     Usage:
       swift run ontologyc check <package.yaml>
       swift run ontologyc compile <package.yaml> --target typescript --out <directory>
+      swift run ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory>
+      swift run ontologyc diff --from <old-package.yaml> --to <new-package.yaml> --out <report.yaml>
 
     """, stderr)
     exit(2)
@@ -958,6 +1263,37 @@ case "compile":
         print("ontologyc compile: PASS \(outDirectory)")
     } catch {
         fputs("ontologyc compile: FAIL \(error)\n", stderr)
+        exit(1)
+    }
+
+case "validate-specgraph":
+    guard args.count == 6 else { usage() }
+    let bindingPath = args[1]
+    guard args[2] == "--ontology-ir", args[4] == "--out" else {
+        usage()
+    }
+    do {
+        let result = try compiler.validateSpecGraph(bindingPath: bindingPath, ontologyIRPath: args[3], outDirectory: args[5])
+        print("ontologyc validate-specgraph: PASS \(bindingPath) resolved=\(result.resolved) gaps=\(result.gaps)")
+    } catch {
+        fputs("ontologyc validate-specgraph: FAIL \(error)\n", stderr)
+        exit(1)
+    }
+
+case "diff":
+    guard args.count == 7 else { usage() }
+    guard args[1] == "--from", args[3] == "--to", args[5] == "--out" else {
+        usage()
+    }
+    do {
+        let diagnostics = try compiler.diffPackages(from: args[2], to: args[4], outPath: args[6])
+        if compiler.hasErrors(diagnostics) {
+            compiler.printDiagnostics(diagnostics)
+            exit(1)
+        }
+        print("ontologyc diff: PASS \(args[6])")
+    } catch {
+        fputs("ontologyc diff: FAIL \(error)\n", stderr)
         exit(1)
     }
 

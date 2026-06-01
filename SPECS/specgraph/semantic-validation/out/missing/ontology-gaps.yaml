@@ -1,0 +1,19 @@
+apiVersion: specgraph.io/v1alpha1
+kind: OntologyGapSet
+metadata:
+  source: SPECS/specgraph/semantic-validation/missing-ref-semantic-binding.yaml
+spec:
+  gaps:
+  - apiVersion: specgraph.io/v1alpha1
+    kind: OntologyGap
+    metadata:
+      id: gap-001
+    spec:
+      missingConcept: examcalc:CASFunction
+      requestedAction:
+        type: proposeOntologyDelta
+      sourceArtifact:
+        id: REQ-EXAMCALC-CAS
+        kind: Requirement
+      targetOntology: edu.university.examcalc
+

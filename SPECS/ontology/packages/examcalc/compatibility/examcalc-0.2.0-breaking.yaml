@@ -1,0 +1,234 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: edu.university.examcalc
+  namespace: examcalc
+  version: 0.2.0
+  publisher: OntologyService
+  source: SPECS/raw/Агентная_Операционная_Система_-_Branch_SpecGraph_-_Онтологии.json
+  approvalStatus: draft
+spec:
+  imports:
+    - id: specgraph.foundation
+      namespace: sg
+      version: 0.1.0
+
+  classes:
+    Exam:
+      extends: sg:DomainEntity
+      implements:
+        - sg:Auditable
+      description: University exam that requires a controlled calculator policy.
+      central: true
+
+    ExamSession:
+      extends: sg:DomainEntity
+      implements:
+        - sg:TimeBound
+      description: Time-bounded sitting of an exam.
+
+    TabletDevice:
+      extends: sg:DomainEntity
+      implements:
+        - sg:DeviceBound
+        - sg:Auditable
+      description: Managed tablet used during an exam.
+
+    CalculatorFunction:
+      extends: sg:Capability
+      implements:
+        - sg:RestrictableCapability
+      description: Calculator capability that can be allowed or denied by an exam policy.
+      central: true
+
+    FunctionSet:
+      extends: sg:DomainEntity
+      description: Named collection of calculator functions.
+
+    ExamPolicyProfile:
+      extends: sg:DomainEntity
+      implements:
+        - sg:Versioned
+        - sg:Approvable
+        - sg:Signable
+        - sg:Auditable
+        - sg:TimeBound
+      description: Signed and approved policy that governs allowed calculator behavior for an exam.
+      central: true
+
+    ExamModeSession:
+      extends: sg:DomainEntity
+      implements:
+        - sg:Auditable
+        - sg:DeviceBound
+      lifecycle: ExamModeSessionState
+      description: Runtime enforcement session for controlled calculator use.
+      central: true
+
+    PolicyViolation:
+      extends: sg:Event
+      implements:
+        - sg:Auditable
+      description: Attempted or detected violation of the active exam calculator policy.
+
+    AuditLogEntry:
+      extends: sg:DomainEntity
+      implements:
+        - sg:Auditable
+      description: Durable audit record for policy enforcement and review.
+
+    StartExamMode:
+      extends: sg:Command
+      description: Request to start exam mode for a tablet and selected exam policy.
+
+    VerifyDeviceAndPolicy:
+      extends: sg:Command
+      description: Request to verify that the active policy is signed and available on the target device.
+
+    LockCalculator:
+      extends: sg:Command
+      description: Request to lock calculator access after a detected policy violation.
+
+    EndExamMode:
+      extends: sg:Command
+      description: Request to complete an active exam mode session.
+
+  protocols: {}
+
+  relations:
+    requires_policy:
+      domain: Exam
+      range: ExamPolicyProfile
+      cardinality:
+        min: 1
+        max: 1
+      description: Every exam requires exactly one active policy profile.
+
+    has_session:
+      domain: Exam
+      range: ExamSession
+      cardinality:
+        min: 0
+        max: "*"
+
+    allows:
+      domain: ExamPolicyProfile
+      range: FunctionSet
+      cardinality:
+        min: 0
+        max: "*"
+
+    denies:
+      domain: ExamPolicyProfile
+      range: CalculatorFunction
+      cardinality:
+        min: 0
+        max: "*"
+
+    includes_function:
+      domain: FunctionSet
+      range: CalculatorFunction
+      cardinality:
+        min: 0
+        max: "*"
+
+    enforces:
+      domain: ExamModeSession
+      range: ExamPolicyProfile
+      cardinality:
+        min: 1
+        max: 1
+
+    occurred_during:
+      domain: PolicyViolation
+      range: ExamModeSession
+      cardinality:
+        min: 1
+        max: 1
+
+    records:
+      domain: AuditLogEntry
+      range:
+        oneOf:
+          - PolicyViolation
+          - ExamModeSession
+      cardinality:
+        min: 0
+        max: "*"
+
+  policies:
+    DenyByDefaultPolicy:
+      extends: sg:Policy
+      enforceability: runtime
+      appliesTo:
+        - ExamPolicyProfile
+      text: Any calculator function not explicitly allowed by the active policy must be denied.
+
+    PolicyMustBeSigned:
+      extends: sg:Policy
+      enforceability: runtime
+      appliesTo:
+        - ExamPolicyProfile
+      text: Exam policy profile must be signed before activation.
+
+    PolicyMustBeDeviceVerifiable:
+      extends: sg:Policy
+      enforceability: runtime
+      appliesTo:
+        - ExamModeSession
+      text: Exam mode session must verify the active policy on the device before entering active state.
+
+    NoNetworkDuringExam:
+      extends: sg:Policy
+      enforceability: runtime
+      appliesTo:
+        - ExamModeSession
+      text: Calculator app must not access network during exam mode unless explicitly allowed.
+
+  stateMachines:
+    ExamModeSessionState:
+      states:
+        - not_started
+        - pending_device_verification
+        - active
+        - violation_detected
+        - locked
+        - completed
+        - failed
+      transitions:
+        - from: not_started
+          to: pending_device_verification
+          command: StartExamMode
+        - from: pending_device_verification
+          to: active
+          command: VerifyDeviceAndPolicy
+        - from: active
+          to: violation_detected
+          event: PolicyViolation
+        - from: violation_detected
+          to: locked
+          command: LockCalculator
+        - from: active
+          to: completed
+          command: EndExamMode
+
+  compatibility:
+    patch:
+      allowed:
+        - add description
+        - add alias
+        - add non-breaking metadata
+    minor:
+      allowed:
+        - add class
+        - add relation
+        - add optional property
+        - add protocol
+    major:
+      requires:
+        - remove class
+        - remove relation
+        - change relation domain
+        - change relation range
+        - make optional field required
+        - change meaning of central concept

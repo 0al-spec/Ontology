@@ -24,7 +24,7 @@ Extend the Swift `ontologyc` prototype so SpecGraph semantic references can be v
 - Generate `OntologyLockfile` data from declared imports and resolved ontology metadata.
 - Generate `OntologyGap` instead of inventing local pseudo-concepts.
 - Classify compatibility changes deterministically from package diffs.
-- Keep implementation in Swift; no Ruby in ONT-005.
+- Keep implementation entirely in Swift.
 
 ## Objective
 
@@ -157,4 +157,3 @@ swift run ontologyc diff \
 | Known ontology refs resolve to canonical URIs. | D1, D3, D6, FR-001 |
 | Missing refs create `OntologyGap`. | D1, D4, D6, FR-002 |
 | Compatibility reports classify breaking ontology changes. | D2, D5, D6, FR-004 |
-

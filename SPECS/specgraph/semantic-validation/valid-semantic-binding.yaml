@@ -1,0 +1,48 @@
+apiVersion: specgraph.io/v1alpha1
+kind: SpecGraphProject
+metadata:
+  id: university-exam-calculator
+spec:
+  ontologyImports:
+    - ontology: edu.university.examcalc
+      namespace: examcalc
+      version: 0.1.0
+      source: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+      digest: sha256:REPLACE_WITH_RESOLVED_DIGEST
+---
+apiVersion: specgraph.io/v1alpha1
+kind: Requirement
+metadata:
+  id: REQ-EXAMCALC-001
+spec:
+  title: Exam-specific calculator function enforcement
+  statement: >
+    The calculator shall enforce exam-specific allowed and denied function
+    sets, require signed device-verifiable policy activation, lock the session
+    after policy violations, and preserve audit evidence for review.
+  semanticRefs:
+    - examcalc:Exam
+    - examcalc:ExamSession
+    - examcalc:ExamPolicyProfile
+    - examcalc:CalculatorFunction
+    - examcalc:FunctionSet
+    - examcalc:ExamModeSession
+    - examcalc:PolicyViolation
+    - examcalc:AuditLogEntry
+    - examcalc:StartExamMode
+    - examcalc:VerifyDeviceAndPolicy
+    - examcalc:LockCalculator
+    - examcalc:EndExamMode
+    - examcalc:requires_policy
+    - examcalc:has_session
+    - examcalc:allows
+    - examcalc:denies
+    - examcalc:includes_function
+    - examcalc:enforces
+    - examcalc:occurred_during
+    - examcalc:records
+    - examcalc:DenyByDefaultPolicy
+    - examcalc:PolicyMustBeSigned
+    - examcalc:PolicyMustBeDeviceVerifiable
+    - examcalc:NoNetworkDuringExam
+    - examcalc:ExamModeSessionState

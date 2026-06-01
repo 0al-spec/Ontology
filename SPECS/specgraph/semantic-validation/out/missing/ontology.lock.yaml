@@ -1,0 +1,39 @@
+apiVersion: specgraph.io/v1alpha1
+kind: OntologyLockfile
+metadata:
+  project: semantic-validation
+spec:
+  resolved:
+  - aliases:
+      AuditLogEntry: examcalc:AuditLogEntry
+      CalculatorFunction: examcalc:CalculatorFunction
+      DenyByDefaultPolicy: examcalc:DenyByDefaultPolicy
+      EndExamMode: examcalc:EndExamMode
+      Exam: examcalc:Exam
+      ExamModeSession: examcalc:ExamModeSession
+      ExamModeSessionState: examcalc:ExamModeSessionState
+      ExamPolicyProfile: examcalc:ExamPolicyProfile
+      ExamSession: examcalc:ExamSession
+      FunctionSet: examcalc:FunctionSet
+      LockCalculator: examcalc:LockCalculator
+      NoNetworkDuringExam: examcalc:NoNetworkDuringExam
+      PolicyMustBeDeviceVerifiable: examcalc:PolicyMustBeDeviceVerifiable
+      PolicyMustBeSigned: examcalc:PolicyMustBeSigned
+      PolicyViolation: examcalc:PolicyViolation
+      StartExamMode: examcalc:StartExamMode
+      TabletDevice: examcalc:TabletDevice
+      VerifyDeviceAndPolicy: examcalc:VerifyDeviceAndPolicy
+      allows: examcalc:allows
+      denies: examcalc:denies
+      enforces: examcalc:enforces
+      has_session: examcalc:has_session
+      includes_function: examcalc:includes_function
+      occurred_during: examcalc:occurred_during
+      records: examcalc:records
+      requires_policy: examcalc:requires_policy
+    digest: sha256:81cbad5a88e7d6f1b0479508e991638b40775b7be3341d0d1c8ada1ed2667a82
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    registryUri: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+    version: 0.1.0
+

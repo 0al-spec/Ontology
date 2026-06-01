@@ -1,0 +1,184 @@
+apiVersion: specgraph.io/v1alpha1
+kind: ConceptRefSet
+metadata:
+  namespace: examcalc
+  ontology: edu.university.examcalc
+  version: 0.1.0
+spec:
+  refs:
+  - alias: examcalc:AuditLogEntry
+    concept: AuditLogEntry
+    kindOfConcept: DomainEntity
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/AuditLogEntry
+    version: 0.1.0
+  - alias: examcalc:CalculatorFunction
+    concept: CalculatorFunction
+    kindOfConcept: Capability
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/CalculatorFunction
+    version: 0.1.0
+  - alias: examcalc:DenyByDefaultPolicy
+    concept: DenyByDefaultPolicy
+    kindOfConcept: Policy
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/policies/DenyByDefaultPolicy
+    version: 0.1.0
+  - alias: examcalc:EndExamMode
+    concept: EndExamMode
+    kindOfConcept: Command
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/EndExamMode
+    version: 0.1.0
+  - alias: examcalc:Exam
+    concept: Exam
+    kindOfConcept: DomainEntity
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/Exam
+    version: 0.1.0
+  - alias: examcalc:ExamModeSession
+    concept: ExamModeSession
+    kindOfConcept: DomainEntity
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/ExamModeSession
+    version: 0.1.0
+  - alias: examcalc:ExamModeSessionState
+    concept: ExamModeSessionState
+    kindOfConcept: StateMachine
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/stateMachines/ExamModeSessionState
+    version: 0.1.0
+  - alias: examcalc:ExamPolicyProfile
+    concept: ExamPolicyProfile
+    kindOfConcept: DomainEntity
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/ExamPolicyProfile
+    version: 0.1.0
+  - alias: examcalc:ExamSession
+    concept: ExamSession
+    kindOfConcept: DomainEntity
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/ExamSession
+    version: 0.1.0
+  - alias: examcalc:FunctionSet
+    concept: FunctionSet
+    kindOfConcept: DomainEntity
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/FunctionSet
+    version: 0.1.0
+  - alias: examcalc:LockCalculator
+    concept: LockCalculator
+    kindOfConcept: Command
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/LockCalculator
+    version: 0.1.0
+  - alias: examcalc:NoNetworkDuringExam
+    concept: NoNetworkDuringExam
+    kindOfConcept: Policy
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/policies/NoNetworkDuringExam
+    version: 0.1.0
+  - alias: examcalc:PolicyMustBeDeviceVerifiable
+    concept: PolicyMustBeDeviceVerifiable
+    kindOfConcept: Policy
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/policies/PolicyMustBeDeviceVerifiable
+    version: 0.1.0
+  - alias: examcalc:PolicyMustBeSigned
+    concept: PolicyMustBeSigned
+    kindOfConcept: Policy
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/policies/PolicyMustBeSigned
+    version: 0.1.0
+  - alias: examcalc:PolicyViolation
+    concept: PolicyViolation
+    kindOfConcept: Event
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/PolicyViolation
+    version: 0.1.0
+  - alias: examcalc:StartExamMode
+    concept: StartExamMode
+    kindOfConcept: Command
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/StartExamMode
+    version: 0.1.0
+  - alias: examcalc:VerifyDeviceAndPolicy
+    concept: VerifyDeviceAndPolicy
+    kindOfConcept: Command
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/classes/VerifyDeviceAndPolicy
+    version: 0.1.0
+  - alias: examcalc:allows
+    concept: allows
+    kindOfConcept: Relation
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/relations/allows
+    version: 0.1.0
+  - alias: examcalc:denies
+    concept: denies
+    kindOfConcept: Relation
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/relations/denies
+    version: 0.1.0
+  - alias: examcalc:enforces
+    concept: enforces
+    kindOfConcept: Relation
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/relations/enforces
+    version: 0.1.0
+  - alias: examcalc:has_session
+    concept: has_session
+    kindOfConcept: Relation
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/relations/has_session
+    version: 0.1.0
+  - alias: examcalc:includes_function
+    concept: includes_function
+    kindOfConcept: Relation
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/relations/includes_function
+    version: 0.1.0
+  - alias: examcalc:occurred_during
+    concept: occurred_during
+    kindOfConcept: Relation
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/relations/occurred_during
+    version: 0.1.0
+  - alias: examcalc:records
+    concept: records
+    kindOfConcept: Relation
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/relations/records
+    version: 0.1.0
+  - alias: examcalc:requires_policy
+    concept: requires_policy
+    kindOfConcept: Relation
+    namespace: examcalc
+    ontology: edu.university.examcalc
+    uri: ontology://edu.university.examcalc/0.1.0/relations/requires_policy
+    version: 0.1.0
+
