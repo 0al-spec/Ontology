@@ -55,11 +55,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-001, ONT-002
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-004_Ontology_Compiler_Prototype/ONT-004_Ontology_Compiler_Prototype.md`
 - **Acceptance Criteria:**
-  - Compiler parses YAML as inert data.
-  - Compiler emits deterministic normalized IR.
-  - Compiler emits `refs.ts`, `types.ts`, `relations.ts`, `policies.ts`, `state-machines.ts`, `registry.ts`, and validators.
+  - Complete: Compiler parses YAML as inert data.
+  - Complete: Compiler emits deterministic normalized IR.
+  - Complete: Compiler emits `refs.ts`, `types.ts`, `relations.ts`, `policies.ts`, `state-machines.ts`, `registry.ts`, and validators.
 
 ---
 

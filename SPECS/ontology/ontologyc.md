@@ -13,7 +13,7 @@
 ### `ontologyc check`
 
 ```bash
-ontologyc check SPECS/ontology/examples/examcalc.ontology.yaml
+swift run ontologyc check SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
 ```
 
 Behavior:
@@ -31,10 +31,9 @@ Behavior:
 ### `ontologyc compile`
 
 ```bash
-ontologyc compile SPECS/ontology/examples/examcalc.ontology.yaml \
+swift run ontologyc compile SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
   --target typescript \
-  --out packages/ontologies/examcalc/generated \
-  --emit refs,types,relations,policies,state-machines,registry,validators,json-schema,lockfile
+  --out SPECS/ontology/packages/examcalc/generated
 ```
 
 Behavior:
@@ -106,3 +105,14 @@ changes:
 - No ABox instance validation implementation.
 - No execution of generated code during checks.
 - No registry service implementation.
+
+## ONT-004 Prototype
+
+The repository prototype is a Swift Package Manager executable target named `ontologyc`. It uses the MIT-licensed `Yams` parser and emits the initial TypeScript-oriented artifacts required by this contract:
+
+```bash
+swift run ontologyc check SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+swift run ontologyc compile SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
+  --target typescript \
+  --out SPECS/ontology/packages/examcalc/generated
+```
