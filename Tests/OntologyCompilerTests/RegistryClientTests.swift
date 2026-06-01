@@ -6,6 +6,7 @@ private final class MockURLProtocol: URLProtocol {
     nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
 
     override class func canInit(with request: URLRequest) -> Bool { true }
+
     override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
     override func startLoading() {
@@ -46,17 +47,22 @@ final class RegistryClientTests: XCTestCase {
         RegistryClient(session: stubSession)
     }
 
-    private func okResponse(for request: URLRequest) -> HTTPURLResponse {
-        HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+    private func stubResponse(for request: URLRequest, status: Int = 200) -> HTTPURLResponse {
+        guard let url = request.url,
+              let response = HTTPURLResponse(url: url, statusCode: status, httpVersion: nil, headerFields: nil)
+        else {
+            preconditionFailure("Could not create stub HTTPURLResponse for request")
+        }
+        return response
     }
 
     // MARK: - GET
 
     func testGetReturnsResponseBody() throws {
         let expected = Data("payload".utf8)
-        MockURLProtocol.requestHandler = { request in (self.okResponse(for: request), expected) }
+        MockURLProtocol.requestHandler = { request in (self.stubResponse(for: request), expected) }
 
-        let url = URL(string: "https://registry.example.com/ontologies/test/1.0.0")!
+        let url = try XCTUnwrap(URL(string: "https://registry.example.com/ontologies/test/1.0.0"))
         let result = try makeClient().get(url: url, token: nil)
         XCTAssertEqual(result, expected)
     }
@@ -65,10 +71,10 @@ final class RegistryClientTests: XCTestCase {
         var capturedAuth: String?
         MockURLProtocol.requestHandler = { request in
             capturedAuth = request.value(forHTTPHeaderField: "Authorization")
-            return (self.okResponse(for: request), Data())
+            return (self.stubResponse(for: request), Data())
         }
 
-        let url = URL(string: "https://registry.example.com/ontologies/test/1.0.0")!
+        let url = try XCTUnwrap(URL(string: "https://registry.example.com/ontologies/test/1.0.0"))
         _ = try makeClient().get(url: url, token: "secret-token")
         XCTAssertEqual(capturedAuth, "Bearer secret-token")
     }
@@ -77,10 +83,10 @@ final class RegistryClientTests: XCTestCase {
         var capturedAuth: String?
         MockURLProtocol.requestHandler = { request in
             capturedAuth = request.value(forHTTPHeaderField: "Authorization")
-            return (self.okResponse(for: request), Data())
+            return (self.stubResponse(for: request), Data())
         }
 
-        let url = URL(string: "https://registry.example.com/ontologies/test/1.0.0")!
+        let url = try XCTUnwrap(URL(string: "https://registry.example.com/ontologies/test/1.0.0"))
         _ = try makeClient().get(url: url, token: nil)
         XCTAssertNil(capturedAuth)
     }
@@ -94,10 +100,10 @@ final class RegistryClientTests: XCTestCase {
         MockURLProtocol.requestHandler = { request in
             capturedBody = request.httpBody
             capturedContentType = request.value(forHTTPHeaderField: "Content-Type")
-            return (self.okResponse(for: request), Data())
+            return (self.stubResponse(for: request), Data())
         }
 
-        let url = URL(string: "https://registry.example.com/ontologies/test/1.0.0")!
+        let url = try XCTUnwrap(URL(string: "https://registry.example.com/ontologies/test/1.0.0"))
         try makeClient().put(url: url, body: body, token: nil)
         XCTAssertEqual(capturedBody, body)
         XCTAssertEqual(capturedContentType, "application/json")
@@ -106,15 +112,13 @@ final class RegistryClientTests: XCTestCase {
     // MARK: - Error handling
 
     func testGetThrowsHTTPErrorOn404() throws {
-        MockURLProtocol.requestHandler = { request in
-            let resp = HTTPURLResponse(url: request.url!, statusCode: 404, httpVersion: nil, headerFields: nil)!
-            return (resp, Data("not found".utf8))
-        }
+        MockURLProtocol.requestHandler = { request in (self.stubResponse(for: request, status: 404), Data("not found".utf8)) }
 
-        let url = URL(string: "https://registry.example.com/ontologies/missing/1.0.0")!
+        let url = try XCTUnwrap(URL(string: "https://registry.example.com/ontologies/missing/1.0.0"))
         XCTAssertThrowsError(try makeClient().get(url: url, token: nil)) { error in
-            guard case RegistryError.httpError(let code, _) = error as! RegistryError else {
-                return XCTFail("Expected httpError, got \(error)")
+            guard let registryError = error as? RegistryError,
+                  case .httpError(let code, _) = registryError else {
+                return XCTFail("Expected RegistryError.httpError, got \(error)")
             }
             XCTAssertEqual(code, 404)
         }
@@ -124,11 +128,10 @@ final class RegistryClientTests: XCTestCase {
         var attempts = 0
         MockURLProtocol.requestHandler = { request in
             attempts += 1
-            let resp = HTTPURLResponse(url: request.url!, statusCode: 401, httpVersion: nil, headerFields: nil)!
-            return (resp, Data("unauthorized".utf8))
+            return (self.stubResponse(for: request, status: 401), Data("unauthorized".utf8))
         }
 
-        let url = URL(string: "https://registry.example.com/ontologies/test/1.0.0")!
+        let url = try XCTUnwrap(URL(string: "https://registry.example.com/ontologies/test/1.0.0"))
         XCTAssertThrowsError(try makeClient().get(url: url, token: nil))
         XCTAssertEqual(attempts, 1, "4xx errors must not be retried")
     }
@@ -139,14 +142,12 @@ final class RegistryClientTests: XCTestCase {
         var attempts = 0
         MockURLProtocol.requestHandler = { request in
             attempts += 1
-            if attempts < 3 {
-                let resp = HTTPURLResponse(url: request.url!, statusCode: 500, httpVersion: nil, headerFields: nil)!
-                return (resp, Data("server error".utf8))
-            }
-            return (self.okResponse(for: request), Data("ok".utf8))
+            return attempts < 3
+                ? (self.stubResponse(for: request, status: 500), Data("server error".utf8))
+                : (self.stubResponse(for: request), Data("ok".utf8))
         }
 
-        let url = URL(string: "https://registry.example.com/ontologies/test/1.0.0")!
+        let url = try XCTUnwrap(URL(string: "https://registry.example.com/ontologies/test/1.0.0"))
         let result = try makeClient().get(url: url, token: nil)
         XCTAssertEqual(attempts, 3)
         XCTAssertEqual(String(data: result, encoding: .utf8), "ok")
@@ -156,20 +157,20 @@ final class RegistryClientTests: XCTestCase {
         var attempts = 0
         MockURLProtocol.requestHandler = { request in
             attempts += 1
-            let resp = HTTPURLResponse(url: request.url!, statusCode: 500, httpVersion: nil, headerFields: nil)!
-            return (resp, Data("always fails".utf8))
+            return (self.stubResponse(for: request, status: 500), Data("always fails".utf8))
         }
 
-        let url = URL(string: "https://registry.example.com/ontologies/test/1.0.0")!
+        let url = try XCTUnwrap(URL(string: "https://registry.example.com/ontologies/test/1.0.0"))
         XCTAssertThrowsError(try makeClient().get(url: url, token: nil)) { error in
-            guard case RegistryError.httpError(500, _) = error as! RegistryError else {
-                return XCTFail("Expected httpError(500), got \(error)")
+            guard let registryError = error as? RegistryError,
+                  case .httpError(500, _) = registryError else {
+                return XCTFail("Expected RegistryError.httpError(500), got \(error)")
             }
         }
         XCTAssertEqual(attempts, 3)
     }
 
-    // MARK: - compatibilityReport logic (no HTTP)
+    // MARK: - compatibilityReport (no HTTP)
 
     func testCompatibilityReportBreakingClassRemoval() {
         let compiler = OntologyCompiler()

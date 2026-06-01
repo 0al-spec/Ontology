@@ -16,6 +16,7 @@ enum RegistryError: Error, CustomStringConvertible {
 
 private final class SyncBox<T>: @unchecked Sendable {
     var value: T
+
     init(_ value: T) { self.value = value }
 }
 
