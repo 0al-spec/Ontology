@@ -4,8 +4,8 @@
 **Phase:** Code Quality and Maintainability
 **Effort:** 10h
 **Dependencies:** ONT-006
-**Status:** Not Started
-**PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
+**Status:** INPROGRESS
+**PRD:** `SPECS/INPROGRESS/ONT-007_ontologyc_Compiler_Module_Split.md`
 
 ## Description
 
