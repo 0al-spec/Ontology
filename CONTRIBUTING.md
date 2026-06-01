@@ -9,9 +9,20 @@ any feature.
 ## Making changes
 
 1. Branch from `main`. Use the prefix that matches the task ID, e.g.
-   `claude/ont-018-registry-cli`.
-2. Run `swift build` and `swift test` before pushing; the CI gate enforces
-   lint, format, build, and test coverage.
+   `codex/ont-018-registry-cli`.
+2. Run the local quality gate before pushing:
+
+   ```bash
+   bash tools/swift-quality.sh
+   ```
+
+   To include the same coverage report mode used by CI:
+
+   ```bash
+   RUN_COVERAGE=1 bash tools/swift-quality.sh
+   ```
+
+   The CI gate enforces lint, format, build, tests, and coverage.
 3. Keep commits focused. One logical change per commit.
 
 ## Code conventions
@@ -54,6 +65,9 @@ commit so the test never goes red on `main`.
   `Tests/OntologyCompilerTests/`.
 - Every new CLI command needs an argument-parsing test (flag-order independence,
   `--help` output).
+- Competency-question and SpecGraph semantic-reference tests should resolve
+  references through `OntologyRules` decision specs instead of duplicating lookup
+  logic in tests.
 
 ## Pull requests
 
