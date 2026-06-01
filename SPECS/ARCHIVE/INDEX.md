@@ -19,6 +19,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-002 | Archived REVIEW_ONT-002 report |
 | 2026-06-01 | ONT-002 | Archived Ontology_Package_Schema_and_Fixtures (PASS) |
 | 2026-06-01 | ONT-001 | Archived REVIEW_ONT-001 report |
 | 2026-06-01 | ONT-001 | Archived Ontology_Layer_And_SpecGraph_Semantic_Import (PASS) |
