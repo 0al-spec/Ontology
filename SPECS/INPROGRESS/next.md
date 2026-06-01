@@ -1,34 +1,33 @@
-# Next Task: ONT-007 - `ontologyc` Compiler Module Split
+# Next Task: ONT-008 - OntologyRules Specification Extraction
 
 **Priority:** P1
 **Phase:** Code Quality and Maintainability
-**Effort:** 10h
-**Dependencies:** ONT-006
+**Effort:** 9h
+**Dependencies:** ONT-007
 **Status:** Not Started
 **PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
 
 ## Description
 
-Split the current monolithic Swift compiler implementation into a thin CLI executable and an importable `OntologyCompiler` target with focused compiler phase files.
+Move current validation predicates into named `SpecificationCore` specifications for package shape, metadata, references, security, relations, policies, and state machines.
 
 ## Next Step
 
-Run the Flow lifecycle for ONT-007 starting from BRANCH/SELECT, then perform a behavior-preserving module split under the ONT-006 regression harness.
+Run the Flow lifecycle for ONT-008 starting from BRANCH/SELECT, then extract validation predicates without changing compiler behavior.
 
 ## TODO Summary
 
 | ID | Task | Effort |
 |---|---|---:|
-| T-003 | Split `OntologyC` executable from compiler core | 5h |
-| T-004 | Move compiler phases into focused files | 5h |
+| T-006 | Extract metadata, package shape, and reference specs | 4h |
+| T-007 | Extract security, relation, policy, and state machine specs | 5h |
 
-Total: **10h**.
+Total: **9h**.
 
 ## Upcoming Tasks
 
 | Task ID | Title | Dependencies | Status |
 |---|---|---|---|
-| ONT-008 | OntologyRules Specification Extraction | ONT-007 | Not Started |
 | ONT-009 | Ontology DecisionSpec Migration | ONT-008 | Not Started |
 | ONT-010 | Specification-Driven Refactor Documentation and Audit | ONT-009 | Not Started |
 
@@ -36,6 +35,7 @@ Total: **10h**.
 
 | Task ID | Archived | Verdict | Folder |
 |---|---|---|---|
+| ONT-007 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-007_ontologyc_Compiler_Module_Split/` |
 | ONT-006 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-006_SpecificationCore_Baseline_and_Regression_Harness/` |
 | ONT-005 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-005_SpecGraph_Semantic_Reference_Validation/` |
 | ONT-004 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-004_Ontology_Compiler_Prototype/` |
