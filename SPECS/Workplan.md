@@ -132,15 +132,15 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-008
 - **Parallelizable:** no
-- **Status:** PRD Ready
-- **PRD:** `SPECS/INPROGRESS/ONT-009_Ontology_DecisionSpec_Migration.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-009_Ontology_DecisionSpec_Migration/ONT-009_Ontology_DecisionSpec_Migration.md`
 - **Acceptance Criteria:**
-  - Relation range classification uses a typed decision spec.
-  - Concept reference resolution uses a typed decision spec.
-  - SpecGraph reference validation uses typed resolved-vs-gap decisions.
-  - Compatibility diff uses typed compatible-vs-breaking decisions.
-  - Decision tests cover all migrated branches.
-  - Baseline regression tests and generated output hashes remain stable.
+  - Complete: Relation range classification uses a typed decision spec.
+  - Complete: Concept reference resolution uses a typed decision spec.
+  - Complete: SpecGraph reference validation uses typed resolved-vs-gap decisions.
+  - Complete: Compatibility diff uses typed compatible-vs-breaking decisions.
+  - Complete: Decision tests cover all migrated branches.
+  - Complete: Baseline regression tests and generated output hashes remain stable.
 
 #### ONT-010: Specification-Driven Refactor Documentation and Audit
 - **Description:** Finalize documentation, validation reporting, and quality gates for the SpecificationCore-based `ontologyc` refactor.

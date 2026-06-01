@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-009 | [ONT-009_Ontology_DecisionSpec_Migration/](ONT-009_Ontology_DecisionSpec_Migration/) | 2026-06-01 | PASS |
 | ONT-008 | [ONT-008_OntologyRules_Specification_Extraction/](ONT-008_OntologyRules_Specification_Extraction/) | 2026-06-01 | PASS |
 | ONT-007 | [ONT-007_ontologyc_Compiler_Module_Split/](ONT-007_ontologyc_Compiler_Module_Split/) | 2026-06-01 | PASS |
 | ONT-006 | [ONT-006_SpecificationCore_Baseline_and_Regression_Harness/](ONT-006_SpecificationCore_Baseline_and_Regression_Harness/) | 2026-06-01 | PASS |
@@ -25,6 +26,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-009 | Archived Ontology_DecisionSpec_Migration (PASS) |
 | 2026-06-01 | ONT-008 | Archived REVIEW_ONT-008 report |
 | 2026-06-01 | ONT-008 | Archived OntologyRules_Specification_Extraction (PASS) |
 | 2026-06-01 | ONT-007 | Archived REVIEW_ONT-007 report |

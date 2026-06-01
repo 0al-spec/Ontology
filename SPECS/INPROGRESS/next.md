@@ -1,39 +1,37 @@
-# Next Task: ONT-009 - Ontology DecisionSpec Migration
+# Next Task: ONT-010 - Specification-Driven Refactor Documentation and Audit
 
 **Priority:** P1
 **Phase:** Code Quality and Maintainability
-**Effort:** 9h
-**Dependencies:** ONT-008
-**Status:** PRD Ready
-**PRD:** `SPECS/INPROGRESS/ONT-009_Ontology_DecisionSpec_Migration.md`
+**Effort:** 5h
+**Dependencies:** ONT-009
+**Status:** Not Started
+**PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
 
 ## Description
 
-Move classification logic into typed `SpecificationCore` decision specs for relation range shape, concept ref resolution, SpecGraph resolved/gap classification, compatibility changes, and CLI command classification where useful.
+Finalize documentation, validation reporting, and quality gates for the SpecificationCore-based `ontologyc` refactor.
 
 ## Next Step
 
-Run the Flow lifecycle for ONT-009 starting from BRANCH/SELECT, then migrate classification branches into typed decision specs without changing compiler behavior.
+Run the Flow lifecycle for ONT-010 starting from BRANCH/SELECT, then document the final module boundaries and complete the audit/no-diff validation pass.
 
 ## TODO Summary
 
 | ID | Task | Effort |
 |---|---|---:|
-| T-008 | Introduce decision specs for relation range and concept resolution branches | 4h |
-| T-009 | Migrate SpecGraph gap and compatibility change classification | 5h |
+| T-010 | Update compiler documentation and final validation audit | 5h |
 
-Total: **9h**.
+Total: **5h**.
 
 ## Upcoming Tasks
 
-| Task ID | Title | Dependencies | Status |
-|---|---|---|---|
-| ONT-010 | Specification-Driven Refactor Documentation and Audit | ONT-009 | Not Started |
+No pending ONT tasks in the current Workplan slice.
 
 ## Recently Archived
 
 | Task ID | Archived | Verdict | Folder |
 |---|---|---|---|
+| ONT-009 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-009_Ontology_DecisionSpec_Migration/` |
 | ONT-008 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-008_OntologyRules_Specification_Extraction/` |
 | ONT-007 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-007_ontologyc_Compiler_Module_Split/` |
 | ONT-006 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-006_SpecificationCore_Baseline_and_Regression_Harness/` |
