@@ -25,6 +25,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-008 | Archived REVIEW_ONT-008 report |
 | 2026-06-01 | ONT-008 | Archived OntologyRules_Specification_Extraction (PASS) |
 | 2026-06-01 | ONT-007 | Archived REVIEW_ONT-007 report |
 | 2026-06-01 | ONT-007 | Archived ontologyc_Compiler_Module_Split (PASS) |
