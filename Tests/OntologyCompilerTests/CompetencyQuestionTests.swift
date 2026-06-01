@@ -21,37 +21,29 @@ final class CompetencyQuestionTests: XCTestCase {
                 .path
         )
         let conceptIndex = compiler.conceptRefIndex(ir)
-        let resolver = SpecGraphRefDecisionSpec()
-
-        var resolvedByQuestion = [String: [String]]()
-        var gapsByQuestion = [String: [String]]()
+        let resolver = OntologyReferenceSetResolutionSpec()
+        var decisionsByQuestion = [String: OntologyReferenceSetResolution]()
 
         for question in questions {
-            for reference in question.references {
-                let decision = try XCTUnwrap(
-                    resolver.decide(SpecGraphRefDecisionContext(ref: reference, conceptIndex: conceptIndex)),
-                    "No decision for \(reference) in \(question.id)"
+            decisionsByQuestion[question.id] = try XCTUnwrap(resolver.decide(
+                OntologyReferenceSetResolutionContext(
+                    references: question.references,
+                    conceptIndex: conceptIndex
                 )
-
-                switch decision {
-                case .resolved:
-                    resolvedByQuestion[question.id, default: []].append(reference)
-                case .gap:
-                    gapsByQuestion[question.id, default: []].append(reference)
-                }
-            }
+            ), "\(question.id) reference-set decision should not be nil")
         }
 
         for question in questions where question.id != "CQ-005" {
-            XCTAssertEqual(gapsByQuestion[question.id] ?? [], [], "\(question.id) should resolve all references")
+            let decision = try XCTUnwrap(decisionsByQuestion[question.id])
+            XCTAssertTrue(decision.allResolved, "\(question.id) should resolve all references")
             XCTAssertEqual(
-                Set(resolvedByQuestion[question.id] ?? []),
+                Set(decision.resolved),
                 Set(question.references),
                 "\(question.id) resolved reference set drifted"
             )
         }
 
-        XCTAssertEqual(gapsByQuestion["CQ-005"] ?? [], ["examcalc:CASFunction"])
+        XCTAssertEqual(decisionsByQuestion["CQ-005"]?.gaps, ["examcalc:CASFunction"])
         let gap = compiler.ontologyGap(
             for: OntologyCompiler.RefOccurrence(
                 ref: "examcalc:CASFunction",
