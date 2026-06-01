@@ -196,6 +196,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Origin:** Post-implementation code review (PR #13).
 - **Acceptance Criteria:**
   - `force_try`/`force_unwrapping` on the serialization path in `CompilerHelpers.swift` are replaced with safe error handling.
+  - `force_cast`, `force_try`, `force_unwrapping`, and implicitly unwrapped optionals are enforced as SwiftLint errors in local and CI quality gates.
   - `cyclomatic_complexity`/`function_parameter_count` in `PackageValidation.swift` and `function_body_length` in `Normalization.swift` are brought below the configured thresholds.
   - `swiftlint` reports zero warnings; the gate is optionally switched to `--strict` so regressions fail CI.
 
