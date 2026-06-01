@@ -10,6 +10,8 @@ final class OntologyCRegressionTests: XCTestCase {
         "relations.ts",
         "policies.ts",
         "state-machines.ts",
+        "protocols.ts",
+        "schemas.ts",
         "registry.ts",
         "validators.ts"
     ]

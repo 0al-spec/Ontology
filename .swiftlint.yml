@@ -45,10 +45,17 @@ file_length:
   error: 800
 
 force_try:
-  severity: warning
+  severity: error
 
 force_unwrapping:
-  severity: warning
+  severity: error
+
+force_cast:
+  severity: error
+
+implicitly_unwrapped_optional:
+  mode: all
+  severity: error
 
 function_body_length:
   warning: 80

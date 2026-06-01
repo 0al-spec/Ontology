@@ -29,6 +29,10 @@ extension OntologyCompiler {
         var commandNames = Set<String>()
         var eventNames = Set<String>()
 
+        let protocols = (spec["protocols"] as? JSONObject) ?? [:]
+        let protocolNames = Set(protocols.keys)
+
+        validateProtocols(protocols)
         validateClasses(
             classes,
             classNames: classNames,
@@ -37,6 +41,12 @@ extension OntologyCompiler {
             packageNamespace: package.namespace,
             commandNames: &commandNames,
             eventNames: &eventNames
+        )
+        validateImplementsRefs(
+            classes,
+            protocolNames: protocolNames,
+            importNamespaces: importNamespaces,
+            packageNamespace: package.namespace
         )
         validateRelations(
             relations,
@@ -55,6 +65,12 @@ extension OntologyCompiler {
             stateMachines,
             commandNames: commandNames,
             eventNames: eventNames,
+            packageNamespace: package.namespace
+        )
+        validateProtocolConformance(
+            classes: classes,
+            protocols: protocols,
+            relations: relations,
             packageNamespace: package.namespace
         )
     }
@@ -116,23 +132,41 @@ extension OntologyCompiler {
 
             _ = requiredString(definition, "description", path: "\(path).description", code: "class.description.required")
 
-            if let implements = definition["implements"] {
-                guard let refs = implements as? [Any] else {
-                    add("class.implements.type", "\(path).implements", "implements must be an array")
-                    continue
-                }
-                for (index, refValue) in refs.enumerated() {
-                    guard let ref = string(refValue),
-                          resolves(ref, localNames: classNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces)
-                    else {
-                        add("protocol.unresolved", "\(path).implements[\(index)]", "Implemented protocol/class reference cannot be resolved")
-                        continue
-                    }
-                }
-            }
-
             if let lifecycle = string(definition["lifecycle"]), !stateMachineNames.contains(lifecycle) {
                 add("class.lifecycle.unresolved", "\(path).lifecycle", "Lifecycle state machine \(lifecycle) cannot be resolved")
+            }
+        }
+    }
+
+    func validateImplementsRefs(
+        _ classes: JSONObject,
+        protocolNames: Set<String>,
+        importNamespaces: Set<String>,
+        packageNamespace: String
+    ) {
+        for name in classes.keys.sorted() {
+            guard let definition = classes[name] as? JSONObject,
+                  let implements = definition["implements"] else { continue }
+            let path = "spec.classes.\(name)"
+            guard let refs = implements as? [Any] else {
+                add("class.implements.type", "\(path).implements", "implements must be an array")
+                continue
+            }
+            for (index, refValue) in refs.enumerated() {
+                guard let ref = string(refValue),
+                      resolves(ref, localNames: protocolNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces)
+                else {
+                    add("protocol.unresolved", "\(path).implements[\(index)]", "Implemented protocol reference cannot be resolved")
+                    continue
+                }
+                if ref.contains(":"),
+                   !ref.hasPrefix("\(packageNamespace):") {
+                    warn(
+                        "protocol.imported.emit_unsupported",
+                        "\(path).implements[\(index)]",
+                        "Imported protocol reference \(ref) resolves but is not emitted as a local TypeScript protocol interface"
+                    )
+                }
             }
         }
     }

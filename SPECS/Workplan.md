@@ -196,6 +196,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Origin:** Post-implementation code review (PR #13).
 - **Acceptance Criteria:**
   - `force_try`/`force_unwrapping` on the serialization path in `CompilerHelpers.swift` are replaced with safe error handling.
+  - `force_cast`, `force_try`, `force_unwrapping`, and implicitly unwrapped optionals are enforced as SwiftLint errors in local and CI quality gates.
   - `cyclomatic_complexity`/`function_parameter_count` in `PackageValidation.swift` and `function_body_length` in `Normalization.swift` are brought below the configured thresholds.
   - `swiftlint` reports zero warnings; the gate is optionally switched to `--strict` so regressions fail CI.
 
@@ -221,6 +222,62 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Acceptance Criteria:**
   - `central: true` is reduced to the governing concept(s) justified by the source, or the multi-central semantics are explicitly documented.
   - Regenerated SDK artifacts and regression baselines are updated to match.
+
+---
+
+## Phase 6: Protocol Interfaces and Advanced Validation
+
+#### ONT-016: Protocol Interfaces and Compiler Support
+- **Description:** Wire up the `protocols` section and `implements` array that already exist in the YAML schema but are ignored by the compiler. Add validation, normalization, and TypeScript emit so classes can declare conformance to named protocols (e.g. `Signable`, `Auditable`) and the compiler generates corresponding interfaces and intersection types.
+- **Priority:** P2
+- **Dependencies:** ONT-010
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** `SPECS/INPROGRESS/ONT-016_Protocol_Interfaces_And_Compiler_Support.md`
+- **Acceptance Criteria:**
+  - Protocol names validate against `OntologySymbolNameSpec`.
+  - `implements` refs resolve to declared or imported protocols; unresolved refs produce diagnostics.
+  - Classes that implement a protocol are checked for `requiredFields` and `requiredRelations`; violations produce `E_PROTO_FIELD_MISSING` / `E_PROTO_RELATION_MISSING`.
+  - Normalized IR includes a `protocols` array and each class carries `implementedProtocols`.
+  - `protocols.ts` is emitted with one TypeScript interface per protocol.
+  - `types.ts` emits intersection types for conforming classes.
+  - `registry.ts` includes a `protocols` entry.
+  - Packages without protocols produce identical outputs to today.
+
+#### ONT-017: Zod/JSON Schema Validators for ABox Instances
+- **Description:** Extend `emitValidators` to generate a `schemas.ts` file with per-class Zod schemas, a discriminated-union `AnyOntologyEntitySchema`, and a `toJsonSchemaFor` utility. Protocol-required fields are injected into conforming class schemas once ONT-016 lands.
+- **Priority:** P2
+- **Dependencies:** ONT-016
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** `SPECS/INPROGRESS/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md`
+- **Acceptance Criteria:**
+  - `schemas.ts` is emitted alongside existing outputs for every `compile` invocation.
+  - Each class produces a `<ClassName>Schema` Zod object with `$type` literal and optional `id` field.
+  - `AnyOntologyEntitySchema` is a `z.discriminatedUnion` on `$type` covering all classes.
+  - `toJsonSchemaFor` converts any class schema to JSON Schema draft-2020-12.
+  - `validators.ts` exports a `parseOntologyEntity` wrapper; the `_ = ir` no-op is removed.
+  - Protocol `requiredFields` appear in conforming class schemas (conditional on ONT-016).
+  - Existing regression hashes are unchanged.
+
+---
+
+## Phase 7: Registry and Distribution
+
+#### ONT-018: CLI Registry Commands (publish, pull, compat-check)
+- **Description:** Add `ontologyc publish`, `ontologyc pull`, and `ontologyc compat-check` commands so authors can distribute packages through a semver registry, download published ontologies, and verify backward compatibility against a live registry version.
+- **Priority:** P2
+- **Dependencies:** ONT-010, ONT-014
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** `SPECS/INPROGRESS/ONT-018_CLI_Registry_Commands.md`
+- **Acceptance Criteria:**
+  - `publish` runs `check` before upload; packages with errors are not published.
+  - `publish` reads the bearer token from `--token` or `ONTOLOGYC_TOKEN`; `--token` takes precedence.
+  - `pull` verifies the `sourceDigest` of the downloaded IR; tampering produces `E_REGISTRY_DIGEST_MISMATCH`.
+  - `compat-check` exits non-zero on breaking changes, zero on fully compatible diffs.
+  - All three commands retry up to 3 times with exponential back-off on transient errors.
+  - Existing commands and regression hashes are unaffected.
 
 ---
 
