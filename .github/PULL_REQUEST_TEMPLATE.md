@@ -6,28 +6,28 @@
 
 <!-- What should be true after this PR is merged? Keep this concrete and reviewable. -->
 
-- 
+- TODO
 
 ## Changes
 
 <!-- Summarize the implementation, docs, tests, or workflow changes. -->
 
-- 
+- TODO
 
 ## Validation
 
 <!-- List the exact commands or checks that were run. Do not claim checks that were not run. -->
 
-- 
+- TODO
 
 ## Boundaries and Non-Goals
 
 <!-- Call out intentional limits, security boundaries, or things this PR explicitly does not change. -->
 
-- 
+- TODO
 
 ## Notes
 
 <!-- Optional follow-up context, migration notes, screenshots, or review hints. -->
 
-- 
+- TODO
