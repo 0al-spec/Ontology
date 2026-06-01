@@ -1,0 +1,91 @@
+apiVersion: specgraph.io/v1alpha1
+kind: SpecGraphProject
+metadata:
+  id: university-exam-calculator
+spec:
+  ontologyImports:
+    - ontology: edu.university.examcalc
+      namespace: examcalc
+      version: 0.1.0
+      source: SPECS/ontology/examples/examcalc.ontology.yaml
+      digest: sha256:REPLACE_WITH_RESOLVED_DIGEST
+---
+apiVersion: specgraph.io/v1alpha1
+kind: Requirement
+metadata:
+  id: REQ-001
+spec:
+  title: Exam-specific function profiles
+  statement: >
+    The calculator shall support different allowed and denied function sets
+    for different exams.
+  semanticRefs:
+    - examcalc:Exam
+    - examcalc:ExamPolicyProfile
+    - examcalc:CalculatorFunction
+    - examcalc:allows
+    - examcalc:denies
+    - examcalc:requires_policy
+---
+apiVersion: specgraph.io/v1alpha1
+kind: TestCase
+metadata:
+  id: TEST-003
+spec:
+  title: Unsigned or unverifiable policy cannot activate exam mode
+  verifies:
+    - requirement: REQ-001
+    - concept: examcalc:ExamPolicyProfile
+    - concept: examcalc:ExamModeSession
+    - policy: examcalc:PolicyMustBeSigned
+    - policy: examcalc:PolicyMustBeDeviceVerifiable
+  given:
+    activePolicy:
+      concept: examcalc:ExamPolicyProfile
+      signature: missing
+  when:
+    command:
+      concept: examcalc:StartExamMode
+  then:
+    expected:
+      concept: examcalc:ExamModeSession
+      state: not_started
+---
+apiVersion: specgraph.io/v1alpha1
+kind: SemanticBinding
+metadata:
+  id: sb-REQ-001
+spec:
+  artifact:
+    kind: Requirement
+    id: REQ-001
+  semanticRefs:
+    - examcalc:Exam
+    - examcalc:ExamPolicyProfile
+    - examcalc:CalculatorFunction
+    - examcalc:allows
+    - examcalc:denies
+---
+apiVersion: specgraph.io/v1alpha1
+kind: OntologyGap
+metadata:
+  id: gap-001
+spec:
+  sourceArtifact:
+    kind: Requirement
+    id: REQ-001
+  missingConcept: examcalc:CASFunction
+  targetOntology: edu.university.examcalc
+  requestedAction:
+    type: proposeOntologyDelta
+---
+apiVersion: specgraph.io/v1alpha1
+kind: OntologyDeltaRequest
+metadata:
+  id: odr-gap-001
+spec:
+  gap: gap-001
+  targetOntology: edu.university.examcalc
+  baseVersion: 0.1.0
+  requestedConcepts:
+    - examcalc:CASFunction
