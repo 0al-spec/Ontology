@@ -1,21 +1,22 @@
-# Next Task: ONT-002 — Ontology Package Schema and Fixtures
+# Next Task: ONT-003 — `examcalc` Golden Ontology Package
 
 **Priority:** P1
 **Phase:** Implementation Candidates
-**Effort:** 8h
+**Effort:** TBD
 **Dependencies:** ONT-001
-**Status:** Selected
+**Status:** Candidate
 
 ## Description
 
-Implement machine-readable schema files and valid/invalid fixtures for `DomainOntologyPackage`.
+Materialize the exam-controlled calculator ontology package from the PRD.
 
 ## Next Step
 
-Run PLAN for ONT-002 and create an implementation-ready PRD for the schema and fixture work.
+Run SELECT for ONT-003 after ONT-002 review/archive-review completes.
 
 ## Recently Archived
 
 | Task ID | Archived | Verdict | Folder |
 |---|---|---|---|
+| ONT-002 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-002_Ontology_Package_Schema_and_Fixtures/` |
 | ONT-001 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-001_Ontology_Layer_And_SpecGraph_Semantic_Import/` |

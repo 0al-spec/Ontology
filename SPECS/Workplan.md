@@ -32,10 +32,11 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-001
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-002_Ontology_Package_Schema_and_Fixtures/ONT-002_Ontology_Package_Schema_and_Fixtures.md`
 - **Acceptance Criteria:**
-  - Schema validates required metadata, classes, relations, policies, and state machines.
-  - Invalid fixtures cover missing metadata, invalid inheritance, unknown relation refs, and unsafe executable-looking YAML.
+  - Complete: Schema validates required metadata, classes, relations, policies, and state machines.
+  - Complete: Invalid fixtures cover missing metadata, invalid inheritance, unknown relation refs, and unsafe executable-looking YAML.
 
 #### ONT-003: `examcalc` Golden Ontology Package
 - **Description:** Materialize the exam-controlled calculator ontology package from the PRD.

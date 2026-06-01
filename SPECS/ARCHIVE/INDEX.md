@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-002 | [ONT-002_Ontology_Package_Schema_and_Fixtures/](ONT-002_Ontology_Package_Schema_and_Fixtures/) | 2026-06-01 | PASS |
 | ONT-001 | [ONT-001_Ontology_Layer_And_SpecGraph_Semantic_Import/](ONT-001_Ontology_Layer_And_SpecGraph_Semantic_Import/) | 2026-06-01 | PASS |
 
 ## Historical Artifacts
@@ -18,5 +19,6 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-002 | Archived Ontology_Package_Schema_and_Fixtures (PASS) |
 | 2026-06-01 | ONT-001 | Archived REVIEW_ONT-001 report |
 | 2026-06-01 | ONT-001 | Archived Ontology_Layer_And_SpecGraph_Semantic_Import (PASS) |
