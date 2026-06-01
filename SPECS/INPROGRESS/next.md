@@ -4,7 +4,7 @@
 **Phase:** Code Quality and Maintainability
 **Effort:** 9h
 **Dependencies:** ONT-007
-**Status:** INPROGRESS
+**Status:** PRD Ready
 **PRD:** `SPECS/INPROGRESS/ONT-008_OntologyRules_Specification_Extraction.md`
 
 ## Description

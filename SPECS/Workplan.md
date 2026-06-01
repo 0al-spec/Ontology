@@ -117,7 +117,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-007
 - **Parallelizable:** no
-- **Status:** INPROGRESS
+- **Status:** PRD Ready
 - **PRD:** `SPECS/INPROGRESS/ONT-008_OntologyRules_Specification_Extraction.md`
 - **Acceptance Criteria:**
   - Metadata and package-shape predicates are represented as named Swift specifications.
