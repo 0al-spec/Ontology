@@ -4,8 +4,8 @@
 **Phase:** Code Quality and Maintainability
 **Effort:** 9h
 **Dependencies:** ONT-008
-**Status:** INPROGRESS
-**PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
+**Status:** PRD Ready
+**PRD:** `SPECS/INPROGRESS/ONT-009_Ontology_DecisionSpec_Migration.md`
 
 ## Description
 
