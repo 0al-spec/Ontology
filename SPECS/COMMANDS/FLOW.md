@@ -31,10 +31,12 @@ Create a new feature branch from `main` for the task.
 - Pull latest changes: `git pull origin main`
 - Create feature branch: `git checkout -b feature/{TASK_ID}-{short-description}`
 
-**Commit via [`COMMIT`](PRIMITIVES/COMMIT.md):**
+**Empty checkpoint commit:**
+```bash
+git commit --allow-empty -m "Branch for {TASK_ID}: {short description}"
 ```
-Branch for {TASK_ID}: {short description}
-```
+
+The BRANCH step normally has no file changes; use an empty commit for this checkpoint instead of the [`COMMIT`](PRIMITIVES/COMMIT.md) primitive.
 
 ---
 

@@ -48,23 +48,15 @@ Update `SPECS/Workplan.md` with new task entries following the existing format:
 - **Acceptance Criteria:** What needs to be true
 ```
 
-### 4. Archive Review Report
+### 4. Leave Review Report for ARCHIVE-REVIEW
 
-```bash
-# Move review report to task archive folder
-git mv "SPECS/INPROGRESS/${REVIEW_FILE}" \
-       "SPECS/ARCHIVE/${PARENT_TASK_ID}_${TASK_NAME}/"
-
-# Or to _Historical if task folder doesn't exist:
-git mv "SPECS/INPROGRESS/${REVIEW_FILE}" \
-       "SPECS/ARCHIVE/_Historical/"
-```
+Do not move or archive `${REVIEW_FILE}` during FOLLOW_UP. The main workflow has a separate ARCHIVE-REVIEW step that owns moving `REVIEW_{subject}.md` out of `SPECS/INPROGRESS/`.
 
 ## Postconditions
 
 - New tasks added to `SPECS/Workplan.md`
-- Review report moved to parent task's archive folder or _Historical
-- `SPECS/INPROGRESS/` contains no review files for completed tasks
+- Review report remains in `SPECS/INPROGRESS/` for the ARCHIVE-REVIEW step
+- No review files are moved during FOLLOW_UP
 
 ## Skip Conditions
 
