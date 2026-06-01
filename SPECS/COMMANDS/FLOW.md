@@ -33,10 +33,15 @@ Create a new feature branch from `main` for the task.
 
 **Empty checkpoint commit:**
 ```bash
+git diff --cached --quiet || {
+  echo "Refusing BRANCH checkpoint: index has staged changes."
+  echo "Commit, stash, or unstage them before starting FLOW."
+  exit 1
+}
 git commit --allow-empty -m "Branch for {TASK_ID}: {short description}"
 ```
 
-The BRANCH step normally has no file changes; use an empty commit for this checkpoint instead of the [`COMMIT`](PRIMITIVES/COMMIT.md) primitive.
+The BRANCH step normally has no file changes; require an empty index, then use an empty commit for this checkpoint instead of the [`COMMIT`](PRIMITIVES/COMMIT.md) primitive.
 
 ---
 
