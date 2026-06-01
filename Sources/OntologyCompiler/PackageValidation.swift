@@ -1,6 +1,18 @@
 import Foundation
 import OntologyRules
 
+struct ClassValidationContext {
+    let classNames: Set<String>
+    let stateMachineNames: Set<String>
+    let importNamespaces: Set<String>
+    let packageNamespace: String
+}
+
+struct TriggerNames {
+    var commands = Set<String>()
+    var events = Set<String>()
+}
+
 extension OntologyCompiler {
     func validate(_ package: LoadedPackage) {
         let spec = package.spec
@@ -26,22 +38,18 @@ extension OntologyCompiler {
         let classNames = Set(classes.keys)
         let policyNames = Set(policies.keys)
         let stateMachineNames = Set(stateMachines.keys)
-        var commandNames = Set<String>()
-        var eventNames = Set<String>()
 
         let protocols = (spec["protocols"] as? JSONObject) ?? [:]
         let protocolNames = Set(protocols.keys)
 
         validateProtocols(protocols)
-        validateClasses(
-            classes,
+        let classContext = ClassValidationContext(
             classNames: classNames,
             stateMachineNames: stateMachineNames,
             importNamespaces: importNamespaces,
-            packageNamespace: package.namespace,
-            commandNames: &commandNames,
-            eventNames: &eventNames
+            packageNamespace: package.namespace
         )
+        let triggerNames = validateClasses(classes, context: classContext)
         validateImplementsRefs(
             classes,
             protocolNames: protocolNames,
@@ -63,8 +71,7 @@ extension OntologyCompiler {
         )
         validateStateMachines(
             stateMachines,
-            commandNames: commandNames,
-            eventNames: eventNames,
+            triggerNames: triggerNames,
             packageNamespace: package.namespace
         )
         validateProtocolConformance(
@@ -95,13 +102,9 @@ extension OntologyCompiler {
 
     func validateClasses(
         _ classes: JSONObject,
-        classNames: Set<String>,
-        stateMachineNames: Set<String>,
-        importNamespaces: Set<String>,
-        packageNamespace: String,
-        commandNames: inout Set<String>,
-        eventNames: inout Set<String>
-    ) {
+        context: ClassValidationContext
+    ) -> TriggerNames {
+        var triggerNames = TriggerNames()
         for name in classes.keys.sorted() {
             let path = "spec.classes.\(name)"
             validate(name, path: path, code: "class.name.invalid") {
@@ -117,14 +120,19 @@ extension OntologyCompiler {
             if let extendsArray = extendsValue as? [Any], !extendsArray.isEmpty {
                 add("class.extends.multiple", "\(path).extends", "Class extends must be one scalar reference; multiple inheritance is not allowed")
             } else if let extends = string(extendsValue) {
-                if !resolves(extends, localNames: classNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces) {
+                if !resolves(
+                    extends,
+                    localNames: context.classNames,
+                    packageNamespace: context.packageNamespace,
+                    importNamespaces: context.importNamespaces
+                ) {
                     add("class.extends.unresolved", "\(path).extends", "Class base reference \(extends) cannot be resolved")
                 }
                 if refName(extends) == "Command" {
-                    commandNames.insert(name)
+                    triggerNames.commands.insert(name)
                 }
                 if refName(extends) == "Event" {
-                    eventNames.insert(name)
+                    triggerNames.events.insert(name)
                 }
             } else {
                 add("class.extends.required", "\(path).extends", "Class extends is required and must be a scalar reference")
@@ -132,10 +140,11 @@ extension OntologyCompiler {
 
             _ = requiredString(definition, "description", path: "\(path).description", code: "class.description.required")
 
-            if let lifecycle = string(definition["lifecycle"]), !stateMachineNames.contains(lifecycle) {
+            if let lifecycle = string(definition["lifecycle"]), !context.stateMachineNames.contains(lifecycle) {
                 add("class.lifecycle.unresolved", "\(path).lifecycle", "Lifecycle state machine \(lifecycle) cannot be resolved")
             }
         }
+        return triggerNames
     }
 
     func validateImplementsRefs(
@@ -255,8 +264,7 @@ extension OntologyCompiler {
 
     func validateStateMachines(
         _ stateMachines: JSONObject,
-        commandNames: Set<String>,
-        eventNames: Set<String>,
+        triggerNames: TriggerNames,
         packageNamespace: String
     ) {
         for name in stateMachines.keys.sorted() {
@@ -270,45 +278,72 @@ extension OntologyCompiler {
             }
             validateKnownKeys(definition, allowed: ["states", "transitions"], path: path)
 
-            let states = requiredArray(definition, "states", path: "\(path).states", code: "state.states.required").compactMap { string($0) }
-            let stateSet = Set(states)
-            if stateSet.isEmpty {
-                add("state.states.empty", "\(path).states", "State machine must contain at least one state")
-            }
-            for (index, state) in states.enumerated() {
-                validate(state, path: "\(path).states[\(index)]", code: "state.name.invalid") {
-                    OntologyStateNameSpec().isSatisfiedBy($0)
-                }
-            }
+            let stateSet = validateStateNames(definition, path: path)
+            validateTransitions(definition, path: path, stateSet: stateSet, triggerNames: triggerNames, packageNamespace: packageNamespace)
+        }
+    }
 
-            let transitions = requiredArray(definition, "transitions", path: "\(path).transitions", code: "state.transitions.required")
-            if transitions.isEmpty {
-                add("state.transitions.empty", "\(path).transitions", "State machine must contain at least one transition")
+    func validateStateNames(_ definition: JSONObject, path: String) -> Set<String> {
+        let states = requiredArray(definition, "states", path: "\(path).states", code: "state.states.required").compactMap { string($0) }
+        let stateSet = Set(states)
+        if stateSet.isEmpty {
+            add("state.states.empty", "\(path).states", "State machine must contain at least one state")
+        }
+        for (index, state) in states.enumerated() {
+            validate(state, path: "\(path).states[\(index)]", code: "state.name.invalid") {
+                OntologyStateNameSpec().isSatisfiedBy($0)
             }
-            for (index, transitionValue) in transitions.enumerated() {
-                let transitionPath = "\(path).transitions[\(index)]"
-                guard let transition = transitionValue as? JSONObject else {
-                    add("state.transition.type", transitionPath, "Transition must be an object")
-                    continue
-                }
-                validateKnownKeys(transition, allowed: ["from", "to", "command", "event"], path: transitionPath)
-                if let from = requiredString(transition, "from", path: "\(transitionPath).from", code: "state.transition.from.required"),
-                   !DeclaredStateSpec().isSatisfiedBy(StateMembershipContext(state: from, states: stateSet)) {
-                    add("state.transition.invalid_state", "\(transitionPath).from", "Transition source state \(from) does not exist")
-                }
-                if let to = requiredString(transition, "to", path: "\(transitionPath).to", code: "state.transition.to.required"),
-                   !DeclaredStateSpec().isSatisfiedBy(StateMembershipContext(state: to, states: stateSet)) {
-                    add("state.transition.invalid_state", "\(transitionPath).to", "Transition target state \(to) does not exist")
-                }
-                if let command = string(transition["command"]),
-                   !isLocalTrigger(command, names: commandNames, packageNamespace: packageNamespace) {
-                    add("state.transition.trigger_unresolved", "\(transitionPath).command", "Command trigger \(command) cannot be resolved")
-                }
-                if let event = string(transition["event"]),
-                   !isLocalTrigger(event, names: eventNames, packageNamespace: packageNamespace) {
-                    add("state.transition.trigger_unresolved", "\(transitionPath).event", "Event trigger \(event) cannot be resolved")
-                }
+        }
+        return stateSet
+    }
+
+    func validateTransitions(
+        _ definition: JSONObject,
+        path: String,
+        stateSet: Set<String>,
+        triggerNames: TriggerNames,
+        packageNamespace: String
+    ) {
+        let transitions = requiredArray(definition, "transitions", path: "\(path).transitions", code: "state.transitions.required")
+        if transitions.isEmpty {
+            add("state.transitions.empty", "\(path).transitions", "State machine must contain at least one transition")
+        }
+        for (index, transitionValue) in transitions.enumerated() {
+            let transitionPath = "\(path).transitions[\(index)]"
+            guard let transition = transitionValue as? JSONObject else {
+                add("state.transition.type", transitionPath, "Transition must be an object")
+                continue
             }
+            validateKnownKeys(transition, allowed: ["from", "to", "command", "event"], path: transitionPath)
+            validateTransitionEndpoints(transition, path: transitionPath, stateSet: stateSet)
+            validateTransitionTriggers(transition, path: transitionPath, triggerNames: triggerNames, packageNamespace: packageNamespace)
+        }
+    }
+
+    func validateTransitionEndpoints(_ transition: JSONObject, path: String, stateSet: Set<String>) {
+        if let from = requiredString(transition, "from", path: "\(path).from", code: "state.transition.from.required"),
+           !DeclaredStateSpec().isSatisfiedBy(StateMembershipContext(state: from, states: stateSet)) {
+            add("state.transition.invalid_state", "\(path).from", "Transition source state \(from) does not exist")
+        }
+        if let to = requiredString(transition, "to", path: "\(path).to", code: "state.transition.to.required"),
+           !DeclaredStateSpec().isSatisfiedBy(StateMembershipContext(state: to, states: stateSet)) {
+            add("state.transition.invalid_state", "\(path).to", "Transition target state \(to) does not exist")
+        }
+    }
+
+    func validateTransitionTriggers(
+        _ transition: JSONObject,
+        path: String,
+        triggerNames: TriggerNames,
+        packageNamespace: String
+    ) {
+        if let command = string(transition["command"]),
+           !isLocalTrigger(command, names: triggerNames.commands, packageNamespace: packageNamespace) {
+            add("state.transition.trigger_unresolved", "\(path).command", "Command trigger \(command) cannot be resolved")
+        }
+        if let event = string(transition["event"]),
+           !isLocalTrigger(event, names: triggerNames.events, packageNamespace: packageNamespace) {
+            add("state.transition.trigger_unresolved", "\(path).event", "Event trigger \(event) cannot be resolved")
         }
     }
 }
