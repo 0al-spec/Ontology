@@ -35,7 +35,7 @@ let package = Package(
         ),
         .testTarget(
             name: "OntologyCompilerTests",
-            dependencies: ["OntologyCompiler"]
+            dependencies: ["OntologyCompiler", "OntologyRules"]
         )
     ]
 )
