@@ -26,6 +26,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-009 | Archived REVIEW_ONT-009 report |
 | 2026-06-01 | ONT-009 | Archived Ontology_DecisionSpec_Migration (PASS) |
 | 2026-06-01 | ONT-008 | Archived REVIEW_ONT-008 report |
 | 2026-06-01 | ONT-008 | Archived OntologyRules_Specification_Extraction (PASS) |
