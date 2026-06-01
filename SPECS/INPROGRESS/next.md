@@ -2,9 +2,9 @@
 
 **Priority:** P1
 **Phase:** SpecGraph Integration
-**Effort:** TBD
+**Effort:** 12h
 **Dependencies:** ONT-001, ONT-003
-**Status:** Candidate
+**Status:** Selected
 
 ## Description
 
@@ -12,7 +12,7 @@ Specify and/or prototype validation for `OntologyImport`, lockfiles, `ConceptRef
 
 ## Next Step
 
-Run SELECT for ONT-005 after ONT-004 review/archive-review completes.
+Run PLAN for ONT-005 and define semantic reference validation deliverables.
 
 ## Recently Archived
 
