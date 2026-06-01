@@ -22,6 +22,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-005 | Archived REVIEW_ONT-005 report |
 | 2026-06-01 | ONT-005 | Archived SpecGraph_Semantic_Reference_Validation (PASS) |
 | 2026-06-01 | ONT-004 | Archived REVIEW_ONT-004 report |
 | 2026-06-01 | ONT-004 | Archived Ontology_Compiler_Prototype (PASS) |
