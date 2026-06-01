@@ -250,14 +250,14 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-016
 - **Parallelizable:** no
-- **Status:** INPROGRESS
+- **Status:** Complete
 - **PRD:** `SPECS/INPROGRESS/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md`
-- **Implementation Note:** Partially implemented in PR #14. Zod schemas, discriminated union, validator parsing, protocol field injection, and regression baselines exist; JSON Schema helper output and smoke fixture remain open.
+- **Implementation Note:** Implemented across PR #14 and the ONT-017 JSON Schema helper follow-up; archive artifacts are not yet materialized.
 - **Acceptance Criteria:**
   - Complete: `schemas.ts` is emitted alongside existing outputs for every `compile` invocation.
   - Complete: Each class produces a `<ClassName>Schema` Zod object with `$type` literal and optional `id` field.
   - Complete: `AnyOntologyEntitySchema` is a `z.discriminatedUnion` on `$type` covering all classes.
-  - Pending: `toJsonSchemaFor` converts any class schema to JSON Schema draft-2020-12.
+  - Complete: `toJsonSchemaFor` converts any class schema to JSON Schema draft-2020-12.
   - Complete: `validators.ts` exports a `parseOntologyEntity` wrapper; the `_ = ir` no-op is removed.
   - Complete: Protocol `requiredFields` appear in conforming class schemas (conditional on ONT-016).
   - Complete: Regression baselines include the generated `schemas.ts` output.
