@@ -21,6 +21,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-004 | Archived REVIEW_ONT-004 report |
 | 2026-06-01 | ONT-004 | Archived Ontology_Compiler_Prototype (PASS) |
 | 2026-06-01 | ONT-003 | Archived REVIEW_ONT-003 report |
 | 2026-06-01 | ONT-003 | Archived examcalc_Golden_Ontology_Package (PASS) |
