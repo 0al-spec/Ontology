@@ -22,11 +22,13 @@ private final class SyncBox<T>: @unchecked Sendable {
 
 final class RegistryClient {
     private let session: URLSession
+    private let sleep: (TimeInterval) -> Void
     private let maxRetries = 3
     private let timeoutInterval: TimeInterval = 30
 
-    init(session: URLSession = .shared) {
+    init(session: URLSession = .shared, sleep: @escaping (TimeInterval) -> Void = { Thread.sleep(forTimeInterval: $0) }) {
         self.session = session
+        self.sleep = sleep
     }
 
     func get(url: URL, token: String?) throws -> Data {
@@ -53,7 +55,7 @@ final class RegistryClient {
                 return try perform()
             } catch let retryableError where isRetriable(retryableError) {
                 lastError = retryableError
-                if attempt < maxRetries - 1 { Thread.sleep(forTimeInterval: Double(1 << attempt)) }
+                if attempt < maxRetries - 1 { sleep(Double(1 << attempt)) }
             } catch {
                 throw error
             }

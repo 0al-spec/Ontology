@@ -32,10 +32,7 @@ extension OntologyCompiler {
         let protocols = (spec["protocols"] as? JSONObject) ?? [:]
         let protocolNames = Set(protocols.keys)
 
-        validateProtocols(
-            protocols,
-            packageNamespace: package.namespace
-        )
+        validateProtocols(protocols)
         validateClasses(
             classes,
             classNames: classNames,
@@ -76,89 +73,6 @@ extension OntologyCompiler {
             relations: relations,
             packageNamespace: package.namespace
         )
-    }
-
-    func validateProtocols(
-        _ protocols: JSONObject,
-        packageNamespace: String
-    ) {
-        for name in protocols.keys.sorted() {
-            let path = "spec.protocols.\(name)"
-            validate(name, path: path, code: "protocol.name.invalid") {
-                OntologySymbolNameSpec().isSatisfiedBy($0)
-            }
-            guard let definition = protocols[name] as? JSONObject else {
-                add("protocol.type", path, "Protocol definition must be an object")
-                continue
-            }
-            validateKnownKeys(
-                definition,
-                allowed: ["description", "requiredFields", "requiredRelations", "semanticConstraints"],
-                path: path
-            )
-            _ = requiredString(definition, "description", path: "\(path).description", code: "protocol.description.required")
-            for (index, fieldValue) in (definition["requiredFields"] as? [Any] ?? []).enumerated() {
-                guard let field = string(fieldValue) else { continue }
-                validate(field, path: "\(path).requiredFields[\(index)]", code: "protocol.field.name.invalid") {
-                    OntologySymbolNameSpec().isSatisfiedBy($0)
-                }
-            }
-            for (index, relValue) in (definition["requiredRelations"] as? [Any] ?? []).enumerated() {
-                guard let rel = string(relValue) else { continue }
-                validate(rel, path: "\(path).requiredRelations[\(index)]", code: "protocol.relation.name.invalid") {
-                    OntologySymbolNameSpec().isSatisfiedBy($0)
-                }
-            }
-        }
-    }
-
-    func validateProtocolConformance(
-        classes: JSONObject,
-        protocols: JSONObject,
-        relations: JSONObject,
-        packageNamespace: String
-    ) {
-        var classRelationDomains: [String: Set<String>] = [:]
-        for (relationName, value) in relations {
-            guard let definition = value as? JSONObject,
-                  let domain = string(definition["domain"]) else { continue }
-            let domainName = refName(domain)
-            classRelationDomains[domainName, default: []].insert(relationName)
-        }
-
-        for (className, value) in classes {
-            guard let definition = value as? JSONObject,
-                  let implementsList = definition["implements"] as? [Any] else { continue }
-            for refValue in implementsList {
-                guard let ref = string(refValue) else { continue }
-                let protoName: String
-                let parts = ref.split(separator: ":", maxSplits: 1)
-                if parts.count == 2 {
-                    let ns = String(parts[0])
-                    if ns != packageNamespace { continue }
-                    protoName = String(parts[1])
-                } else {
-                    protoName = ref
-                }
-                guard let protoDef = protocols[protoName] as? JSONObject,
-                      let requiredRels = protoDef["requiredRelations"] as? [Any] else { continue }
-                let requiredRelNames = requiredRels.compactMap { string($0) }
-                let domains = classRelationDomains[className] ?? []
-                let context = ProtocolConformanceContext(
-                    protocolRequiredRelations: requiredRelNames,
-                    classRelationDomains: domains
-                )
-                if !ProtocolRelationConformanceSpec().isSatisfiedBy(context) {
-                    for req in requiredRelNames where !domains.contains(req) {
-                        add(
-                            "protocol.relation.missing",
-                            "spec.classes.\(className).implements",
-                            "Class \(className) implements \(protoName) but is missing required relation \(req)"
-                        )
-                    }
-                }
-            }
-        }
     }
 
     func collectImportNamespaces(_ imports: [Any]) -> Set<String> {
@@ -244,6 +158,14 @@ extension OntologyCompiler {
                 else {
                     add("protocol.unresolved", "\(path).implements[\(index)]", "Implemented protocol reference cannot be resolved")
                     continue
+                }
+                if ref.contains(":"),
+                   !ref.hasPrefix("\(packageNamespace):") {
+                    warn(
+                        "protocol.imported.emit_unsupported",
+                        "\(path).implements[\(index)]",
+                        "Imported protocol reference \(ref) resolves but is not emitted as a local TypeScript protocol interface"
+                    )
                 }
             }
         }

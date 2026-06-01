@@ -44,7 +44,7 @@ final class RegistryClientTests: XCTestCase {
     }
 
     private func makeClient() throws -> RegistryClient {
-        RegistryClient(session: try XCTUnwrap(stubSession))
+        RegistryClient(session: try XCTUnwrap(stubSession), sleep: { _ in })
     }
 
     private func stubResponse(for request: URLRequest, status: Int = 200) -> HTTPURLResponse {

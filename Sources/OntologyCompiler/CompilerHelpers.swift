@@ -93,6 +93,10 @@ extension OntologyCompiler {
         diagnostics.append(Diagnostic(code: code, severity: "error", path: path, message: message, hint: hint))
     }
 
+    func warn(_ code: String, _ path: String, _ message: String, hint: String? = nil) {
+        diagnostics.append(Diagnostic(code: code, severity: "warning", path: path, message: message, hint: hint))
+    }
+
     func string(_ value: Any?) -> String? {
         value as? String
     }

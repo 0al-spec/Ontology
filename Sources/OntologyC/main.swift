@@ -42,6 +42,9 @@ case "check":
         compiler.printDiagnostics(diagnostics)
         exit(1)
     }
+    if !diagnostics.isEmpty {
+        compiler.printDiagnostics(diagnostics)
+    }
     print("ontologyc check: PASS \(path)")
 
 case "compile":
@@ -56,6 +59,9 @@ case "compile":
         if compiler.hasErrors(diagnostics) {
             compiler.printDiagnostics(diagnostics)
             exit(1)
+        }
+        if !diagnostics.isEmpty {
+            compiler.printDiagnostics(diagnostics)
         }
         print("ontologyc compile: PASS \(outDirectory)")
     } catch {
@@ -88,6 +94,9 @@ case "diff":
             compiler.printDiagnostics(diagnostics)
             exit(1)
         }
+        if !diagnostics.isEmpty {
+            compiler.printDiagnostics(diagnostics)
+        }
         print("ontologyc diff: PASS \(args[6])")
     } catch {
         fputs("ontologyc diff: FAIL \(error)\n", stderr)
@@ -101,6 +110,9 @@ case "publish":
     let publishPath = args[1]
     do {
         let result = try compiler.publishPackage(path: publishPath, registry: publishRegistry, token: authToken())
+        if !result.diagnostics.isEmpty {
+            compiler.printDiagnostics(result.diagnostics)
+        }
         print("ontologyc publish: PASS \(result.packageRef)")
     } catch let compilerError as OntologyCompilerError {
         if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
