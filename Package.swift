@@ -9,6 +9,7 @@ let package = Package(
     ],
     products: [
         .executable(name: "ontologyc", targets: ["OntologyC"]),
+        .library(name: "OntologyCompiler", targets: ["OntologyCompiler"]),
         .library(name: "OntologyRules", targets: ["OntologyRules"])
     ],
     dependencies: [
@@ -20,9 +21,13 @@ let package = Package(
             name: "OntologyRules",
             dependencies: ["SpecificationCore"]
         ),
+        .target(
+            name: "OntologyCompiler",
+            dependencies: ["Yams"]
+        ),
         .executableTarget(
             name: "OntologyC",
-            dependencies: ["Yams"]
+            dependencies: ["OntologyCompiler"]
         ),
         .testTarget(
             name: "OntologyRulesTests",
