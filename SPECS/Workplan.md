@@ -158,6 +158,72 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+## Phase 5: Polish and Hardening
+
+> Tasks in this phase were derived from the post-implementation code review on PR #13
+> (Add Swift quality gates). They are backlog items; none block the completed ONT-001..010 slice.
+
+#### ONT-011: Repository README and Contributor Guide
+- **Description:** Replace the stub root `README.md` with real project documentation: what the Ontology layer and `ontologyc` are, how to build and run the CLI, how to run the local quality gate, and links into `SPECS/ontology/`.
+- **Priority:** P2
+- **Dependencies:** ONT-010
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **Origin:** Post-implementation code review (PR #13).
+- **Acceptance Criteria:**
+  - Root `README.md` describes the layer model and the `ontologyc` commands (`check`, `compile`, `validate-specgraph`, `diff`) over the `examcalc` example.
+  - README documents local build/test and `tools/swift-quality.sh` usage (including `RUN_COVERAGE=1`).
+  - README links to the key specs under `SPECS/ontology/` (glossary, core contracts, `ontologyc.md`).
+
+#### ONT-012: Automated Competency-Question Resolution Test (T-009)
+- **Description:** Add automated coverage for PRD test T-009: load `SPECS/ontology/examples/examcalc.competency-questions.yaml` and assert every referenced concept/relation/policy resolves against the compiled ontology, and that the missing-concept question emits an `OntologyGap`.
+- **Priority:** P1
+- **Dependencies:** ONT-003, ONT-006
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **Origin:** Post-implementation code review (PR #13).
+- **Acceptance Criteria:**
+  - A Swift test parses the competency-question set and resolves each `examcalc:*` reference through the normalized IR.
+  - CQ-005 (missing `CASFunction`) is asserted to produce an `OntologyGap`, not a silent miss.
+  - The test is wired into the existing regression suite and CI quality gate.
+
+#### ONT-013: Resolve SwiftLint Warnings in OntologyCompiler
+- **Description:** Clear the advisory SwiftLint warnings in `OntologyCompiler` and decide whether to enforce them via `--strict`.
+- **Priority:** P2
+- **Dependencies:** ONT-007
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **Origin:** Post-implementation code review (PR #13).
+- **Acceptance Criteria:**
+  - `force_try`/`force_unwrapping` on the serialization path in `CompilerHelpers.swift` are replaced with safe error handling.
+  - `cyclomatic_complexity`/`function_parameter_count` in `PackageValidation.swift` and `function_body_length` in `Normalization.swift` are brought below the configured thresholds.
+  - `swiftlint` reports zero warnings; the gate is optionally switched to `--strict` so regressions fail CI.
+
+#### ONT-014: Harden `ontologyc` CLI Argument Parsing
+- **Description:** Make the `ontologyc` CLI robust: support `--help`, flag-order independence, and clear error messages instead of the current fixed-position/fixed-count argument checks in `Sources/OntologyC/main.swift`.
+- **Priority:** P2
+- **Dependencies:** ONT-007
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **Origin:** Post-implementation code review (PR #13).
+- **Acceptance Criteria:**
+  - Each command accepts flags in any order and prints actionable usage on error.
+  - `ontologyc --help` and `ontologyc <command> --help` are supported.
+  - Public command output strings and exit codes relied on by the regression suite remain stable.
+
+#### ONT-015: Ontology Governing-Concept Review
+- **Description:** Review `central: true` usage in the `examcalc` package — four concepts (`Exam`, `CalculatorFunction`, `ExamPolicyProfile`, `ExamModeSession`) are currently marked central, diluting the single governing-concept signal the source intended (`ExamPolicyProfile`).
+- **Priority:** P3
+- **Dependencies:** ONT-003
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **Origin:** Post-implementation code review (PR #13).
+- **Acceptance Criteria:**
+  - `central: true` is reduced to the governing concept(s) justified by the source, or the multi-central semantics are explicitly documented.
+  - Regenerated SDK artifacts and regression baselines are updated to match.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
