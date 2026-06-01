@@ -87,16 +87,16 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-004, ONT-005
 - **Parallelizable:** no
-- **Status:** PRD Ready
-- **PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-006_SpecificationCore_Baseline_and_Regression_Harness/ONT-006_SpecificationCore_Baseline_and_Regression_Harness.md`
 - **Acceptance Criteria:**
-  - Swift regression tests cover current `check`, `compile`, `validate-specgraph`, and `diff` behavior.
-  - Valid and invalid fixture behavior is locked before production refactoring.
-  - Generated IR, TypeScript artifacts, SpecGraph validation outputs, and compatibility report hashes are recorded and verified.
-  - `SpecificationCore` 1.0.0 is added as a pinned SwiftPM dependency.
-  - `OntologyRules` target builds and imports `SpecificationCore`.
-  - No production compiler behavior changes are introduced.
-  - New implementation and tests are Swift-native; no Ruby tooling is introduced.
+  - Complete: Swift regression tests cover current `check`, `compile`, `validate-specgraph`, and `diff` behavior.
+  - Complete: Valid and invalid fixture behavior is locked before production refactoring.
+  - Complete: Generated IR, TypeScript artifacts, SpecGraph validation outputs, and compatibility report hashes are recorded and verified.
+  - Complete: `SpecificationCore` 1.0.0 is added as a pinned SwiftPM dependency.
+  - Complete: `OntologyRules` target builds and imports `SpecificationCore`.
+  - Complete: No production compiler behavior changes are introduced.
+  - Complete: New implementation and tests are Swift-native; no Ruby tooling is introduced.
 
 #### ONT-007: `ontologyc` Compiler Module Split
 - **Description:** Split the current monolithic Swift compiler implementation into a thin CLI executable and an importable `OntologyCompiler` target with focused compiler phase files.
