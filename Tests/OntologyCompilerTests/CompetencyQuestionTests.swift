@@ -30,7 +30,7 @@ final class CompetencyQuestionTests: XCTestCase {
                     references: question.references,
                     conceptIndex: conceptIndex
                 )
-            ))
+            ), "\(question.id) reference-set decision should not be nil")
         }
 
         for question in questions where question.id != "CQ-005" {
