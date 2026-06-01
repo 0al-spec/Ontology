@@ -1,24 +1,28 @@
-# Next Tasks: Repository State Alignment
+# Next Tasks: Phase 5 Follow-Up
 
-**Status:** Updated after PR #14
+**Status:** Updated after ONT-014
 
 ## Description
 
 PR #14 implemented most of the Phase 6/7 surface that was previously listed here as pending:
 protocol interfaces, Zod schema output, and registry CLI commands. The ONT-017 follow-up
-adds the remaining JSON Schema helper and smoke fixture, so the next fresh implementation
-task is CLI hardening.
+added the remaining JSON Schema helper and smoke fixture. The ONT-014 follow-up hardens
+CLI help and argument parsing, so the next fresh implementation task should move to the
+remaining Phase 5 backlog.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| ONT-014 | Harden `ontologyc` CLI Argument Parsing | 5 | P2 | `SPECS/Workplan.md` |
+| ONT-012 | Automated Competency-Question Resolution Test | 5 | P1 | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
-- ONT-014 should be prioritized because the new registry commands currently sit on the same
-  fixed-position/fixed-count parser as the older CLI commands.
+- ONT-012 is the highest-priority remaining Phase 5 item and closes the unimplemented
+  competency-question validation coverage from the ontology PRD.
+- ONT-011, ONT-013, and ONT-015 remain useful but lower-priority follow-ups.
+- ONT-014 is implemented in code but still needs formal archive materialization if the Flow
+  lifecycle is enforced strictly.
 - ONT-016, ONT-017, and ONT-018 are implemented in code but still need formal archive materialization
   if the Flow lifecycle is enforced strictly.
 - The ONT-018 `pull` contract follows the PRD: `sourceDigest` is the digest of the original
@@ -31,6 +35,7 @@ task is CLI hardening.
 | ONT-018 | PR #14 | `SPECS/INPROGRESS/ONT-018_CLI_Registry_Commands.md` |
 | ONT-017 | PR #14 + JSON Schema follow-up | `SPECS/INPROGRESS/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md` |
 | ONT-016 | PR #14 | `SPECS/INPROGRESS/ONT-016_Protocol_Interfaces_And_Compiler_Support.md` |
+| ONT-014 | CLI help/argument parsing follow-up | `SPECS/Workplan.md` |
 
 ## Recently Archived
 

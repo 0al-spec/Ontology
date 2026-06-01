@@ -29,6 +29,102 @@ final class OntologyCRegressionTests: XCTestCase {
         )
     }
 
+    func testRootHelpPrintsCommandSummary() throws {
+        let result = try ontologyc(["--help"])
+
+        XCTAssertEqual(result.status, 0, result.combinedOutput)
+        XCTAssertTrue(result.stdout.contains("Usage:"), result.stdout)
+        XCTAssertTrue(result.stdout.contains("ontologyc <command> [options]"), result.stdout)
+        XCTAssertTrue(result.stdout.contains("compat-check"), result.stdout)
+        XCTAssertEqual(result.stderr, "")
+    }
+
+    func testCommandHelpPrintsCommandSpecificUsage() throws {
+        let result = try ontologyc(["compile", "--help"])
+
+        XCTAssertEqual(result.status, 0, result.combinedOutput)
+        XCTAssertTrue(
+            result.stdout.contains("ontologyc compile <package.yaml> --target typescript --out <directory>"),
+            result.stdout
+        )
+        XCTAssertEqual(result.stderr, "")
+    }
+
+    func testCompileAcceptsFlagsInAnyOrder() throws {
+        let output = try makeTemporaryDirectory(name: "ontologyc-compile-reordered")
+        let result = try ontologyc([
+            "compile",
+            "--out",
+            output.path,
+            "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml",
+            "--target",
+            "typescript"
+        ])
+
+        XCTAssertEqual(result.status, 0, result.combinedOutput)
+        XCTAssertEqual(
+            result.stdout.trimmingCharacters(in: .whitespacesAndNewlines),
+            "ontologyc compile: PASS \(output.path)"
+        )
+        XCTAssertTrue(FileManager.default.fileExists(atPath: output.appendingPathComponent("schemas.ts").path))
+    }
+
+    func testDiffAcceptsFlagsInAnyOrder() throws {
+        let report = try makeTemporaryDirectory(name: "ontologyc-diff-reordered")
+            .appendingPathComponent("compatibility-report.yaml")
+        let result = try ontologyc([
+            "diff",
+            "--out",
+            report.path,
+            "--to",
+            "SPECS/ontology/packages/examcalc/compatibility/examcalc-0.2.0-breaking.yaml",
+            "--from",
+            "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml"
+        ])
+
+        XCTAssertEqual(result.status, 0, result.combinedOutput)
+        XCTAssertTrue(result.stdout.contains("ontologyc diff: PASS \(report.path)"), result.stdout)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: report.path))
+    }
+
+    func testMissingRequiredOptionPrintsActionableUsage() throws {
+        let output = try makeTemporaryDirectory(name: "ontologyc-compile-error")
+        let result = try ontologyc([
+            "compile",
+            "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml",
+            "--out",
+            output.path
+        ])
+
+        XCTAssertEqual(result.status, 2, result.combinedOutput)
+        XCTAssertTrue(result.stderr.contains("missing required option --target"), result.stderr)
+        XCTAssertTrue(result.stderr.contains("ontologyc compile <package.yaml>"), result.stderr)
+    }
+
+    func testOptionValueMayStartWithDash() throws {
+        let output = try makeTemporaryDirectory(name: "ontologyc-compile-dash-value")
+        let result = try ontologyc([
+            "compile",
+            "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml",
+            "--target",
+            "-typescript",
+            "--out",
+            output.path
+        ])
+
+        XCTAssertEqual(result.status, 2, result.combinedOutput)
+        XCTAssertTrue(result.stderr.contains("unsupported target -typescript"), result.stderr)
+        XCTAssertFalse(result.stderr.contains("missing value for --target"), result.stderr)
+    }
+
+    func testDoubleDashAllowsDashPrefixedPositionalArgument() throws {
+        let result = try ontologyc(["check", "--", "-missing-package.yaml"])
+
+        XCTAssertEqual(result.status, 1, result.combinedOutput)
+        XCTAssertTrue(result.combinedOutput.contains("-missing-package.yaml"), result.combinedOutput)
+        XCTAssertFalse(result.stderr.contains("unknown option -missing-package.yaml"), result.stderr)
+    }
+
     func testInvalidFixturesFail() throws {
         let fixtures = [
             "SPECS/ontology/fixtures/invalid/invalid-inheritance.yaml",
