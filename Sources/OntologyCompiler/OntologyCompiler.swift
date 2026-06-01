@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 
 public final class OntologyCompiler {
     let apiVersion = "ontology.specgraph.io/v1alpha1"
@@ -48,14 +49,20 @@ public final class OntologyCompiler {
         var seenGaps = Set<String>()
 
         for occurrence in occurrences.sorted(by: { $0.ref < $1.ref }) {
-            if let conceptRef = index[occurrence.ref] {
+            let decision = SpecGraphRefDecisionSpec().decide(
+                SpecGraphRefDecisionContext(ref: occurrence.ref, conceptIndex: index)
+            )
+            switch decision {
+            case .resolved(let conceptRef):
                 if !seenResolved.contains(occurrence.ref) {
                     resolvedRefs.append(conceptRef)
                     seenResolved.insert(occurrence.ref)
                 }
-            } else if !seenGaps.contains(occurrence.ref) {
-                gaps.append(ontologyGap(for: occurrence, ir: ir, ordinal: gaps.count + 1))
-                seenGaps.insert(occurrence.ref)
+            case .gap, nil:
+                if !seenGaps.contains(occurrence.ref) {
+                    gaps.append(ontologyGap(for: occurrence, ir: ir, ordinal: gaps.count + 1))
+                    seenGaps.insert(occurrence.ref)
+                }
             }
         }
 
