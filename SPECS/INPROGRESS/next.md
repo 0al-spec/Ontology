@@ -2,9 +2,9 @@
 
 **Priority:** P1
 **Phase:** Implementation Candidates
-**Effort:** TBD
+**Effort:** 8h
 **Dependencies:** ONT-001
-**Status:** Candidate
+**Status:** Selected
 
 ## Description
 
@@ -12,7 +12,7 @@ Implement machine-readable schema files and valid/invalid fixtures for `DomainOn
 
 ## Next Step
 
-Run SELECT for ONT-002 after ONT-001 review/archive-review completes.
+Run PLAN for ONT-002 and create an implementation-ready PRD for the schema and fixture work.
 
 ## Recently Archived
 
