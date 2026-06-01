@@ -1,0 +1,7 @@
+apiVersion: specgraph.io/v1alpha1
+kind: OntologyGapSet
+metadata:
+  source: SPECS/specgraph/semantic-validation/valid-semantic-binding.yaml
+spec:
+  gaps: []
+

@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-005 | [ONT-005_SpecGraph_Semantic_Reference_Validation/](ONT-005_SpecGraph_Semantic_Reference_Validation/) | 2026-06-01 | PASS |
 | ONT-004 | [ONT-004_Ontology_Compiler_Prototype/](ONT-004_Ontology_Compiler_Prototype/) | 2026-06-01 | PASS |
 | ONT-003 | [ONT-003_examcalc_Golden_Ontology_Package/](ONT-003_examcalc_Golden_Ontology_Package/) | 2026-06-01 | PASS |
 | ONT-002 | [ONT-002_Ontology_Package_Schema_and_Fixtures/](ONT-002_Ontology_Package_Schema_and_Fixtures/) | 2026-06-01 | PASS |
@@ -21,6 +22,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-005 | Archived REVIEW_ONT-005 report |
+| 2026-06-01 | ONT-005 | Archived SpecGraph_Semantic_Reference_Validation (PASS) |
 | 2026-06-01 | ONT-004 | Archived REVIEW_ONT-004 report |
 | 2026-06-01 | ONT-004 | Archived Ontology_Compiler_Prototype (PASS) |
 | 2026-06-01 | ONT-003 | Archived REVIEW_ONT-003 report |

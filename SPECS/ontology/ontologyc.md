@@ -77,10 +77,10 @@ Behavior:
 ## Compatibility Command
 
 ```bash
-ontologyc diff \
-  --from edu.university.examcalc@0.1.0 \
-  --to edu.university.examcalc@0.2.0 \
-  --emit compatibility-report
+swift run ontologyc diff \
+  --from SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
+  --to SPECS/ontology/packages/examcalc/compatibility/examcalc-0.2.0-breaking.yaml \
+  --out SPECS/specgraph/semantic-validation/out/compatibility-report.yaml
 ```
 
 Output kind:
@@ -115,4 +115,20 @@ swift run ontologyc check SPECS/ontology/packages/examcalc/domain-ontology-packa
 swift run ontologyc compile SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
   --target typescript \
   --out SPECS/ontology/packages/examcalc/generated
+```
+
+## ONT-005 Semantic Validation Prototype
+
+The same Swift executable validates SpecGraph semantic references against compiled ontology IR and emits `ConceptRef`, `OntologyLockfile`, `OntologyGap`, and compatibility report artifacts:
+
+```bash
+swift run ontologyc validate-specgraph \
+  SPECS/specgraph/semantic-validation/valid-semantic-binding.yaml \
+  --ontology-ir SPECS/ontology/packages/examcalc/generated/ontology.normalized.json \
+  --out SPECS/specgraph/semantic-validation/out/valid
+
+swift run ontologyc validate-specgraph \
+  SPECS/specgraph/semantic-validation/missing-ref-semantic-binding.yaml \
+  --ontology-ir SPECS/ontology/packages/examcalc/generated/ontology.normalized.json \
+  --out SPECS/specgraph/semantic-validation/out/missing
 ```

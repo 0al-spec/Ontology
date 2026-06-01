@@ -1,0 +1,17 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+changes:
+  addedClasses: []
+  addedRelations: []
+  breakingChanges:
+  - change relation range examcalc:allows
+  removedClasses: []
+  removedRelations: []
+kind: OntologyCompatibilityReport
+metadata:
+  from: edu.university.examcalc@0.1.0
+  to: edu.university.examcalc@0.2.0
+result:
+  compatible: false
+  requiredSpecGraphActions:
+  - reviewBreakingOntologyChange
+

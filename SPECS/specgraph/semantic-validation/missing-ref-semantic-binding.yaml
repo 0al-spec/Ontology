@@ -1,0 +1,25 @@
+apiVersion: specgraph.io/v1alpha1
+kind: SpecGraphProject
+metadata:
+  id: university-exam-calculator
+spec:
+  ontologyImports:
+    - ontology: edu.university.examcalc
+      namespace: examcalc
+      version: 0.1.0
+      source: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+      digest: sha256:REPLACE_WITH_RESOLVED_DIGEST
+---
+apiVersion: specgraph.io/v1alpha1
+kind: Requirement
+metadata:
+  id: REQ-EXAMCALC-CAS
+spec:
+  title: CAS function request
+  statement: >
+    The calculator may need a computer algebra system function in a future
+    ontology version.
+  semanticRefs:
+    - examcalc:Exam
+    - examcalc:ExamPolicyProfile
+    - examcalc:CASFunction
