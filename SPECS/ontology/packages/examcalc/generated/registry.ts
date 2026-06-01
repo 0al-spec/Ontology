@@ -4,6 +4,7 @@ import { classes, relations, policies, stateMachines } from "./refs";
 import { relationDefinitions } from "./relations";
 import { policyDefinitions } from "./policies";
 import { stateMachineDefinitions } from "./state-machines";
+import { protocolDefinitions } from "./protocols";
 
 export const ontologyMetadata = {
   "id" : "edu.university.examcalc",
@@ -18,4 +19,5 @@ export const ontologyRegistry = {
   relations: relationDefinitions,
   policies: policyDefinitions,
   stateMachines: stateMachineDefinitions,
+  protocols: protocolDefinitions,
 } as const;

@@ -1,6 +1,16 @@
 import Foundation
 import OntologyRules
 
+public enum OntologyCompilerError: Error, CustomStringConvertible {
+    case invalidArgument(String)
+
+    public var description: String {
+        switch self {
+        case .invalidArgument(let msg): return msg
+        }
+    }
+}
+
 public final class OntologyCompiler {
     let apiVersion = "ontology.specgraph.io/v1alpha1"
     let kind = "DomainOntologyPackage"
@@ -113,6 +123,77 @@ public final class OntologyCompiler {
         let report = compatibilityReport(fromIR: fromIR, toIR: toIR)
         try writeYAML(report, to: URL(fileURLWithPath: outPath))
         return diagnostics
+    }
+
+    public func publishPackage(path: String, registry: String, token: String?) throws -> [Diagnostic] {
+        diagnostics = []
+        guard let package = load(path: path) else { return diagnostics }
+        validate(package)
+        if hasErrors(diagnostics) { return diagnostics }
+        let ir = normalize(package)
+        let id = string(ir["id"]) ?? ""
+        let version = string(ir["version"]) ?? ""
+        let urlString = "\(registry)/ontologies/\(id)/\(version)"
+        guard let url = URL(string: urlString) else {
+            add("registry.url.invalid", "publish", "Invalid registry URL: \(urlString)")
+            return diagnostics
+        }
+        let data = try JSONSerialization.data(
+            withJSONObject: ir,
+            options: [.sortedKeys, .prettyPrinted, .withoutEscapingSlashes]
+        )
+        try RegistryClient().put(url: url, body: data, token: token)
+        return diagnostics
+    }
+
+    public func pullPackage(ref: String, registry: String, token: String?, outDirectory: String) throws {
+        let data = try pullPackageData(ref: ref, registry: registry, token: token)
+        let parts = ref.split(separator: "@", maxSplits: 1)
+        let id = String(parts[0])
+        let version = String(parts.count == 2 ? parts[1] : "")
+        let filename = "\(id.replacingOccurrences(of: ".", with: "-"))-\(version).normalized.json"
+        let outURL = URL(fileURLWithPath: outDirectory)
+        try FileManager.default.createDirectory(at: outURL, withIntermediateDirectories: true)
+        try data.write(to: outURL.appendingPathComponent(filename))
+    }
+
+    public func compatCheckPackage(
+        path: String,
+        against ref: String,
+        registry: String,
+        token: String?,
+        outPath: String?
+    ) throws -> Bool {
+        let irData = try pullPackageData(ref: ref, registry: registry, token: token)
+        guard let fromIR = try JSONSerialization.jsonObject(with: irData) as? JSONObject else {
+            throw OntologyCompilerError.invalidArgument("Registry IR is not valid JSON for \(ref)")
+        }
+        diagnostics = []
+        guard let toPackage = load(path: path) else { return false }
+        validate(toPackage)
+        if hasErrors(diagnostics) { return false }
+        let toIR = normalize(toPackage)
+        let report = compatibilityReport(fromIR: fromIR, toIR: toIR)
+        if let outPath {
+            try writeYAML(report, to: URL(fileURLWithPath: outPath))
+        }
+        return (report["result"] as? JSONObject)?["compatible"] as? Bool ?? false
+    }
+
+    private func pullPackageData(ref: String, registry: String, token: String?) throws -> Data {
+        let parts = ref.split(separator: "@", maxSplits: 1)
+        guard parts.count == 2 else {
+            throw OntologyCompilerError.invalidArgument(
+                "Expected format <id>@<version>, got: \(ref)"
+            )
+        }
+        let id = String(parts[0])
+        let version = String(parts[1])
+        let urlString = "\(registry)/ontologies/\(id)/\(version)"
+        guard let url = URL(string: urlString) else {
+            throw OntologyCompilerError.invalidArgument("Invalid registry URL: \(urlString)")
+        }
+        return try RegistryClient().get(url: url, token: token)
     }
 
     public func hasErrors(_ diagnostics: [Diagnostic]) -> Bool {

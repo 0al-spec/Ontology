@@ -46,13 +46,17 @@ flag-order-independent argument parsing contract that task establishes.
 - **`ontologyc pull <ontology-id>@<version> --registry <url> --out <directory>`**:
   - HTTP-GETs `<registry>/ontologies/<id>/<version>` (content-type: `application/json`).
   - Writes the downloaded IR to `<directory>/<id>-<version>.normalized.json`.
-  - Verifies the `sourceDigest` field in the downloaded IR matches the SHA-256 of the body.
+  - Note: `sourceDigest` in the IR is the SHA-256 of the **original YAML source**, not the IR
+    JSON body, so it cannot be used to verify download integrity. Integrity is ensured by the
+    HTTPS transport; registries MAY include a `Content-Digest` response header for additional
+    verification in a future revision.
   - Prints `ontologyc pull: PASS <id>@<version>` on success.
 
 - **`ontologyc compat-check <package.yaml> --against <ontology-id>@<version> --registry <url>`**:
-  - Pulls the specified registry version to a temp file.
-  - Runs the existing `diffPackages` logic (from `CompatibilityDiff.swift`) treating the
-    registry version as `from` and the local package as `to`.
+  - Pulls the specified registry version as raw IR JSON (not YAML).
+  - Normalizes the local package in memory via `normalize(_:)`.
+  - Calls `compatibilityReport(fromIR:toIR:)` directly on the two IR objects — bypassing
+    `diffPackages(from:to:outPath:)`, which expects YAML input and would fail on IR JSON.
   - Prints a concise summary and exits non-zero if any breaking changes are detected.
   - Optionally writes a full report with `--out <report.yaml>`.
 
@@ -90,11 +94,11 @@ flag-order-independent argument parsing contract that task establishes.
 |----|-------------|---------------------|--------------|
 | FR-001 | `publish` MUST run `check` before uploading; packages with errors MUST NOT be published. | Error diagnostics printed; exit 1; no HTTP request made. | Unit test |
 | FR-002 | `publish` MUST read the bearer token from `--token` or `ONTOLOGYC_TOKEN`; `--token` takes precedence. | Token present in `Authorization: Bearer …` header. | Unit test |
-| FR-003 | `pull` MUST verify the `sourceDigest` of the downloaded IR. | Tampered body produces `E_REGISTRY_DIGEST_MISMATCH` error. | Unit test |
+| FR-003 | `pull` MUST write the downloaded IR to `<out>/<id-dashed>-<version>.normalized.json`. | File present with correct name after pull. | Unit test |
 | FR-004 | `compat-check` MUST exit non-zero when the diff contains breaking changes. | Breaking removal of a class → exit 1. | Unit test |
 | FR-005 | `compat-check` MUST exit zero when the diff is fully compatible. | Adding a new class with no removals → exit 0. | Unit test |
 | FR-006 | All three commands MUST retry up to 3 times with exponential back-off on transient HTTP errors (5xx, timeout). | 3 attempts logged; succeeds on third. | Unit test with stub |
-| FR-007 | `pull` output file name MUST follow `<id>-<version>.normalized.json` (dots in id replaced by dashes). | `io.specgraph.examcalc-1.0.0.normalized.json`. | Unit test |
+| FR-007 | `compat-check` MUST call `compatibilityReport(fromIR:toIR:)` directly on pulled IR JSON; it MUST NOT pipe pulled IR through `diffPackages(from:to:)` which expects YAML. | Pulled JSON is parsed and compared directly. | Unit test |
 | FR-008 | Existing commands (`check`, `compile`, `validate-specgraph`, `diff`) MUST be unaffected. | All regression hashes pass. | Regression suite |
 
 ## Implementation Roadmap
@@ -104,14 +108,15 @@ flag-order-independent argument parsing contract that task establishes.
 1. Implement `RegistryClient.swift` with `get(url:token:)` and `put(url:body:token:)`,
    returning `Result<Data, RegistryError>`.
 2. Add retry logic (3 attempts, back-off: 1s, 2s, 4s) for 5xx and connection-timeout errors.
-3. Add `RegistryError` enum: `.httpError(Int, String)`, `.digestMismatch`, `.networkError(Error)`.
+3. Add `RegistryError` enum: `.httpError(Int, String)`, `.networkError(Error)`, `.invalidResponse`.
 
 ### Phase 2 — Compiler Methods
 
 4. Add `publishPackage(path:registry:token:)` to `OntologyCompiler`.
 5. Add `pullPackage(ref:registry:outDirectory:)` to `OntologyCompiler`.
-6. Add `compatCheckPackage(path:against:registry:outPath:)` to `OntologyCompiler` — reuses
-   existing `diffPackages` logic with a temp-dir pull step prepended.
+6. Add `compatCheckPackage(path:against:registry:token:outPath:)` to `OntologyCompiler` — pulls
+   registry IR via `RegistryClient`, normalizes the local package, then calls
+   `compatibilityReport(fromIR:toIR:)` directly.
 
 ### Phase 3 — CLI Integration
 

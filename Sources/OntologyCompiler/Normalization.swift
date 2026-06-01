@@ -17,6 +17,7 @@ extension OntologyCompiler {
             }
 
         let classesObject = spec["classes"] as? JSONObject ?? [:]
+        let protocolsObject = spec["protocols"] as? JSONObject ?? [:]
         let relationsObject = spec["relations"] as? JSONObject ?? [:]
         let policiesObject = spec["policies"] as? JSONObject ?? [:]
         let stateMachinesObject = spec["stateMachines"] as? JSONObject ?? [:]
@@ -96,6 +97,21 @@ extension OntologyCompiler {
             ]
         }
 
+        let protocols = protocolsObject.keys.sorted().map { name -> JSONObject in
+            let definition = protocolsObject[name] as? JSONObject ?? [:]
+            var normalized: JSONObject = [
+                "id": name,
+                "fqid": "\(package.namespace):\(name)",
+                "uri": "ontology://\(package.id)/\(package.version)/protocols/\(name)",
+                "description": string(definition["description"]) ?? ""
+            ]
+            let requiredFields = (definition["requiredFields"] as? [Any] ?? []).compactMap { string($0) }.sorted()
+            if !requiredFields.isEmpty { normalized["requiredFields"] = requiredFields }
+            let requiredRelations = (definition["requiredRelations"] as? [Any] ?? []).compactMap { string($0) }.sorted()
+            if !requiredRelations.isEmpty { normalized["requiredRelations"] = requiredRelations }
+            return normalized
+        }
+
         var ir: JSONObject = [
             "id": package.id,
             "namespace": package.namespace,
@@ -104,7 +120,7 @@ extension OntologyCompiler {
             "imports": imports,
             "classes": classes,
             "relations": relations,
-            "protocols": [],
+            "protocols": protocols,
             "policies": policies,
             "stateMachines": stateMachines,
             "diagnostics": []
