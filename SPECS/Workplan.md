@@ -11,17 +11,17 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** None
 - **Parallelizable:** no
-- **Status:** INPROGRESS
-- **PRD:** `SPECS/INPROGRESS/ONT-001_Ontology_Layer_And_SpecGraph_Semantic_Import.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-001_Ontology_Layer_And_SpecGraph_Semantic_Import/ONT-001_Ontology_Layer_And_SpecGraph_Semantic_Import.md`
 - **Source:** `SPECS/raw/Агентная_Операционная_Система_-_Branch_SpecGraph_-_Онтологии.json`
 - **Acceptance Criteria:**
-  - Core artifacts `OntologyImport`, `ConceptRef`, `SemanticBinding`, `OntologyGap`, and `OntologyLockfile` are specified.
-  - `DomainOntologyPackage` YAML schema contract is specified.
-  - TypeScript foundation model and normalized compiler IR are specified.
-  - `ontologyc` validation and compile behavior is specified.
-  - `examcalc` ontology example contains required classes, relations, policies, and state machine.
-  - SpecGraph examples reference ontology concepts without duplicating domain definitions.
-  - Security rule forbids executing ontology YAML.
+  - Complete: Core artifacts `OntologyImport`, `ConceptRef`, `SemanticBinding`, `OntologyGap`, and `OntologyLockfile` are specified.
+  - Complete: `DomainOntologyPackage` YAML schema contract is specified.
+  - Complete: TypeScript foundation model and normalized compiler IR are specified.
+  - Complete: `ontologyc` validation and compile behavior is specified.
+  - Complete: `examcalc` ontology example contains required classes, relations, policies, and state machine.
+  - Complete: SpecGraph examples reference ontology concepts without duplicating domain definitions.
+  - Complete: Security rule forbids executing ontology YAML.
 
 ---
 

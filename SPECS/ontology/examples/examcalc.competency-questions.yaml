@@ -1,0 +1,60 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: CompetencyQuestionSet
+metadata:
+  ontology: edu.university.examcalc
+  version: 0.1.0
+spec:
+  questions:
+    - id: CQ-001
+      question: Which calculator functions are allowed for a given exam?
+      exercises:
+        concepts:
+          - examcalc:Exam
+          - examcalc:ExamPolicyProfile
+          - examcalc:CalculatorFunction
+        relations:
+          - examcalc:requires_policy
+          - examcalc:allows
+      expectedValidation: all references resolve
+
+    - id: CQ-002
+      question: Which functions are explicitly denied for an exam?
+      exercises:
+        concepts:
+          - examcalc:ExamPolicyProfile
+          - examcalc:CalculatorFunction
+        relations:
+          - examcalc:denies
+      expectedValidation: all references resolve
+
+    - id: CQ-003
+      question: Can an ExamModeSession become active if the policy is unsigned or not device-verified?
+      exercises:
+        concepts:
+          - examcalc:ExamModeSession
+          - examcalc:ExamPolicyProfile
+        relations:
+          - examcalc:enforces
+        policies:
+          - examcalc:PolicyMustBeSigned
+          - examcalc:PolicyMustBeDeviceVerifiable
+      expectedValidation: policy references resolve and state transition requires verification
+
+    - id: CQ-004
+      question: What evidence proves the correct policy was enforced during the exam?
+      exercises:
+        concepts:
+          - examcalc:AuditLogEntry
+          - examcalc:ExamModeSession
+          - examcalc:PolicyViolation
+        relations:
+          - examcalc:records
+          - examcalc:occurred_during
+      expectedValidation: audit path resolves
+
+    - id: CQ-005
+      question: What happens when a question references a missing CAS function concept?
+      exercises:
+        concepts:
+          - examcalc:CASFunction
+      expectedValidation: unresolved reference emits OntologyGap

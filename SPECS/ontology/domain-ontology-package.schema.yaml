@@ -1,0 +1,244 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://specgraph.io/schemas/domain-ontology-package.schema.yaml"
+title: DomainOntologyPackage
+type: object
+additionalProperties: false
+required:
+  - apiVersion
+  - kind
+  - metadata
+  - spec
+properties:
+  apiVersion:
+    const: ontology.specgraph.io/v1alpha1
+  kind:
+    const: DomainOntologyPackage
+  metadata:
+    type: object
+    additionalProperties: false
+    required:
+      - id
+      - namespace
+      - version
+    properties:
+      id:
+        type: string
+        pattern: "^[a-z][a-z0-9]*(\\.[a-z0-9][a-z0-9-]*)+$"
+      namespace:
+        type: string
+        pattern: "^[a-z][a-z0-9-]*$"
+      version:
+        type: string
+        pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)([-+][0-9A-Za-z.-]+)?$"
+      publisher:
+        type: string
+      source:
+        type: string
+      approvalStatus:
+        enum:
+          - draft
+          - candidate
+          - approved
+          - rejected
+  spec:
+    type: object
+    additionalProperties: false
+    required:
+      - imports
+      - classes
+      - relations
+    properties:
+      imports:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - id
+            - version
+          properties:
+            id:
+              type: string
+            version:
+              type: string
+            namespace:
+              type: string
+      classes:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/classDefinition"
+      protocols:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/protocolDefinition"
+      relations:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/relationDefinition"
+      policies:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/policyDefinition"
+      stateMachines:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/stateMachineDefinition"
+      compatibility:
+        $ref: "#/$defs/compatibilityDefinition"
+$defs:
+  classDefinition:
+    type: object
+    additionalProperties: false
+    required:
+      - extends
+      - description
+    properties:
+      extends:
+        type: string
+        pattern: "^[A-Za-z0-9_.-]+:[A-Za-z][A-Za-z0-9_]*$"
+      implements:
+        type: array
+        items:
+          type: string
+      description:
+        type: string
+      central:
+        type: boolean
+      lifecycle:
+        type: string
+      aliases:
+        type: array
+        items:
+          type: string
+  protocolDefinition:
+    type: object
+    additionalProperties: false
+    required:
+      - description
+    properties:
+      description:
+        type: string
+      requiredFields:
+        type: array
+        items:
+          type: string
+      requiredRelations:
+        type: array
+        items:
+          type: string
+      semanticConstraints:
+        type: array
+        items:
+          type: string
+  relationDefinition:
+    type: object
+    additionalProperties: false
+    required:
+      - domain
+      - range
+    properties:
+      domain:
+        type: string
+      range:
+        oneOf:
+          - type: string
+          - type: object
+            additionalProperties: false
+            required:
+              - oneOf
+            properties:
+              oneOf:
+                type: array
+                minItems: 1
+                items:
+                  type: string
+      cardinality:
+        type: object
+        additionalProperties: false
+        properties:
+          min:
+            type: integer
+            minimum: 0
+          max:
+            oneOf:
+              - type: integer
+                minimum: 1
+              - const: "*"
+      description:
+        type: string
+  policyDefinition:
+    type: object
+    additionalProperties: false
+    required:
+      - extends
+      - enforceability
+      - appliesTo
+      - text
+    properties:
+      extends:
+        type: string
+      enforceability:
+        enum:
+          - design
+          - runtime
+          - manual
+          - audit
+      appliesTo:
+        type: array
+        minItems: 1
+        items:
+          type: string
+      text:
+        type: string
+  stateMachineDefinition:
+    type: object
+    additionalProperties: false
+    required:
+      - states
+      - transitions
+    properties:
+      states:
+        type: array
+        minItems: 1
+        uniqueItems: true
+        items:
+          type: string
+      transitions:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - from
+            - to
+          properties:
+            from:
+              type: string
+            to:
+              type: string
+            command:
+              type: string
+            event:
+              type: string
+  compatibilityDefinition:
+    type: object
+    additionalProperties: false
+    properties:
+      patch:
+        $ref: "#/$defs/changeRule"
+      minor:
+        $ref: "#/$defs/changeRule"
+      major:
+        $ref: "#/$defs/changeRule"
+  changeRule:
+    type: object
+    additionalProperties: false
+    properties:
+      allowed:
+        type: array
+        items:
+          type: string
+      requires:
+        type: array
+        items:
+          type: string
