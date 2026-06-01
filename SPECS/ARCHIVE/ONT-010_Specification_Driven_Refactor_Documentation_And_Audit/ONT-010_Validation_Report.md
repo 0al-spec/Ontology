@@ -20,6 +20,7 @@ ONT-010 closes the SpecificationCore-based `ontologyc` refactor with documentati
 | Manual CLI regression | `ontologyc check/compile/validate-specgraph/diff` against ONT-006 baseline fixtures | PASS |
 | Generated artifact hash | `find SPECS/ontology/packages/examcalc/generated SPECS/specgraph/semantic-validation/out -type f \| sort \| xargs shasum -a 256 \| shasum -a 256` | PASS |
 | No-Ruby audit | `git diff --name-only --diff-filter=ACMRT origin/main..HEAD \| xargs rg -n "ruby|\\.rb"` | PASS, no matches |
+| Dependency license audit | `SpecificationCore/LICENSE`, `SpecificationCore/README.md` | PASS, MIT License |
 | Production logic audit | `git diff --name-only` before implementation commit | PASS, docs only |
 
 ## Test Details
@@ -74,6 +75,16 @@ Updated `SPECS/ontology/ontologyc.md` to document:
 - no-macro and no-local-clone policy;
 - behavior-preserving refactor constraints;
 - corrected generated file and compatibility report descriptions.
+
+## Dependency Audit
+
+`SpecificationCore` is the only new specification-pattern dependency introduced by this refactor series. Local checkout audit confirms:
+
+```text
+SpecificationCore: MIT License
+```
+
+`Yams` remains the existing YAML parser dependency from the compiler prototype.
 
 ## Residual Risk
 

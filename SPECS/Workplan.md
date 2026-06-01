@@ -147,14 +147,14 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-009
 - **Parallelizable:** no
-- **Status:** PRD Ready
-- **PRD:** `SPECS/INPROGRESS/ONT-010_Specification_Driven_Refactor_Documentation_And_Audit.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-010_Specification_Driven_Refactor_Documentation_And_Audit/ONT-010_Specification_Driven_Refactor_Documentation_And_Audit.md`
 - **Acceptance Criteria:**
-  - `SPECS/ontology/ontologyc.md` documents the new module boundaries and `SpecificationCore` dependency decision.
-  - `SPECS/INPROGRESS/ONT-006_Validation_Report.md` records build, tests, CLI checks, hashes, dependency/license audit, and residual risks.
-  - Final no-diff and generated output hash checks pass.
-  - Audit confirms no new Ruby tooling was introduced.
-  - Workplan and archive-ready artifacts are consistent for Flow completion.
+  - Complete: `SPECS/ontology/ontologyc.md` documents the new module boundaries and `SpecificationCore` dependency decision.
+  - Complete: `SPECS/ARCHIVE/ONT-010_Specification_Driven_Refactor_Documentation_And_Audit/ONT-010_Validation_Report.md` records build, tests, CLI checks, hashes, dependency audit, and residual risks.
+  - Complete: Final no-diff and generated output hash checks pass.
+  - Complete: Audit confirms no new Ruby tooling was introduced.
+  - Complete: Workplan and archive-ready artifacts are consistent for Flow completion.
 
 ---
 

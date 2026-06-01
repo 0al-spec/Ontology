@@ -1,36 +1,16 @@
-# Next Task: ONT-010 - Specification-Driven Refactor Documentation and Audit
+# Next Task: None
 
-**Priority:** P1
-**Phase:** Code Quality and Maintainability
-**Effort:** 5h
-**Dependencies:** ONT-009
-**Status:** PRD Ready
-**PRD:** `SPECS/INPROGRESS/ONT-010_Specification_Driven_Refactor_Documentation_And_Audit.md`
+**Status:** Complete
 
 ## Description
 
-Finalize documentation, validation reporting, and quality gates for the SpecificationCore-based `ontologyc` refactor.
-
-## Next Step
-
-Run the Flow lifecycle for ONT-010 starting from BRANCH/SELECT, then document the final module boundaries and complete the audit/no-diff validation pass.
-
-## TODO Summary
-
-| ID | Task | Effort |
-|---|---|---:|
-| T-010 | Update compiler documentation and final validation audit | 5h |
-
-Total: **5h**.
-
-## Upcoming Tasks
-
-No pending ONT tasks in the current Workplan slice.
+All ONT-006..ONT-010 Code Quality and Maintainability tasks in the current Workplan slice are complete and archived.
 
 ## Recently Archived
 
 | Task ID | Archived | Verdict | Folder |
 |---|---|---|---|
+| ONT-010 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-010_Specification_Driven_Refactor_Documentation_And_Audit/` |
 | ONT-009 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-009_Ontology_DecisionSpec_Migration/` |
 | ONT-008 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-008_OntologyRules_Specification_Extraction/` |
 | ONT-007 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-007_ontologyc_Compiler_Module_Split/` |
