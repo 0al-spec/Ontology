@@ -1,0 +1,49 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: edu.university.invalidinheritance
+  namespace: invalidinheritance
+  version: 0.1.0
+spec:
+  imports:
+    - id: specgraph.foundation
+      namespace: sg
+      version: 0.1.0
+
+  classes:
+    PolicyProfile:
+      extends:
+        - sg:DomainEntity
+        - sg:Policy
+      description: Invalid class attempting multiple inheritance.
+
+    Function:
+      extends: sg:Capability
+      description: Function controlled by the policy.
+
+    StartSession:
+      extends: sg:Command
+      description: Command that starts the session.
+
+  relations:
+    permits:
+      domain: PolicyProfile
+      range: Function
+
+  policies:
+    DenyUnknown:
+      extends: sg:Policy
+      enforceability: runtime
+      appliesTo:
+        - PolicyProfile
+      text: Unknown functions are denied.
+
+  stateMachines:
+    SessionState:
+      states:
+        - not_started
+        - active
+      transitions:
+        - from: not_started
+          to: active
+          command: StartSession

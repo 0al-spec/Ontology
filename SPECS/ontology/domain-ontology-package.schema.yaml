@@ -47,9 +47,12 @@ properties:
       - imports
       - classes
       - relations
+      - policies
+      - stateMachines
     properties:
       imports:
         type: array
+        minItems: 1
         items:
           type: object
           additionalProperties: false
@@ -65,22 +68,36 @@ properties:
               type: string
       classes:
         type: object
+        minProperties: 1
+        propertyNames:
+          $ref: "#/$defs/nameReference"
         additionalProperties:
           $ref: "#/$defs/classDefinition"
       protocols:
         type: object
+        propertyNames:
+          $ref: "#/$defs/nameReference"
         additionalProperties:
           $ref: "#/$defs/protocolDefinition"
       relations:
         type: object
+        minProperties: 1
+        propertyNames:
+          $ref: "#/$defs/nameReference"
         additionalProperties:
           $ref: "#/$defs/relationDefinition"
       policies:
         type: object
+        minProperties: 1
+        propertyNames:
+          $ref: "#/$defs/nameReference"
         additionalProperties:
           $ref: "#/$defs/policyDefinition"
       stateMachines:
         type: object
+        minProperties: 1
+        propertyNames:
+          $ref: "#/$defs/nameReference"
         additionalProperties:
           $ref: "#/$defs/stateMachineDefinition"
       compatibility:
@@ -94,22 +111,21 @@ $defs:
       - description
     properties:
       extends:
-        type: string
-        pattern: "^[A-Za-z0-9_.-]+:[A-Za-z][A-Za-z0-9_]*$"
+        $ref: "#/$defs/conceptReference"
       implements:
         type: array
         items:
-          type: string
+          $ref: "#/$defs/conceptReference"
       description:
         type: string
       central:
         type: boolean
       lifecycle:
-        type: string
+        $ref: "#/$defs/nameReference"
       aliases:
         type: array
         items:
-          type: string
+          $ref: "#/$defs/nameReference"
   protocolDefinition:
     type: object
     additionalProperties: false
@@ -121,11 +137,11 @@ $defs:
       requiredFields:
         type: array
         items:
-          type: string
+          $ref: "#/$defs/nameReference"
       requiredRelations:
         type: array
         items:
-          type: string
+          $ref: "#/$defs/nameReference"
       semanticConstraints:
         type: array
         items:
@@ -138,10 +154,10 @@ $defs:
       - range
     properties:
       domain:
-        type: string
+        $ref: "#/$defs/conceptReference"
       range:
         oneOf:
-          - type: string
+          - $ref: "#/$defs/conceptReference"
           - type: object
             additionalProperties: false
             required:
@@ -151,7 +167,7 @@ $defs:
                 type: array
                 minItems: 1
                 items:
-                  type: string
+                  $ref: "#/$defs/conceptReference"
       cardinality:
         type: object
         additionalProperties: false
@@ -176,7 +192,7 @@ $defs:
       - text
     properties:
       extends:
-        type: string
+        $ref: "#/$defs/conceptReference"
       enforceability:
         enum:
           - design
@@ -187,7 +203,7 @@ $defs:
         type: array
         minItems: 1
         items:
-          type: string
+          $ref: "#/$defs/conceptReference"
       text:
         type: string
   stateMachineDefinition:
@@ -202,9 +218,10 @@ $defs:
         minItems: 1
         uniqueItems: true
         items:
-          type: string
+          $ref: "#/$defs/stateName"
       transitions:
         type: array
+        minItems: 1
         items:
           type: object
           additionalProperties: false
@@ -213,13 +230,13 @@ $defs:
             - to
           properties:
             from:
-              type: string
+              $ref: "#/$defs/stateName"
             to:
-              type: string
+              $ref: "#/$defs/stateName"
             command:
-              type: string
+              $ref: "#/$defs/conceptReference"
             event:
-              type: string
+              $ref: "#/$defs/conceptReference"
   compatibilityDefinition:
     type: object
     additionalProperties: false
@@ -242,3 +259,12 @@ $defs:
         type: array
         items:
           type: string
+  nameReference:
+    type: string
+    pattern: "^[A-Za-z][A-Za-z0-9_]*$"
+  stateName:
+    type: string
+    pattern: "^[a-z][a-z0-9_]*$"
+  conceptReference:
+    type: string
+    pattern: "^([A-Za-z][A-Za-z0-9_]*|[A-Za-z][A-Za-z0-9_.-]*:[A-Za-z][A-Za-z0-9_]*)$"
