@@ -2,9 +2,9 @@
 
 **Priority:** P1
 **Phase:** Implementation Candidates
-**Effort:** TBD
+**Effort:** 16h
 **Dependencies:** ONT-001, ONT-002
-**Status:** Candidate
+**Status:** Selected
 
 ## Description
 
@@ -12,7 +12,7 @@ Prototype `ontologyc check` and `ontologyc compile` from YAML to normalized IR a
 
 ## Next Step
 
-Run SELECT for ONT-004 after ONT-003 review/archive-review completes.
+Run PLAN for ONT-004 and define the compiler prototype deliverables.
 
 ## Recently Archived
 
