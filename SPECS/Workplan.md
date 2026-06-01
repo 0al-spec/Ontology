@@ -205,12 +205,13 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-007
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete
 - **Origin:** Post-implementation code review (PR #13).
+- **Implementation Note:** Implemented in the ONT-014 CLI help/argument parsing follow-up; archive artifacts are not yet materialized.
 - **Acceptance Criteria:**
-  - Each command accepts flags in any order and prints actionable usage on error.
-  - `ontologyc --help` and `ontologyc <command> --help` are supported.
-  - Public command output strings and exit codes relied on by the regression suite remain stable.
+  - Complete: Each command accepts flags in any order and prints actionable usage on error.
+  - Complete: `ontologyc --help` and `ontologyc <command> --help` are supported.
+  - Complete: Public command output strings and exit codes relied on by the regression suite remain stable.
 
 #### ONT-015: Ontology Governing-Concept Review
 - **Description:** Review `central: true` usage in the `examcalc` package — four concepts (`Exam`, `CalculatorFunction`, `ExamPolicyProfile`, `ExamModeSession`) are currently marked central, diluting the single governing-concept signal the source intended (`ExamPolicyProfile`).
