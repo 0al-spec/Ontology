@@ -1,0 +1,72 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: edu.university.minimalcalc
+  namespace: minimalcalc
+  version: 0.1.0
+  publisher: OntologyService
+  approvalStatus: draft
+spec:
+  imports:
+    - id: specgraph.foundation
+      namespace: sg
+      version: 0.1.0
+
+  classes:
+    CalculatorPolicyProfile:
+      extends: sg:DomainEntity
+      description: Minimal policy profile used by schema fixture validation.
+
+    CalculatorFunction:
+      extends: sg:Capability
+      description: Minimal calculator capability controlled by a policy profile.
+
+    StartSession:
+      extends: sg:Command
+      description: Command that starts the minimal session.
+
+    EndSession:
+      extends: sg:Command
+      description: Command that completes the minimal session.
+
+  relations:
+    permits:
+      domain: CalculatorPolicyProfile
+      range: CalculatorFunction
+      cardinality:
+        min: 0
+        max: "*"
+      description: Policy profile permits a calculator function.
+
+  policies:
+    DenyUnknownFunctions:
+      extends: sg:Policy
+      enforceability: runtime
+      appliesTo:
+        - CalculatorPolicyProfile
+      text: Calculator functions not listed by the active profile are denied.
+
+  stateMachines:
+    MinimalSessionState:
+      states:
+        - not_started
+        - active
+        - completed
+      transitions:
+        - from: not_started
+          to: active
+          command: StartSession
+        - from: active
+          to: completed
+          command: EndSession
+
+  compatibility:
+    patch:
+      allowed:
+        - add description
+    minor:
+      allowed:
+        - add class
+    major:
+      requires:
+        - remove class
