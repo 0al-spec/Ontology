@@ -1,23 +1,24 @@
-# Next Task: ONT-005 — SpecGraph Semantic Reference Validation
+# Next Task: None
 
-**Priority:** P1
-**Phase:** SpecGraph Integration
-**Effort:** 12h
-**Dependencies:** ONT-001, ONT-003
-**Status:** Selected
+**Priority:** N/A
+**Phase:** Complete
+**Effort:** 0h
+**Dependencies:** N/A
+**Status:** Complete
 
 ## Description
 
-Specify and/or prototype validation for `OntologyImport`, lockfiles, `ConceptRef`, `SemanticBinding`, and `OntologyGap`.
+All tasks currently listed in `SPECS/Workplan.md` are complete.
 
 ## Next Step
 
-Run PLAN for ONT-005 and define semantic reference validation deliverables.
+Add new Workplan tasks before running SELECT again.
 
 ## Recently Archived
 
 | Task ID | Archived | Verdict | Folder |
 |---|---|---|---|
+| ONT-005 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-005_SpecGraph_Semantic_Reference_Validation/` |
 | ONT-004 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-004_Ontology_Compiler_Prototype/` |
 | ONT-003 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-003_examcalc_Golden_Ontology_Package/` |
 | ONT-002 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-002_Ontology_Package_Schema_and_Fixtures/` |

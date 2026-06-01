@@ -71,11 +71,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-001, ONT-003
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-005_SpecGraph_Semantic_Reference_Validation/ONT-005_SpecGraph_Semantic_Reference_Validation.md`
 - **Acceptance Criteria:**
-  - Known ontology refs resolve to canonical URIs.
-  - Missing refs create `OntologyGap`.
-  - Compatibility reports classify breaking ontology changes.
+  - Complete: Known ontology refs resolve to canonical URIs.
+  - Complete: Missing refs create `OntologyGap`.
+  - Complete: Compatibility reports classify breaking ontology changes.
 
 ---
 
