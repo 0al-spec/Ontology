@@ -1,0 +1,103 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: GoldenOntologyValidationManifest
+metadata:
+  ontology: edu.university.examcalc
+  namespace: examcalc
+  version: 0.1.0
+spec:
+  package: domain-ontology-package.yaml
+  bindings:
+    - specgraph-requirement-binding.yaml
+  requiredClasses:
+    - Exam
+    - ExamSession
+    - TabletDevice
+    - CalculatorFunction
+    - FunctionSet
+    - ExamPolicyProfile
+    - ExamModeSession
+    - PolicyViolation
+    - AuditLogEntry
+    - StartExamMode
+    - VerifyDeviceAndPolicy
+    - LockCalculator
+    - EndExamMode
+  auditClasses:
+    - PolicyViolation
+    - AuditLogEntry
+  requiredRelations:
+    - requires_policy
+    - has_session
+    - allows
+    - denies
+    - includes_function
+    - enforces
+    - occurred_during
+    - records
+  requiredPolicies:
+    - DenyByDefaultPolicy
+    - PolicyMustBeSigned
+    - PolicyMustBeDeviceVerifiable
+    - NoNetworkDuringExam
+  policyExpectations:
+    DenyByDefaultPolicy:
+      enforceability: runtime
+      appliesTo:
+        - ExamPolicyProfile
+    PolicyMustBeSigned:
+      enforceability: runtime
+      appliesTo:
+        - ExamPolicyProfile
+    PolicyMustBeDeviceVerifiable:
+      enforceability: runtime
+      appliesTo:
+        - ExamModeSession
+    NoNetworkDuringExam:
+      enforceability: runtime
+      appliesTo:
+        - ExamModeSession
+  stateMachines:
+    ExamModeSessionState:
+      states:
+        - not_started
+        - pending_device_verification
+        - active
+        - violation_detected
+        - locked
+        - completed
+        - failed
+      transitions:
+        - from: not_started
+          to: pending_device_verification
+          command: StartExamMode
+        - from: pending_device_verification
+          to: active
+          command: VerifyDeviceAndPolicy
+        - from: active
+          to: violation_detected
+          event: PolicyViolation
+        - from: violation_detected
+          to: locked
+          command: LockCalculator
+        - from: active
+          to: completed
+          command: EndExamMode
+  requiredSemanticRefs:
+    - examcalc:Exam
+    - examcalc:ExamPolicyProfile
+    - examcalc:CalculatorFunction
+    - examcalc:FunctionSet
+    - examcalc:ExamModeSession
+    - examcalc:PolicyViolation
+    - examcalc:AuditLogEntry
+    - examcalc:requires_policy
+    - examcalc:allows
+    - examcalc:denies
+    - examcalc:includes_function
+    - examcalc:enforces
+    - examcalc:records
+    - examcalc:DenyByDefaultPolicy
+    - examcalc:PolicyMustBeSigned
+    - examcalc:PolicyMustBeDeviceVerifiable
+    - examcalc:NoNetworkDuringExam
+    - examcalc:ExamModeSessionState
