@@ -86,8 +86,7 @@ state_machines = package_spec.fetch("stateMachines")
 class_names = Set.new(classes.keys)
 relation_names = Set.new(relations.keys)
 policy_names = Set.new(policies.keys)
-state_machine_names = Set.new(state_machines.keys)
-resolvable_symbols = class_names + relation_names + policy_names + state_machine_names
+resolvable_symbols = class_names + relation_names + policy_names + Set.new(state_machines.keys)
 
 missing_classes = missing(manifest_spec["requiredClasses"], class_names)
 errors << "missing required classes: #{missing_classes.join(', ')}" unless missing_classes.empty?
@@ -163,4 +162,3 @@ end
 puts "Validated examcalc golden package: FAIL"
 errors.each { |error| puts "  - #{error}" }
 exit 1
-
