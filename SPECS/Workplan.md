@@ -103,14 +103,14 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-006
 - **Parallelizable:** no
-- **Status:** PRD Ready
-- **PRD:** `SPECS/INPROGRESS/ONT-007_ontologyc_Compiler_Module_Split.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-007_ontologyc_Compiler_Module_Split/ONT-007_ontologyc_Compiler_Module_Split.md`
 - **Acceptance Criteria:**
-  - `Sources/OntologyC/main.swift` becomes a thin CLI entry point.
-  - `OntologyCompiler` contains diagnostics, IO, package loading, validation, normalization, TypeScript emission, SpecGraph validation, and compatibility diff code in focused files.
-  - Public CLI commands and output strings remain unchanged.
-  - Baseline regression tests and generated output hashes remain stable.
-  - No ontology validation semantics change.
+  - Complete: `Sources/OntologyC/main.swift` becomes a thin CLI entry point.
+  - Complete: `OntologyCompiler` contains diagnostics, IO, package loading, validation, normalization, TypeScript emission, SpecGraph validation, and compatibility diff code in focused files.
+  - Complete: Public CLI commands and output strings remain unchanged.
+  - Complete: Baseline regression tests and generated output hashes remain stable.
+  - Complete: No ontology validation semantics change.
 
 #### ONT-008: OntologyRules Specification Extraction
 - **Description:** Move current validation predicates into named `SpecificationCore` specifications for package shape, metadata, references, security, relations, policies, and state machines.
