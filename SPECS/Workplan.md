@@ -180,12 +180,15 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-003, ONT-006
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete
 - **Origin:** Post-implementation code review (PR #13).
+- **Implementation Note:** Implemented as a Swift regression test that parses the committed
+  competency-question YAML, resolves references through the normalized IR index, and asserts
+  CQ-005 emits an `OntologyGap`.
 - **Acceptance Criteria:**
-  - A Swift test parses the competency-question set and resolves each `examcalc:*` reference through the normalized IR.
-  - CQ-005 (missing `CASFunction`) is asserted to produce an `OntologyGap`, not a silent miss.
-  - The test is wired into the existing regression suite and CI quality gate.
+  - Complete: A Swift test parses the competency-question set and resolves each `examcalc:*` reference through the normalized IR.
+  - Complete: CQ-005 (missing `CASFunction`) is asserted to produce an `OntologyGap`, not a silent miss.
+  - Complete: The test is wired into the existing regression suite and CI quality gate.
 
 #### ONT-013: Resolve SwiftLint Warnings in OntologyCompiler
 - **Description:** Clear the advisory SwiftLint warnings in `OntologyCompiler` and decide whether to enforce them via `--strict`.
