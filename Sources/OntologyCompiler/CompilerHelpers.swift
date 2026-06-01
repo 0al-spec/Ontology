@@ -1,22 +1,26 @@
 import CryptoKit
 import Foundation
+import OntologyRules
 import Yams
 
 extension OntologyCompiler {
     func scanUnsafeSource(_ source: String, filePath: String) {
+        let unsafeTag = UnsafeYamlTagSpec()
+        let executableValue = ExecutableLookingYamlValueSpec()
         for (lineIndex, line) in source.split(separator: "\n", omittingEmptySubsequences: false).enumerated() {
             let lineText = String(line)
-            if matches(lineText, unsafeTagPattern, caseInsensitive: true) ||
-                unsafeValuePatterns.contains(where: { matches(lineText, $0) }) {
+            if unsafeTag.isSatisfiedBy(lineText) || executableValue.isSatisfiedBy(lineText) {
                 add("security.executable_content", "\(filePath):\(lineIndex + 1)", "YAML contains executable-looking content")
             }
         }
     }
 
     func scanUnsafeNode(_ value: Any, path: String) {
+        let unsafeKey = UnsafeYamlKeySpec()
+        let executableValue = ExecutableLookingYamlValueSpec()
         if let object = value as? JSONObject {
             for key in object.keys.sorted() {
-                if unsafeKeys.contains(key.lowercased()) {
+                if unsafeKey.isSatisfiedBy(key) {
                     add("security.executable_content", "\(path).\(key)", "YAML contains executable-looking key")
                 }
                 if let child = object[key] {
@@ -28,7 +32,7 @@ extension OntologyCompiler {
                 scanUnsafeNode(child, path: "\(path)[\(index)]")
             }
         } else if let scalar = value as? String,
-                  unsafeValuePatterns.contains(where: { matches(scalar, $0) }) {
+                  executableValue.isSatisfiedBy(scalar) {
             add("security.executable_content", path, "YAML contains executable-looking string")
         }
     }
@@ -79,8 +83,8 @@ extension OntologyCompiler {
         return value
     }
 
-    func validatePattern(_ value: String, _ pattern: String, path: String, code: String) {
-        if !value.isEmpty && !matches(value, pattern) {
+    func validate(_ value: String, path: String, code: String, isSatisfied: (String) -> Bool) {
+        if !value.isEmpty && !isSatisfied(value) {
             add(code, path, "\(path) has invalid format")
         }
     }
@@ -94,10 +98,11 @@ extension OntologyCompiler {
     }
 
     func relationRangeRefs(_ value: Any) -> [String] {
-        if let ref = string(value) {
+        if ScalarRelationRangeSpec().isSatisfiedBy(value), let ref = string(value) {
             return [ref]
         }
-        if let object = value as? JSONObject,
+        if OneOfRelationRangeSpec().isSatisfiedBy(value),
+           let object = value as? JSONObject,
            let oneOf = object["oneOf"] as? [Any] {
             return oneOf.compactMap { string($0) }
         }
@@ -106,10 +111,11 @@ extension OntologyCompiler {
 
     func normalizeRange(_ value: Any?, namespace: String) -> Any {
         guard let value else { return "" }
-        if let ref = string(value) {
+        if ScalarRelationRangeSpec().isSatisfiedBy(value), let ref = string(value) {
             return normalizeRef(ref, namespace: namespace)
         }
-        if let object = value as? JSONObject,
+        if OneOfRelationRangeSpec().isSatisfiedBy(value),
+           let object = value as? JSONObject,
            let oneOf = object["oneOf"] as? [Any] {
             return ["oneOf": oneOf.compactMap { string($0) }.map { normalizeRef($0, namespace: namespace) }.sorted()]
         }
@@ -117,35 +123,22 @@ extension OntologyCompiler {
     }
 
     func resolves(_ ref: String, localNames: Set<String>, packageNamespace: String, importNamespaces: Set<String>) -> Bool {
-        guard matches(ref, conceptPattern) else { return false }
-        return isImported(ref, importNamespaces) || isLocal(ref, localNames: localNames, packageNamespace: packageNamespace)
-    }
-
-    func isImported(_ ref: String, _ importNamespaces: Set<String>) -> Bool {
-        guard let namespace = refNamespace(ref) else { return false }
-        return importNamespaces.contains(namespace)
-    }
-
-    func isLocal(_ ref: String, localNames: Set<String>, packageNamespace: String) -> Bool {
-        if let namespace = refNamespace(ref) {
-            return namespace == packageNamespace && localNames.contains(refName(ref))
-        }
-        return localNames.contains(ref)
+        let context = ConceptRefResolutionContext(
+            ref: ref,
+            localNames: localNames,
+            packageNamespace: packageNamespace,
+            importNamespaces: importNamespaces
+        )
+        return ResolvableConceptRefSpec().isSatisfiedBy(context)
     }
 
     func isLocalTrigger(_ ref: String, names: Set<String>, packageNamespace: String) -> Bool {
-        if let namespace = refNamespace(ref), namespace != packageNamespace {
-            return false
-        }
-        return names.contains(refName(ref))
+        let context = TriggerRefResolutionContext(ref: ref, names: names, packageNamespace: packageNamespace)
+        return LocalTriggerRefSpec().isSatisfiedBy(context)
     }
 
     func normalizeRef(_ ref: String, namespace: String) -> String {
         ref.contains(":") ? ref : "\(namespace):\(ref)"
-    }
-
-    func refNamespace(_ ref: String) -> String? {
-        ref.split(separator: ":", maxSplits: 1).count == 2 ? String(ref.split(separator: ":", maxSplits: 1)[0]) : nil
     }
 
     func refName(_ ref: String) -> String {
