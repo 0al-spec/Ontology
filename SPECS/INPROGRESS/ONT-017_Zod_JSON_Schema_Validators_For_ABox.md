@@ -79,7 +79,7 @@ since v3.24; consumers who prefer plain JSON Schema receive it through that sing
 | D2 | Generated schemas file | `<out>/schemas.ts` | Exports one Zod schema per class, `AnyOntologyEntitySchema`, and `toJsonSchemaFor` |
 | D3 | Updated validators | `<out>/validators.ts` | `parseOntologyEntity` wrapper exported; `_ = ir` no-op removed |
 | D4 | Regression tests | `Tests/OntologyCompilerTests/` | `schemas.ts` hash recorded; existing hashes unchanged |
-| D5 | Smoke fixture | `SPECS/ontology/fixtures/Valid/examcalc-schemas.ts` | Demonstrates `ExamSchema.parse` and `toJsonSchemaFor(ExamSchema)` |
+| D5 | Smoke fixture | `SPECS/ontology/typescript-smoke/examcalc-schemas.ts` | Demonstrates `ExamSchema.parse` and `toJsonSchemaFor(ExamSchema)` |
 
 ## Functional Requirements
 
@@ -113,5 +113,5 @@ since v3.24; consumers who prefer plain JSON Schema receive it through that sing
 ### Phase 3 — Tests and Fixtures
 
 6. Update regression baselines with new `schemas.ts` hash.
-7. Add `examcalc-schemas.ts` smoke fixture to `SPECS/ontology/fixtures/Valid/`.
+7. Add `examcalc-schemas.ts` smoke fixture to `SPECS/ontology/typescript-smoke/`.
 8. Document Zod peer-dependency requirement in `SPECS/ontology/ontologyc.md`.

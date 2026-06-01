@@ -1,4 +1,4 @@
-import { ExamSchema, toJsonSchemaFor } from "../../packages/examcalc/generated/schemas";
+import { ExamSchema, toJsonSchemaFor } from "../packages/examcalc/generated/schemas";
 
 const parsedExam = ExamSchema.parse({
   $type: "examcalc:Exam",
