@@ -48,7 +48,7 @@ final class RegistryClient {
 
     private func withRetry(_ perform: () throws -> Data) throws -> Data {
         var lastError: Error = RegistryError.invalidResponse
-        for attempt in 0..<maxRetries {
+        for attempt in 0 ..< maxRetries {
             do {
                 return try perform()
             } catch let e where isRetriable(e) {
