@@ -66,9 +66,9 @@ Apply a structured code review to any set of commits or staged changes. This com
 - If `github.pr_template` is set in [Params](.flow/params.yaml), verify the PR body matches the template before merging.
 ```
 
-6. **Create backlog tasks** for actionable findings (if any):
-   - Extract items from the review report and add them to `SPECS/Workplan.md`.
-   - Assign new IDs consistent with the workflow (follow `PRIMITIVES/FOLLOW_UP.md` conventions).
+6. **Prepare follow-up handoff** for actionable findings (if any):
+   - List items that should become tracked follow-up tasks.
+   - Do not edit `SPECS/Workplan.md` during REVIEW; the FOLLOW-UP step owns backlog mutation.
    - If no actionable issues exist, explicitly note that FOLLOW-UP is skipped.
 
 ## Output
