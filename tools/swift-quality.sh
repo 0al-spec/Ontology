@@ -43,7 +43,7 @@ run_coverage() {
 
     xcrun llvm-cov report "$test_binary" \
         -instr-profile "$profile" \
-        -ignore-filename-regex="(.build|checkouts|Tests|OntologyPackageTests\\.derived)/"
+        -ignore-filename-regex="(\\.build|checkouts|Tests|OntologyPackageTests\\.derived)/"
 }
 
 require_tool swiftformat "Install with: brew install swiftformat"
