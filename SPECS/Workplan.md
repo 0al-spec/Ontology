@@ -147,8 +147,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-009
 - **Parallelizable:** no
-- **Status:** INPROGRESS
-- **PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
+- **Status:** PRD Ready
+- **PRD:** `SPECS/INPROGRESS/ONT-010_Specification_Driven_Refactor_Documentation_And_Audit.md`
 - **Acceptance Criteria:**
   - `SPECS/ontology/ontologyc.md` documents the new module boundaries and `SpecificationCore` dependency decision.
   - `SPECS/INPROGRESS/ONT-006_Validation_Report.md` records build, tests, CLI checks, hashes, dependency/license audit, and residual risks.

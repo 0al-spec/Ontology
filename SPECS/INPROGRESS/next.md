@@ -4,8 +4,8 @@
 **Phase:** Code Quality and Maintainability
 **Effort:** 5h
 **Dependencies:** ONT-009
-**Status:** INPROGRESS
-**PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
+**Status:** PRD Ready
+**PRD:** `SPECS/INPROGRESS/ONT-010_Specification_Driven_Refactor_Documentation_And_Audit.md`
 
 ## Description
 
