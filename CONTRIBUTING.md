@@ -3,7 +3,7 @@
 ## Workflow
 
 All planned work starts in [SPECS/INPROGRESS/](SPECS/INPROGRESS/) — read
-[FLOW.md](SPECS/FLOW.md) for the branch-to-archive lifecycle before starting
+[FLOW.md](SPECS/COMMANDS/FLOW.md) for the branch-to-archive lifecycle before starting
 any feature.
 
 ## Making changes

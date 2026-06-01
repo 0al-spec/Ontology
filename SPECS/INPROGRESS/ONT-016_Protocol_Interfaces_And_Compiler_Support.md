@@ -1,6 +1,6 @@
 # PRD: ONT-016 - Protocol Interfaces and Compiler Support
 
-**Status:** PRD Ready  
+**Status:** Implemented; archive pending
 **Priority:** P2  
 **Phase:** Protocol Interfaces and Advanced Validation  
 **Reasoning Effort:** high  
