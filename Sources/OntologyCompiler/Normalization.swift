@@ -3,7 +3,27 @@ import Foundation
 extension OntologyCompiler {
     func normalize(_ package: LoadedPackage) -> JSONObject {
         let spec = package.spec
-        let imports = (spec["imports"] as? [Any] ?? []).compactMap { $0 as? JSONObject }
+        var ir: JSONObject = [
+            "id": package.id,
+            "namespace": package.namespace,
+            "version": package.version,
+            "sourceDigest": sha256(package.source),
+            "imports": normalizeImports(spec),
+            "classes": normalizeClasses(spec, package: package),
+            "relations": normalizeRelations(spec, package: package),
+            "protocols": normalizeProtocols(spec, package: package),
+            "policies": normalizePolicies(spec, package: package),
+            "stateMachines": normalizeStateMachines(spec, package: package),
+            "diagnostics": []
+        ]
+        if let compatibility = spec["compatibility"] as? JSONObject {
+            ir["compatibility"] = compatibility
+        }
+        return ir
+    }
+
+    private func normalizeImports(_ spec: JSONObject) -> [JSONObject] {
+        (spec["imports"] as? [Any] ?? []).compactMap { $0 as? JSONObject }
             .sorted { string($0["id"]) ?? "" < string($1["id"]) ?? "" }
             .map { importObject -> JSONObject in
                 var normalized: JSONObject = [
@@ -15,14 +35,11 @@ extension OntologyCompiler {
                 }
                 return normalized
             }
+    }
 
+    private func normalizeClasses(_ spec: JSONObject, package: LoadedPackage) -> [JSONObject] {
         let classesObject = spec["classes"] as? JSONObject ?? [:]
-        let protocolsObject = spec["protocols"] as? JSONObject ?? [:]
-        let relationsObject = spec["relations"] as? JSONObject ?? [:]
-        let policiesObject = spec["policies"] as? JSONObject ?? [:]
-        let stateMachinesObject = spec["stateMachines"] as? JSONObject ?? [:]
-
-        let classes = classesObject.keys.sorted().map { name -> JSONObject in
+        return classesObject.keys.sorted().map { name -> JSONObject in
             let definition = classesObject[name] as? JSONObject ?? [:]
             let extends = string(definition["extends"]) ?? ""
             var normalized: JSONObject = [
@@ -31,7 +48,7 @@ extension OntologyCompiler {
                 "uri": "ontology://\(package.id)/\(package.version)/classes/\(name)",
                 "kind": refName(extends),
                 "extends": normalizeRef(extends, namespace: package.namespace),
-                "implements": (definition["implements"] as? [Any] ?? []).compactMap { string($0) }.map { normalizeRef($0, namespace: package.namespace) }.sorted(),
+                "implements": normalizedRefs(definition["implements"], namespace: package.namespace),
                 "description": string(definition["description"]) ?? "",
                 "central": (definition["central"] as? Bool) ?? false,
                 "aliases": (definition["aliases"] as? [Any] ?? []).compactMap { string($0) }.sorted()
@@ -41,8 +58,11 @@ extension OntologyCompiler {
             }
             return normalized
         }
+    }
 
-        let relations = relationsObject.keys.sorted().map { name -> JSONObject in
+    private func normalizeRelations(_ spec: JSONObject, package: LoadedPackage) -> [JSONObject] {
+        let relationsObject = spec["relations"] as? JSONObject ?? [:]
+        return relationsObject.keys.sorted().map { name -> JSONObject in
             let definition = relationsObject[name] as? JSONObject ?? [:]
             var normalized: JSONObject = [
                 "id": name,
@@ -59,45 +79,57 @@ extension OntologyCompiler {
             }
             return normalized
         }
+    }
 
-        let policies = policiesObject.keys.sorted().map { name -> JSONObject in
+    private func normalizePolicies(_ spec: JSONObject, package: LoadedPackage) -> [JSONObject] {
+        let policiesObject = spec["policies"] as? JSONObject ?? [:]
+        return policiesObject.keys.sorted().map { name -> JSONObject in
             let definition = policiesObject[name] as? JSONObject ?? [:]
             return [
                 "id": name,
                 "fqid": "\(package.namespace):\(name)",
                 "extends": normalizeRef(string(definition["extends"]) ?? "", namespace: package.namespace),
                 "enforceability": string(definition["enforceability"]) ?? "",
-                "appliesTo": (definition["appliesTo"] as? [Any] ?? []).compactMap { string($0) }.map { normalizeRef($0, namespace: package.namespace) }.sorted(),
+                "appliesTo": normalizedRefs(definition["appliesTo"], namespace: package.namespace),
                 "text": string(definition["text"]) ?? ""
             ]
         }
+    }
 
-        let stateMachines = stateMachinesObject.keys.sorted().map { name -> JSONObject in
+    private func normalizeStateMachines(_ spec: JSONObject, package: LoadedPackage) -> [JSONObject] {
+        let stateMachinesObject = spec["stateMachines"] as? JSONObject ?? [:]
+        return stateMachinesObject.keys.sorted().map { name -> JSONObject in
             let definition = stateMachinesObject[name] as? JSONObject ?? [:]
-            let transitions = (definition["transitions"] as? [Any] ?? []).compactMap { $0 as? JSONObject }
-                .map { transition -> JSONObject in
-                    var normalized: JSONObject = [
-                        "from": string(transition["from"]) ?? "",
-                        "to": string(transition["to"]) ?? ""
-                    ]
-                    if let command = string(transition["command"]) {
-                        normalized["command"] = normalizeRef(command, namespace: package.namespace)
-                    }
-                    if let event = string(transition["event"]) {
-                        normalized["event"] = normalizeRef(event, namespace: package.namespace)
-                    }
-                    return normalized
-                }
-                .sorted { transitionSortKey($0) < transitionSortKey($1) }
             return [
                 "id": name,
                 "fqid": "\(package.namespace):\(name)",
                 "states": (definition["states"] as? [Any] ?? []).compactMap { string($0) }.sorted(),
-                "transitions": transitions
+                "transitions": normalizeTransitions(definition, namespace: package.namespace)
             ]
         }
+    }
 
-        let protocols = protocolsObject.keys.sorted().map { name -> JSONObject in
+    private func normalizeTransitions(_ definition: JSONObject, namespace: String) -> [JSONObject] {
+        (definition["transitions"] as? [Any] ?? []).compactMap { $0 as? JSONObject }
+            .map { transition -> JSONObject in
+                var normalized: JSONObject = [
+                    "from": string(transition["from"]) ?? "",
+                    "to": string(transition["to"]) ?? ""
+                ]
+                if let command = string(transition["command"]) {
+                    normalized["command"] = normalizeRef(command, namespace: namespace)
+                }
+                if let event = string(transition["event"]) {
+                    normalized["event"] = normalizeRef(event, namespace: namespace)
+                }
+                return normalized
+            }
+            .sorted { transitionSortKey($0) < transitionSortKey($1) }
+    }
+
+    private func normalizeProtocols(_ spec: JSONObject, package: LoadedPackage) -> [JSONObject] {
+        let protocolsObject = spec["protocols"] as? JSONObject ?? [:]
+        return protocolsObject.keys.sorted().map { name -> JSONObject in
             let definition = protocolsObject[name] as? JSONObject ?? [:]
             var normalized: JSONObject = [
                 "id": name,
@@ -105,29 +137,19 @@ extension OntologyCompiler {
                 "uri": "ontology://\(package.id)/\(package.version)/protocols/\(name)",
                 "description": string(definition["description"]) ?? ""
             ]
-            let requiredFields = (definition["requiredFields"] as? [Any] ?? []).compactMap { string($0) }.sorted()
+            let requiredFields = sortedStrings(definition["requiredFields"])
             if !requiredFields.isEmpty { normalized["requiredFields"] = requiredFields }
-            let requiredRelations = (definition["requiredRelations"] as? [Any] ?? []).compactMap { string($0) }.sorted()
+            let requiredRelations = sortedStrings(definition["requiredRelations"])
             if !requiredRelations.isEmpty { normalized["requiredRelations"] = requiredRelations }
             return normalized
         }
+    }
 
-        var ir: JSONObject = [
-            "id": package.id,
-            "namespace": package.namespace,
-            "version": package.version,
-            "sourceDigest": sha256(package.source),
-            "imports": imports,
-            "classes": classes,
-            "relations": relations,
-            "protocols": protocols,
-            "policies": policies,
-            "stateMachines": stateMachines,
-            "diagnostics": []
-        ]
-        if let compatibility = spec["compatibility"] as? JSONObject {
-            ir["compatibility"] = compatibility
-        }
-        return ir
+    private func normalizedRefs(_ value: Any?, namespace: String) -> [String] {
+        (value as? [Any] ?? []).compactMap { string($0) }.map { normalizeRef($0, namespace: namespace) }.sorted()
+    }
+
+    private func sortedStrings(_ value: Any?) -> [String] {
+        (value as? [Any] ?? []).compactMap { string($0) }.sorted()
     }
 }
