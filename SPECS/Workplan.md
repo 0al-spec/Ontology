@@ -80,6 +80,84 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+## Phase 4: Code Quality and Maintainability
+
+#### ONT-006: SpecificationCore Baseline and Regression Harness
+- **Description:** Add the first behavior-preserving ONT-006 implementation slice: Swift regression tests for current `ontologyc` behavior plus the pinned `SpecificationCore` dependency and `OntologyRules` target scaffold.
+- **Priority:** P1
+- **Dependencies:** ONT-004, ONT-005
+- **Parallelizable:** no
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-006_SpecificationCore_Baseline_and_Regression_Harness/ONT-006_SpecificationCore_Baseline_and_Regression_Harness.md`
+- **Acceptance Criteria:**
+  - Complete: Swift regression tests cover current `check`, `compile`, `validate-specgraph`, and `diff` behavior.
+  - Complete: Valid and invalid fixture behavior is locked before production refactoring.
+  - Complete: Generated IR, TypeScript artifacts, SpecGraph validation outputs, and compatibility report hashes are recorded and verified.
+  - Complete: `SpecificationCore` 1.0.0 is added as a pinned SwiftPM dependency.
+  - Complete: `OntologyRules` target builds and imports `SpecificationCore`.
+  - Complete: No production compiler behavior changes are introduced.
+  - Complete: New implementation and tests are Swift-native; no Ruby tooling is introduced.
+
+#### ONT-007: `ontologyc` Compiler Module Split
+- **Description:** Split the current monolithic Swift compiler implementation into a thin CLI executable and an importable `OntologyCompiler` target with focused compiler phase files.
+- **Priority:** P1
+- **Dependencies:** ONT-006
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
+- **Acceptance Criteria:**
+  - `Sources/OntologyC/main.swift` becomes a thin CLI entry point.
+  - `OntologyCompiler` contains diagnostics, IO, package loading, validation, normalization, TypeScript emission, SpecGraph validation, and compatibility diff code in focused files.
+  - Public CLI commands and output strings remain unchanged.
+  - Baseline regression tests and generated output hashes remain stable.
+  - No ontology validation semantics change.
+
+#### ONT-008: OntologyRules Specification Extraction
+- **Description:** Move current validation predicates into named `SpecificationCore` specifications for package shape, metadata, references, security, relations, policies, and state machines.
+- **Priority:** P1
+- **Dependencies:** ONT-007
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
+- **Acceptance Criteria:**
+  - Metadata and package-shape predicates are represented as named Swift specifications.
+  - Concept reference syntax and local/imported reference checks are represented as named Swift specifications.
+  - Unsafe YAML key/value/tag checks are represented as named Swift specifications.
+  - Relation, policy, and state-machine predicates are represented as named Swift specifications.
+  - `OntologyRulesTests` cover each extracted specification cluster.
+  - Baseline regression tests and generated output hashes remain stable.
+
+#### ONT-009: Ontology DecisionSpec Migration
+- **Description:** Move classification logic into typed `SpecificationCore` decision specs for relation range shape, concept ref resolution, SpecGraph resolved/gap classification, compatibility changes, and CLI command classification where useful.
+- **Priority:** P1
+- **Dependencies:** ONT-008
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
+- **Acceptance Criteria:**
+  - Relation range classification uses a typed decision spec.
+  - Concept reference resolution uses a typed decision spec.
+  - SpecGraph reference validation uses typed resolved-vs-gap decisions.
+  - Compatibility diff uses typed compatible-vs-breaking decisions.
+  - Decision tests cover all migrated branches.
+  - Baseline regression tests and generated output hashes remain stable.
+
+#### ONT-010: Specification-Driven Refactor Documentation and Audit
+- **Description:** Finalize documentation, validation reporting, and quality gates for the SpecificationCore-based `ontologyc` refactor.
+- **Priority:** P1
+- **Dependencies:** ONT-009
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** `SPECS/INPROGRESS/ONT-006_Specification_Driven_OntologyC_Refactor.md`
+- **Acceptance Criteria:**
+  - `SPECS/ontology/ontologyc.md` documents the new module boundaries and `SpecificationCore` dependency decision.
+  - `SPECS/INPROGRESS/ONT-006_Validation_Report.md` records build, tests, CLI checks, hashes, dependency/license audit, and residual risks.
+  - Final no-diff and generated output hash checks pass.
+  - Audit confirms no new Ruby tooling was introduced.
+  - Workplan and archive-ready artifacts are consistent for Flow completion.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
