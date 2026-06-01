@@ -39,12 +39,17 @@ extension OntologyCompiler {
         validateClasses(
             classes,
             classNames: classNames,
-            protocolNames: protocolNames,
             stateMachineNames: stateMachineNames,
             importNamespaces: importNamespaces,
             packageNamespace: package.namespace,
             commandNames: &commandNames,
             eventNames: &eventNames
+        )
+        validateImplementsRefs(
+            classes,
+            protocolNames: protocolNames,
+            importNamespaces: importNamespaces,
+            packageNamespace: package.namespace
         )
         validateRelations(
             relations,
@@ -177,7 +182,6 @@ extension OntologyCompiler {
     func validateClasses(
         _ classes: JSONObject,
         classNames: Set<String>,
-        protocolNames: Set<String>,
         stateMachineNames: Set<String>,
         importNamespaces: Set<String>,
         packageNamespace: String,
@@ -214,23 +218,33 @@ extension OntologyCompiler {
 
             _ = requiredString(definition, "description", path: "\(path).description", code: "class.description.required")
 
-            if let implements = definition["implements"] {
-                guard let refs = implements as? [Any] else {
-                    add("class.implements.type", "\(path).implements", "implements must be an array")
-                    continue
-                }
-                for (index, refValue) in refs.enumerated() {
-                    guard let ref = string(refValue),
-                          resolves(ref, localNames: protocolNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces)
-                    else {
-                        add("protocol.unresolved", "\(path).implements[\(index)]", "Implemented protocol reference cannot be resolved")
-                        continue
-                    }
-                }
-            }
-
             if let lifecycle = string(definition["lifecycle"]), !stateMachineNames.contains(lifecycle) {
                 add("class.lifecycle.unresolved", "\(path).lifecycle", "Lifecycle state machine \(lifecycle) cannot be resolved")
+            }
+        }
+    }
+
+    func validateImplementsRefs(
+        _ classes: JSONObject,
+        protocolNames: Set<String>,
+        importNamespaces: Set<String>,
+        packageNamespace: String
+    ) {
+        for name in classes.keys.sorted() {
+            guard let definition = classes[name] as? JSONObject,
+                  let implements = definition["implements"] else { continue }
+            let path = "spec.classes.\(name)"
+            guard let refs = implements as? [Any] else {
+                add("class.implements.type", "\(path).implements", "implements must be an array")
+                continue
+            }
+            for (index, refValue) in refs.enumerated() {
+                guard let ref = string(refValue),
+                      resolves(ref, localNames: protocolNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces)
+                else {
+                    add("protocol.unresolved", "\(path).implements[\(index)]", "Implemented protocol reference cannot be resolved")
+                    continue
+                }
             }
         }
     }

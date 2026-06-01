@@ -3,10 +3,13 @@ import OntologyRules
 
 public enum OntologyCompilerError: Error, CustomStringConvertible {
     case invalidArgument(String)
+    case packageError([Diagnostic])
 
     public var description: String {
         switch self {
         case .invalidArgument(let msg): return msg
+        case .packageError(let diags):
+            return diags.map { "\($0.severity) \($0.code): \($0.message)" }.joined(separator: "\n")
         }
     }
 }
@@ -125,25 +128,29 @@ public final class OntologyCompiler {
         return diagnostics
     }
 
-    public func publishPackage(path: String, registry: String, token: String?) throws -> [Diagnostic] {
+    public func publishPackage(path: String, registry: String, token: String?) throws -> (diagnostics: [Diagnostic], packageRef: String) {
         diagnostics = []
-        guard let package = load(path: path) else { return diagnostics }
+        guard let package = load(path: path) else {
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
         validate(package)
-        if hasErrors(diagnostics) { return diagnostics }
+        if hasErrors(diagnostics) {
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
         let ir = normalize(package)
         let id = string(ir["id"]) ?? ""
         let version = string(ir["version"]) ?? ""
         let urlString = "\(registry)/ontologies/\(id)/\(version)"
         guard let url = URL(string: urlString) else {
             add("registry.url.invalid", "publish", "Invalid registry URL: \(urlString)")
-            return diagnostics
+            throw OntologyCompilerError.packageError(diagnostics)
         }
         let data = try JSONSerialization.data(
             withJSONObject: ir,
             options: [.sortedKeys, .prettyPrinted, .withoutEscapingSlashes]
         )
         try RegistryClient().put(url: url, body: data, token: token)
-        return diagnostics
+        return (diagnostics: diagnostics, packageRef: "\(id)@\(version)")
     }
 
     public func pullPackage(ref: String, registry: String, token: String?, outDirectory: String) throws {
@@ -169,9 +176,13 @@ public final class OntologyCompiler {
             throw OntologyCompilerError.invalidArgument("Registry IR is not valid JSON for \(ref)")
         }
         diagnostics = []
-        guard let toPackage = load(path: path) else { return false }
+        guard let toPackage = load(path: path) else {
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
         validate(toPackage)
-        if hasErrors(diagnostics) { return false }
+        if hasErrors(diagnostics) {
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
         let toIR = normalize(toPackage)
         let report = compatibilityReport(fromIR: fromIR, toIR: toIR)
         if let outPath {

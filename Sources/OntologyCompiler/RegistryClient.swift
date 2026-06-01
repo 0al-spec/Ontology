@@ -20,8 +20,13 @@ private final class SyncBox<T>: @unchecked Sendable {
 }
 
 final class RegistryClient {
+    private let session: URLSession
     private let maxRetries = 3
     private let timeoutInterval: TimeInterval = 30
+
+    init(session: URLSession = .shared) {
+        self.session = session
+    }
 
     func get(url: URL, token: String?) throws -> Data {
         try withRetry { try self.performRequest(method: "GET", url: url, body: nil, token: token) }
@@ -31,17 +36,25 @@ final class RegistryClient {
         _ = try withRetry { try self.performRequest(method: "PUT", url: url, body: body, token: token) }
     }
 
+    private func isRetriable(_ error: Error) -> Bool {
+        guard let e = error as? RegistryError else { return false }
+        switch e {
+        case .httpError(let code, _): return code >= 500
+        case .networkError: return true
+        case .invalidResponse: return false
+        }
+    }
+
     private func withRetry(_ perform: () throws -> Data) throws -> Data {
         var lastError: Error = RegistryError.invalidResponse
         for attempt in 0..<maxRetries {
             do {
                 return try perform()
-            } catch RegistryError.httpError(let code, let message) where code >= 500 {
-                lastError = RegistryError.httpError(code, message)
+            } catch let e where isRetriable(e) {
+                lastError = e
                 if attempt < maxRetries - 1 { Thread.sleep(forTimeInterval: Double(1 << attempt)) }
             } catch {
-                lastError = error
-                if attempt < maxRetries - 1 { Thread.sleep(forTimeInterval: Double(1 << attempt)) }
+                throw error
             }
         }
         throw lastError
@@ -58,10 +71,11 @@ final class RegistryClient {
 
         let result = SyncBox<Result<(Data, URLResponse), Error>>(.failure(URLError(.unknown)))
         let sema = DispatchSemaphore(value: 0)
+        let currentSession = session
 
         Task {
             do {
-                let (data, response) = try await URLSession.shared.data(for: request)
+                let (data, response) = try await currentSession.data(for: request)
                 result.value = .success((data, response))
             } catch {
                 result.value = .failure(RegistryError.networkError(error))
