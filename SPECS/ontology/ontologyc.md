@@ -42,8 +42,7 @@ Behavior:
 2. Emit `ontology.normalized.json` from normalized IR.
 3. Emit generated TypeScript files from IR.
 4. Emit runtime validators.
-5. Emit `ontology.schema.json`.
-6. Emit `ontology.lock.yaml`.
+5. Preserve deterministic output order for all generated files.
 
 ## Required Generated Files
 
@@ -57,8 +56,14 @@ Behavior:
 | `registry.ts` | Single generated registry export. |
 | `validators.ts` | Runtime validators for ontology-shaped documents. |
 | `ontology.normalized.json` | Serialized normalized IR. |
-| `ontology.schema.json` | JSON Schema for package or generated instances. |
-| `ontology.lock.yaml` | Resolved dependency lock data. |
+
+SpecGraph validation emits separate semantic reference artifacts:
+
+| File | Purpose |
+|---|---|
+| `concept-refs.yaml` | Resolved ontology concepts referenced by SpecGraph artifacts. |
+| `ontology.lock.yaml` | Resolved ontology import lock data. |
+| `ontology-gaps.yaml` | Missing semantic references requiring ontology follow-up. |
 
 ## Validation Details
 
@@ -92,11 +97,16 @@ metadata:
   from: edu.university.examcalc@0.1.0
   to: edu.university.examcalc@0.2.0
 result:
-  compatible: true
+  compatible: false
+  requiredSpecGraphActions:
+    - reviewBreakingOntologyChange
 changes:
   addedClasses: []
   addedRelations: []
-  breakingChanges: []
+  breakingChanges:
+    - change relation range examcalc:allows
+  removedClasses: []
+  removedRelations: []
 ```
 
 ## Non-Goals for ONT-001
@@ -132,3 +142,59 @@ swift run ontologyc validate-specgraph \
   --ontology-ir SPECS/ontology/packages/examcalc/generated/ontology.normalized.json \
   --out SPECS/specgraph/semantic-validation/out/missing
 ```
+
+## Current Swift Implementation
+
+The ONT-006..ONT-010 refactor keeps the public executable name and command behavior stable while splitting implementation ownership across SwiftPM targets:
+
+| Target | Ownership |
+|---|---|
+| `OntologyC` | Thin executable entry point in `Sources/OntologyC/main.swift`; parses command shape, delegates to `OntologyCompiler`, prints public PASS/FAIL lines, and exits with the existing status codes. |
+| `OntologyCompiler` | Importable compiler orchestration in `Sources/OntologyCompiler/`; owns diagnostics, YAML/JSON IO, package loading, validation call sites, normalization, TypeScript emission, SpecGraph validation, and compatibility report materialization. |
+| `OntologyRules` | Specification and decision layer in `Sources/OntologyRules/`; owns reusable validation predicates and typed decisions backed by `SpecificationCore`. |
+
+`OntologyCompiler` intentionally keeps output materialization concerns that depend on ordering or aggregate state. For example, SpecGraph gap ordinal assignment stays in compiler orchestration, while `SpecGraphRefDecisionSpec` only decides whether one semantic ref is resolved or missing.
+
+## SpecificationCore Dependency
+
+`OntologyRules` depends on `SpecificationCore` 1.0.0 from the shared 0AL Swift stack:
+
+```swift
+.package(url: "https://github.com/SoundBlaster/SpecificationCore", from: "1.0.0")
+```
+
+The dependency is used directly rather than cloning the pattern locally:
+
+- boolean validation predicates conform to `Specification`;
+- typed classification branches conform to `DecisionSpec`;
+- no `SpecificationCore` macros are used in ontology rules;
+- no local `Specification` or `DecisionSpec` protocol clone is introduced.
+
+This keeps the compiler aligned with the same specification pattern used by Hyperprompt while preserving `ontologyc` behavior byte-for-byte.
+
+## Rule and Decision Ownership
+
+| Rule File | Responsibility |
+|---|---|
+| `PackageShapeSpecs.swift` | Expected `apiVersion` and `kind`. |
+| `MetadataSpecs.swift` | Ontology id, namespace, version, symbol, state, and concept-ref syntax patterns. |
+| `ReferenceSpecs.swift` | Local/imported concept refs and local trigger refs. |
+| `SecuritySpecs.swift` | Unsafe YAML keys, tags, and executable-looking scalar values. |
+| `RelationSpecs.swift` | Boolean relation range shape checks. |
+| `PolicySpecs.swift` | Allowed policy enforceability values. |
+| `StateMachineSpecs.swift` | Declared state membership checks. |
+| `RelationDecisionSpecs.swift` | Scalar, `oneOf`, or invalid relation range classification. |
+| `ReferenceDecisionSpecs.swift` | Local, imported, unresolved, or invalid concept-ref classification. |
+| `SpecGraphDecisionSpecs.swift` | Resolved-vs-gap semantic ref classification. |
+| `CompatibilityDecisionSpecs.swift` | Compatible-vs-breaking compatibility change classification. |
+
+## Behavior-Preserving Refactor Policy
+
+The refactor is constrained by the ONT-006 baseline:
+
+- public commands remain `check`, `compile`, `validate-specgraph`, and `diff`;
+- diagnostic codes, messages, and paths must remain stable unless a dedicated PRD changes them;
+- generated `examcalc` IR and TypeScript artifacts must remain byte-identical;
+- SpecGraph validation outputs and compatibility report outputs must remain byte-identical;
+- YAML remains inert data and is never executed;
+- new implementation and validation tooling stays Swift-native; no Ruby growth is allowed.
