@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 
 extension OntologyCompiler {
     func compatibilityReport(fromIR: JSONObject, toIR: JSONObject) -> JSONObject {
@@ -7,22 +8,49 @@ extension OntologyCompiler {
         let fromRelations = mapById(fromIR["relations"] as? [JSONObject] ?? [])
         let toRelations = mapById(toIR["relations"] as? [JSONObject] ?? [])
 
-        let addedClasses = sortedDifference(Set(toClasses.keys), Set(fromClasses.keys)).map { "\(string(toIR["namespace"]) ?? ""):\($0)" }
-        let removedClasses = sortedDifference(Set(fromClasses.keys), Set(toClasses.keys)).map { "\(string(fromIR["namespace"]) ?? ""):\($0)" }
-        let addedRelations = sortedDifference(Set(toRelations.keys), Set(fromRelations.keys)).map { "\(string(toIR["namespace"]) ?? ""):\($0)" }
-        let removedRelations = sortedDifference(Set(fromRelations.keys), Set(toRelations.keys)).map { "\(string(fromIR["namespace"]) ?? ""):\($0)" }
+        let fromNamespace = string(fromIR["namespace"]) ?? ""
+        let toNamespace = string(toIR["namespace"]) ?? ""
+        let addedClassIds = sortedDifference(Set(toClasses.keys), Set(fromClasses.keys))
+        let removedClassIds = sortedDifference(Set(fromClasses.keys), Set(toClasses.keys))
+        let addedRelationIds = sortedDifference(Set(toRelations.keys), Set(fromRelations.keys))
+        let removedRelationIds = sortedDifference(Set(fromRelations.keys), Set(toRelations.keys))
+        let addedClasses = addedClassIds.map { "\(toNamespace):\($0)" }
+        let removedClasses = removedClassIds.map { "\(fromNamespace):\($0)" }
+        let addedRelations = addedRelationIds.map { "\(toNamespace):\($0)" }
+        let removedRelations = removedRelationIds.map { "\(fromNamespace):\($0)" }
 
         var breakingChanges = [String]()
-        breakingChanges.append(contentsOf: removedClasses.map { "remove class \($0)" })
-        breakingChanges.append(contentsOf: removedRelations.map { "remove relation \($0)" })
+        let compatibilityDecision = CompatibilityChangeDecisionSpec()
+        breakingChanges.append(contentsOf: removedClassIds.compactMap {
+            breakingMessage(compatibilityDecision.decide(
+                CompatibilityChangeContext(kind: .removedClass, namespace: fromNamespace, symbolId: $0)
+            ))
+        })
+        breakingChanges.append(contentsOf: removedRelationIds.compactMap {
+            breakingMessage(compatibilityDecision.decide(
+                CompatibilityChangeContext(kind: .removedRelation, namespace: fromNamespace, symbolId: $0)
+            ))
+        })
 
         for relationId in Set(fromRelations.keys).intersection(Set(toRelations.keys)).sorted() {
             guard let before = fromRelations[relationId], let after = toRelations[relationId] else { continue }
-            if jsonComparable(before["domain"]) != jsonComparable(after["domain"]) {
-                breakingChanges.append("change relation domain \(string(fromIR["namespace"]) ?? ""):\(relationId)")
+            if let domainMessage = breakingMessage(compatibilityDecision.decide(CompatibilityChangeContext(
+                kind: .relationDomainChanged,
+                namespace: fromNamespace,
+                symbolId: relationId,
+                beforeComparable: jsonComparable(before["domain"]),
+                afterComparable: jsonComparable(after["domain"])
+            ))) {
+                breakingChanges.append(domainMessage)
             }
-            if jsonComparable(before["range"]) != jsonComparable(after["range"]) {
-                breakingChanges.append("change relation range \(string(fromIR["namespace"]) ?? ""):\(relationId)")
+            if let rangeMessage = breakingMessage(compatibilityDecision.decide(CompatibilityChangeContext(
+                kind: .relationRangeChanged,
+                namespace: fromNamespace,
+                symbolId: relationId,
+                beforeComparable: jsonComparable(before["range"]),
+                afterComparable: jsonComparable(after["range"])
+            ))) {
+                breakingChanges.append(rangeMessage)
             }
         }
 
@@ -57,6 +85,11 @@ extension OntologyCompiler {
 
     func sortedDifference(_ lhs: Set<String>, _ rhs: Set<String>) -> [String] {
         Array(lhs.subtracting(rhs)).sorted()
+    }
+
+    func breakingMessage(_ decision: CompatibilityChangeDecision?) -> String? {
+        guard case .breaking(let message) = decision else { return nil }
+        return message
     }
 
     func jsonComparable(_ value: Any?) -> String {

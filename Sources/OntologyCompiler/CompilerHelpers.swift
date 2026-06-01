@@ -98,28 +98,26 @@ extension OntologyCompiler {
     }
 
     func relationRangeRefs(_ value: Any) -> [String] {
-        if ScalarRelationRangeSpec().isSatisfiedBy(value), let ref = string(value) {
+        switch RelationRangeShapeDecisionSpec().decide(value) {
+        case .scalarRef(let ref):
             return [ref]
+        case .oneOfRefs(let refs):
+            return refs
+        case .invalid, nil:
+            return []
         }
-        if OneOfRelationRangeSpec().isSatisfiedBy(value),
-           let object = value as? JSONObject,
-           let oneOf = object["oneOf"] as? [Any] {
-            return oneOf.compactMap { string($0) }
-        }
-        return []
     }
 
     func normalizeRange(_ value: Any?, namespace: String) -> Any {
         guard let value else { return "" }
-        if ScalarRelationRangeSpec().isSatisfiedBy(value), let ref = string(value) {
+        switch RelationRangeShapeDecisionSpec().decide(value) {
+        case .scalarRef(let ref):
             return normalizeRef(ref, namespace: namespace)
+        case .oneOfRefs(let refs):
+            return ["oneOf": refs.map { normalizeRef($0, namespace: namespace) }.sorted()]
+        case .invalid, nil:
+            return ""
         }
-        if OneOfRelationRangeSpec().isSatisfiedBy(value),
-           let object = value as? JSONObject,
-           let oneOf = object["oneOf"] as? [Any] {
-            return ["oneOf": oneOf.compactMap { string($0) }.map { normalizeRef($0, namespace: namespace) }.sorted()]
-        }
-        return ""
     }
 
     func resolves(_ ref: String, localNames: Set<String>, packageNamespace: String, importNamespaces: Set<String>) -> Bool {
@@ -129,7 +127,7 @@ extension OntologyCompiler {
             packageNamespace: packageNamespace,
             importNamespaces: importNamespaces
         )
-        return ResolvableConceptRefSpec().isSatisfiedBy(context)
+        return ConceptRefResolutionDecisionSpec().decide(context)?.resolves == true
     }
 
     func isLocalTrigger(_ ref: String, names: Set<String>, packageNamespace: String) -> Bool {
