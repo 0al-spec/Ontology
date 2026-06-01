@@ -1,6 +1,6 @@
 # PRD: ONT-018 - CLI Registry Commands (publish, pull, compat-check)
 
-**Status:** PRD Ready  
+**Status:** Implemented; archive pending
 **Priority:** P2  
 **Phase:** Registry and Distribution  
 **Reasoning Effort:** high  

@@ -1,29 +1,39 @@
-# Next Tasks: ONT-016, ONT-017, ONT-018
+# Next Tasks: Repository State Alignment
 
-**Status:** PRD Ready
+**Status:** Updated after PR #14
 
 ## Description
 
-Three new tasks open Phase 6 (Protocol Interfaces and Advanced Validation) and Phase 7
-(Registry and Distribution). They extend the compiler and CLI surface without touching
-existing behavior.
+PR #14 implemented the Phase 6/7 surface that was previously listed here as pending:
+protocol interfaces, most Zod schema output, and registry CLI commands. The next work should
+avoid selecting ONT-016 or ONT-018 as fresh implementation tasks; ONT-017 remains open only
+for its JSON Schema helper and smoke-fixture follow-up.
 
-## Pending Tasks
+## Recommended Next Task
 
-| Task ID | Title | Phase | Priority | PRD |
-|---------|-------|-------|----------|-----|
-| ONT-016 | Protocol Interfaces and Compiler Support | 6 | P2 | `SPECS/INPROGRESS/ONT-016_Protocol_Interfaces_And_Compiler_Support.md` |
-| ONT-017 | Zod/JSON Schema Validators for ABox Instances | 6 | P2 | `SPECS/INPROGRESS/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md` |
-| ONT-018 | CLI Registry Commands (publish, pull, compat-check) | 7 | P2 | `SPECS/INPROGRESS/ONT-018_CLI_Registry_Commands.md` |
+| Task ID | Title | Phase | Priority | Source |
+|---------|-------|-------|----------|--------|
+| ONT-017 | Complete JSON Schema helper output | 6 | P2 | `SPECS/INPROGRESS/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md` |
+| ONT-014 | Harden `ontologyc` CLI Argument Parsing | 5 | P2 | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
-- ONT-016 before ONT-017: the schema emitter conditionally injects protocol required-fields,
-  so protocol normalization must land first.
-- ONT-018 depends on ONT-014 (CLI argument hardening, Phase 5) for the flag-parsing
-  convention; ONT-014 should be completed or developed in parallel on a separate branch.
-- ONT-016 and ONT-018 are independent of each other and can be developed in parallel once
-  their respective dependencies are satisfied.
+- ONT-017 should remain open until generated `schemas.ts` exports `toJsonSchemaFor` and a
+  smoke fixture demonstrates JSON Schema conversion.
+- ONT-014 should be prioritized because the new registry commands currently sit on the same
+  fixed-position/fixed-count parser as the older CLI commands.
+- ONT-016 and ONT-018 are implemented in code but still need formal archive materialization
+  if the Flow lifecycle is enforced strictly.
+- The ONT-018 `pull` contract follows the PRD: `sourceDigest` is the digest of the original
+  YAML source, not the downloaded IR body. Integrity for pulled IR is transport-level for now.
+
+## Recently Implemented
+
+| Task ID | Implemented | Folder |
+|---------|-------------|--------|
+| ONT-018 | PR #14 | `SPECS/INPROGRESS/ONT-018_CLI_Registry_Commands.md` |
+| ONT-017 | PR #14 partial | `SPECS/INPROGRESS/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md` |
+| ONT-016 | PR #14 | `SPECS/INPROGRESS/ONT-016_Protocol_Interfaces_And_Compiler_Support.md` |
 
 ## Recently Archived
 

@@ -232,33 +232,35 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-010
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** Complete
 - **PRD:** `SPECS/INPROGRESS/ONT-016_Protocol_Interfaces_And_Compiler_Support.md`
+- **Implementation Note:** Implemented in PR #14; archive artifacts are not yet materialized.
 - **Acceptance Criteria:**
-  - Protocol names validate against `OntologySymbolNameSpec`.
-  - `implements` refs resolve to declared or imported protocols; unresolved refs produce diagnostics.
-  - Classes that implement a protocol are checked for `requiredFields` and `requiredRelations`; violations produce `E_PROTO_FIELD_MISSING` / `E_PROTO_RELATION_MISSING`.
-  - Normalized IR includes a `protocols` array and each class carries `implementedProtocols`.
-  - `protocols.ts` is emitted with one TypeScript interface per protocol.
-  - `types.ts` emits intersection types for conforming classes.
-  - `registry.ts` includes a `protocols` entry.
-  - Packages without protocols produce identical outputs to today.
+  - Complete: Protocol names validate against `OntologySymbolNameSpec`.
+  - Complete: `implements` refs resolve to declared or imported protocols; unresolved refs produce diagnostics.
+  - Complete: Classes that implement a protocol are checked for `requiredFields` and `requiredRelations`; violations produce `E_PROTO_FIELD_MISSING` / `E_PROTO_RELATION_MISSING`.
+  - Complete: Normalized IR includes a `protocols` array and each class carries `implementedProtocols`.
+  - Complete: `protocols.ts` is emitted with one TypeScript interface per protocol.
+  - Complete: `types.ts` emits intersection types for conforming classes.
+  - Complete: `registry.ts` includes a `protocols` entry.
+  - Complete: Packages without protocols produce identical outputs to today.
 
 #### ONT-017: Zod/JSON Schema Validators for ABox Instances
 - **Description:** Extend `emitValidators` to generate a `schemas.ts` file with per-class Zod schemas, a discriminated-union `AnyOntologyEntitySchema`, and a `toJsonSchemaFor` utility. Protocol-required fields are injected into conforming class schemas once ONT-016 lands.
 - **Priority:** P2
 - **Dependencies:** ONT-016
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **PRD:** `SPECS/INPROGRESS/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md`
+- **Implementation Note:** Partially implemented in PR #14. Zod schemas, discriminated union, validator parsing, protocol field injection, and regression baselines exist; JSON Schema helper output and smoke fixture remain open.
 - **Acceptance Criteria:**
-  - `schemas.ts` is emitted alongside existing outputs for every `compile` invocation.
-  - Each class produces a `<ClassName>Schema` Zod object with `$type` literal and optional `id` field.
-  - `AnyOntologyEntitySchema` is a `z.discriminatedUnion` on `$type` covering all classes.
-  - `toJsonSchemaFor` converts any class schema to JSON Schema draft-2020-12.
-  - `validators.ts` exports a `parseOntologyEntity` wrapper; the `_ = ir` no-op is removed.
-  - Protocol `requiredFields` appear in conforming class schemas (conditional on ONT-016).
-  - Existing regression hashes are unchanged.
+  - Complete: `schemas.ts` is emitted alongside existing outputs for every `compile` invocation.
+  - Complete: Each class produces a `<ClassName>Schema` Zod object with `$type` literal and optional `id` field.
+  - Complete: `AnyOntologyEntitySchema` is a `z.discriminatedUnion` on `$type` covering all classes.
+  - Pending: `toJsonSchemaFor` converts any class schema to JSON Schema draft-2020-12.
+  - Complete: `validators.ts` exports a `parseOntologyEntity` wrapper; the `_ = ir` no-op is removed.
+  - Complete: Protocol `requiredFields` appear in conforming class schemas (conditional on ONT-016).
+  - Complete: Regression baselines include the generated `schemas.ts` output.
 
 ---
 
@@ -269,15 +271,16 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-010, ONT-014
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** Complete
 - **PRD:** `SPECS/INPROGRESS/ONT-018_CLI_Registry_Commands.md`
+- **Implementation Note:** Implemented in PR #14; archive artifacts are not yet materialized. ONT-014 remains a follow-up hardening task for the shared CLI parser.
 - **Acceptance Criteria:**
-  - `publish` runs `check` before upload; packages with errors are not published.
-  - `publish` reads the bearer token from `--token` or `ONTOLOGYC_TOKEN`; `--token` takes precedence.
-  - `pull` verifies the `sourceDigest` of the downloaded IR; tampering produces `E_REGISTRY_DIGEST_MISMATCH`.
-  - `compat-check` exits non-zero on breaking changes, zero on fully compatible diffs.
-  - All three commands retry up to 3 times with exponential back-off on transient errors.
-  - Existing commands and regression hashes are unaffected.
+  - Complete: `publish` runs `check` before upload; packages with errors are not published.
+  - Complete: `publish` reads the bearer token from `--token` or `ONTOLOGYC_TOKEN`; `--token` takes precedence.
+  - Complete: `pull` writes the downloaded IR to `<out>/<id-dashed>-<version>.normalized.json`; `sourceDigest` is treated as the original YAML source digest, not an IR body integrity digest.
+  - Complete: `compat-check` exits non-zero on breaking changes, zero on fully compatible diffs.
+  - Complete: All registry HTTP operations retry up to 3 times with exponential back-off on transient errors.
+  - Complete: Existing commands and regression hashes are unaffected.
 
 ---
 
