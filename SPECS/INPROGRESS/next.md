@@ -4,7 +4,7 @@
 **Phase:** Code Quality and Maintainability
 **Effort:** 10h
 **Dependencies:** ONT-006
-**Status:** INPROGRESS
+**Status:** PRD Ready
 **PRD:** `SPECS/INPROGRESS/ONT-007_ontologyc_Compiler_Module_Split.md`
 
 ## Description

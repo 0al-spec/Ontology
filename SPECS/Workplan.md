@@ -103,7 +103,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-006
 - **Parallelizable:** no
-- **Status:** INPROGRESS
+- **Status:** PRD Ready
 - **PRD:** `SPECS/INPROGRESS/ONT-007_ontologyc_Compiler_Module_Split.md`
 - **Acceptance Criteria:**
   - `Sources/OntologyC/main.swift` becomes a thin CLI entry point.
