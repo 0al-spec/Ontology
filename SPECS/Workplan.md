@@ -1,97 +1,84 @@
-# Project Workplan — Example
+# Project Workplan — Ontology
 
-Replace this file with your own tasks. Installed to `SPECS/Workplan.md` by `install.sh`.
-Delete the example phases below and add your own.
+This workplan tracks the specification work for the Ontology repository. The initial source material is preserved in `SPECS/raw/`.
 
 ---
 
 ## Phase 1: Foundation
 
-#### P1-T1: Project Setup
-- **Description:** Initialize repository, tooling, and basic structure
+#### ONT-001: Ontology Layer and SpecGraph Semantic Import
+- **Description:** Define the lower-level Ontology Layer, TypeScript-oriented ontology compiler contract, SpecGraph semantic import/reference artifacts, and the `examcalc` golden ontology example.
 - **Priority:** P0
 - **Dependencies:** None
 - **Parallelizable:** no
+- **Status:** INPROGRESS
+- **PRD:** `SPECS/INPROGRESS/ONT-001_Ontology_Layer_And_SpecGraph_Semantic_Import.md`
+- **Source:** `SPECS/raw/Агентная_Операционная_Система_-_Branch_SpecGraph_-_Онтологии.json`
 - **Acceptance Criteria:**
-  - Repository initialized with proper structure
-  - Basic tooling configured (linting, tests)
-  - CI/CD pipeline set up
-
-#### P1-T2: Core Architecture
-- **Description:** Design and implement core system architecture
-- **Priority:** P0
-- **Dependencies:** P1-T1
-- **Parallelizable:** no
-- **Acceptance Criteria:**
-  - Architecture document approved
-  - Basic module structure implemented
-  - Integration tests passing
+  - Core artifacts `OntologyImport`, `ConceptRef`, `SemanticBinding`, `OntologyGap`, and `OntologyLockfile` are specified.
+  - `DomainOntologyPackage` YAML schema contract is specified.
+  - TypeScript foundation model and normalized compiler IR are specified.
+  - `ontologyc` validation and compile behavior is specified.
+  - `examcalc` ontology example contains required classes, relations, policies, and state machine.
+  - SpecGraph examples reference ontology concepts without duplicating domain definitions.
+  - Security rule forbids executing ontology YAML.
 
 ---
 
-## Phase 2: Features
+## Phase 2: Implementation Candidates
 
-#### P2-T1: Feature A Implementation
-- **Description:** Implement the main feature A
+#### ONT-002: Ontology Package Schema and Fixtures
+- **Description:** Implement machine-readable schema files and valid/invalid fixtures for `DomainOntologyPackage`.
 - **Priority:** P1
-- **Dependencies:** P1-T2
+- **Dependencies:** ONT-001
 - **Parallelizable:** yes
+- **Status:** Not Started
 - **Acceptance Criteria:**
-  - Feature A functional
-  - Unit tests >80% coverage
-  - Documentation complete
+  - Schema validates required metadata, classes, relations, policies, and state machines.
+  - Invalid fixtures cover missing metadata, invalid inheritance, unknown relation refs, and unsafe executable-looking YAML.
 
-#### P2-T2: Feature B Implementation
-- **Description:** Implement feature B
+#### ONT-003: `examcalc` Golden Ontology Package
+- **Description:** Materialize the exam-controlled calculator ontology package from the PRD.
 - **Priority:** P1
-- **Dependencies:** P1-T2
+- **Dependencies:** ONT-001
 - **Parallelizable:** yes
+- **Status:** Not Started
 - **Acceptance Criteria:**
-  - Feature B functional
-  - Integration with Feature A verified
+  - Ontology defines `Exam`, `ExamPolicyProfile`, `CalculatorFunction`, `FunctionSet`, `ExamModeSession`, and audit concepts.
+  - Relations and policies match the PRD.
+  - Example SpecGraph requirement resolves all `examcalc:*` semantic refs.
+
+#### ONT-004: Ontology Compiler Prototype
+- **Description:** Prototype `ontologyc check` and `ontologyc compile` from YAML to normalized IR and TypeScript SDK artifacts.
+- **Priority:** P1
+- **Dependencies:** ONT-001, ONT-002
+- **Parallelizable:** no
+- **Status:** Not Started
+- **Acceptance Criteria:**
+  - Compiler parses YAML as inert data.
+  - Compiler emits deterministic normalized IR.
+  - Compiler emits `refs.ts`, `types.ts`, `relations.ts`, `policies.ts`, `state-machines.ts`, `registry.ts`, and validators.
 
 ---
 
-## Phase 3: Polish
+## Phase 3: SpecGraph Integration
 
-#### P3-T1: Documentation
-- **Description:** Complete user and developer documentation
-- **Priority:** P2
-- **Dependencies:** P2-T1, P2-T2
+#### ONT-005: SpecGraph Semantic Reference Validation
+- **Description:** Specify and/or prototype validation for `OntologyImport`, lockfiles, `ConceptRef`, `SemanticBinding`, and `OntologyGap`.
+- **Priority:** P1
+- **Dependencies:** ONT-001, ONT-003
 - **Parallelizable:** yes
+- **Status:** Not Started
 - **Acceptance Criteria:**
-  - README complete
-  - API documentation published
-  - Usage examples provided
-
-#### P3-T2: Performance Optimization
-- **Description:** Optimize critical paths
-- **Priority:** P2
-- **Dependencies:** P2-T1, P2-T2
-- **Parallelizable:** no
-- **Acceptance Criteria:**
-  - Benchmarks meet NFRs
-  - Performance regression tests added
+  - Known ontology refs resolve to canonical URIs.
+  - Missing refs create `OntologyGap`.
+  - Compatibility reports classify breaking ontology changes.
 
 ---
 
 ## Task Status Legend
 
-- **Not Started** — Task defined but not yet begun
-- **INPROGRESS** — Task currently being worked on
-- **✅ Complete** — Task finished and archived
-
-## Adding New Tasks
-
-When adding tasks, follow this format:
-
-```markdown
-#### {PHASE}-{NUMBER}: {Task_Name}
-- **Description:** Brief description of the task
-- **Priority:** P0/P1/P2 (P0 = critical, P1 = important, P2 = nice-to-have)
-- **Dependencies:** Comma-separated list of task IDs or "None"
-- **Parallelizable:** yes/no (can this be worked on in parallel with others)
-- **Acceptance Criteria:**
-  - Criterion 1
-  - Criterion 2
-```
+- **Not Started** — Task defined but not yet begun.
+- **INPROGRESS** — Task currently being planned or executed.
+- **PRD Ready** — Implementation-ready PRD exists in `SPECS/INPROGRESS/`.
+- **Complete** — Task finished and archived.
