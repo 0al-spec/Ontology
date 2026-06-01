@@ -1,0 +1,29 @@
+name: Swift Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  quality:
+    name: Lint, format, test, coverage
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Install quality tools
+        run: |
+          brew list swiftformat >/dev/null 2>&1 || brew install swiftformat
+          brew list swiftlint >/dev/null 2>&1 || brew install swiftlint
+
+      - name: Run Swift quality checks
+        env:
+          RUN_COVERAGE: "1"
+        run: bash ./tools/swift-quality.sh

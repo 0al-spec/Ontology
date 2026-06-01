@@ -1,0 +1,5 @@
+# SwiftFormat is the single formatter for this package.
+# Keep this list explicit so new upstream rules do not create surprise churn.
+--swift-version 6.0
+--min-version 0.59.0
+--rules blankLineAfterImports,blankLinesAtEndOfScope,blankLinesAtStartOfScope,blankLinesBetweenImports,blankLinesBetweenScopes,consecutiveBlankLines,consecutiveSpaces,linebreakAtEndOfFile,linebreaks,semicolons,spaceAroundBraces,spaceAroundBrackets,spaceAroundComments,spaceAroundGenerics,spaceAroundOperators,spaceAroundParens,spaceInsideBraces,spaceInsideBrackets,spaceInsideComments,spaceInsideGenerics,spaceInsideParens
