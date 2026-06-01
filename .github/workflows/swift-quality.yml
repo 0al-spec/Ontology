@@ -19,7 +19,9 @@ jobs:
         run: swift --version
 
       - name: Install quality tools
-        run: brew install swiftformat swiftlint
+        run: |
+          brew list swiftformat >/dev/null 2>&1 || brew install swiftformat
+          brew list swiftlint >/dev/null 2>&1 || brew install swiftlint
 
       - name: Run Swift quality checks
         env:
