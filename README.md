@@ -139,6 +139,34 @@ RUN_COVERAGE=1 bash tools/swift-quality.sh
 GitHub Actions runs the same script with `RUN_COVERAGE=1` on pull requests and
 pushes to `main`.
 
+## Documentation
+
+DocC documentation is generated for the library targets and deployed to GitHub
+Pages on pushes to `main`.
+
+Generate local DocC output:
+
+```bash
+swift package --allow-writing-to-directory ./docs/ontologyrules \
+  generate-documentation \
+  --target OntologyRules \
+  --output-path ./docs/ontologyrules \
+  --transform-for-static-hosting \
+  --hosting-base-path Ontology/ontologyrules
+
+swift package --allow-writing-to-directory ./docs/ontologycompiler \
+  generate-documentation \
+  --target OntologyCompiler \
+  --output-path ./docs/ontologycompiler \
+  --transform-for-static-hosting \
+  --hosting-base-path Ontology/ontologycompiler
+```
+
+The Pages workflow publishes:
+
+- `OntologyRules`: `documentation/ontologyrules/`
+- `OntologyCompiler`: `documentation/ontologycompiler/`
+
 ## Project Layout
 
 ```text

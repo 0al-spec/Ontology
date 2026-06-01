@@ -1,0 +1,88 @@
+name: Deploy DocC Documentation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build DocC
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build OntologyRules documentation
+        run: |
+          mkdir -p docs
+          swift package --allow-writing-to-directory ./docs/ontologyrules \
+            generate-documentation \
+            --target OntologyRules \
+            --output-path ./docs/ontologyrules \
+            --transform-for-static-hosting \
+            --hosting-base-path Ontology/ontologyrules
+
+      - name: Build OntologyCompiler documentation
+        run: |
+          mkdir -p docs
+          swift package --allow-writing-to-directory ./docs/ontologycompiler \
+            generate-documentation \
+            --target OntologyCompiler \
+            --output-path ./docs/ontologycompiler \
+            --transform-for-static-hosting \
+            --hosting-base-path Ontology/ontologycompiler
+
+      - name: Add Pages index
+        run: |
+          touch docs/.nojekyll
+          cat > docs/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Ontology Documentation</title>
+          </head>
+          <body>
+            <h1>Ontology Documentation</h1>
+            <ul>
+              <li><a href="./ontologyrules/documentation/ontologyrules/">OntologyRules</a></li>
+              <li><a href="./ontologycompiler/documentation/ontologycompiler/">OntologyCompiler</a></li>
+            </ul>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload Pages artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+  deploy:
+    name: Deploy Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
