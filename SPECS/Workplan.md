@@ -117,15 +117,15 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-007
 - **Parallelizable:** no
-- **Status:** PRD Ready
-- **PRD:** `SPECS/INPROGRESS/ONT-008_OntologyRules_Specification_Extraction.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-008_OntologyRules_Specification_Extraction/ONT-008_OntologyRules_Specification_Extraction.md`
 - **Acceptance Criteria:**
-  - Metadata and package-shape predicates are represented as named Swift specifications.
-  - Concept reference syntax and local/imported reference checks are represented as named Swift specifications.
-  - Unsafe YAML key/value/tag checks are represented as named Swift specifications.
-  - Relation, policy, and state-machine predicates are represented as named Swift specifications.
-  - `OntologyRulesTests` cover each extracted specification cluster.
-  - Baseline regression tests and generated output hashes remain stable.
+  - Complete: Metadata and package-shape predicates are represented as named Swift specifications.
+  - Complete: Concept reference syntax and local/imported reference checks are represented as named Swift specifications.
+  - Complete: Unsafe YAML key/value/tag checks are represented as named Swift specifications.
+  - Complete: Relation, policy, and state-machine predicates are represented as named Swift specifications.
+  - Complete: `OntologyRulesTests` cover each extracted specification cluster.
+  - Complete: Baseline regression tests and generated output hashes remain stable.
 
 #### ONT-009: Ontology DecisionSpec Migration
 - **Description:** Move classification logic into typed `SpecificationCore` decision specs for relation range shape, concept ref resolution, SpecGraph resolved/gap classification, compatibility changes, and CLI command classification where useful.

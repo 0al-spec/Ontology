@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-008 | [ONT-008_OntologyRules_Specification_Extraction/](ONT-008_OntologyRules_Specification_Extraction/) | 2026-06-01 | PASS |
 | ONT-007 | [ONT-007_ontologyc_Compiler_Module_Split/](ONT-007_ontologyc_Compiler_Module_Split/) | 2026-06-01 | PASS |
 | ONT-006 | [ONT-006_SpecificationCore_Baseline_and_Regression_Harness/](ONT-006_SpecificationCore_Baseline_and_Regression_Harness/) | 2026-06-01 | PASS |
 | ONT-005 | [ONT-005_SpecGraph_Semantic_Reference_Validation/](ONT-005_SpecGraph_Semantic_Reference_Validation/) | 2026-06-01 | PASS |
@@ -24,6 +25,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-01 | ONT-008 | Archived OntologyRules_Specification_Extraction (PASS) |
 | 2026-06-01 | ONT-007 | Archived REVIEW_ONT-007 report |
 | 2026-06-01 | ONT-007 | Archived ontologyc_Compiler_Module_Split (PASS) |
 | 2026-06-01 | ONT-006 | Archived REVIEW_ONT-006 report |
