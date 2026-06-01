@@ -160,7 +160,10 @@ extension OntologyCompiler {
 
     func write(json: Any, to url: URL) throws {
         let data = try JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
-        let text = String(data: data, encoding: .utf8)! + "\n"
+        guard let jsonText = String(data: data, encoding: .utf8) else {
+            throw OntologyCompilerError.invalidArgument("Could not encode JSON as UTF-8")
+        }
+        let text = jsonText + "\n"
         try text.write(to: url, atomically: true, encoding: .utf8)
     }
 
@@ -182,8 +185,18 @@ extension OntologyCompiler {
     }
 
     func jsonText(_ value: Any) -> String {
-        let data = try! JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
-        return String(data: data, encoding: .utf8)!
+        do {
+            let data = try JSONSerialization.data(
+                withJSONObject: value,
+                options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+            )
+            guard let text = String(data: data, encoding: .utf8) else {
+                preconditionFailure("JSON serialization produced non-UTF-8 data")
+            }
+            return text
+        } catch {
+            preconditionFailure("Invalid JSON value passed to TypeScript emitter: \(error)")
+        }
     }
 
     func matches(_ value: String, _ pattern: String, caseInsensitive: Bool = false) -> Bool {

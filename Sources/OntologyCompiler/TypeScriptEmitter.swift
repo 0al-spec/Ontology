@@ -68,9 +68,9 @@ extension OntologyCompiler {
             let fqid = string(item["fqid"]) ?? id
             let localProtos = ((item["implements"] as? [String]) ?? ((item["implements"] as? [Any] ?? []).compactMap { $0 as? String }))
                 .filter { localProtocolFqids.contains($0) }
-                .compactMap { f -> String? in
-                    let p = f.split(separator: ":", maxSplits: 1)
-                    return p.count == 2 ? String(p[1]) : nil
+                .compactMap { fqProtocolRef -> String? in
+                    let parts = fqProtocolRef.split(separator: ":", maxSplits: 1)
+                    return parts.count == 2 ? String(parts[1]) : nil
                 }
             for proto in localProtos where !referencedProtoNames.contains(proto) {
                 referencedProtoNames.append(proto)

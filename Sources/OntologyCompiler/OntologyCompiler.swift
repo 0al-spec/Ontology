@@ -171,10 +171,6 @@ public final class OntologyCompiler {
         token: String?,
         outPath: String?
     ) throws -> Bool {
-        let irData = try pullPackageData(ref: ref, registry: registry, token: token)
-        guard let fromIR = try JSONSerialization.jsonObject(with: irData) as? JSONObject else {
-            throw OntologyCompilerError.invalidArgument("Registry IR is not valid JSON for \(ref)")
-        }
         diagnostics = []
         guard let toPackage = load(path: path) else {
             throw OntologyCompilerError.packageError(diagnostics)
@@ -184,6 +180,11 @@ public final class OntologyCompiler {
             throw OntologyCompilerError.packageError(diagnostics)
         }
         let toIR = normalize(toPackage)
+
+        let irData = try pullPackageData(ref: ref, registry: registry, token: token)
+        guard let fromIR = try JSONSerialization.jsonObject(with: irData) as? JSONObject else {
+            throw OntologyCompilerError.invalidArgument("Registry IR is not valid JSON for \(ref)")
+        }
         let report = compatibilityReport(fromIR: fromIR, toIR: toIR)
         if let outPath {
             try writeYAML(report, to: URL(fileURLWithPath: outPath))

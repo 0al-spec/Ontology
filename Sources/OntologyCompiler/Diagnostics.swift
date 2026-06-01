@@ -2,7 +2,7 @@ import Foundation
 
 typealias JSONObject = [String: Any]
 
-public struct Diagnostic: Encodable {
+public struct Diagnostic: Encodable, Sendable {
     let code: String
     let severity: String
     let path: String

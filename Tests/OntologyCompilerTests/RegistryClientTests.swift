@@ -28,7 +28,7 @@ private final class MockURLProtocol: URLProtocol {
 }
 
 final class RegistryClientTests: XCTestCase {
-    private var stubSession: URLSession!
+    private var stubSession: URLSession?
 
     override func setUp() {
         super.setUp()
@@ -43,8 +43,8 @@ final class RegistryClientTests: XCTestCase {
         super.tearDown()
     }
 
-    private func makeClient() -> RegistryClient {
-        RegistryClient(session: stubSession)
+    private func makeClient() throws -> RegistryClient {
+        RegistryClient(session: try XCTUnwrap(stubSession))
     }
 
     private func stubResponse(for request: URLRequest, status: Int = 200) -> HTTPURLResponse {
@@ -98,7 +98,7 @@ final class RegistryClientTests: XCTestCase {
         var capturedBody: Data?
         var capturedContentType: String?
         MockURLProtocol.requestHandler = { request in
-            capturedBody = request.httpBody
+            capturedBody = request.bodyData
             capturedContentType = request.value(forHTTPHeaderField: "Content-Type")
             return (self.stubResponse(for: request), Data())
         }
@@ -230,5 +230,61 @@ final class RegistryClientTests: XCTestCase {
         let report = compiler.compatibilityReport(fromIR: fromIR, toIR: toIR)
         let compatible = (report["result"] as? [String: Any])?["compatible"] as? Bool ?? false
         XCTAssertTrue(compatible, "Adding a class must not be a breaking change")
+    }
+
+    func testCompatCheckReportsLocalPackageDiagnosticsBeforeRegistryPull() throws {
+        let compiler = OntologyCompiler()
+        let invalidPackage = repoRoot
+            .appendingPathComponent("SPECS/ontology/fixtures/invalid/missing-metadata.yaml")
+
+        XCTAssertThrowsError(
+            try compiler.compatCheckPackage(
+                path: invalidPackage.path,
+                against: "examcalc@0.1.0",
+                registry: "https://registry.example.com",
+                token: nil,
+                outPath: nil
+            )
+        ) { error in
+            guard case OntologyCompilerError.packageError(let diagnostics) = error else {
+                return XCTFail("Expected local package diagnostics, got \(error)")
+            }
+
+            XCTAssertTrue(
+                diagnostics.contains { $0.code == "metadata.required" },
+                "Expected missing metadata diagnostic, got \(diagnostics)"
+            )
+        }
+    }
+
+    private var repoRoot: URL {
+        URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+    }
+}
+
+private extension URLRequest {
+    var bodyData: Data? {
+        if let httpBody {
+            return httpBody
+        }
+        guard let stream = httpBodyStream else {
+            return nil
+        }
+        stream.open()
+        defer { stream.close() }
+
+        var data = Data()
+        var buffer = [UInt8](repeating: 0, count: 1024)
+        while stream.hasBytesAvailable {
+            let readCount = stream.read(&buffer, maxLength: buffer.count)
+            if readCount <= 0 {
+                break
+            }
+            data.append(buffer, count: readCount)
+        }
+        return data
     }
 }

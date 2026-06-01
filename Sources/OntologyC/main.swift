@@ -23,6 +23,16 @@ guard let command = args.first else {
 
 let compiler = OntologyCompiler()
 
+func optionValue(_ name: String) -> String? {
+    args.firstIndex(of: name).flatMap { index in
+        index + 1 < args.count ? args[index + 1] : nil
+    }
+}
+
+func authToken() -> String? {
+    optionValue("--token") ?? ProcessInfo.processInfo.environment["ONTOLOGYC_TOKEN"]
+}
+
 switch command {
 case "check":
     guard args.count == 2 else { usage() }
@@ -87,18 +97,14 @@ case "diff":
 case "publish":
     // publish <package.yaml> --registry <url> [--token <token>]
     guard args.count >= 2,
-          let regIdx = args.firstIndex(of: "--registry"), regIdx + 1 < args.count else { usage() }
+          let publishRegistry = optionValue("--registry") else { usage() }
     let publishPath = args[1]
-    let publishRegistry = args[regIdx + 1]
-    let publishTokenIdx = args.firstIndex(of: "--token")
-    let publishToken: String? = publishTokenIdx.flatMap { $0 + 1 < args.count ? args[$0 + 1] : nil }
-        ?? ProcessInfo.processInfo.environment["ONTOLOGYC_TOKEN"]
     do {
-        let result = try compiler.publishPackage(path: publishPath, registry: publishRegistry, token: publishToken)
+        let result = try compiler.publishPackage(path: publishPath, registry: publishRegistry, token: authToken())
         print("ontologyc publish: PASS \(result.packageRef)")
-    } catch let e as OntologyCompilerError {
-        if case .packageError(let diags) = e { compiler.printDiagnostics(diags) }
-        fputs("ontologyc publish: FAIL \(e)\n", stderr)
+    } catch let compilerError as OntologyCompilerError {
+        if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
+        fputs("ontologyc publish: FAIL \(compilerError)\n", stderr)
         exit(1)
     } catch {
         fputs("ontologyc publish: FAIL \(error)\n", stderr)
@@ -108,16 +114,11 @@ case "publish":
 case "pull":
     // pull <id>@<version> --registry <url> --out <directory>
     guard args.count >= 2,
-          let pullRegIdx = args.firstIndex(of: "--registry"), pullRegIdx + 1 < args.count,
-          let pullOutIdx = args.firstIndex(of: "--out"), pullOutIdx + 1 < args.count else { usage() }
+          let pullRegistry = optionValue("--registry"),
+          let pullOutDirectory = optionValue("--out") else { usage() }
     let pullRef = args[1]
-    let pullRegistry = args[pullRegIdx + 1]
-    let pullOutDirectory = args[pullOutIdx + 1]
-    let pullTokenIdx = args.firstIndex(of: "--token")
-    let pullToken: String? = pullTokenIdx.flatMap { $0 + 1 < args.count ? args[$0 + 1] : nil }
-        ?? ProcessInfo.processInfo.environment["ONTOLOGYC_TOKEN"]
     do {
-        try compiler.pullPackage(ref: pullRef, registry: pullRegistry, token: pullToken, outDirectory: pullOutDirectory)
+        try compiler.pullPackage(ref: pullRef, registry: pullRegistry, token: authToken(), outDirectory: pullOutDirectory)
         print("ontologyc pull: PASS \(pullRef)")
     } catch {
         fputs("ontologyc pull: FAIL \(error)\n", stderr)
@@ -127,32 +128,25 @@ case "pull":
 case "compat-check":
     // compat-check <package.yaml> --against <id>@<version> --registry <url> [--out <report.yaml>]
     guard args.count >= 2,
-          let againstIdx = args.firstIndex(of: "--against"), againstIdx + 1 < args.count,
-          let compatRegIdx = args.firstIndex(of: "--registry"), compatRegIdx + 1 < args.count else { usage() }
+          let compatRef = optionValue("--against"),
+          let compatRegistry = optionValue("--registry") else { usage() }
     let compatPath = args[1]
-    let compatRef = args[againstIdx + 1]
-    let compatRegistry = args[compatRegIdx + 1]
-    let compatOutIdx = args.firstIndex(of: "--out")
-    let compatOutPath: String? = compatOutIdx.flatMap { $0 + 1 < args.count ? args[$0 + 1] : nil }
-    let compatTokenIdx = args.firstIndex(of: "--token")
-    let compatToken: String? = compatTokenIdx.flatMap { $0 + 1 < args.count ? args[$0 + 1] : nil }
-        ?? ProcessInfo.processInfo.environment["ONTOLOGYC_TOKEN"]
     do {
         let compatible = try compiler.compatCheckPackage(
             path: compatPath,
             against: compatRef,
             registry: compatRegistry,
-            token: compatToken,
-            outPath: compatOutPath
+            token: authToken(),
+            outPath: optionValue("--out")
         )
         if !compatible {
             fputs("ontologyc compat-check: BREAKING CHANGES DETECTED in \(compatPath)\n", stderr)
             exit(1)
         }
         print("ontologyc compat-check: PASS \(compatPath)")
-    } catch let e as OntologyCompilerError {
-        if case .packageError(let diags) = e { compiler.printDiagnostics(diags) }
-        fputs("ontologyc compat-check: FAIL \(e)\n", stderr)
+    } catch let compilerError as OntologyCompilerError {
+        if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
+        fputs("ontologyc compat-check: FAIL \(compilerError)\n", stderr)
         exit(1)
     } catch {
         fputs("ontologyc compat-check: FAIL \(error)\n", stderr)

@@ -38,8 +38,8 @@ final class RegistryClient {
     }
 
     private func isRetriable(_ error: Error) -> Bool {
-        guard let e = error as? RegistryError else { return false }
-        switch e {
+        guard let registryError = error as? RegistryError else { return false }
+        switch registryError {
         case .httpError(let code, _): return code >= 500
         case .networkError: return true
         case .invalidResponse: return false
@@ -51,8 +51,8 @@ final class RegistryClient {
         for attempt in 0 ..< maxRetries {
             do {
                 return try perform()
-            } catch let e where isRetriable(e) {
-                lastError = e
+            } catch let retryableError where isRetriable(retryableError) {
+                lastError = retryableError
                 if attempt < maxRetries - 1 { Thread.sleep(forTimeInterval: Double(1 << attempt)) }
             } catch {
                 throw error
