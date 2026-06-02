@@ -1,7 +1,7 @@
 # ONT-025 Validation Report
 
-**Task:** Governance Decision CLI Validation  
-**Date:** 2026-06-03  
+**Task:** Governance Decision CLI Validation
+**Date:** 2026-06-03
 **Verdict:** PASS
 
 ## Scope

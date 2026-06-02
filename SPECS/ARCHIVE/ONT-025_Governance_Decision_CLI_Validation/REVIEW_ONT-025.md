@@ -1,6 +1,6 @@
 ## REVIEW REPORT — ONT-025 Governance Decision CLI Validation
 
-**Scope:** `origin/main..HEAD`  
+**Scope:** `origin/main..HEAD`
 **Files:** 13
 
 ### Summary Verdict

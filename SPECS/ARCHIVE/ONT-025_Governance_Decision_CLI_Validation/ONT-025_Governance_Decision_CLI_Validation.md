@@ -1,8 +1,8 @@
 # ONT-025: Governance Decision CLI Validation
 
-**Status:** PRD Ready  
-**Date:** 2026-06-03  
-**Priority:** P1  
+**Status:** PRD Ready
+**Date:** 2026-06-03
+**Priority:** P1
 **Dependencies:** ONT-024
 
 ## Summary
