@@ -227,11 +227,15 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P3
 - **Dependencies:** ONT-003
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete
 - **Origin:** Post-implementation code review (PR #13).
+- **Implementation Note:** `ExamPolicyProfile` is the only governing concept in the
+  canonical examcalc ontology, matching the ONT-001 source model. Supporting concepts remain
+  ordinary domain concepts.
 - **Acceptance Criteria:**
-  - `central: true` is reduced to the governing concept(s) justified by the source, or the multi-central semantics are explicitly documented.
-  - Regenerated SDK artifacts and regression baselines are updated to match.
+  - Complete: `central: true` is reduced to the governing concept justified by the source:
+    `ExamPolicyProfile`.
+  - Complete: Regenerated SDK artifacts and regression baselines are updated to match.
 
 ---
 

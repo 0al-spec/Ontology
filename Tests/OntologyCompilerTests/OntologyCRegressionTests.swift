@@ -175,7 +175,7 @@ final class OntologyCRegressionTests: XCTestCase {
         let ir = output.appendingPathComponent("ontology.normalized.json")
         XCTAssertEqual(
             try sha256Hex(of: ir),
-            "bb626c69bb0989ab6e7e5605e0dde73dee9e220b6b203d584924e22a6e20936d"
+            "197419c31b3a89c9ed04edefa3ca650e8c241e660d756d0affaf38f21d88aca4"
         )
     }
 

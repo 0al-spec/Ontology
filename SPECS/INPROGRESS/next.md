@@ -1,24 +1,26 @@
 # Next Tasks: Planning State
 
-**Status:** Updated after ONT-013 strict lint gate
+**Status:** Updated after ONT-015 governing-concept review
 
 ## Description
 
-The active implementation backlog is now small. ONT-013 has been completed by auditing the
-current SwiftLint state and enabling strict lint mode. The next task should start from the
-remaining Phase 5 semantic-governance backlog.
+The tracked implementation backlog in `SPECS/Workplan.md` is complete. ONT-015 has reduced
+the examcalc governing-concept signal to the source-backed `ExamPolicyProfile` concept.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| ONT-015 | Ontology Governing-Concept Review | 5 | P3 | `SPECS/Workplan.md` |
+| None | No active Workplan task remains | - | - | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
+- ONT-015 is complete: `ExamPolicyProfile` is the only `central: true` class in the
+  canonical examcalc package, example mirror, compatibility fixture, and generated IR.
+- New work should start by adding a fresh task to `SPECS/Workplan.md`, not by reusing
+  completed follow-ups.
 - ONT-013 is complete: the fresh audit found zero SwiftLint violations, force rules are
   already enforced as errors, and `strict: true` now makes warning regressions fail CI.
-- ONT-015 remains the only active Workplan item.
 - The ONT-018 `pull` contract follows the PRD: `sourceDigest` is the digest of the original
   YAML source, not the downloaded IR body. Integrity for pulled IR is transport-level for now.
 - ONT-011, ONT-012, and ONT-014 are complete in `SPECS/Workplan.md` but do not have
@@ -28,6 +30,7 @@ remaining Phase 5 semantic-governance backlog.
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-015 | Governing-concept central marker follow-up | `SPECS/Workplan.md` |
 | ONT-013 | Strict SwiftLint warning gate follow-up | `SPECS/Workplan.md` |
 | ONT-014 | CLI help/argument parsing follow-up | `SPECS/Workplan.md` |
 | ONT-012 | Competency-question regression test follow-up | `SPECS/Workplan.md` |
