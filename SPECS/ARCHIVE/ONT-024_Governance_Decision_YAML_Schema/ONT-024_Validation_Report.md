@@ -51,6 +51,22 @@ for path in [
         yaml.safe_load(f)
 print('yaml parse: PASS')
 PY
+python3 - <<'PY'
+import jsonschema
+import yaml
+from pathlib import Path
+schema = yaml.safe_load(Path('SPECS/ontology/governance-decision.schema.yaml').read_text())
+approved = yaml.safe_load(Path('SPECS/ontology/examples/governance/approved-decision.yaml').read_text())
+invalid = yaml.safe_load(Path('SPECS/ontology/examples/governance/invalid-agent-approval.yaml').read_text())
+jsonschema.Draft202012Validator.check_schema(schema)
+jsonschema.validate(approved, schema)
+try:
+    jsonschema.validate(invalid, schema)
+except jsonschema.ValidationError:
+    print('jsonschema smoke: PASS')
+else:
+    raise SystemExit('invalid example unexpectedly passed schema validation')
+PY
 bash tools/swift-quality.sh
 ```
 
@@ -59,6 +75,9 @@ bash tools/swift-quality.sh
 - `git diff --check`: PASS
 - File existence checks: PASS
 - YAML parse smoke check: PASS
+- JSON Schema smoke check: PASS
+  - Valid approval example passes.
+  - Invalid agent approval example fails as expected.
 - `bash tools/swift-quality.sh`: PASS
   - SwiftFormat: 0/46 files require formatting
   - SwiftLint: 0 violations
