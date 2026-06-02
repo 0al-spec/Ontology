@@ -1,0 +1,121 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: test.examcalc.pass
+  namespace: examcalcpass
+  version: 0.1.0
+spec:
+  imports:
+    - id: specgraph.foundation
+      namespace: sg
+      version: 0.1.0
+  classes:
+    Exam:
+      extends: sg:DomainEntity
+      description: University exam that requires a controlled calculator policy.
+    ExamPolicyProfile:
+      extends: sg:DomainEntity
+      description: Signed policy governing calculator behavior.
+      central: true
+    ExamModeSession:
+      extends: sg:DomainEntity
+      lifecycle: ExamModeSessionState
+      description: Runtime enforcement session.
+    TabletDevice:
+      extends: sg:DomainEntity
+      description: Managed tablet used during an exam.
+    AuditLogEntry:
+      extends: sg:DomainEntity
+      description: Durable audit record.
+    CalculatorFunction:
+      extends: sg:Capability
+      description: Calculator capability.
+    StartExamMode:
+      extends: sg:Command
+      description: Start exam mode.
+    VerifyDeviceAndPolicy:
+      extends: sg:Command
+      description: Verify device and policy.
+    LockCalculator:
+      extends: sg:Command
+      description: Lock calculator.
+    EndExamMode:
+      extends: sg:Command
+      description: End exam mode.
+    PolicyViolation:
+      extends: sg:Event
+      description: Policy violation.
+    FunctionSet:
+      extends: sg:ValueObject
+      description: Named set of calculator functions.
+  protocols: {}
+  relations:
+    requires_policy:
+      domain: examcalcpass:Exam
+      range: examcalcpass:ExamPolicyProfile
+    allows:
+      domain: examcalcpass:ExamPolicyProfile
+      range: examcalcpass:CalculatorFunction
+    denies:
+      domain: examcalcpass:ExamPolicyProfile
+      range: examcalcpass:CalculatorFunction
+    enforces:
+      domain: examcalcpass:ExamModeSession
+      range: examcalcpass:ExamPolicyProfile
+    records:
+      domain: examcalcpass:AuditLogEntry
+      range:
+        oneOf:
+          - examcalcpass:PolicyViolation
+          - examcalcpass:ExamModeSession
+  policies:
+    DenyByDefaultPolicy:
+      extends: sg:Policy
+      enforceability: runtime
+      appliesTo:
+        - ExamPolicyProfile
+      text: Any calculator function not explicitly allowed must be denied.
+    PolicyMustBeSigned:
+      extends: sg:Policy
+      enforceability: design
+      appliesTo:
+        - ExamPolicyProfile
+      text: Exam policy profile must be signed before activation.
+    PolicyMustBeDeviceVerifiable:
+      extends: sg:Policy
+      enforceability: design
+      appliesTo:
+        - ExamPolicyProfile
+      text: Exam policy must be verifiable on the device.
+    NoNetworkDuringExam:
+      extends: sg:Policy
+      enforceability: runtime
+      appliesTo:
+        - ExamModeSession
+      text: Network access is denied during exam mode.
+  stateMachines:
+    ExamModeSessionState:
+      states:
+        - initialized
+        - pending_device_verification
+        - policy_verified
+        - active
+        - locked
+        - ended
+        - failed
+      transitions:
+        - from: initialized
+          to: pending_device_verification
+          command: StartExamMode
+        - from: pending_device_verification
+          to: policy_verified
+          command: VerifyDeviceAndPolicy
+        - from: policy_verified
+          to: active
+          command: VerifyDeviceAndPolicy
+        - from: active
+          to: locked
+          command: LockCalculator
+        - from: active
+          to: ended
+          command: EndExamMode

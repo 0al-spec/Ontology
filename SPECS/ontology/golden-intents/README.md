@@ -23,24 +23,43 @@ must preserve, such as:
 - minimum concept coverage;
 - required relation paths;
 - policy, lifecycle, trust, and evidence expectations;
-- competency question coverage;
+- competency question review anchors;
 - forbidden surface or implementation concepts.
 
 They are intentionally not byte-exact expected ontology outputs. A candidate ontology may
 use different names or add justified concepts and still be acceptable if it satisfies the
 minimum semantics and avoids hard reject criteria.
 
-## Future Harness Use
+## Repeatability Harness
 
-ONT-022 should use these files as inputs for a repeatability harness. The harness should
-check minimum semantics and anti-patterns, not compare whole generated drafts
-byte-for-byte.
+Use `ontologyc validate-golden-intent` to compare an expectation file with a candidate
+`DomainOntologyPackage` YAML artifact:
 
-Recommended evaluation shape:
+```bash
+swift run ontologyc validate-golden-intent \
+  SPECS/ontology/golden-intents/expectations/exam-controlled-calculator.expectation.yaml \
+  --candidate Tests/fixtures/golden-intents/examcalc-pass.yaml \
+  --out /tmp/golden-intent-report.yaml
+```
+
+Evaluation shape:
 
 ```text
 golden intent + candidate ontology draft + expectation file -> repeatability report
 ```
+
+The command performs automated pass/fail checks for:
+
+- governing concept presence and `central: true` when required;
+- minimum concept coverage;
+- required relation id/domain/range shape;
+- required policies and enforceability groups;
+- lifecycle state machine state coverage;
+- forbidden core concept absence.
+
+Competency question expectations are included in the report as `manual_review_required`
+anchors. The current `DomainOntologyPackage` format does not carry first-class competency
+question data, so the harness does not overclaim automated CQ proof.
 
 ## Non-Goals
 

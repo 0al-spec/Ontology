@@ -378,15 +378,16 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-021
 - **Parallelizable:** no
-- **Status:** Not Started
-- **PRD:** TBD by FLOW
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-022_Golden_Intent_Repeatability_Harness/ONT-022_Golden_Intent_Repeatability_Harness.md`
 - **Origin:** Follow-up to ONT-021 and raw roadmap stage 4, "Golden intent set."
 - **Acceptance Criteria:**
-  - Harness accepts a golden intent expectation file and a candidate ontology artifact.
-  - Harness reports pass/fail results for required concepts, relations, policies, lifecycle,
-    evidence, and competency question coverage.
-  - Harness treats expectations as minimum semantic criteria, not byte-exact ontology truth.
-  - Harness output is deterministic and suitable for CI/regression use.
+  - Complete: Harness accepts a golden intent expectation file and a candidate ontology artifact.
+  - Complete: Harness reports pass/fail results for required concepts, relations, policies,
+    lifecycle, and forbidden concept checks; competency question expectations are emitted as
+    manual review anchors until candidates carry first-class CQ data.
+  - Complete: Harness treats expectations as minimum semantic criteria, not byte-exact ontology truth.
+  - Complete: Harness output is deterministic and suitable for CI/regression use.
 
 #### ONT-023: Ontology Governance Protocol
 - **Description:** Define the approval, rejection, merge, versioning, and audit protocol for

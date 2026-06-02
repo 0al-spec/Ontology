@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-022 | [ONT-022_Golden_Intent_Repeatability_Harness/](ONT-022_Golden_Intent_Repeatability_Harness/) | 2026-06-02 | PASS |
 | ONT-021 | [ONT-021_Golden_Intent_Semantic_Expectations/](ONT-021_Golden_Intent_Semantic_Expectations/) | 2026-06-02 | PASS |
 | ONT-019 | [ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/](ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/) | 2026-06-02 | PASS |
 | ONT-018 | [ONT-018_CLI_Registry_Commands/](ONT-018_CLI_Registry_Commands/) | 2026-06-02 | PASS |
@@ -32,6 +33,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-02 | ONT-022 | Archived REVIEW_ONT-022 report |
+| 2026-06-02 | ONT-022 | Archived Golden_Intent_Repeatability_Harness (PASS) |
 | 2026-06-02 | ONT-021 | Archived REVIEW_ONT-021 report |
 | 2026-06-02 | ONT-021 | Archived Golden_Intent_Semantic_Expectations (PASS) |
 | 2026-06-02 | ONT-019 | Archived REVIEW_ONT-019 report |
