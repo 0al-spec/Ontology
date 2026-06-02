@@ -1,25 +1,24 @@
 # Next Tasks: Planning State
 
-**Status:** Updated after ONT-016..018 archive cleanup
+**Status:** Updated after ONT-013 strict lint gate
 
 ## Description
 
-The active implementation backlog is now small. Completed Phase 6/7 PRDs have been moved
-out of `SPECS/INPROGRESS/` and into `SPECS/ARCHIVE/`. The next task should start from the
-remaining Phase 5 backlog, not from stale in-progress PRDs.
+The active implementation backlog is now small. ONT-013 has been completed by auditing the
+current SwiftLint state and enabling strict lint mode. The next task should start from the
+remaining Phase 5 semantic-governance backlog.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| ONT-013 | Resolve SwiftLint Warnings in OntologyCompiler | 5 | P2 | `SPECS/Workplan.md` |
+| ONT-015 | Ontology Governing-Concept Review | 5 | P3 | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
-- ONT-013 is the next quality-focused Phase 5 item, but it should start with a fresh audit
-  because current SwiftLint output is clean and parts of the original warning list are
-  already obsolete.
-- ONT-015 remains a lower-priority semantic-governance follow-up.
+- ONT-013 is complete: the fresh audit found zero SwiftLint violations, force rules are
+  already enforced as errors, and `strict: true` now makes warning regressions fail CI.
+- ONT-015 remains the only active Workplan item.
 - The ONT-018 `pull` contract follows the PRD: `sourceDigest` is the digest of the original
   YAML source, not the downloaded IR body. Integrity for pulled IR is transport-level for now.
 - ONT-011, ONT-012, and ONT-014 are complete in `SPECS/Workplan.md` but do not have
@@ -29,6 +28,7 @@ remaining Phase 5 backlog, not from stale in-progress PRDs.
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-013 | Strict SwiftLint warning gate follow-up | `SPECS/Workplan.md` |
 | ONT-014 | CLI help/argument parsing follow-up | `SPECS/Workplan.md` |
 | ONT-012 | Competency-question regression test follow-up | `SPECS/Workplan.md` |
 | ONT-011 | README and contributor guide follow-up | `SPECS/Workplan.md` |
