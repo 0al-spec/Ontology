@@ -243,6 +243,7 @@ Examples:
 - [Ontology authoring guide](SPECS/ontology/authoring-guide.md)
 - [SpecGraph Ontology Induction Protocol](SPECS/ontology/induction-protocol.md)
 - [Ontology quality rubric](SPECS/ontology/ontology-quality-rubric.md)
+- [Golden intent set](SPECS/ontology/golden-intents/README.md)
 - [Examcalc golden package](SPECS/ontology/packages/examcalc/README.md)
 - [Hypercode roadmap](SPECS/ontology/hypercode-roadmap.md)
 
