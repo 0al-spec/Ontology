@@ -36,6 +36,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-03 | ONT-025 | Archived REVIEW_ONT-025 report |
 | 2026-06-03 | ONT-025 | Archived Governance_Decision_CLI_Validation (PASS) |
 | 2026-06-03 | ONT-024 | Archived REVIEW_ONT-024 report |
 | 2026-06-03 | ONT-024 | Archived Governance_Decision_YAML_Schema (PASS) |
