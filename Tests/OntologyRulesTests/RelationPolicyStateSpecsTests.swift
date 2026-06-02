@@ -13,11 +13,11 @@ final class RelationPolicyStateSpecsTests: XCTestCase {
     func testPolicyEnforceabilitySpec() {
         let spec = AllowedPolicyEnforceabilitySpec()
 
-        XCTAssertTrue(spec.isSatisfiedBy("design"))
-        XCTAssertTrue(spec.isSatisfiedBy("runtime"))
-        XCTAssertTrue(spec.isSatisfiedBy("manual"))
-        XCTAssertTrue(spec.isSatisfiedBy("audit"))
-        XCTAssertFalse(spec.isSatisfiedBy("optional"))
+        XCTAssertTrue(spec.isSatisfiedBy(PolicyEnforceability(rawValue: "design")))
+        XCTAssertTrue(spec.isSatisfiedBy(PolicyEnforceability(rawValue: "runtime")))
+        XCTAssertTrue(spec.isSatisfiedBy(PolicyEnforceability(rawValue: "manual")))
+        XCTAssertTrue(spec.isSatisfiedBy(PolicyEnforceability(rawValue: "audit")))
+        XCTAssertFalse(spec.isSatisfiedBy(PolicyEnforceability(rawValue: "optional")))
     }
 
     func testDeclaredStateSpec() {

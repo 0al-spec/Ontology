@@ -31,10 +31,10 @@ extension OntologyCompiler {
         scanUnsafeNode(root, path: "package")
         validateKnownKeys(root, allowed: ["apiVersion", "kind", "metadata", "spec"], path: "package")
 
-        if !ExpectedOntologyApiVersionSpec().isSatisfiedBy(string(root["apiVersion"]) ?? "") {
+        if !ExpectedOntologyApiVersionSpec().isSatisfiedBy(OntologyApiVersion(rawValue: string(root["apiVersion"]) ?? "")) {
             add("apiVersion.invalid", "apiVersion", "apiVersion must be \(apiVersion)")
         }
-        if !ExpectedDomainOntologyPackageKindSpec().isSatisfiedBy(string(root["kind"]) ?? "") {
+        if !ExpectedDomainOntologyPackageKindSpec().isSatisfiedBy(OntologyPackageKind(rawValue: string(root["kind"]) ?? "")) {
             add("kind.invalid", "kind", "kind must be \(kind)")
         }
 
@@ -54,13 +54,13 @@ extension OntologyCompiler {
         let version = requiredString(metadata, "version", path: "metadata.version", code: "metadata.required") ?? ""
 
         validate(id, path: "metadata.id", code: "metadata.invalid") {
-            OntologyIdPatternSpec().isSatisfiedBy($0)
+            OntologyIdPatternSpec().isSatisfiedBy(OntologyPackageId(rawValue: $0))
         }
         validate(namespace, path: "metadata.namespace", code: "metadata.invalid") {
-            OntologyNamespacePatternSpec().isSatisfiedBy($0)
+            OntologyNamespacePatternSpec().isSatisfiedBy(OntologyNamespace(rawValue: $0))
         }
         validate(version, path: "metadata.version", code: "metadata.invalid") {
-            OntologySemVerPatternSpec().isSatisfiedBy($0)
+            OntologySemVerPatternSpec().isSatisfiedBy(OntologySemanticVersion(rawValue: $0))
         }
 
         return LoadedPackage(

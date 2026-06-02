@@ -1,7 +1,9 @@
 import SpecificationCore
 
+/// JSON object representation used by SpecGraph integration decision rules.
 public typealias OntologyJSONObject = [String: Any]
 
+/// Inputs used to resolve one ontology reference against a SpecGraph concept index.
 public struct SpecGraphRefDecisionContext {
     public let ref: String
     public let conceptIndex: [String: OntologyJSONObject]
@@ -12,11 +14,13 @@ public struct SpecGraphRefDecisionContext {
     }
 }
 
+/// Resolution result for one ontology reference in a SpecGraph concept index.
 public enum SpecGraphRefDecision {
     case resolved(OntologyJSONObject)
     case gap
 }
 
+/// Decides whether one ontology reference resolves to a SpecGraph concept or becomes a gap.
 public struct SpecGraphRefDecisionSpec: DecisionSpec {
     public typealias Context = SpecGraphRefDecisionContext
     public typealias Result = SpecGraphRefDecision
@@ -31,6 +35,7 @@ public struct SpecGraphRefDecisionSpec: DecisionSpec {
     }
 }
 
+/// Inputs used to resolve a batch of ontology references against a SpecGraph concept index.
 public struct OntologyReferenceSetResolutionContext {
     public let references: [String]
     public let conceptIndex: [String: OntologyJSONObject]
@@ -41,6 +46,7 @@ public struct OntologyReferenceSetResolutionContext {
     }
 }
 
+/// Batch resolution result for ontology references consumed by SpecGraph integration.
 public struct OntologyReferenceSetResolution: Equatable {
     public let resolved: [String]
     public let gaps: [String]
@@ -55,6 +61,7 @@ public struct OntologyReferenceSetResolution: Equatable {
     }
 }
 
+/// Resolves a set of ontology references into resolved references and gap references.
 public struct OntologyReferenceSetResolutionSpec: DecisionSpec {
     public typealias Context = OntologyReferenceSetResolutionContext
     public typealias Result = OntologyReferenceSetResolution

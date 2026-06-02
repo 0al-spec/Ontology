@@ -1,6 +1,7 @@
 import Foundation
 import OntologyRules
 
+/// Errors raised by compiler workflows when arguments, packages, or registry payloads cannot be processed.
 public enum OntologyCompilerError: Error, CustomStringConvertible {
     case invalidArgument(String)
     case packageError([Diagnostic])
@@ -14,14 +15,17 @@ public enum OntologyCompilerError: Error, CustomStringConvertible {
     }
 }
 
+/// Orchestrates ontology package loading, validation, normalization, generation, registry operations, and SpecGraph validation.
 public final class OntologyCompiler {
     let apiVersion = "ontology.specgraph.io/v1alpha1"
     let kind = "DomainOntologyPackage"
 
     var diagnostics: [Diagnostic] = []
 
+    /// Creates a compiler instance with an empty diagnostic buffer.
     public init() {}
 
+    /// Parses and validates one ontology package, returning sorted diagnostics without writing output files.
     public func check(path: String) -> [Diagnostic] {
         diagnostics = []
         if let package = load(path: path) {
@@ -33,6 +37,7 @@ public final class OntologyCompiler {
         }
     }
 
+    /// Validates one ontology package and emits normalized IR plus generated TypeScript artifacts.
     public func compile(path: String, outDirectory: String) throws -> [Diagnostic] {
         diagnostics = []
         guard let package = load(path: path) else {
@@ -48,6 +53,7 @@ public final class OntologyCompiler {
         return diagnostics
     }
 
+    /// Resolves ontology references from SpecGraph binding documents and writes resolved refs, gaps, and a lockfile.
     public func validateSpecGraph(bindingPath: String, ontologyIRPath: String, outDirectory: String) throws -> (resolved: Int, gaps: Int) {
         let ir = try loadJSON(path: ontologyIRPath)
         let namespace = string(ir["namespace"]) ?? ""
@@ -110,6 +116,7 @@ public final class OntologyCompiler {
         return (resolvedRefs.count, gaps.count)
     }
 
+    /// Compares two ontology packages and writes a compatibility report to `outPath`.
     public func diffPackages(from fromPath: String, to toPath: String, outPath: String) throws -> [Diagnostic] {
         diagnostics = []
         guard let fromPackage = load(path: fromPath), let toPackage = load(path: toPath) else {
@@ -128,6 +135,7 @@ public final class OntologyCompiler {
         return diagnostics
     }
 
+    /// Publishes a validated ontology package IR to a registry endpoint.
     public func publishPackage(path: String, registry: String, token: String?) throws -> (diagnostics: [Diagnostic], packageRef: String) {
         diagnostics = []
         guard let package = load(path: path) else {
@@ -153,6 +161,7 @@ public final class OntologyCompiler {
         return (diagnostics: diagnostics, packageRef: "\(id)@\(version)")
     }
 
+    /// Pulls a normalized ontology package IR from a registry and writes it into `outDirectory`.
     public func pullPackage(ref: String, registry: String, token: String?, outDirectory: String) throws {
         let data = try pullPackageData(ref: ref, registry: registry, token: token)
         let parts = ref.split(separator: "@", maxSplits: 1)
@@ -164,6 +173,7 @@ public final class OntologyCompiler {
         try data.write(to: outURL.appendingPathComponent(filename))
     }
 
+    /// Checks whether a local package remains compatible with a registry package reference.
     public func compatCheckPackage(
         path: String,
         against ref: String,
@@ -208,10 +218,12 @@ public final class OntologyCompiler {
         return try RegistryClient().get(url: url, token: token)
     }
 
+    /// Returns whether a diagnostic collection contains at least one error severity.
     public func hasErrors(_ diagnostics: [Diagnostic]) -> Bool {
         diagnostics.contains { $0.severity == "error" }
     }
 
+    /// Prints diagnostics using the stable command-line text format.
     public func printDiagnostics(_ diagnostics: [Diagnostic]) {
         for diagnostic in diagnostics {
             var line = "\(diagnostic.severity) \(diagnostic.code) \(diagnostic.path): \(diagnostic.message)"

@@ -107,9 +107,7 @@ extension OntologyCompiler {
         var triggerNames = TriggerNames()
         for name in classes.keys.sorted() {
             let path = "spec.classes.\(name)"
-            validate(name, path: path, code: "class.name.invalid") {
-                OntologySymbolNameSpec().isSatisfiedBy($0)
-            }
+            validateSymbolName(name, path: path, code: "class.name.invalid")
             guard let definition = classes[name] as? JSONObject else {
                 add("class.type", path, "Class definition must be an object")
                 continue
@@ -188,9 +186,7 @@ extension OntologyCompiler {
     ) {
         for name in relations.keys.sorted() {
             let path = "spec.relations.\(name)"
-            validate(name, path: path, code: "relation.name.invalid") {
-                OntologySymbolNameSpec().isSatisfiedBy($0)
-            }
+            validateSymbolName(name, path: path, code: "relation.name.invalid")
             guard let definition = relations[name] as? JSONObject else {
                 add("relation.type", path, "Relation definition must be an object")
                 continue
@@ -226,9 +222,7 @@ extension OntologyCompiler {
     ) {
         for name in policies.keys.sorted() {
             let path = "spec.policies.\(name)"
-            validate(name, path: path, code: "policy.name.invalid") {
-                OntologySymbolNameSpec().isSatisfiedBy($0)
-            }
+            validateSymbolName(name, path: path, code: "policy.name.invalid")
             guard let definition = policies[name] as? JSONObject else {
                 add("policy.type", path, "Policy definition must be an object")
                 continue
@@ -241,7 +235,7 @@ extension OntologyCompiler {
             }
 
             if let enforceability = requiredString(definition, "enforceability", path: "\(path).enforceability", code: "policy.enforceability.required"),
-               !AllowedPolicyEnforceabilitySpec().isSatisfiedBy(enforceability) {
+               !AllowedPolicyEnforceabilitySpec().isSatisfiedBy(PolicyEnforceability(rawValue: enforceability)) {
                 add("policy.enforceability.invalid", "\(path).enforceability", "Policy enforceability \(enforceability) is invalid")
             }
 
@@ -269,9 +263,7 @@ extension OntologyCompiler {
     ) {
         for name in stateMachines.keys.sorted() {
             let path = "spec.stateMachines.\(name)"
-            validate(name, path: path, code: "stateMachine.name.invalid") {
-                OntologySymbolNameSpec().isSatisfiedBy($0)
-            }
+            validateSymbolName(name, path: path, code: "stateMachine.name.invalid")
             guard let definition = stateMachines[name] as? JSONObject else {
                 add("stateMachine.type", path, "State machine definition must be an object")
                 continue
@@ -290,9 +282,7 @@ extension OntologyCompiler {
             add("state.states.empty", "\(path).states", "State machine must contain at least one state")
         }
         for (index, state) in states.enumerated() {
-            validate(state, path: "\(path).states[\(index)]", code: "state.name.invalid") {
-                OntologyStateNameSpec().isSatisfiedBy($0)
-            }
+            validateStateName(state, path: "\(path).states[\(index)]", code: "state.name.invalid")
         }
         return stateSet
     }

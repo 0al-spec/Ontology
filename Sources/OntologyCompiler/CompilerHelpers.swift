@@ -9,7 +9,8 @@ extension OntologyCompiler {
         let executableValue = ExecutableLookingYamlValueSpec()
         for (lineIndex, line) in source.split(separator: "\n", omittingEmptySubsequences: false).enumerated() {
             let lineText = String(line)
-            if unsafeTag.isSatisfiedBy(lineText) || executableValue.isSatisfiedBy(lineText) {
+            if unsafeTag.isSatisfiedBy(YamlSourceLine(rawValue: lineText)) ||
+                executableValue.isSatisfiedBy(YamlScalarText(rawValue: lineText)) {
                 add("security.executable_content", "\(filePath):\(lineIndex + 1)", "YAML contains executable-looking content")
             }
         }
@@ -20,7 +21,7 @@ extension OntologyCompiler {
         let executableValue = ExecutableLookingYamlValueSpec()
         if let object = value as? JSONObject {
             for key in object.keys.sorted() {
-                if unsafeKey.isSatisfiedBy(key) {
+                if unsafeKey.isSatisfiedBy(YamlMappingKey(rawValue: key)) {
                     add("security.executable_content", "\(path).\(key)", "YAML contains executable-looking key")
                 }
                 if let child = object[key] {
@@ -32,7 +33,7 @@ extension OntologyCompiler {
                 scanUnsafeNode(child, path: "\(path)[\(index)]")
             }
         } else if let scalar = value as? String,
-                  executableValue.isSatisfiedBy(scalar) {
+                  executableValue.isSatisfiedBy(YamlScalarText(rawValue: scalar)) {
             add("security.executable_content", path, "YAML contains executable-looking string")
         }
     }
@@ -86,6 +87,18 @@ extension OntologyCompiler {
     func validate(_ value: String, path: String, code: String, isSatisfied: (String) -> Bool) {
         if !value.isEmpty && !isSatisfied(value) {
             add(code, path, "\(path) has invalid format")
+        }
+    }
+
+    func validateSymbolName(_ value: String, path: String, code: String) {
+        validate(value, path: path, code: code) {
+            OntologySymbolNameSpec().isSatisfiedBy(OntologySymbolName(rawValue: $0))
+        }
+    }
+
+    func validateStateName(_ value: String, path: String, code: String) {
+        validate(value, path: path, code: code) {
+            OntologyStateNameSpec().isSatisfiedBy(OntologyStateName(rawValue: $0))
         }
     }
 

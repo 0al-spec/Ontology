@@ -5,9 +5,7 @@ extension OntologyCompiler {
     func validateProtocols(_ protocols: JSONObject) {
         for name in protocols.keys.sorted() {
             let path = "spec.protocols.\(name)"
-            validate(name, path: path, code: "protocol.name.invalid") {
-                OntologySymbolNameSpec().isSatisfiedBy($0)
-            }
+            validateSymbolName(name, path: path, code: "protocol.name.invalid")
             guard let definition = protocols[name] as? JSONObject else {
                 add("protocol.type", path, "Protocol definition must be an object")
                 continue
@@ -46,9 +44,7 @@ extension OntologyCompiler {
     private func validateProtocolNameList(_ definition: JSONObject, key: String, path: String, code: String) {
         for (index, value) in (definition[key] as? [Any] ?? []).enumerated() {
             guard let name = string(value) else { continue }
-            validate(name, path: "\(path).\(key)[\(index)]", code: code) {
-                OntologySymbolNameSpec().isSatisfiedBy($0)
-            }
+            validateSymbolName(name, path: "\(path).\(key)[\(index)]", code: code)
         }
     }
 

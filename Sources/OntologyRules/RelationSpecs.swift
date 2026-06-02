@@ -1,5 +1,6 @@
 import SpecificationCore
 
+/// Checks whether a relation range is encoded as one scalar concept reference.
 public struct ScalarRelationRangeSpec: Specification {
     public typealias T = Any
 
@@ -10,6 +11,7 @@ public struct ScalarRelationRangeSpec: Specification {
     }
 }
 
+/// Checks whether a relation range is encoded as an object containing a `oneOf` list.
 public struct OneOfRelationRangeSpec: Specification {
     public typealias T = Any
 

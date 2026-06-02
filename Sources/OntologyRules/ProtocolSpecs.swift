@@ -1,5 +1,6 @@
 import SpecificationCore
 
+/// Inputs used to verify that a class supplies all relations required by an implemented protocol.
 public struct ProtocolConformanceContext: Equatable, Sendable {
     public let protocolRequiredRelations: [String]
     public let classRelationDomains: Set<String>
@@ -10,6 +11,7 @@ public struct ProtocolConformanceContext: Equatable, Sendable {
     }
 }
 
+/// Validates relation-level protocol conformance for one class.
 public struct ProtocolRelationConformanceSpec: Specification {
     public typealias T = ProtocolConformanceContext
 
