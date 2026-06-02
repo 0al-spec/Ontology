@@ -43,12 +43,12 @@ Every governance decision should reference the evidence used to decide:
 | From | To | Actor | Required Evidence | Output |
 |---|---|---|---|---|
 | `candidate` | `under_review` | authoring agent or maintainer | source intent, candidate package, critique, compiler validation | review packet |
-| `under_review` | `changes_requested` | reviewer | review comments with required corrections | revision request |
+| `under_review` | `changes_requested` | human reviewer | review comments with required corrections | revision request |
 | `changes_requested` | `candidate` | authoring agent or maintainer | revised candidate and changed evidence | revised candidate |
-| `under_review` | `rejected` | reviewer | hard reject reason or unresolved critical gaps | rejection decision |
-| `under_review` | `approved` | reviewer | passing validation and accepted residual risks | approval decision |
-| `approved` | `merged` | maintainer | compatibility/version decision and merge record | accepted package line update |
-| `approved` | `superseded` | maintainer | newer approved artifact | supersession record |
+| `under_review` | `rejected` | human reviewer | hard reject reason or unresolved critical gaps | rejection decision |
+| `under_review` | `approved` | human reviewer | passing validation and accepted residual risks | approval decision |
+| `approved` | `merged` | human maintainer | compatibility/version decision and merge record | accepted package line update |
+| `approved` | `superseded` | human maintainer | newer approved artifact | supersession record |
 | `candidate` | `withdrawn` | proposer | withdrawal reason | withdrawal record |
 | `changes_requested` | `withdrawn` | proposer | withdrawal reason | withdrawal record |
 
@@ -75,7 +75,7 @@ kind: OntologyGovernanceDecision
 metadata:
   id: decision-2026-06-02-examcalc-policy-profile
   createdAt: "2026-06-02T20:00:00Z"
-  reviewer: user-or-agent-supervisor-id
+  reviewer: human-reviewer-id
   candidate: candidates/examcalc-policy-profile.yaml
 spec:
   targetPackage:
