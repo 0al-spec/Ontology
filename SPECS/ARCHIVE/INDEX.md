@@ -35,6 +35,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-03 | ONT-024 | Archived REVIEW_ONT-024 report |
 | 2026-06-03 | ONT-024 | Archived Governance_Decision_YAML_Schema (PASS) |
 | 2026-06-02 | ONT-023 | Archived REVIEW_ONT-023 report |
 | 2026-06-02 | ONT-023 | Archived Ontology_Governance_Protocol (PASS) |
