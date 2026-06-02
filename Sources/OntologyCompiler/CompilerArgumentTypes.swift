@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 
 /// Filesystem path to an ontology source artifact consumed by compiler workflows.
 public struct OntologySourcePath: Equatable, Hashable, Sendable {
@@ -76,12 +77,17 @@ public struct RegistryBaseURL: Equatable, Hashable, Sendable {
 
 /// Registry package reference in `<id>@<version>` form.
 public struct OntologyPackageReference: Equatable, Hashable, Sendable {
-    public let id: String
-    public let version: String
+    public let packageId: OntologyPackageId
+    public let semanticVersion: OntologySemanticVersion
 
     public init(id: String, version: String) {
-        self.id = id
-        self.version = version
+        self.packageId = OntologyPackageId(rawValue: id)
+        self.semanticVersion = OntologySemanticVersion(rawValue: version)
+    }
+
+    public init(packageId: OntologyPackageId, semanticVersion: OntologySemanticVersion) {
+        self.packageId = packageId
+        self.semanticVersion = semanticVersion
     }
 
     public init?(rawValue: String) {
@@ -89,8 +95,15 @@ public struct OntologyPackageReference: Equatable, Hashable, Sendable {
         guard parts.count == 2, !parts[0].isEmpty, !parts[1].isEmpty else {
             return nil
         }
-        self.id = parts[0]
-        self.version = parts[1]
+        self.init(id: parts[0], version: parts[1])
+    }
+
+    public var id: String {
+        packageId.rawValue
+    }
+
+    public var version: String {
+        semanticVersion.rawValue
     }
 
     public var rawValue: String {
