@@ -28,6 +28,7 @@ intent -> staged prompt contracts -> reviewed draft -> YAML -> ontologyc check -
 8. Generate competency questions.
 9. Assemble `DomainOntologyPackage` YAML.
 10. Run compiler validation.
+11. Submit candidate output to ontology governance before treating it as trusted.
 
 ## Role Set
 
@@ -164,3 +165,6 @@ Candidate classes might include:
 
 The final YAML must still pass `ontologyc check`; this guide does not authorize new
 schema fields.
+
+Promotion from candidate YAML to trusted ontology version is governed by
+[`governance-protocol.md`](governance-protocol.md).
