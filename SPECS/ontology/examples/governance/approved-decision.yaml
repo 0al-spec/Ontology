@@ -1,0 +1,43 @@
+apiVersion: ontology-governance.specgraph.io/v1alpha1
+kind: OntologyGovernanceDecision
+metadata:
+  id: decision-2026-06-03-examcalc-approval
+  createdAt: "2026-06-03T09:00:00Z"
+  reviewUrl: https://github.com/0al-spec/Ontology/pull/example
+spec:
+  targetPackage:
+    id: edu.university.examcalc
+    namespace: examcalc
+    version: 0.1.0
+    source: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+    digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+  decision:
+    state: approved
+    reviewer:
+      id: human-reviewer-id
+      kind: human
+      role: reviewer
+    decidedAt: "2026-06-03T09:00:00Z"
+    versionChange: none
+    rationale:
+      - Canonical examcalc package satisfies compiler validation and golden intent expectations.
+    residualRisks:
+      - Competency question coverage remains a human review anchor until first-class CQ storage lands.
+    followUp:
+      goldenExpectations:
+        action: no_change
+        rationale: Existing expectations cover this package version.
+  evidence:
+    sourceIntent:
+      uri: SPECS/ontology/golden-intents/exam-controlled-calculator.intent.md
+    candidatePackage:
+      uri: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+      digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+    compilerValidation:
+      uri: reports/ontologyc-check.txt
+      result: pass
+    repeatabilityReport:
+      uri: reports/examcalc-golden-intent.yaml
+      result: pass
+    reviewRecord:
+      uri: https://github.com/0al-spec/Ontology/pull/example

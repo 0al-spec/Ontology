@@ -69,6 +69,16 @@ Invalid transition: generated agents must not move a candidate directly to `appr
 Decision records are audit artifacts. They may live in a registry, repository, or governance
 ledger, but must preserve the same fields.
 
+The machine-readable contract is defined in
+[`governance-decision.schema.yaml`](governance-decision.schema.yaml). Authors and agents
+should use the examples under [`examples/governance/`](examples/governance/) when preparing
+review packets:
+
+- [`approved-decision.yaml`](examples/governance/approved-decision.yaml) shows a valid
+  human approval record.
+- [`invalid-agent-approval.yaml`](examples/governance/invalid-agent-approval.yaml) shows
+  the trust-boundary violation future validators must reject.
+
 ```yaml
 apiVersion: ontology-governance.specgraph.io/v1alpha1
 kind: OntologyGovernanceDecision
