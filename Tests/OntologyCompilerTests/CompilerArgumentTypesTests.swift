@@ -10,9 +10,9 @@ final class CompilerArgumentTypesTests: XCTestCase {
         XCTAssertTrue(path.url.path.hasSuffix("SPECS/example.yaml"))
     }
 
-    func testRegistryBaseURLRequiresAbsoluteURL() {
+    func testRegistryBaseURLRequiresAbsoluteURL() throws {
         XCTAssertNotNil(RegistryBaseURL(string: "https://registry.example.com"))
-        XCTAssertNotNil(RegistryBaseURL(url: URL(string: "https://registry.example.com")!))
+        XCTAssertNotNil(RegistryBaseURL(url: try XCTUnwrap(URL(string: "https://registry.example.com"))))
         XCTAssertNil(RegistryBaseURL(string: "registry.example.com"))
         XCTAssertNil(RegistryBaseURL(url: URL(fileURLWithPath: "registry.example.com")))
     }
