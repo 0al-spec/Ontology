@@ -108,10 +108,15 @@ public struct YamlSourceLine: RawRepresentable, Equatable, Hashable, Sendable {
 
 /// Inputs required to decide whether a concept reference resolves against local or imported ontology names.
 public struct ConceptRefResolutionContext: Equatable, Sendable {
-    public let ref: String
-    public let localNames: Set<String>
-    public let packageNamespace: String
-    public let importNamespaces: Set<String>
+    public let reference: OntologyConceptReferenceLiteral
+    public let localSymbols: Set<OntologySymbolName>
+    public let namespace: OntologyNamespace
+    public let importedNamespaces: Set<OntologyNamespace>
+
+    public var ref: String { reference.rawValue }
+    public var localNames: Set<String> { Set(localSymbols.map(\.rawValue)) }
+    public var packageNamespace: String { namespace.rawValue }
+    public var importNamespaces: Set<String> { Set(importedNamespaces.map(\.rawValue)) }
 
     public init(
         ref: String,
@@ -119,33 +124,73 @@ public struct ConceptRefResolutionContext: Equatable, Sendable {
         packageNamespace: String,
         importNamespaces: Set<String>
     ) {
-        self.ref = ref
-        self.localNames = localNames
-        self.packageNamespace = packageNamespace
-        self.importNamespaces = importNamespaces
+        self.init(
+            reference: OntologyConceptReferenceLiteral(rawValue: ref),
+            localSymbols: Set(localNames.map(OntologySymbolName.init(rawValue:))),
+            namespace: OntologyNamespace(rawValue: packageNamespace),
+            importedNamespaces: Set(importNamespaces.map(OntologyNamespace.init(rawValue:)))
+        )
+    }
+
+    public init(
+        reference: OntologyConceptReferenceLiteral,
+        localSymbols: Set<OntologySymbolName>,
+        namespace: OntologyNamespace,
+        importedNamespaces: Set<OntologyNamespace>
+    ) {
+        self.reference = reference
+        self.localSymbols = localSymbols
+        self.namespace = namespace
+        self.importedNamespaces = importedNamespaces
     }
 }
 
 /// Inputs required to decide whether a command or event trigger reference is local to the package.
 public struct TriggerRefResolutionContext: Equatable, Sendable {
-    public let ref: String
-    public let names: Set<String>
-    public let packageNamespace: String
+    public let reference: OntologyConceptReferenceLiteral
+    public let localSymbols: Set<OntologySymbolName>
+    public let namespace: OntologyNamespace
+
+    public var ref: String { reference.rawValue }
+    public var names: Set<String> { Set(localSymbols.map(\.rawValue)) }
+    public var packageNamespace: String { namespace.rawValue }
 
     public init(ref: String, names: Set<String>, packageNamespace: String) {
-        self.ref = ref
-        self.names = names
-        self.packageNamespace = packageNamespace
+        self.init(
+            reference: OntologyConceptReferenceLiteral(rawValue: ref),
+            localSymbols: Set(names.map(OntologySymbolName.init(rawValue:))),
+            namespace: OntologyNamespace(rawValue: packageNamespace)
+        )
+    }
+
+    public init(
+        reference: OntologyConceptReferenceLiteral,
+        localSymbols: Set<OntologySymbolName>,
+        namespace: OntologyNamespace
+    ) {
+        self.reference = reference
+        self.localSymbols = localSymbols
+        self.namespace = namespace
     }
 }
 
 /// Inputs required to test whether a state name belongs to a declared state set.
 public struct StateMembershipContext: Equatable, Sendable {
-    public let state: String
-    public let states: Set<String>
+    public let stateName: OntologyStateName
+    public let declaredStates: Set<OntologyStateName>
+
+    public var state: String { stateName.rawValue }
+    public var states: Set<String> { Set(declaredStates.map(\.rawValue)) }
 
     public init(state: String, states: Set<String>) {
-        self.state = state
-        self.states = states
+        self.init(
+            stateName: OntologyStateName(rawValue: state),
+            declaredStates: Set(states.map(OntologyStateName.init(rawValue:)))
+        )
+    }
+
+    public init(stateName: OntologyStateName, declaredStates: Set<OntologyStateName>) {
+        self.stateName = stateName
+        self.declaredStates = declaredStates
     }
 }
