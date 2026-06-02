@@ -99,17 +99,25 @@ case "diff":
     }
 
 case "publish":
-    let parsed = parseArguments(commandArgs, allowedOptions: ["--registry", "--token"], command: command)
+    let parsed = parseArguments(
+        commandArgs,
+        allowedOptions: ["--registry", "--token", "--channel", "--decision", "--golden-report"],
+        command: command
+    )
     requirePositionals(1, in: parsed, command: command)
     let publishPath = parsed.positional[0]
     let publishRegistry = requireOption("--registry", in: parsed, command: command)
+    let channel = publishChannel(parsed.options["--channel"] ?? "candidate", command: command)
     do {
         let result = try compiler.publishPackage(
             path: OntologySourcePath(path: publishPath),
             registry: registryBaseURL(publishRegistry, command: command),
-            token: authToken(from: parsed)
+            token: authToken(from: parsed),
+            channel: channel,
+            governanceDecisionPath: parsed.options["--decision"].map(OntologySourcePath.init(path:)),
+            goldenReportPath: parsed.options["--golden-report"].map(OntologySourcePath.init(path:))
         )
-        print("ontologyc publish: PASS \(result.packageRef.rawValue)")
+        print("ontologyc publish: PASS \(result.packageRef.rawValue) channel=\(channel.rawValue)")
     } catch let compilerError as OntologyCompilerError {
         if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
         fputs("ontologyc publish: FAIL \(compilerError)\n", stderr)

@@ -148,8 +148,16 @@ Behavior:
 5. Emit `OntologyGovernanceDecisionValidationReport` when `--out` is supplied.
 6. Exit non-zero for invalid governance records.
 
-Current boundary: registry `publish` does not consume this command yet. ONT-026 defines
-the publish gate that will require a valid approved decision for trusted publication.
+Registry `publish` has an explicit trust boundary:
+
+- `--channel candidate` is the default and preserves draft/integration publication.
+- `--channel trusted` requires `--decision <decision.yaml>` and rejects publication unless
+  the decision validates against the supplied package and has lifecycle state `approved`.
+- `--golden-report` requires `--decision`, including candidate publication, so evidence
+  flags cannot be silently ignored.
+
+The trusted gate runs before any registry network call. `pull` and `compat-check` do not
+consume governance decisions.
 
 ## Non-Goals for ONT-001
 

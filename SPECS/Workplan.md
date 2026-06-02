@@ -452,15 +452,19 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-025
 - **Parallelizable:** no
-- **Status:** Not Started
-- **PRD:** `SPECS/INPROGRESS/ONT-026_Registry_Publish_Governance_Gate.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-026_Registry_Publish_Governance_Gate/ONT-026_Registry_Publish_Governance_Gate.md`
 - **Origin:** Follow-up to ONT-025 and the registry distribution workflow.
+- **Implementation Note:** Added `--channel candidate|trusted` to `ontologyc publish`.
+  Candidate remains default. Trusted publication requires an approved governance decision
+  validated against the package and optional golden intent report before any registry
+  network call.
 - **Acceptance Criteria:**
-  - Pending: `ontologyc publish` accepts a governance decision artifact for trusted publication.
-  - Pending: Publish rejects missing, non-approved, package-mismatched, version-mismatched, or evidence-failing decisions.
-  - Pending: The policy boundary documents whether governance is mandatory for all publish flows or only trusted/stable publication.
-  - Pending: Registry tests cover approval pass/fail behavior without requiring a live external registry.
-  - Pending: Existing pull and compat-check behavior remains unchanged.
+  - Complete: `ontologyc publish` accepts a governance decision artifact for trusted publication.
+  - Complete: Publish rejects missing, non-approved, package-mismatched, version-mismatched, or evidence-failing decisions.
+  - Complete: The policy boundary documents that governance is mandatory for trusted publication and optional for candidate publication.
+  - Complete: Registry tests cover approval pass/fail behavior without requiring a live external registry.
+  - Complete: Existing pull and compat-check behavior remains unchanged.
 
 ---
 

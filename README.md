@@ -108,10 +108,15 @@ swift run ontologyc diff \
 Registry-oriented commands are also available:
 
 ```bash
-swift run ontologyc publish <package.yaml> --registry <url> [--token <token>]
+swift run ontologyc publish <package.yaml> --registry <url> [--token <token>] \
+  [--channel candidate|trusted] [--decision <decision.yaml>] [--golden-report <report.yaml>]
 swift run ontologyc pull <id>@<version> --registry <url> --out <directory>
 swift run ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url> [--out <report.yaml>]
 ```
+
+`publish` defaults to `--channel candidate`. Trusted publication requires an approved
+governance decision artifact that matches the package being published. `--golden-report`
+is only meaningful with `--decision`; the CLI rejects that flag when no decision is supplied.
 
 `--token` can also be supplied through `ONTOLOGYC_TOKEN`.
 

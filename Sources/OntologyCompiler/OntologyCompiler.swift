@@ -147,20 +147,55 @@ public final class OntologyCompiler {
     public func publishPackage(
         path: OntologySourcePath,
         registry: RegistryBaseURL,
-        token: String?
+        token: String?,
+        channel: OntologyPublishChannel = .candidate,
+        governanceDecisionPath: OntologySourcePath? = nil,
+        goldenReportPath: OntologySourcePath? = nil
+    ) throws -> (diagnostics: [Diagnostic], packageRef: OntologyPackageReference) {
+        try publishPackage(
+            request: RegistryPublishRequest(
+                path: path,
+                registry: registry,
+                token: token,
+                channel: channel,
+                governanceDecisionPath: governanceDecisionPath,
+                goldenReportPath: goldenReportPath
+            ),
+            put: { url, data, token in try RegistryClient().put(url: url, body: data, token: token) }
+        )
+    }
+
+    struct RegistryPublishRequest {
+        let path: OntologySourcePath
+        let registry: RegistryBaseURL
+        let token: String?
+        let channel: OntologyPublishChannel
+        let governanceDecisionPath: OntologySourcePath?
+        let goldenReportPath: OntologySourcePath?
+    }
+
+    func publishPackage(
+        request: RegistryPublishRequest,
+        put: (URL, Data, String?) throws -> Void
     ) throws -> (diagnostics: [Diagnostic], packageRef: OntologyPackageReference) {
         diagnostics = []
-        guard let package = load(path: path.path) else {
+        guard let package = load(path: request.path.path) else {
             throw OntologyCompilerError.packageError(diagnostics)
         }
         validate(package)
         if hasErrors(diagnostics) {
             throw OntologyCompilerError.packageError(diagnostics)
         }
+        try validatePublishGovernanceGate(
+            channel: request.channel,
+            decisionPath: request.governanceDecisionPath,
+            packagePath: request.path,
+            goldenReportPath: request.goldenReportPath
+        )
         let ir = normalize(package)
         let id = string(ir["id"]) ?? ""
         let version = string(ir["version"]) ?? ""
-        let urlString = "\(registry.absoluteString)/ontologies/\(id)/\(version)"
+        let urlString = "\(request.registry.absoluteString)/ontologies/\(id)/\(version)"
         guard let url = URL(string: urlString) else {
             add("registry.url.invalid", "publish", "Invalid registry URL: \(urlString)")
             throw OntologyCompilerError.packageError(diagnostics)
@@ -169,8 +204,43 @@ public final class OntologyCompiler {
             withJSONObject: ir,
             options: [.sortedKeys, .prettyPrinted, .withoutEscapingSlashes]
         )
-        try RegistryClient().put(url: url, body: data, token: token)
+        try put(url, data, request.token)
         return (diagnostics: diagnostics, packageRef: OntologyPackageReference(id: id, version: version))
+    }
+
+    private func validatePublishGovernanceGate(
+        channel: OntologyPublishChannel,
+        decisionPath: OntologySourcePath?,
+        packagePath: OntologySourcePath,
+        goldenReportPath: OntologySourcePath?
+    ) throws {
+        guard channel == .trusted || decisionPath != nil || goldenReportPath != nil else { return }
+        guard let decisionPath else {
+            add(
+                "registry.publish.governanceDecision.required",
+                "publish.--decision",
+                "--channel trusted and --golden-report require --decision"
+            )
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
+
+        let result = try validateGovernanceDecision(
+            decisionPath: decisionPath,
+            packagePath: packagePath,
+            goldenReportPath: goldenReportPath,
+            outPath: nil
+        )
+        diagnostics = result.diagnostics
+        if channel == .trusted, result.decisionState != "approved" {
+            add(
+                "registry.publish.governanceDecision.approved.required",
+                "decision.spec.decision.state",
+                "trusted publication requires an approved governance decision"
+            )
+        }
+        if hasErrors(diagnostics) {
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
     }
 
     /// Pulls a normalized ontology package IR from a registry and writes it into `outDirectory`.
