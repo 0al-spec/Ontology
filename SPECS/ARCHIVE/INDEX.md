@@ -32,6 +32,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-02 | ONT-021 | Archived REVIEW_ONT-021 report |
 | 2026-06-02 | ONT-021 | Archived Golden_Intent_Semantic_Expectations (PASS) |
 | 2026-06-02 | ONT-019 | Archived REVIEW_ONT-019 report |
 | 2026-06-02 | ONT-019 | Archived SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts (PASS) |
