@@ -214,12 +214,12 @@ public final class OntologyCompiler {
         packagePath: OntologySourcePath,
         goldenReportPath: OntologySourcePath?
     ) throws {
-        guard channel == .trusted || decisionPath != nil else { return }
+        guard channel == .trusted || decisionPath != nil || goldenReportPath != nil else { return }
         guard let decisionPath else {
             add(
                 "registry.publish.governanceDecision.required",
                 "publish.--decision",
-                "trusted publication requires --decision"
+                "--channel trusted and --golden-report require --decision"
             )
             throw OntologyCompilerError.packageError(diagnostics)
         }

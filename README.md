@@ -115,7 +115,8 @@ swift run ontologyc compat-check <package.yaml> --against <id>@<version> --regis
 ```
 
 `publish` defaults to `--channel candidate`. Trusted publication requires an approved
-governance decision artifact that matches the package being published.
+governance decision artifact that matches the package being published. `--golden-report`
+is only meaningful with `--decision`; the CLI rejects that flag when no decision is supplied.
 
 `--token` can also be supplied through `ONTOLOGYC_TOKEN`.
 

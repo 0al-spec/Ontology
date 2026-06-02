@@ -59,6 +59,30 @@ final class GovernanceDecisionCLITests: XCTestCase {
         XCTAssertTrue(result.stderr.contains("candidate or trusted"), result.stderr)
     }
 
+    func testPublishCandidateRejectsGoldenReportWithoutDecision() throws {
+        let output = try makeTemporaryDirectory(name: "ontologyc-publish-golden")
+        let goldenReport = output.appendingPathComponent("golden-report.yaml")
+        try """
+        apiVersion: ontology-induction.specgraph.io/v1alpha1
+        kind: GoldenIntentValidationReport
+        result:
+          passed: true
+        """.write(to: goldenReport, atomically: true, encoding: .utf8)
+
+        let result = try ontologyc([
+            "publish",
+            "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml",
+            "--registry",
+            "https://registry.example.com",
+            "--golden-report",
+            goldenReport.path
+        ])
+
+        XCTAssertEqual(result.status, 1, result.combinedOutput)
+        XCTAssertTrue(result.combinedOutput.contains("registry.publish.governanceDecision.required"), result.combinedOutput)
+        XCTAssertTrue(result.combinedOutput.contains("--golden-report require --decision"), result.combinedOutput)
+    }
+
     private var repoRoot: URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

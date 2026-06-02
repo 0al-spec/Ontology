@@ -153,6 +153,8 @@ Registry `publish` has an explicit trust boundary:
 - `--channel candidate` is the default and preserves draft/integration publication.
 - `--channel trusted` requires `--decision <decision.yaml>` and rejects publication unless
   the decision validates against the supplied package and has lifecycle state `approved`.
+- `--golden-report` requires `--decision`, including candidate publication, so evidence
+  flags cannot be silently ignored.
 
 The trusted gate runs before any registry network call. `pull` and `compat-check` do not
 consume governance decisions.

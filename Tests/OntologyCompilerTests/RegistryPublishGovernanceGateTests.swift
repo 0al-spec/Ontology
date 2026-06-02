@@ -70,6 +70,36 @@ final class RegistryPublishGovernanceGateTests: XCTestCase {
         XCTAssertFalse(putCalled)
     }
 
+    func testCandidatePublishRejectsGoldenReportWithoutDecisionBeforeRegistryPut() throws {
+        let compiler = OntologyCompiler()
+        let goldenReport = try makeTemporaryDirectory(name: "publish-candidate-golden")
+            .appendingPathComponent("golden-report.yaml")
+        try """
+        apiVersion: ontology-induction.specgraph.io/v1alpha1
+        kind: GoldenIntentValidationReport
+        result:
+          passed: true
+        """.write(to: goldenReport, atomically: true, encoding: .utf8)
+        var putCalled = false
+
+        XCTAssertThrowsError(
+            try compiler.publishPackage(
+                request: request(
+                    channel: .candidate,
+                    governanceDecisionPath: nil,
+                    goldenReportPath: OntologySourcePath(url: goldenReport)
+                ),
+                put: { _, _, _ in putCalled = true }
+            )
+        ) { error in
+            guard case OntologyCompilerError.packageError(let diagnostics) = error else {
+                return XCTFail("Expected governance package diagnostics, got \(error)")
+            }
+            XCTAssertTrue(diagnostics.contains { $0.code == "registry.publish.governanceDecision.required" })
+        }
+        XCTAssertFalse(putCalled)
+    }
+
     func testTrustedPublishAcceptsApprovedDecisionWithInjectedRegistryPut() throws {
         let compiler = OntologyCompiler()
         var capturedURL: URL?
@@ -92,6 +122,7 @@ final class RegistryPublishGovernanceGateTests: XCTestCase {
     }
 
     private func request(
+        channel: OntologyPublishChannel = .trusted,
         governanceDecisionPath: OntologySourcePath? = OntologySourcePath(
             path: "SPECS/ontology/examples/governance/approved-decision.yaml"
         ),
@@ -103,7 +134,7 @@ final class RegistryPublishGovernanceGateTests: XCTestCase {
             )),
             registry: try XCTUnwrap(RegistryBaseURL(string: "https://registry.example.com")),
             token: nil,
-            channel: .trusted,
+            channel: channel,
             governanceDecisionPath: governanceDecisionPath,
             goldenReportPath: goldenReportPath
         )

@@ -79,6 +79,7 @@ Trusted publication must reject before the registry network call when:
 - the decision package id/namespace/version does not match the published package;
 - the decision lifecycle state is not `approved`;
 - the supplied golden intent validation report is failing.
+- `--golden-report` is supplied without `--decision`.
 
 Candidate publication must keep the existing publish contract. If a decision artifact is
 supplied for candidate publication, it may be validated for author feedback, but it must

@@ -10,6 +10,8 @@
 - Trusted publication requires `--decision`.
 - Trusted publication rejects missing, non-approved, package-mismatched, and evidence-failing
   governance decisions before registry network calls.
+- Candidate publication rejects `--golden-report` without `--decision` so evidence flags are
+  not silently ignored.
 - Candidate publication remains the default behavior.
 - `pull` and `compat-check` code paths were not changed.
 
@@ -33,7 +35,7 @@ git diff --check
 | SwiftFormat | PASS, 0 files require formatting |
 | SwiftLint | PASS, 0 violations |
 | Swift build | PASS |
-| Swift tests | PASS, 77 tests |
+| Swift tests | PASS, 79 tests |
 | Whitespace check | PASS |
 
 ## Notes
@@ -43,3 +45,4 @@ git diff --check
 - The implementation was adjusted by moving publish-gate arguments into
   `RegistryPublishRequest` and splitting governance publish tests into a dedicated test file.
 - Full quality passed after that correction.
+- Review follow-up added coverage for `--golden-report` without `--decision`.

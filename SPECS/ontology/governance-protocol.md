@@ -92,6 +92,8 @@ This validation is both a local quality gate and the trusted registry publicatio
 compatible with existing workflows. `--channel trusted` requires `--decision` and rejects
 missing, invalid, non-approved, package-mismatched, version-mismatched, or evidence-failing
 decisions before any registry network call.
+Supplying `--golden-report` also requires `--decision`, including candidate publication,
+so evidence validation is never silently ignored.
 
 ```yaml
 apiVersion: ontology-governance.specgraph.io/v1alpha1
