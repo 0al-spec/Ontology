@@ -69,6 +69,16 @@ commit so the test never goes red on `main`.
   references through `OntologyRules` decision specs instead of duplicating lookup
   logic in tests.
 
+## Documentation
+
+- Public library API documentation lives in DocC catalogs under
+  `Sources/OntologyRules/Documentation.docc/` and
+  `Sources/OntologyCompiler/Documentation.docc/`.
+- Keep DocC symbol links in sync with real Swift symbols when adding or renaming
+  rules, decisions, diagnostics, or compiler entry points.
+- The GitHub Pages workflow builds DocC on pull requests and deploys it only on
+  pushes to `main`.
+
 ## Pull requests
 
 - PR titles should be short (≤ 70 characters) and start with the task ID,
