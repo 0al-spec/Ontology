@@ -36,6 +36,7 @@ final class OntologyCRegressionTests: XCTestCase {
         XCTAssertTrue(result.stdout.contains("Usage:"), result.stdout)
         XCTAssertTrue(result.stdout.contains("ontologyc <command> [options]"), result.stdout)
         XCTAssertTrue(result.stdout.contains("compat-check"), result.stdout)
+        XCTAssertTrue(result.stdout.contains("import-hypercode"), result.stdout)
         XCTAssertEqual(result.stderr, "")
     }
 

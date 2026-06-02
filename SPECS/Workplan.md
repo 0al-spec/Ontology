@@ -326,6 +326,30 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+## Phase 9: Hypercode Bridge
+
+#### ONT-020: Hypercode IR Import Spike
+- **Description:** Add the first deterministic bridge from Hypercode resolved graph IR
+  (`hypercode.ir/v1`) into a `DomainOntologyPackage` draft. The importer treats Hypercode
+  node types as candidate ontology classes and emits review scaffolding, not an approved
+  domain ontology.
+- **Priority:** P2
+- **Dependencies:** ONT-019
+- **Parallelizable:** yes
+- **Status:** Complete
+- **PRD:** `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md`
+- **Origin:** Cross-repo Hypercode tooling integration.
+- **Implementation Note:** Implemented as a small `ontologyc import-hypercode` spike.
+- **Acceptance Criteria:**
+  - Complete: CLI accepts `import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>`.
+  - Complete: Importer rejects non-`hypercode.ir/v1` JSON before writing output.
+  - Complete: Hypercode node `type` values are deterministically mapped to ontology class names.
+  - Complete: Output package is marked `approvalStatus: draft` and includes review policy/lifecycle scaffolding.
+  - Complete: Generated draft passes `ontologyc check`.
+  - Complete: README documents the command as a draft bridge, not a full ontology induction workflow.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

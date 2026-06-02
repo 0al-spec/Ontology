@@ -115,6 +115,20 @@ swift run ontologyc compat-check <package.yaml> --against <id>@<version> --regis
 
 `--token` can also be supplied through `ONTOLOGYC_TOKEN`.
 
+Hypercode resolved graphs can be imported as draft ontology packages:
+
+```bash
+swift run ontologyc import-hypercode <hypercode-ir.json> \
+  --out <draft.yaml> \
+  --id org.0al.example \
+  --namespace example \
+  --version 0.1.0
+```
+
+`import-hypercode` is a deterministic bridge from `hypercode.ir/v1` node types to
+`DomainOntologyPackage` class drafts. The output is always `approvalStatus: draft`;
+review and domain refinement still happen through the ontology authoring workflow.
+
 ## Ontology Authoring
 
 Do not start ontology authoring by writing YAML directly. For new product/domain intents,
