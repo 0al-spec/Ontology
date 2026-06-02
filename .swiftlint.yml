@@ -11,7 +11,7 @@ excluded:
   - plugins
   - tools
 
-strict: false
+strict: true
 reporter: "xcode"
 
 only_rules:

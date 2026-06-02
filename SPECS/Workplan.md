@@ -198,13 +198,16 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-007
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete
 - **Origin:** Post-implementation code review (PR #13).
+- **Implementation Note:** Fresh ONT-013 audit found SwiftLint clean on current `main`.
+  The original force-unwrap/complexity findings had already been resolved by intervening
+  refactors; this task locked the remaining contract by switching SwiftLint to strict mode.
 - **Acceptance Criteria:**
-  - `force_try`/`force_unwrapping` on the serialization path in `CompilerHelpers.swift` are replaced with safe error handling.
-  - `force_cast`, `force_try`, `force_unwrapping`, and implicitly unwrapped optionals are enforced as SwiftLint errors in local and CI quality gates.
-  - `cyclomatic_complexity`/`function_parameter_count` in `PackageValidation.swift` and `function_body_length` in `Normalization.swift` are brought below the configured thresholds.
-  - `swiftlint` reports zero warnings; the gate is optionally switched to `--strict` so regressions fail CI.
+  - Complete: `force_try`/`force_unwrapping` on the serialization path in `CompilerHelpers.swift` are absent in the current code.
+  - Complete: `force_cast`, `force_try`, `force_unwrapping`, and implicitly unwrapped optionals are enforced as SwiftLint errors in local and CI quality gates.
+  - Complete: `cyclomatic_complexity`/`function_parameter_count` in `PackageValidation.swift` and `function_body_length` in `Normalization.swift` are below the configured thresholds.
+  - Complete: `swiftlint` reports zero warnings and strict mode is enabled so warning regressions fail CI.
 
 #### ONT-014: Harden `ontologyc` CLI Argument Parsing
 - **Description:** Make the `ontologyc` CLI robust: support `--help`, flag-order independence, and clear error messages instead of the current fixed-position/fixed-count argument checks in `Sources/OntologyC/main.swift`.
