@@ -11,10 +11,10 @@ spec:
     source: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
   decision:
     state: approved
-    reviewer:
+    actor:
       id: ontology-authoring-agent
       kind: agent
-      role: reviewer
+      role: authoring_agent
     decidedAt: "2026-06-03T09:05:00Z"
     rationale:
       - This example is intentionally invalid: generated agents may prepare evidence but cannot approve trusted ontology truth.

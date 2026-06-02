@@ -78,7 +78,7 @@ properties:
         additionalProperties: false
         required:
           - state
-          - reviewer
+          - actor
           - decidedAt
           - rationale
         properties:
@@ -92,7 +92,7 @@ properties:
               - merged
               - superseded
               - withdrawn
-          reviewer:
+          actor:
             type: object
             additionalProperties: false
             required:
@@ -103,9 +103,13 @@ properties:
               id:
                 type: string
               kind:
-                const: human
+                enum:
+                  - human
+                  - agent
               role:
                 enum:
+                  - authoring_agent
+                  - proposer
                   - reviewer
                   - maintainer
               displayName:
@@ -202,8 +206,10 @@ allOf:
           properties:
             decision:
               properties:
-                reviewer:
+                actor:
                   properties:
+                    kind:
+                      const: human
                     role:
                       const: reviewer
   - if:
@@ -222,8 +228,10 @@ allOf:
           properties:
             decision:
               properties:
-                reviewer:
+                actor:
                   properties:
+                    kind:
+                      const: human
                     role:
                       const: maintainer
   - if:

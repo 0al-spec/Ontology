@@ -13,7 +13,7 @@ spec:
     digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
   decision:
     state: approved
-    reviewer:
+    actor:
       id: human-reviewer-id
       kind: human
       role: reviewer
