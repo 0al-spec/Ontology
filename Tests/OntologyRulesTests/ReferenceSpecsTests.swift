@@ -2,6 +2,20 @@ import OntologyRules
 import XCTest
 
 final class ReferenceSpecsTests: XCTestCase {
+    func testConceptRefResolutionContextStoresTypedInputs() {
+        let context = ConceptRefResolutionContext(
+            reference: OntologyConceptReferenceLiteral(rawValue: "foundation:Policy"),
+            localSymbols: [OntologySymbolName(rawValue: "Exam")],
+            namespace: OntologyNamespace(rawValue: "examcalc"),
+            importedNamespaces: [OntologyNamespace(rawValue: "foundation")]
+        )
+
+        XCTAssertEqual(context.ref, "foundation:Policy")
+        XCTAssertEqual(context.localNames, ["Exam"])
+        XCTAssertEqual(context.packageNamespace, "examcalc")
+        XCTAssertEqual(context.importNamespaces, ["foundation"])
+    }
+
     func testConceptRefResolutionSpecs() {
         let context = ConceptRefResolutionContext(
             ref: "foundation:Policy",
@@ -29,6 +43,18 @@ final class ReferenceSpecsTests: XCTestCase {
             importNamespaces: ["foundation"]
         )
         XCTAssertFalse(ResolvableConceptRefSpec().isSatisfiedBy(unresolved))
+    }
+
+    func testTriggerRefResolutionContextStoresTypedInputs() {
+        let context = TriggerRefResolutionContext(
+            reference: OntologyConceptReferenceLiteral(rawValue: "StartExamModeCommand"),
+            localSymbols: [OntologySymbolName(rawValue: "StartExamModeCommand")],
+            namespace: OntologyNamespace(rawValue: "examcalc")
+        )
+
+        XCTAssertEqual(context.ref, "StartExamModeCommand")
+        XCTAssertEqual(context.names, ["StartExamModeCommand"])
+        XCTAssertEqual(context.packageNamespace, "examcalc")
     }
 
     func testLocalTriggerRefSpec() {

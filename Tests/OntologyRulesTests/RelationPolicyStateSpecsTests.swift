@@ -23,6 +23,16 @@ final class RelationPolicyStateSpecsTests: XCTestCase {
     func testDeclaredStateSpec() {
         let spec = DeclaredStateSpec()
 
+        let typedContext = StateMembershipContext(
+            stateName: OntologyStateName(rawValue: "active"),
+            declaredStates: [
+                OntologyStateName(rawValue: "active"),
+                OntologyStateName(rawValue: "ended")
+            ]
+        )
+        XCTAssertEqual(typedContext.state, "active")
+        XCTAssertEqual(typedContext.states, ["active", "ended"])
+
         XCTAssertTrue(spec.isSatisfiedBy(StateMembershipContext(state: "active", states: ["active", "ended"])))
         XCTAssertFalse(spec.isSatisfiedBy(StateMembershipContext(state: "missing", states: ["active", "ended"])))
     }
