@@ -1,6 +1,6 @@
 # ONT-022: Golden Intent Repeatability Harness
 
-**Status:** PRD Ready
+**Status:** Archived PASS
 **Created:** 2026-06-02
 **Source:** `SPECS/Workplan.md`
 
@@ -42,7 +42,7 @@ any single draft as byte-exact truth.
 | D2 | CLI command | `Sources/OntologyC/main.swift` | Adds `validate-golden-intent <expectation.yaml> --candidate <package.yaml> [--out <report.yaml>]` |
 | D3 | Regression tests | `Tests/OntologyCompilerTests/GoldenIntentValidationTests.swift` and CLI regression tests | Covers passing and failing candidate outcomes |
 | D4 | Documentation | `SPECS/ontology/golden-intents/README.md` and root docs if needed | Explains minimum semantic criteria and report interpretation |
-| D5 | Validation report | `SPECS/INPROGRESS/ONT-022_Validation_Report.md` | Records local checks and residual risks |
+| D5 | Validation report | `SPECS/ARCHIVE/ONT-022_Golden_Intent_Repeatability_Harness/ONT-022_Validation_Report.md` | Records local checks and residual risks |
 
 ## Functional Requirements
 

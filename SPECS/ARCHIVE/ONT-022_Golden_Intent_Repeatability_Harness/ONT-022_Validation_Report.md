@@ -39,7 +39,7 @@ bash tools/swift-quality.sh
 | D2 CLI command | `Sources/OntologyC/main.swift` | PASS |
 | D3 Regression tests | `Tests/OntologyCompilerTests/GoldenIntentValidationTests.swift`, `Tests/OntologyCompilerTests/OntologyCRegressionTests.swift`, `Tests/fixtures/golden-intents/` | PASS |
 | D4 Documentation | `SPECS/ontology/golden-intents/README.md` | PASS |
-| D5 Validation report | `SPECS/INPROGRESS/ONT-022_Validation_Report.md` | PASS |
+| D5 Validation report | `SPECS/ARCHIVE/ONT-022_Golden_Intent_Repeatability_Harness/ONT-022_Validation_Report.md` | PASS |
 
 ## Residual Risks
 

@@ -1,23 +1,25 @@
-# Next Tasks: Repeatability Harness
+# Next Tasks: Ontology Governance
 
-**Status:** ONT-022 selected for execution
+**Status:** Updated after ONT-022 archive
 
 ## Description
 
-ONT-022 is selected from `SPECS/Workplan.md`. The golden intent set has minimum
-semantic expectation files that the repeatability harness can consume.
+ONT-022 is archived with PASS. The golden intent set now has semantic expectations and
+a deterministic repeatability harness for candidate ontology packages.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| ONT-022 | Golden Intent Repeatability Harness | 9 | P1 | `SPECS/Workplan.md` |
+| ONT-023 | Ontology Governance Protocol | 9 | P1 | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
+- ONT-022 is archived with PASS.
+- The repeatability harness checks deterministic ontology surfaces and reports competency
+  question expectations as manual review anchors.
 - ONT-021 is archived with PASS.
 - Expectations must remain minimum semantic criteria, not byte-exact ontology truth.
-- ONT-022 should consume these expectations in a repeatability harness.
 - ONT-023 should define the governance protocol for approving candidate outputs.
 - ONT-020 Hypercode IR Import Spike is already merged on `main`; its PRD still lives in
   `SPECS/INPROGRESS/` until a later planning cleanup/archive pass.
@@ -37,6 +39,7 @@ semantic expectation files that the repeatability harness can consume.
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-022 | Golden intent repeatability harness | `SPECS/ARCHIVE/ONT-022_Golden_Intent_Repeatability_Harness/` |
 | ONT-021 | Golden intent semantic expectations | `SPECS/ARCHIVE/ONT-021_Golden_Intent_Semantic_Expectations/` |
 | ONT-020 | Hypercode IR import bridge | `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md` |
 | ONT-019 | Ontology induction protocol and prompt contracts | `SPECS/ARCHIVE/ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/` |
@@ -50,6 +53,7 @@ semantic expectation files that the repeatability harness can consume.
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-022 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-022_Golden_Intent_Repeatability_Harness/` |
 | ONT-021 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-021_Golden_Intent_Semantic_Expectations/` |
 | ONT-019 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/` |
 | ONT-018 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-018_CLI_Registry_Commands/` |
