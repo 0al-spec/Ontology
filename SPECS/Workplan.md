@@ -432,16 +432,19 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-024
 - **Parallelizable:** no
-- **Status:** INPROGRESS
-- **PRD:** `SPECS/INPROGRESS/ONT-025_Governance_Decision_CLI_Validation.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-025_Governance_Decision_CLI_Validation/ONT-025_Governance_Decision_CLI_Validation.md`
 - **Origin:** Follow-up to ONT-024 and the ONT-023 enforcement boundary.
+- **Implementation Note:** Added `OntologyCompiler.validateGovernanceDecision` and
+  `ontologyc validate-governance-decision` with package/golden-report evidence checks.
+  Registry publish enforcement is deferred to ONT-026.
 - **Acceptance Criteria:**
-  - Pending: CLI accepts a decision YAML path and optional package / golden intent report evidence paths.
-  - Pending: Validation rejects invalid `apiVersion`, `kind`, lifecycle state, missing reviewer,
+  - Complete: CLI accepts a decision YAML path and optional package / golden intent report evidence paths.
+  - Complete: Validation rejects invalid `apiVersion`, `kind`, lifecycle state, missing actor,
     missing rationale, malformed evidence, and approval records tied to failing reports.
-  - Pending: Validation confirms decision package/version metadata matches the supplied package when provided.
-  - Pending: Output is deterministic and suitable for CI.
-  - Pending: Unit and CLI regression tests cover pass/fail cases.
+  - Complete: Validation confirms decision package/version metadata matches the supplied package when provided.
+  - Complete: Output is deterministic and suitable for CI.
+  - Complete: Unit and CLI regression tests cover pass/fail cases.
 
 #### ONT-026: Registry Publish Governance Gate
 - **Description:** Integrate governance decision validation into registry publication so
