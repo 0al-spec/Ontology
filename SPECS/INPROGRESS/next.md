@@ -1,11 +1,11 @@
 # Next Tasks: Repeatability Harness
 
-**Status:** Updated after ONT-021 archive
+**Status:** ONT-022 selected for execution
 
 ## Description
 
-ONT-021 is archived with PASS. The golden intent set now has minimum semantic expectation
-files that future repeatability checks can consume.
+ONT-022 is selected from `SPECS/Workplan.md`. The golden intent set has minimum
+semantic expectation files that the repeatability harness can consume.
 
 ## Recommended Next Task
 
