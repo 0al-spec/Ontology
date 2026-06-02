@@ -1,0 +1,129 @@
+kind: GoldenIntentSemanticExpectation
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+metadata:
+  id: voice-recorder-ai-transcription
+  sourceIntent: SPECS/ontology/golden-intents/voice-recorder-ai-transcription.intent.md
+  expectationType: minimum-semantic-criteria
+  description: Minimum semantic expectations for a voice recorder with multi-speaker AI transcription.
+
+domainFrame:
+  surfaceProduct: VoiceRecorderApplication
+  deepDomain: ReviewedMultiSpeakerTranscription
+  primaryValue: Produce reviewable, speaker-attributed, timestamped transcript text from recorded speech.
+  primaryRisk: Incorrect speaker attribution or low-confidence transcript text is exported as trusted output.
+  boundedContexts:
+    - RecordingCapture
+    - SpeakerAttribution
+    - TranscriptionReview
+    - TranscriptExport
+    - ConfidenceAndProvenance
+
+governingConcept:
+  id: TranscriptionSession
+  mustBeCentral: true
+  rationale: Controls recording input, speaker attribution, transcript segment lifecycle, review state, and export readiness.
+
+minimumConcepts:
+  domainEntities:
+    - RecordingSession
+    - AudioRecording
+    - TranscriptionSession
+    - TranscriptSegment
+    - SpeakerProfile
+    - SpeakerAttribution
+    - ReviewCorrection
+  capabilities:
+    - MultiSpeakerTranscription
+    - SpeakerDiarization
+  commands:
+    - StartRecording
+    - StopRecording
+    - StartTranscription
+    - ReviewTranscriptSegment
+    - CorrectSpeakerAttribution
+    - ExportTranscript
+  events:
+    - RecordingCompleted
+    - TranscriptionCompleted
+    - LowConfidenceSegmentDetected
+    - ReviewCorrectionApplied
+    - TranscriptExported
+  valueObjects:
+    - TimestampRange
+    - ConfidenceScore
+    - TranscriptText
+
+minimumRelations:
+  - id: captures_audio
+    domain: RecordingSession
+    range: AudioRecording
+  - id: produces_transcription
+    domain: AudioRecording
+    range: TranscriptionSession
+  - id: contains_segment
+    domain: TranscriptionSession
+    range: TranscriptSegment
+  - id: attributes_speaker
+    domain: TranscriptSegment
+    range: SpeakerAttribution
+  - id: assigned_to
+    domain: SpeakerAttribution
+    range: SpeakerProfile
+  - id: corrected_by
+    domain: TranscriptSegment
+    range: ReviewCorrection
+
+policyExpectations:
+  mustInclude:
+    - LowConfidenceRequiresReview
+    - ExportRequiresResolvedReview
+  enforceability:
+    runtime:
+      - ExportRequiresResolvedReview
+    manual:
+      - LowConfidenceRequiresReview
+  reviewOnly:
+    - ConsentAndRetentionPolicy
+
+lifecycleExpectations:
+  stateMachines:
+    - id: TranscriptionSessionState
+      appliesTo: TranscriptionSession
+      mustIncludeStates:
+        - recording
+        - transcribing
+        - awaiting_review
+        - reviewed
+        - exported
+        - failed
+
+trustAndEvidenceExpectations:
+  mustCapture:
+    - confidence score for transcript text
+    - confidence score for speaker attribution
+    - timestamp range for each transcript segment
+    - provenance of user review corrections
+    - export readiness based on unresolved review items
+
+competencyQuestions:
+  mustCover:
+    - which transcript segments belong to a given speaker
+    - which segments require human review before export
+    - what confidence evidence supports speaker attribution
+    - whether export is allowed while required review corrections are unresolved
+
+forbiddenCoreConcepts:
+  - id: RecordButton
+    reason: UI control, not domain ontology core.
+  - id: TranscriptScreen
+    reason: UI surface, not domain ontology core.
+  - id: AIModelEndpoint
+    reason: Integration detail unless model operations are the domain boundary under review.
+
+qualityTargets:
+  domainFraming: 3
+  conceptCoverage: 3
+  behavioralModeling: 3
+  policyModeling: 2
+  trustAndEvidence: 3
+  implementationLeakage: 3

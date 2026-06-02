@@ -96,6 +96,10 @@ spec:
 - Competency questions cover relations, policies, lifecycle, and evidence.
 - Assumptions are not converted into facts.
 
+For golden intent experiments, compare candidate drafts against the minimum semantic
+expectations in `SPECS/ontology/golden-intents/expectations/`. These expectations are
+review anchors, not byte-exact ontology outputs.
+
 ## Compiler Validation
 
 Run:

@@ -1,0 +1,117 @@
+kind: GoldenIntentSemanticExpectation
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+metadata:
+  id: exam-controlled-calculator
+  sourceIntent: SPECS/ontology/golden-intents/exam-controlled-calculator.intent.md
+  expectationType: minimum-semantic-criteria
+  description: Minimum semantic expectations for an exam-controlled calculator ontology.
+
+domainFrame:
+  surfaceProduct: CalculatorApplication
+  deepDomain: ExamControlledComputation
+  primaryValue: Allow fair and controlled calculator use during exams.
+  primaryRisk: Student obtains unfair advantage through disallowed functions or external access.
+  boundedContexts:
+    - Calculation
+    - ExamPolicyManagement
+    - ExamModeRuntime
+    - DeviceTrust
+    - AuditAndCompliance
+
+governingConcept:
+  id: ExamPolicyProfile
+  mustBeCentral: true
+  rationale: Governs allowed calculator behavior, approval, signatures, device verification, and exam-mode enforcement.
+
+minimumConcepts:
+  domainEntities:
+    - Exam
+    - ExamPolicyProfile
+    - ExamModeSession
+    - TabletDevice
+    - AuditLogEntry
+  capabilities:
+    - CalculatorFunction
+  commands:
+    - StartExamMode
+    - VerifyDeviceAndPolicy
+    - LockCalculator
+    - EndExamMode
+  events:
+    - PolicyViolation
+  valueObjects:
+    - FunctionSet
+
+minimumRelations:
+  - id: requires_policy
+    domain: Exam
+    range: ExamPolicyProfile
+  - id: allows
+    domain: ExamPolicyProfile
+    range: CalculatorFunction
+  - id: denies
+    domain: ExamPolicyProfile
+    range: CalculatorFunction
+  - id: enforces
+    domain: ExamModeSession
+    range: ExamPolicyProfile
+  - id: records
+    domain: AuditLogEntry
+    range: PolicyViolation
+
+policyExpectations:
+  mustInclude:
+    - DenyByDefaultPolicy
+    - PolicyMustBeSigned
+    - PolicyMustBeDeviceVerifiable
+    - NoNetworkDuringExam
+  enforceability:
+    runtime:
+      - DenyByDefaultPolicy
+      - NoNetworkDuringExam
+    design:
+      - PolicyMustBeSigned
+      - PolicyMustBeDeviceVerifiable
+
+lifecycleExpectations:
+  stateMachines:
+    - id: ExamModeSessionState
+      appliesTo: ExamModeSession
+      mustIncludeStates:
+        - initialized
+        - pending_device_verification
+        - policy_verified
+        - active
+        - locked
+        - ended
+        - failed
+
+trustAndEvidenceExpectations:
+  mustCapture:
+    - signed policy profile
+    - device-verifiable policy availability
+    - no-network exam mode constraint
+    - durable audit record for policy violations
+
+competencyQuestions:
+  mustCover:
+    - allowed functions for a given exam
+    - explicitly denied functions for a given exam
+    - whether unsigned or not device-verifiable policy can become active
+    - evidence proving policy enforcement or violation handling
+
+forbiddenCoreConcepts:
+  - id: CalculatorButton
+    reason: UI control, not domain ontology core.
+  - id: CalculatorScreen
+    reason: UI surface, not domain ontology core.
+  - id: MathOperationImplementation
+    reason: Implementation detail unless the domain is symbolic computation itself.
+
+qualityTargets:
+  domainFraming: 3
+  conceptCoverage: 3
+  behavioralModeling: 2
+  policyModeling: 3
+  trustAndEvidence: 3
+  implementationLeakage: 3
