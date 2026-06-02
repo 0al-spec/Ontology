@@ -432,7 +432,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-024
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **PRD:** `SPECS/INPROGRESS/ONT-025_Governance_Decision_CLI_Validation.md`
 - **Origin:** Follow-up to ONT-024 and the ONT-023 enforcement boundary.
 - **Acceptance Criteria:**

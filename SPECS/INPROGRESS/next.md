@@ -1,11 +1,11 @@
 # Next Tasks: Governance Enforcement
 
-**Status:** ONT-024 archived with PASS
+**Status:** ONT-025 selected
 
 ## Description
 
-ONT-024 has defined the `OntologyGovernanceDecision` artifact contract. The remaining
-stack turns that contract into compiler validation and registry publish enforcement.
+ONT-024 has defined the `OntologyGovernanceDecision` artifact contract. ONT-025 now
+turns that contract into deterministic compiler validation before registry enforcement.
 
 ## Recommended Next Task
 
