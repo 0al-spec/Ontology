@@ -1,11 +1,12 @@
 # Next Tasks: Planning State
 
-**Status:** Updated after ONT-015 governing-concept review
+**Status:** Updated after ONT-019 archive
 
 ## Description
 
-The tracked implementation backlog in `SPECS/Workplan.md` is complete. ONT-015 has reduced
-the examcalc governing-concept signal to the source-backed `ExamPolicyProfile` concept.
+ONT-019 has been completed and archived. The repository now has a documented ontology
+induction layer: staged protocol, prompt contracts, quality rubric, authoring guide, and
+golden intent seeds.
 
 ## Recommended Next Task
 
@@ -15,10 +16,11 @@ the examcalc governing-concept signal to the source-backed `ExamPolicyProfile` c
 
 ## Sequencing Notes
 
+- ONT-019 is archived with PASS.
+- The final YAML artifact remains `DomainOntologyPackage`; ONT-019 documents how an
+  ontology-authoring agent gets there from product/domain intent.
 - ONT-015 is complete: `ExamPolicyProfile` is the only `central: true` class in the
   canonical examcalc package, example mirror, compatibility fixture, and generated IR.
-- New work should start by adding a fresh task to `SPECS/Workplan.md`, not by reusing
-  completed follow-ups.
 - ONT-013 is complete: the fresh audit found zero SwiftLint violations, force rules are
   already enforced as errors, and `strict: true` now makes warning regressions fail CI.
 - The ONT-018 `pull` contract follows the PRD: `sourceDigest` is the digest of the original
@@ -30,6 +32,7 @@ the examcalc governing-concept signal to the source-backed `ExamPolicyProfile` c
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-019 | Ontology induction protocol and prompt contracts | `SPECS/ARCHIVE/ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/` |
 | ONT-015 | Governing-concept central marker follow-up | `SPECS/Workplan.md` |
 | ONT-013 | Strict SwiftLint warning gate follow-up | `SPECS/Workplan.md` |
 | ONT-014 | CLI help/argument parsing follow-up | `SPECS/Workplan.md` |
@@ -40,6 +43,7 @@ the examcalc governing-concept signal to the source-backed `ExamPolicyProfile` c
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-019 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/` |
 | ONT-018 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-018_CLI_Registry_Commands/` |
 | ONT-017 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-017_Zod_JSON_Schema_Validators_For_ABox/` |
 | ONT-016 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-016_Protocol_Interfaces_And_Compiler_Support/` |
