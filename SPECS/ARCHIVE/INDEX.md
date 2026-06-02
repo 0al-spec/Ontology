@@ -34,6 +34,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-02 | ONT-023 | Archived REVIEW_ONT-023 report |
 | 2026-06-02 | ONT-023 | Archived Ontology_Governance_Protocol (PASS) |
 | 2026-06-02 | ONT-022 | Archived REVIEW_ONT-022 report |
 | 2026-06-02 | ONT-022 | Archived Golden_Intent_Repeatability_Harness (PASS) |
