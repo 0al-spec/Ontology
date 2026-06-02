@@ -298,6 +298,30 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+## Phase 8: Ontology Induction and Authoring
+
+#### ONT-019: SpecGraph Ontology Induction Protocol and Prompt Contracts
+- **Description:** Materialize the raw roadmap for turning product/domain intent into validated
+  `DomainOntologyPackage` YAML through a staged ontology induction protocol, prompt
+  contracts, quality rubric, and golden intent seeds.
+- **Priority:** P1
+- **Dependencies:** ONT-001, ONT-002, ONT-003, ONT-004, ONT-015
+- **Parallelizable:** yes
+- **Status:** INPROGRESS
+- **Origin:** `SPECS/raw` roadmap: SpecGraph Ontology Induction Protocol, prompt contracts,
+  rubric + validators, golden intent set, and ontology governance.
+- **Acceptance Criteria:**
+  - Protocol doc defines the staged intent-to-ontology pipeline from product intent to
+    approved `DomainOntologyPackage`.
+  - Prompt contracts are split by stage and have explicit inputs, outputs, forbidden
+    behavior, and quality checks.
+  - Quality rubric defines reviewer criteria for ontology drafts and separates automated
+    checks from human/agent review.
+  - Authoring guide explains how the final YAML is checked and compiled with `ontologyc`.
+  - At least two golden intent seeds are included for future stability tests.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

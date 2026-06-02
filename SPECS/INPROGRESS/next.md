@@ -1,24 +1,27 @@
 # Next Tasks: Planning State
 
-**Status:** Updated after ONT-015 governing-concept review
+**Status:** ONT-019 selected for FLOW execution
 
 ## Description
 
-The tracked implementation backlog in `SPECS/Workplan.md` is complete. ONT-015 has reduced
-the examcalc governing-concept signal to the source-backed `ExamPolicyProfile` concept.
+ONT-019 has been added to `SPECS/Workplan.md` to materialize the raw roadmap for ontology
+induction: a staged intent-to-ontology protocol, prompt contracts, quality rubric, and
+golden intent seeds.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| None | No active Workplan task remains | - | - | `SPECS/Workplan.md` |
+| ONT-019 | SpecGraph Ontology Induction Protocol and Prompt Contracts | 8 | P1 | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
+- ONT-019 is the active FLOW task for this branch.
+- This task is documentation/protocol work only; it must not change compiler logic.
+- The final YAML artifact remains `DomainOntologyPackage`; ONT-019 documents how an
+  ontology-authoring agent gets there from product/domain intent.
 - ONT-015 is complete: `ExamPolicyProfile` is the only `central: true` class in the
   canonical examcalc package, example mirror, compatibility fixture, and generated IR.
-- New work should start by adding a fresh task to `SPECS/Workplan.md`, not by reusing
-  completed follow-ups.
 - ONT-013 is complete: the fresh audit found zero SwiftLint violations, force rules are
   already enforced as errors, and `strict: true` now makes warning regressions fail CI.
 - The ONT-018 `pull` contract follows the PRD: `sourceDigest` is the digest of the original
