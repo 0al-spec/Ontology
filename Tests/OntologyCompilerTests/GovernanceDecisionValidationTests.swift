@@ -19,15 +19,18 @@ final class GovernanceDecisionValidationTests: XCTestCase {
     }
 
     func testGovernanceDecisionValidationRejectsAgentApproval() throws {
+        let report = try makeTemporaryDirectory(name: "governance-agent")
+            .appendingPathComponent("report.yaml")
         let result = try OntologyCompiler().validateGovernanceDecision(
             decisionPath: OntologySourcePath(path: "SPECS/ontology/examples/governance/invalid-agent-approval.yaml"),
             packagePath: nil,
             goldenReportPath: nil,
-            outPath: nil
+            outPath: OntologyOutputPath(path: report.path)
         )
 
         XCTAssertFalse(result.passed)
         XCTAssertTrue(result.diagnostics.contains { $0.code == "governance.decision.actor.authority.invalid" })
+        XCTAssertTrue(try String(contentsOf: report).contains("governance.decision.actor.authority.invalid"))
     }
 
     func testGovernanceDecisionValidationRejectsPackageMismatch() throws {

@@ -17,7 +17,12 @@ extension OntologyCompiler {
         diagnostics = []
         guard let decision = loadGovernanceDecision(path: decisionPath.path) else {
             let sorted = sortedDiagnostics()
-            let report = governanceDecisionReport(decisionPath: decisionPath.path, passed: false, checks: checks(from: sorted))
+            let report = governanceDecisionReport(
+                decisionPath: decisionPath.path,
+                passed: false,
+                checks: checks(from: sorted),
+                diagnostics: sorted
+            )
             if let outPath { try writeYAML(report, to: outPath.url) }
             return GovernanceDecisionValidationResult(passed: false, report: report, diagnostics: sorted)
         }
@@ -33,7 +38,12 @@ extension OntologyCompiler {
         let sorted = sortedDiagnostics()
         let checks = governanceDecisionChecks(decision, diagnostics: sorted)
         let passed = sorted.allSatisfy { $0.severity != "error" }
-        let report = governanceDecisionReport(decisionPath: decisionPath.path, passed: passed, checks: checks)
+        let report = governanceDecisionReport(
+            decisionPath: decisionPath.path,
+            passed: passed,
+            checks: checks,
+            diagnostics: sorted
+        )
         if let outPath {
             try writeYAML(report, to: outPath.url)
         }
@@ -332,7 +342,12 @@ extension OntologyCompiler {
         }
     }
 
-    private func governanceDecisionReport(decisionPath: String, passed: Bool, checks: [JSONObject]) -> JSONObject {
+    private func governanceDecisionReport(
+        decisionPath: String,
+        passed: Bool,
+        checks: [JSONObject],
+        diagnostics: [Diagnostic]
+    ) -> JSONObject {
         [
             "apiVersion": "ontology-governance.specgraph.io/v1alpha1",
             "kind": "OntologyGovernanceDecisionValidationReport",
@@ -346,7 +361,15 @@ extension OntologyCompiler {
                     "failed": checks.filter { string($0["status"]) == "fail" }.count
                 ]
             ],
-            "checks": checks
+            "checks": checks,
+            "diagnostics": diagnostics.map {
+                [
+                    "code": $0.code,
+                    "severity": $0.severity,
+                    "path": $0.path,
+                    "message": $0.message
+                ]
+            }
         ]
     }
 
