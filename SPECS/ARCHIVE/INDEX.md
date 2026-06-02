@@ -33,6 +33,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-02 | ONT-022 | Archived REVIEW_ONT-022 report |
 | 2026-06-02 | ONT-022 | Archived Golden_Intent_Repeatability_Harness (PASS) |
 | 2026-06-02 | ONT-021 | Archived REVIEW_ONT-021 report |
 | 2026-06-02 | ONT-021 | Archived Golden_Intent_Semantic_Expectations (PASS) |
