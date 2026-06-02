@@ -1,5 +1,6 @@
 import Foundation
 import OntologyCompiler
+import OntologyRules
 
 private let generalUsage = """
 Usage:
@@ -13,6 +14,7 @@ Commands:
   publish             Publish compiled ontology IR to a registry.
   pull                Download published ontology IR from a registry.
   compat-check        Compare local package compatibility against registry IR.
+  import-hypercode    Convert Hypercode IR into a DomainOntologyPackage draft.
 
 Run `ontologyc <command> --help` for command-specific usage.
 """
@@ -45,6 +47,10 @@ private let commandUsage: [String: String] = [
     "compat-check": """
     Usage:
       ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url> [--out <report.yaml>] [--token <token>]
+    """,
+    "import-hypercode": """
+    Usage:
+      ontologyc import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>
     """
 ]
 
@@ -143,6 +149,30 @@ private func packageReference(_ value: String, command: String) -> OntologyPacka
         usageError("expected package reference <id>@<version>, got \(value)", command: command)
     }
     return ref
+}
+
+private func packageId(_ value: String, command: String) -> OntologyPackageId {
+    let id = OntologyPackageId(rawValue: value)
+    guard OntologyIdPatternSpec().isSatisfiedBy(id) else {
+        usageError("invalid package id \(value)", command: command)
+    }
+    return id
+}
+
+private func namespace(_ value: String, command: String) -> OntologyNamespace {
+    let namespace = OntologyNamespace(rawValue: value)
+    guard OntologyNamespacePatternSpec().isSatisfiedBy(namespace) else {
+        usageError("invalid namespace \(value)", command: command)
+    }
+    return namespace
+}
+
+private func semanticVersion(_ value: String, command: String) -> OntologySemanticVersion {
+    let version = OntologySemanticVersion(rawValue: value)
+    guard OntologySemVerPatternSpec().isSatisfiedBy(version) else {
+        usageError("invalid semantic version \(value)", command: command)
+    }
+    return version
 }
 
 let args = Array(CommandLine.arguments.dropFirst())
@@ -311,6 +341,36 @@ case "compat-check":
         exit(1)
     } catch {
         fputs("ontologyc compat-check: FAIL \(error)\n", stderr)
+        exit(1)
+    }
+
+case "import-hypercode":
+    let parsed = parseArguments(
+        commandArgs,
+        allowedOptions: ["--out", "--id", "--namespace", "--version"],
+        command: command
+    )
+    requirePositionals(1, in: parsed, command: command)
+    let irPath = parsed.positional[0]
+    let outPath = requireOption("--out", in: parsed, command: command)
+    let packageId = packageId(requireOption("--id", in: parsed, command: command), command: command)
+    let packageNamespace = namespace(requireOption("--namespace", in: parsed, command: command), command: command)
+    let packageVersion = semanticVersion(requireOption("--version", in: parsed, command: command), command: command)
+    do {
+        let diagnostics = try compiler.importHypercode(
+            path: OntologySourcePath(path: irPath),
+            outPath: OntologyOutputPath(path: outPath),
+            packageId: packageId,
+            namespace: packageNamespace,
+            version: packageVersion
+        )
+        if compiler.hasErrors(diagnostics) {
+            compiler.printDiagnostics(diagnostics)
+            exit(1)
+        }
+        print("ontologyc import-hypercode: PASS \(outPath)")
+    } catch {
+        fputs("ontologyc import-hypercode: FAIL \(error)\n", stderr)
         exit(1)
     }
 

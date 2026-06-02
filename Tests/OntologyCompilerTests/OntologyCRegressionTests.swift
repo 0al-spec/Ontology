@@ -36,6 +36,7 @@ final class OntologyCRegressionTests: XCTestCase {
         XCTAssertTrue(result.stdout.contains("Usage:"), result.stdout)
         XCTAssertTrue(result.stdout.contains("ontologyc <command> [options]"), result.stdout)
         XCTAssertTrue(result.stdout.contains("compat-check"), result.stdout)
+        XCTAssertTrue(result.stdout.contains("import-hypercode"), result.stdout)
         XCTAssertEqual(result.stderr, "")
     }
 
@@ -234,6 +235,37 @@ final class OntologyCRegressionTests: XCTestCase {
             report,
             matches: "SPECS/specgraph/semantic-validation/out/compatibility-report.yaml"
         )
+    }
+
+    func testImportHypercodeWritesCheckableDraftPackage() throws {
+        let output = try makeTemporaryDirectory(name: "ontologyc-import-hypercode")
+            .appendingPathComponent("service-domain-ontology.yaml")
+        let result = try ontologyc([
+            "import-hypercode",
+            "SPECS/ontology/hypercode/service.production.ir.json",
+            "--out",
+            output.path,
+            "--id",
+            "org.0al.hypercode.service",
+            "--namespace",
+            "hypercodeservice",
+            "--version",
+            "0.1.0"
+        ])
+
+        XCTAssertEqual(result.status, 0, result.combinedOutput)
+        XCTAssertEqual(
+            result.stdout.trimmingCharacters(in: .whitespacesAndNewlines),
+            "ontologyc import-hypercode: PASS \(output.path)"
+        )
+        let draft = try String(contentsOf: output, encoding: .utf8)
+        XCTAssertTrue(draft.contains("kind: DomainOntologyPackage"), draft)
+        XCTAssertTrue(draft.contains("Service:"), draft)
+        XCTAssertTrue(draft.contains("GeneratedDraftRequiresReview:"), draft)
+
+        let check = try ontologyc(["check", output.path])
+        XCTAssertEqual(check.status, 0, check.combinedOutput)
+        XCTAssertTrue(check.stdout.contains("ontologyc check: PASS \(output.path)"), check.stdout)
     }
 
     private var repoRoot: URL {

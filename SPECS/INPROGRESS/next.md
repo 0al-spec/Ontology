@@ -1,21 +1,27 @@
-# Next Tasks: Planning State
+# Next Tasks: Hypercode Import Bridge
 
-**Status:** Updated after ONT-019 archive
+**Status:** Updated for ONT-020 implementation PR
 
 ## Description
 
-ONT-019 has been completed and archived. The repository now has a documented ontology
-induction layer: staged protocol, prompt contracts, quality rubric, authoring guide, and
-golden intent seeds.
+ONT-019 completed the ontology induction layer. ONT-020 adds the first deterministic
+Hypercode bridge: importing a `hypercode.ir/v1` resolved graph into a reviewable
+`DomainOntologyPackage` draft without making domain-authoritative claims.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| None | No active Workplan task remains | - | - | `SPECS/Workplan.md` |
+| ONT-020 | Hypercode IR Import Spike | 9 | P2 | `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md` |
 
 ## Sequencing Notes
 
+- ONT-020 is intentionally a bridge, not a full ontology induction replacement.
+- The importer maps Hypercode node `type` values into draft ontology classes and adds
+  synthetic review policy/lifecycle scaffolding so the output passes `ontologyc check`.
+- Hypercode `.hc`/`.hcs` parsing and context resolution remain owned by the Hypercode
+  repository; Ontology consumes only the resolved `hypercode.ir/v1` contract.
+- Future refinement can add richer relation inference after a real consumer needs it.
 - ONT-019 is archived with PASS.
 - The final YAML artifact remains `DomainOntologyPackage`; ONT-019 documents how an
   ontology-authoring agent gets there from product/domain intent.
@@ -32,6 +38,7 @@ golden intent seeds.
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-020 | Current PR | `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md` |
 | ONT-019 | Ontology induction protocol and prompt contracts | `SPECS/ARCHIVE/ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/` |
 | ONT-015 | Governing-concept central marker follow-up | `SPECS/Workplan.md` |
 | ONT-013 | Strict SwiftLint warning gate follow-up | `SPECS/Workplan.md` |
