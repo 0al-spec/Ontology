@@ -115,6 +115,21 @@ swift run ontologyc compat-check <package.yaml> --against <id>@<version> --regis
 
 `--token` can also be supplied through `ONTOLOGYC_TOKEN`.
 
+## Ontology Authoring
+
+Do not start ontology authoring by writing YAML directly. For new product/domain intents,
+use the staged induction workflow:
+
+```text
+intent -> prompt contracts -> reviewed ontology draft -> DomainOntologyPackage YAML
+       -> ontologyc check -> ontologyc compile
+```
+
+Start with the [authoring guide](SPECS/ontology/authoring-guide.md), then use the
+[induction protocol](SPECS/ontology/induction-protocol.md), stage-specific
+[prompt contracts](SPECS/ontology/authoring-prompts/), and
+[quality rubric](SPECS/ontology/ontology-quality-rubric.md).
+
 ## Quality Gate
 
 Run the same local gate shape used by CI:
@@ -211,6 +226,9 @@ Examples:
 - [Compiler IR](SPECS/ontology/compiler-ir.md)
 - [Foundation types](SPECS/ontology/foundation-types.md)
 - [Domain ontology package schema](SPECS/ontology/domain-ontology-package.schema.yaml)
+- [Ontology authoring guide](SPECS/ontology/authoring-guide.md)
+- [SpecGraph Ontology Induction Protocol](SPECS/ontology/induction-protocol.md)
+- [Ontology quality rubric](SPECS/ontology/ontology-quality-rubric.md)
 - [Examcalc golden package](SPECS/ontology/packages/examcalc/README.md)
 - [Hypercode roadmap](SPECS/ontology/hypercode-roadmap.md)
 
