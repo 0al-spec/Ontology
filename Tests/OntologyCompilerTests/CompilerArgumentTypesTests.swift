@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 import XCTest
 @testable import OntologyCompiler
 
@@ -22,6 +23,8 @@ final class CompilerArgumentTypesTests: XCTestCase {
 
         XCTAssertEqual(reference.id, "org.0al.examcalc")
         XCTAssertEqual(reference.version, "1.0.0")
+        XCTAssertEqual(reference.packageId, OntologyPackageId(rawValue: "org.0al.examcalc"))
+        XCTAssertEqual(reference.semanticVersion, OntologySemanticVersion(rawValue: "1.0.0"))
         XCTAssertEqual(reference.rawValue, "org.0al.examcalc@1.0.0")
         XCTAssertNil(OntologyPackageReference(rawValue: "org.0al.examcalc"))
     }
