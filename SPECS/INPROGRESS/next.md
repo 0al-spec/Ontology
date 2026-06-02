@@ -1,43 +1,47 @@
-# Next Task: ONT-026 Registry Publish Governance Gate
+# Next Tasks: Post-Governance Enforcement
 
-**Status:** ONT-026 selected
+**Status:** ONT-026 archived with PASS
 
 ## Description
 
 ONT-024 defined the `OntologyGovernanceDecision` artifact contract, and ONT-025 added
-deterministic CLI validation for that artifact. The remaining stack item wires this
-validation into trusted registry publication.
+deterministic CLI validation for that artifact. ONT-026 now wires that validation into
+trusted registry publication.
 
-## Selected Task
+## Current State
+
+- `ontologyc publish` defaults to `--channel candidate`.
+- `--channel trusted` requires an approved governance decision matching the package.
+- Trusted publish rejects invalid or evidence-failing decisions before registry network calls.
+- `pull` and `compat-check` remain unchanged.
+
+## Potential Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| ONT-026 | Registry Publish Governance Gate | Phase 9 | P1 | `SPECS/Workplan.md` |
+| TBD | CI SwiftPM and DocC Cache Optimization | Quality | P2 | Follow-up from repeated quality/CI runs |
 
-## Execution Notes
+## Sequencing Notes
 
-- ONT-026 should integrate `validateGovernanceDecision` into `ontologyc publish`.
-- The policy boundary to decide in ONT-026: governance may be mandatory for trusted/stable
-  publication while draft/candidate publication remains possible only if explicitly documented.
-- Existing `pull` and `compat-check` behavior should remain unchanged.
-- The implementation should reject trusted publication before any registry network call when
-  the governance decision is missing, invalid, not approved, mismatched, or backed by failing
-  golden intent evidence.
+- The governance enforcement stack is complete through local schema, CLI validation, and
+  trusted registry publish gating.
+- A focused CI optimization slice could reduce repeated SwiftSyntax/DocC dependency
+  materialization and build time.
 
 ## Recently Implemented
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-026 | Registry publish governance gate | `SPECS/ARCHIVE/ONT-026_Registry_Publish_Governance_Gate/` |
 | ONT-025 | Governance decision CLI validation | `SPECS/ARCHIVE/ONT-025_Governance_Decision_CLI_Validation/` |
 | ONT-024 | Governance decision YAML schema | `SPECS/ARCHIVE/ONT-024_Governance_Decision_YAML_Schema/` |
 | ONT-023 | Ontology governance protocol | `SPECS/ARCHIVE/ONT-023_Ontology_Governance_Protocol/` |
-| ONT-022 | Golden intent repeatability harness | `SPECS/ARCHIVE/ONT-022_Golden_Intent_Repeatability_Harness/` |
 
 ## Recently Archived
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-026 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-026_Registry_Publish_Governance_Gate/` |
 | ONT-025 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-025_Governance_Decision_CLI_Validation/` |
 | ONT-024 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-024_Governance_Decision_YAML_Schema/` |
 | ONT-023 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-023_Ontology_Governance_Protocol/` |
-| ONT-022 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-022_Golden_Intent_Repeatability_Harness/` |

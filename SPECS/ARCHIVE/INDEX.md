@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-026 | [ONT-026_Registry_Publish_Governance_Gate/](ONT-026_Registry_Publish_Governance_Gate/) | 2026-06-03 | PASS |
 | ONT-025 | [ONT-025_Governance_Decision_CLI_Validation/](ONT-025_Governance_Decision_CLI_Validation/) | 2026-06-03 | PASS |
 | ONT-024 | [ONT-024_Governance_Decision_YAML_Schema/](ONT-024_Governance_Decision_YAML_Schema/) | 2026-06-03 | PASS |
 | ONT-023 | [ONT-023_Ontology_Governance_Protocol/](ONT-023_Ontology_Governance_Protocol/) | 2026-06-02 | PASS |
@@ -36,6 +37,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-03 | ONT-026 | Archived Registry_Publish_Governance_Gate (PASS) |
 | 2026-06-03 | ONT-025 | Archived REVIEW_ONT-025 report |
 | 2026-06-03 | ONT-025 | Archived Governance_Decision_CLI_Validation (PASS) |
 | 2026-06-03 | ONT-024 | Archived REVIEW_ONT-024 report |

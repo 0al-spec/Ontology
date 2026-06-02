@@ -1,6 +1,6 @@
 # ONT-026: Registry Publish Governance Gate
 
-**Status:** PRD Ready
+**Status:** Archived PASS
 **Date:** 2026-06-03
 **Priority:** P1
 **Dependencies:** ONT-025
