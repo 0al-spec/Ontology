@@ -20,9 +20,10 @@ This protocol materializes the raw roadmap in `SPECS/raw/`:
 4. Golden intent set.
 5. Ontology governance.
 
-This task implements the first four as documentation and prompt contracts. Governance
-state transitions such as approve, reject, merge, and versioning are described as the
-future promotion model, not implemented as compiler behavior.
+The first four stages are covered by documentation, prompt contracts, golden intents, and
+repeatability checks. Governance state transitions such as approve, reject, merge, and
+versioning are defined in [`governance-protocol.md`](governance-protocol.md), not
+implemented as compiler behavior.
 
 ## Artifact Pipeline
 
@@ -198,7 +199,7 @@ swift run ontologyc compile <package.yaml> --target typescript --out <out-dir>
 | Rubric review | Semantic quality, leakage, inflation, missing behavior | Reviewer/Critic |
 | Compiler validation | YAML shape, references, state-machine consistency, unsafe YAML | `ontologyc` |
 | Regression validation | Golden intent stability and expected outputs | Future test harness |
-| Governance validation | Approval, merge, versioning, provenance | Future governance flow |
+| Governance validation | Approval, merge, versioning, provenance | `SPECS/ontology/governance-protocol.md` |
 
 ## Promotion Rule
 
@@ -215,3 +216,6 @@ Only a package that has:
 may become an approved ontology version.
 
 Until then, it remains a candidate ontology package or ontology delta.
+
+The approval, rejection, merge, versioning, and audit process is defined by
+[`governance-protocol.md`](governance-protocol.md).
