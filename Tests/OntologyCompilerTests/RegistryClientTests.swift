@@ -239,9 +239,9 @@ final class RegistryClientTests: XCTestCase {
 
         XCTAssertThrowsError(
             try compiler.compatCheckPackage(
-                path: invalidPackage.path,
-                against: "examcalc@0.1.0",
-                registry: "https://registry.example.com",
+                path: OntologySourcePath(url: invalidPackage),
+                against: try XCTUnwrap(OntologyPackageReference(rawValue: "examcalc@0.1.0")),
+                registry: try XCTUnwrap(RegistryBaseURL(string: "https://registry.example.com")),
                 token: nil,
                 outPath: nil
             )
