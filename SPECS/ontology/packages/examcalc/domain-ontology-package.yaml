@@ -19,7 +19,6 @@ spec:
       implements:
         - sg:Auditable
       description: University exam that requires a controlled calculator policy.
-      central: true
 
     ExamSession:
       extends: sg:DomainEntity
@@ -39,7 +38,6 @@ spec:
       implements:
         - sg:RestrictableCapability
       description: Calculator capability that can be allowed or denied by an exam policy.
-      central: true
 
     FunctionSet:
       extends: sg:DomainEntity
@@ -63,7 +61,6 @@ spec:
         - sg:DeviceBound
       lifecycle: ExamModeSessionState
       description: Runtime enforcement session for controlled calculator use.
-      central: true
 
     PolicyViolation:
       extends: sg:Event

@@ -19,7 +19,7 @@
       "aliases" : [
 
       ],
-      "central" : true,
+      "central" : false,
       "description" : "Calculator capability that can be allowed or denied by an exam policy.",
       "extends" : "sg:Capability",
       "fqid" : "examcalc:CalculatorFunction",
@@ -49,7 +49,7 @@
       "aliases" : [
 
       ],
-      "central" : true,
+      "central" : false,
       "description" : "University exam that requires a controlled calculator policy.",
       "extends" : "sg:DomainEntity",
       "fqid" : "examcalc:Exam",
@@ -64,7 +64,7 @@
       "aliases" : [
 
       ],
-      "central" : true,
+      "central" : false,
       "description" : "Runtime enforcement session for controlled calculator use.",
       "extends" : "sg:DomainEntity",
       "fqid" : "examcalc:ExamModeSession",
@@ -383,7 +383,7 @@
       "uri" : "ontology://edu.university.examcalc/0.1.0/relations/requires_policy"
     }
   ],
-  "sourceDigest" : "sha256:81cbad5a88e7d6f1b0479508e991638b40775b7be3341d0d1c8ada1ed2667a82",
+  "sourceDigest" : "sha256:57fcb796e6f8d3cd5e163df36879dbbdfac7471a134cddf46160253dd4b68ff1",
   "stateMachines" : [
     {
       "fqid" : "examcalc:ExamModeSessionState",
