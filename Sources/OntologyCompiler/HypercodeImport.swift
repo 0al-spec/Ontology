@@ -132,10 +132,11 @@ extension OntologyCompiler {
     }
 
     private func hypercodeDraftRelations(symbols: [String], rootSymbol: String) -> JSONObject {
-        [
+        let rangeSymbols = containmentRangeSymbols(symbols: symbols, rootSymbol: rootSymbol)
+        return [
             "contains": [
                 "domain": rootSymbol,
-                "range": ["oneOf": symbols.sorted()],
+                "range": ["oneOf": rangeSymbols],
                 "cardinality": [
                     "min": 0,
                     "max": "*"
@@ -143,6 +144,11 @@ extension OntologyCompiler {
                 "description": "Draft structural containment relation inferred from Hypercode parent-child structure."
             ]
         ]
+    }
+
+    private func containmentRangeSymbols(symbols: [String], rootSymbol: String) -> [String] {
+        let nonRoot = symbols.filter { $0 != rootSymbol }.sorted()
+        return nonRoot.isEmpty ? [rootSymbol] : nonRoot
     }
 
     private func hypercodeDraftPolicies(rootSymbol: String) -> JSONObject {
@@ -201,8 +207,15 @@ extension OntologyCompiler {
         guard string(root["version"]) == "hypercode.ir/v1" else {
             throw OntologyCompilerError.invalidArgument("Expected Hypercode IR version hypercode.ir/v1 in \(path.path)")
         }
-        guard root["nodes"] is [Any] else {
+        guard let nodes = root["nodes"] as? [Any] else {
             throw OntologyCompilerError.invalidArgument("Hypercode IR must contain a nodes array: \(path.path)")
+        }
+        guard
+            let firstRoot = nodes.first as? JSONObject,
+            let rootType = string(firstRoot["type"]),
+            !rootType.isEmpty
+        else {
+            throw OntologyCompilerError.invalidArgument("Hypercode IR root node must have a non-empty type: \(path.path)")
         }
         return root
     }
