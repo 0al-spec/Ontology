@@ -1,15 +1,12 @@
-# Next Tasks: Phase 5 Follow-Up
+# Next Tasks: Planning State
 
-**Status:** Updated after ONT-011
+**Status:** Updated after ONT-016..018 archive cleanup
 
 ## Description
 
-PR #14 implemented most of the Phase 6/7 surface that was previously listed here as pending:
-protocol interfaces, Zod schema output, and registry CLI commands. The ONT-017 follow-up
-added the remaining JSON Schema helper and smoke fixture. The ONT-014 follow-up hardens
-CLI help and argument parsing. ONT-012 added automated competency-question coverage, and
-ONT-011 refreshed the repository entry-point documentation, so the next fresh
-implementation task should move to the remaining Phase 5 backlog.
+The active implementation backlog is now small. Completed Phase 6/7 PRDs have been moved
+out of `SPECS/INPROGRESS/` and into `SPECS/ARCHIVE/`. The next task should start from the
+remaining Phase 5 backlog, not from stale in-progress PRDs.
 
 ## Recommended Next Task
 
@@ -20,27 +17,18 @@ implementation task should move to the remaining Phase 5 backlog.
 ## Sequencing Notes
 
 - ONT-013 is the next quality-focused Phase 5 item, but it should start with a fresh audit
-  because current SwiftLint output is clean and parts of the original warning list may
-  already be obsolete.
+  because current SwiftLint output is clean and parts of the original warning list are
+  already obsolete.
 - ONT-015 remains a lower-priority semantic-governance follow-up.
-- ONT-011 is implemented in code/docs but still needs formal archive materialization if
-  the Flow lifecycle is enforced strictly.
-- ONT-012 is implemented in code but still needs formal archive materialization if the Flow
-  lifecycle is enforced strictly.
-- ONT-014 is implemented in code but still needs formal archive materialization if the Flow
-  lifecycle is enforced strictly.
-- ONT-016, ONT-017, and ONT-018 are implemented in code but still need formal archive materialization
-  if the Flow lifecycle is enforced strictly.
 - The ONT-018 `pull` contract follows the PRD: `sourceDigest` is the digest of the original
   YAML source, not the downloaded IR body. Integrity for pulled IR is transport-level for now.
+- ONT-011, ONT-012, and ONT-014 are complete in `SPECS/Workplan.md` but do not have
+  dedicated archive folders; create those only if strict Flow artifact parity is required.
 
 ## Recently Implemented
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
-| ONT-018 | PR #14 | `SPECS/INPROGRESS/ONT-018_CLI_Registry_Commands.md` |
-| ONT-017 | PR #14 + JSON Schema follow-up | `SPECS/INPROGRESS/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md` |
-| ONT-016 | PR #14 | `SPECS/INPROGRESS/ONT-016_Protocol_Interfaces_And_Compiler_Support.md` |
 | ONT-014 | CLI help/argument parsing follow-up | `SPECS/Workplan.md` |
 | ONT-012 | Competency-question regression test follow-up | `SPECS/Workplan.md` |
 | ONT-011 | README and contributor guide follow-up | `SPECS/Workplan.md` |
@@ -49,6 +37,9 @@ implementation task should move to the remaining Phase 5 backlog.
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-018 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-018_CLI_Registry_Commands/` |
+| ONT-017 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-017_Zod_JSON_Schema_Validators_For_ABox/` |
+| ONT-016 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-016_Protocol_Interfaces_And_Compiler_Support/` |
 | ONT-010 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-010_Specification_Driven_Refactor_Documentation_And_Audit/` |
 | ONT-009 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-009_Ontology_DecisionSpec_Migration/` |
 | ONT-008 | 2026-06-01 | PASS | `SPECS/ARCHIVE/ONT-008_OntologyRules_Specification_Extraction/` |

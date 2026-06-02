@@ -1,6 +1,6 @@
 # PRD: ONT-006 - Specification-Driven `ontologyc` Refactor
 
-**Status:** PRD Ready  
+**Status:** Superseded historical draft
 **Priority:** P1  
 **Phase:** Code Quality and Maintainability  
 **Reasoning Effort:** high  
@@ -275,7 +275,7 @@ Tests/OntologyRulesTests/
 | D4 | Specification rules target | `Sources/OntologyRules/` | Named specs and decisions use `SpecificationCore` and cover existing validation predicates |
 | D5 | Package manifest update | `Package.swift`, `Package.resolved` | Adds `SpecificationCore` 1.0.0 and SwiftPM builds all targets and tests without Ruby |
 | D6 | Updated compiler docs | `SPECS/ontology/ontologyc.md` | Documents module boundaries and behavior-preserving refactor policy |
-| D7 | Validation report | `SPECS/INPROGRESS/ONT-006_Validation_Report.md` | Records commands, hashes, changed files, and residual risks |
+| D7 | Validation report | Historical draft path, superseded by archived ONT-006 artifacts | Records commands, hashes, changed files, and residual risks |
 
 ## Functional Requirements
 
@@ -440,7 +440,7 @@ Success metric: combined generated output hash remains `1ab28999c8d9e37ac7e447d1
 Validation:
 
 ```bash
-rg -n "ruby|\\.rb" Package.swift Sources Tests SPECS/INPROGRESS/ONT-006_Validation_Report.md
+rg -n "ruby|\\.rb" Package.swift Sources Tests SPECS/ARCHIVE/ONT-006_SpecificationCore_Baseline_and_Regression_Harness/ONT-006_Validation_Report.md
 git status --short
 ```
 

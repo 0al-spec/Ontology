@@ -240,8 +240,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Dependencies:** ONT-010
 - **Parallelizable:** no
 - **Status:** Complete
-- **PRD:** `SPECS/INPROGRESS/ONT-016_Protocol_Interfaces_And_Compiler_Support.md`
-- **Implementation Note:** Implemented in PR #14; archive artifacts are not yet materialized.
+- **PRD:** `SPECS/ARCHIVE/ONT-016_Protocol_Interfaces_And_Compiler_Support/ONT-016_Protocol_Interfaces_And_Compiler_Support.md`
+- **Implementation Note:** Implemented in PR #14; archived on 2026-06-02 during planning-state cleanup.
 - **Acceptance Criteria:**
   - Complete: Protocol names validate against `OntologySymbolNameSpec`.
   - Complete: `implements` refs resolve to declared or imported protocols; unresolved refs produce diagnostics.
@@ -258,8 +258,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Dependencies:** ONT-016
 - **Parallelizable:** no
 - **Status:** Complete
-- **PRD:** `SPECS/INPROGRESS/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md`
-- **Implementation Note:** Implemented across PR #14 and the ONT-017 JSON Schema helper follow-up; archive artifacts are not yet materialized.
+- **PRD:** `SPECS/ARCHIVE/ONT-017_Zod_JSON_Schema_Validators_For_ABox/ONT-017_Zod_JSON_Schema_Validators_For_ABox.md`
+- **Implementation Note:** Implemented across PR #14 and the ONT-017 JSON Schema helper follow-up; archived on 2026-06-02 during planning-state cleanup.
 - **Acceptance Criteria:**
   - Complete: `schemas.ts` is emitted alongside existing outputs for every `compile` invocation.
   - Complete: Each class produces a `<ClassName>Schema` Zod object with `$type` literal and optional `id` field.
@@ -279,8 +279,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Dependencies:** ONT-010, ONT-014
 - **Parallelizable:** no
 - **Status:** Complete
-- **PRD:** `SPECS/INPROGRESS/ONT-018_CLI_Registry_Commands.md`
-- **Implementation Note:** Implemented in PR #14; archive artifacts are not yet materialized. ONT-014 remains a follow-up hardening task for the shared CLI parser.
+- **PRD:** `SPECS/ARCHIVE/ONT-018_CLI_Registry_Commands/ONT-018_CLI_Registry_Commands.md`
+- **Implementation Note:** Implemented in PR #14; archived on 2026-06-02 during planning-state cleanup.
 - **Acceptance Criteria:**
   - Complete: `publish` runs `check` before upload; packages with errors are not published.
   - Complete: `publish` reads the bearer token from `--token` or `ONTOLOGYC_TOKEN`; `--token` takes precedence.
