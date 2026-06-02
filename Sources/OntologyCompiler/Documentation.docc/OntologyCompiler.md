@@ -65,6 +65,14 @@ data-only, and executable-looking YAML content is validated as inert data.
 
 ## Topics
 
+### Compiler Argument Types
+
+- ``OntologySourcePath``
+- ``OntologyOutputDirectory``
+- ``OntologyOutputPath``
+- ``RegistryBaseURL``
+- ``OntologyPackageReference``
+
 ### Compiler Entry Point
 
 - ``OntologyCompiler``

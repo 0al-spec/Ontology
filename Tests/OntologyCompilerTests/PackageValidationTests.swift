@@ -49,7 +49,7 @@ final class PackageValidationTests: XCTestCase {
                   to: signed
         """)
 
-        let diagnostics = OntologyCompiler().check(path: packageURL.path)
+        let diagnostics = OntologyCompiler().check(path: OntologySourcePath(url: packageURL))
 
         XCTAssertTrue(
             diagnostics.contains { $0.code == "protocol.field.missing" },
@@ -102,7 +102,7 @@ final class PackageValidationTests: XCTestCase {
         """)
 
         let compiler = OntologyCompiler()
-        let diagnostics = compiler.check(path: packageURL.path)
+        let diagnostics = compiler.check(path: OntologySourcePath(url: packageURL))
 
         XCTAssertFalse(compiler.hasErrors(diagnostics), "Imported protocol refs should remain resolvable: \(diagnostics)")
         XCTAssertTrue(

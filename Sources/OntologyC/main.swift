@@ -131,6 +131,20 @@ private func authToken(from parsed: ParsedArguments) -> String? {
     parsed.options["--token"] ?? ProcessInfo.processInfo.environment["ONTOLOGYC_TOKEN"]
 }
 
+private func registryBaseURL(_ value: String, command: String) -> RegistryBaseURL {
+    guard let registry = RegistryBaseURL(string: value) else {
+        usageError("invalid registry URL \(value)", command: command)
+    }
+    return registry
+}
+
+private func packageReference(_ value: String, command: String) -> OntologyPackageReference {
+    guard let ref = OntologyPackageReference(rawValue: value) else {
+        usageError("expected package reference <id>@<version>, got \(value)", command: command)
+    }
+    return ref
+}
+
 let args = Array(CommandLine.arguments.dropFirst())
 
 if args.first == "--help" || args.first == "-h" {
@@ -157,7 +171,7 @@ case "check":
     let parsed = parseArguments(commandArgs, allowedOptions: [], command: command)
     requirePositionals(1, in: parsed, command: command)
     let path = parsed.positional[0]
-    let diagnostics = compiler.check(path: path)
+    let diagnostics = compiler.check(path: OntologySourcePath(path: path))
     if compiler.hasErrors(diagnostics) {
         compiler.printDiagnostics(diagnostics)
         exit(1)
@@ -174,7 +188,10 @@ case "compile":
     }
     let outDirectory = requireOption("--out", in: parsed, command: command)
     do {
-        let diagnostics = try compiler.compile(path: path, outDirectory: outDirectory)
+        let diagnostics = try compiler.compile(
+            path: OntologySourcePath(path: path),
+            outDirectory: OntologyOutputDirectory(path: outDirectory)
+        )
         if compiler.hasErrors(diagnostics) {
             compiler.printDiagnostics(diagnostics)
             exit(1)
@@ -193,9 +210,9 @@ case "validate-specgraph":
     let outDirectory = requireOption("--out", in: parsed, command: command)
     do {
         let result = try compiler.validateSpecGraph(
-            bindingPath: bindingPath,
-            ontologyIRPath: ontologyIR,
-            outDirectory: outDirectory
+            bindingPath: OntologySourcePath(path: bindingPath),
+            ontologyIRPath: OntologySourcePath(path: ontologyIR),
+            outDirectory: OntologyOutputDirectory(path: outDirectory)
         )
         print("ontologyc validate-specgraph: PASS \(bindingPath) resolved=\(result.resolved) gaps=\(result.gaps)")
     } catch {
@@ -210,7 +227,11 @@ case "diff":
     let to = requireOption("--to", in: parsed, command: command)
     let outPath = requireOption("--out", in: parsed, command: command)
     do {
-        let diagnostics = try compiler.diffPackages(from: from, to: to, outPath: outPath)
+        let diagnostics = try compiler.diffPackages(
+            from: OntologySourcePath(path: from),
+            to: OntologySourcePath(path: to),
+            outPath: OntologyOutputPath(path: outPath)
+        )
         if compiler.hasErrors(diagnostics) {
             compiler.printDiagnostics(diagnostics)
             exit(1)
@@ -228,11 +249,11 @@ case "publish":
     let publishRegistry = requireOption("--registry", in: parsed, command: command)
     do {
         let result = try compiler.publishPackage(
-            path: publishPath,
-            registry: publishRegistry,
+            path: OntologySourcePath(path: publishPath),
+            registry: registryBaseURL(publishRegistry, command: command),
             token: authToken(from: parsed)
         )
-        print("ontologyc publish: PASS \(result.packageRef)")
+        print("ontologyc publish: PASS \(result.packageRef.rawValue)")
     } catch let compilerError as OntologyCompilerError {
         if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
         fputs("ontologyc publish: FAIL \(compilerError)\n", stderr)
@@ -250,10 +271,10 @@ case "pull":
     let pullOutDirectory = requireOption("--out", in: parsed, command: command)
     do {
         try compiler.pullPackage(
-            ref: pullRef,
-            registry: pullRegistry,
+            ref: packageReference(pullRef, command: command),
+            registry: registryBaseURL(pullRegistry, command: command),
             token: authToken(from: parsed),
-            outDirectory: pullOutDirectory
+            outDirectory: OntologyOutputDirectory(path: pullOutDirectory)
         )
         print("ontologyc pull: PASS \(pullRef)")
     } catch {
@@ -273,11 +294,11 @@ case "compat-check":
     let compatRegistry = requireOption("--registry", in: parsed, command: command)
     do {
         let compatible = try compiler.compatCheckPackage(
-            path: compatPath,
-            against: compatRef,
-            registry: compatRegistry,
+            path: OntologySourcePath(path: compatPath),
+            against: packageReference(compatRef, command: command),
+            registry: registryBaseURL(compatRegistry, command: command),
             token: authToken(from: parsed),
-            outPath: parsed.options["--out"]
+            outPath: parsed.options["--out"].map(OntologyOutputPath.init(path:))
         )
         if !compatible {
             fputs("ontologyc compat-check: BREAKING CHANGES DETECTED in \(compatPath)\n", stderr)
