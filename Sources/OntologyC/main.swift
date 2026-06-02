@@ -15,43 +15,22 @@ Commands:
   pull                Download published ontology IR from a registry.
   compat-check        Compare local package compatibility against registry IR.
   import-hypercode    Convert Hypercode IR into a DomainOntologyPackage draft.
+  validate-golden-intent
+                      Validate candidate ontology YAML against a golden intent expectation.
 
 Run `ontologyc <command> --help` for command-specific usage.
 """
 
 private let commandUsage: [String: String] = [
-    "check": """
-    Usage:
-      ontologyc check <package.yaml>
-    """,
-    "compile": """
-    Usage:
-      ontologyc compile <package.yaml> --target typescript --out <directory>
-    """,
-    "validate-specgraph": """
-    Usage:
-      ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory>
-    """,
-    "diff": """
-    Usage:
-      ontologyc diff --from <old-package.yaml> --to <new-package.yaml> --out <report.yaml>
-    """,
-    "publish": """
-    Usage:
-      ontologyc publish <package.yaml> --registry <url> [--token <token>]
-    """,
-    "pull": """
-    Usage:
-      ontologyc pull <id>@<version> --registry <url> --out <directory> [--token <token>]
-    """,
-    "compat-check": """
-    Usage:
-      ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url> [--out <report.yaml>] [--token <token>]
-    """,
-    "import-hypercode": """
-    Usage:
-      ontologyc import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>
-    """
+    "check": "Usage:\n  ontologyc check <package.yaml>",
+    "compile": "Usage:\n  ontologyc compile <package.yaml> --target typescript --out <directory>",
+    "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory>",
+    "diff": "Usage:\n  ontologyc diff --from <old-package.yaml> --to <new-package.yaml> --out <report.yaml>",
+    "publish": "Usage:\n  ontologyc publish <package.yaml> --registry <url> [--token <token>]",
+    "pull": "Usage:\n  ontologyc pull <id>@<version> --registry <url> --out <directory> [--token <token>]",
+    "compat-check": "Usage:\n  ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url> [--out <report.yaml>] [--token <token>]",
+    "import-hypercode": "Usage:\n  ontologyc import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>",
+    "validate-golden-intent": "Usage:\n  ontologyc validate-golden-intent <expectation.yaml> --candidate <package.yaml> [--out <report.yaml>]"
 ]
 
 private struct ParsedArguments {
@@ -371,6 +350,32 @@ case "import-hypercode":
         print("ontologyc import-hypercode: PASS \(outPath)")
     } catch {
         fputs("ontologyc import-hypercode: FAIL \(error)\n", stderr)
+        exit(1)
+    }
+
+case "validate-golden-intent":
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--candidate", "--out"], command: command)
+    requirePositionals(1, in: parsed, command: command)
+    let expectationPath = parsed.positional[0]
+    let candidatePath = requireOption("--candidate", in: parsed, command: command)
+    do {
+        let result = try compiler.validateGoldenIntent(
+            expectationPath: OntologySourcePath(path: expectationPath),
+            candidatePath: OntologySourcePath(path: candidatePath),
+            outPath: parsed.options["--out"].map(OntologyOutputPath.init(path:))
+        )
+        let reportTarget = parsed.options["--out"].map { " report=\($0)" } ?? ""
+        if !result.passed {
+            fputs("ontologyc validate-golden-intent: FAIL \(candidatePath)\(reportTarget)\n", stderr)
+            exit(1)
+        }
+        print("ontologyc validate-golden-intent: PASS \(candidatePath)\(reportTarget)")
+    } catch let compilerError as OntologyCompilerError {
+        if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
+        fputs("ontologyc validate-golden-intent: FAIL \(compilerError)\n", stderr)
+        exit(1)
+    } catch {
+        fputs("ontologyc validate-golden-intent: FAIL \(error)\n", stderr)
         exit(1)
     }
 

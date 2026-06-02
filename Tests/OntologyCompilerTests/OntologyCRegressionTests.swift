@@ -37,6 +37,7 @@ final class OntologyCRegressionTests: XCTestCase {
         XCTAssertTrue(result.stdout.contains("ontologyc <command> [options]"), result.stdout)
         XCTAssertTrue(result.stdout.contains("compat-check"), result.stdout)
         XCTAssertTrue(result.stdout.contains("import-hypercode"), result.stdout)
+        XCTAssertTrue(result.stdout.contains("validate-golden-intent"), result.stdout)
         XCTAssertEqual(result.stderr, "")
     }
 
@@ -235,6 +236,38 @@ final class OntologyCRegressionTests: XCTestCase {
             report,
             matches: "SPECS/specgraph/semantic-validation/out/compatibility-report.yaml"
         )
+    }
+
+    func testValidateGoldenIntentCliWritesReportAndFailsSemanticMismatch() throws {
+        let output = try makeTemporaryDirectory(name: "ontologyc-golden-intent")
+        let passReport = output.appendingPathComponent("pass-report.yaml")
+        let pass = try ontologyc([
+            "validate-golden-intent",
+            "SPECS/ontology/golden-intents/expectations/exam-controlled-calculator.expectation.yaml",
+            "--candidate",
+            "Tests/fixtures/golden-intents/examcalc-pass.yaml",
+            "--out",
+            passReport.path
+        ])
+
+        XCTAssertEqual(pass.status, 0, pass.combinedOutput)
+        XCTAssertTrue(pass.stdout.contains("ontologyc validate-golden-intent: PASS"), pass.stdout)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: passReport.path))
+        XCTAssertTrue(try String(contentsOf: passReport).contains("GoldenIntentValidationReport"))
+
+        let failReport = output.appendingPathComponent("fail-report.yaml")
+        let fail = try ontologyc([
+            "validate-golden-intent",
+            "SPECS/ontology/golden-intents/expectations/exam-controlled-calculator.expectation.yaml",
+            "--candidate",
+            "Tests/fixtures/golden-intents/examcalc-fail.yaml",
+            "--out",
+            failReport.path
+        ])
+
+        XCTAssertEqual(fail.status, 1, fail.combinedOutput)
+        XCTAssertTrue(fail.stderr.contains("ontologyc validate-golden-intent: FAIL"), fail.stderr)
+        XCTAssertTrue(try String(contentsOf: failReport).contains("status: fail"))
     }
 
     private var repoRoot: URL {
