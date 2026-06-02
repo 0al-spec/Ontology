@@ -411,17 +411,20 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-023
 - **Parallelizable:** no
-- **Status:** INPROGRESS
-- **PRD:** `SPECS/INPROGRESS/ONT-024_Governance_Decision_YAML_Schema.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-024_Governance_Decision_YAML_Schema/ONT-024_Governance_Decision_YAML_Schema.md`
 - **Origin:** Follow-up to ONT-023 enforcement boundary and SpecGraph integration proposal work.
+- **Implementation Note:** Added a YAML/JSON Schema-compatible governance decision
+  contract, valid and invalid examples, and documentation links. Compiler enforcement is
+  deferred to ONT-025.
 - **Acceptance Criteria:**
-  - Pending: Schema defines `apiVersion`, `kind`, metadata, package identity, decision state,
+  - Complete: Schema defines `apiVersion`, `kind`, metadata, package identity, decision state,
     reviewer identity, rationale, evidence references, and optional digest fields.
-  - Pending: Schema constrains approval/rejection actors to human reviewer intent and keeps
+  - Complete: Schema constrains approval/rejection actors to human reviewer intent and keeps
     generated agents out of approval authority.
-  - Pending: Valid and invalid governance decision examples are included.
-  - Pending: Governance protocol, authoring guide, and ontology docs link to the schema and examples.
-  - Pending: No compiler enforcement or registry behavior changes are introduced in this task.
+  - Complete: Valid and invalid governance decision examples are included.
+  - Complete: Governance protocol, authoring guide, and ontology docs link to the schema and examples.
+  - Complete: No compiler enforcement or registry behavior changes are introduced in this task.
 
 #### ONT-025: Governance Decision CLI Validation
 - **Description:** Add `ontologyc validate-governance-decision` to validate governance
