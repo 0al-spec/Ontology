@@ -168,12 +168,15 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-010
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete
 - **Origin:** Post-implementation code review (PR #13).
+- **Implementation Note:** Updated root README and contributor guidance to document the
+  Ontology/SpecGraph layer boundary, examcalc CLI walkthrough, local/CI quality gate,
+  SpecificationCore rule ownership, and key ontology spec links.
 - **Acceptance Criteria:**
-  - Root `README.md` describes the layer model and the `ontologyc` commands (`check`, `compile`, `validate-specgraph`, `diff`) over the `examcalc` example.
-  - README documents local build/test and `tools/swift-quality.sh` usage (including `RUN_COVERAGE=1`).
-  - README links to the key specs under `SPECS/ontology/` (glossary, core contracts, `ontologyc.md`).
+  - Complete: Root `README.md` describes the layer model and the `ontologyc` commands (`check`, `compile`, `validate-specgraph`, `diff`) over the `examcalc` example.
+  - Complete: README documents local build/test and `tools/swift-quality.sh` usage (including `RUN_COVERAGE=1`).
+  - Complete: README links to the key specs under `SPECS/ontology/` (glossary, core contracts, `ontologyc.md`).
 
 #### ONT-012: Automated Competency-Question Resolution Test (T-009)
 - **Description:** Add automated coverage for PRD test T-009: load `SPECS/ontology/examples/examcalc.competency-questions.yaml` and assert every referenced concept/relation/policy resolves against the compiled ontology, and that the missing-concept question emits an `OntologyGap`.

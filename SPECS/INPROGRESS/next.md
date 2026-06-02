@@ -1,26 +1,30 @@
 # Next Tasks: Phase 5 Follow-Up
 
-**Status:** Updated after ONT-012
+**Status:** Updated after ONT-011
 
 ## Description
 
 PR #14 implemented most of the Phase 6/7 surface that was previously listed here as pending:
 protocol interfaces, Zod schema output, and registry CLI commands. The ONT-017 follow-up
 added the remaining JSON Schema helper and smoke fixture. The ONT-014 follow-up hardens
-CLI help and argument parsing. ONT-012 added automated competency-question coverage, so
-the next fresh implementation task should move to the remaining Phase 5 backlog.
+CLI help and argument parsing. ONT-012 added automated competency-question coverage, and
+ONT-011 refreshed the repository entry-point documentation, so the next fresh
+implementation task should move to the remaining Phase 5 backlog.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| ONT-011 | Repository README and Contributor Guide | 5 | P2 | `SPECS/Workplan.md` |
+| ONT-013 | Resolve SwiftLint Warnings in OntologyCompiler | 5 | P2 | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
-- ONT-011 is the lowest-risk remaining Phase 5 item and will make the new CLI/test surface
-  easier for contributors to discover.
-- ONT-013 and ONT-015 remain useful lower-priority follow-ups.
+- ONT-013 is the next quality-focused Phase 5 item, but it should start with a fresh audit
+  because current SwiftLint output is clean and parts of the original warning list may
+  already be obsolete.
+- ONT-015 remains a lower-priority semantic-governance follow-up.
+- ONT-011 is implemented in code/docs but still needs formal archive materialization if
+  the Flow lifecycle is enforced strictly.
 - ONT-012 is implemented in code but still needs formal archive materialization if the Flow
   lifecycle is enforced strictly.
 - ONT-014 is implemented in code but still needs formal archive materialization if the Flow
@@ -39,6 +43,7 @@ the next fresh implementation task should move to the remaining Phase 5 backlog.
 | ONT-016 | PR #14 | `SPECS/INPROGRESS/ONT-016_Protocol_Interfaces_And_Compiler_Support.md` |
 | ONT-014 | CLI help/argument parsing follow-up | `SPECS/Workplan.md` |
 | ONT-012 | Competency-question regression test follow-up | `SPECS/Workplan.md` |
+| ONT-011 | README and contributor guide follow-up | `SPECS/Workplan.md` |
 
 ## Recently Archived
 
