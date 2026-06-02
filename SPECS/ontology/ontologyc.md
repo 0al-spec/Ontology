@@ -127,6 +127,30 @@ Current boundary: this artifact is documentation-level contract only. `ontologyc
 not validate governance decisions in ONT-024. Future tasks add deterministic CLI
 validation and registry publish gating against this schema.
 
+### `ontologyc validate-governance-decision`
+
+```bash
+swift run ontologyc validate-governance-decision \
+  SPECS/ontology/examples/governance/approved-decision.yaml \
+  --package SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
+  --out /tmp/governance-decision-report.yaml
+```
+
+Behavior:
+
+1. Parse the governance decision YAML as inert data.
+2. Validate `apiVersion`, `kind`, package identity, decision state, actor authority,
+   rationale, and mandatory evidence references.
+3. When `--package` is supplied, ensure decision package id, namespace, and version match
+   the supplied `DomainOntologyPackage`.
+4. When `--golden-report` is supplied for an approved decision, require the golden intent
+   validation report to pass.
+5. Emit `OntologyGovernanceDecisionValidationReport` when `--out` is supplied.
+6. Exit non-zero for invalid governance records.
+
+Current boundary: registry `publish` does not consume this command yet. ONT-026 defines
+the publish gate that will require a valid approved decision for trusted publication.
+
 ## Non-Goals for ONT-001
 
 - No production compiler implementation.
