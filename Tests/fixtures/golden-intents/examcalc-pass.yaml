@@ -51,23 +51,23 @@ spec:
   protocols: {}
   relations:
     requires_policy:
-      domain: Exam
-      range: ExamPolicyProfile
+      domain: examcalcpass:Exam
+      range: examcalcpass:ExamPolicyProfile
     allows:
-      domain: ExamPolicyProfile
-      range: CalculatorFunction
+      domain: examcalcpass:ExamPolicyProfile
+      range: examcalcpass:CalculatorFunction
     denies:
-      domain: ExamPolicyProfile
-      range: CalculatorFunction
+      domain: examcalcpass:ExamPolicyProfile
+      range: examcalcpass:CalculatorFunction
     enforces:
-      domain: ExamModeSession
-      range: ExamPolicyProfile
+      domain: examcalcpass:ExamModeSession
+      range: examcalcpass:ExamPolicyProfile
     records:
-      domain: AuditLogEntry
+      domain: examcalcpass:AuditLogEntry
       range:
         oneOf:
-          - PolicyViolation
-          - ExamModeSession
+          - examcalcpass:PolicyViolation
+          - examcalcpass:ExamModeSession
   policies:
     DenyByDefaultPolicy:
       extends: sg:Policy

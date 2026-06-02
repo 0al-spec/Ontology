@@ -17,6 +17,9 @@ extension OntologyCompiler {
               let candidate = load(path: candidatePath.path) else {
             throw OntologyCompilerError.packageError(diagnostics)
         }
+        if hasErrors(diagnostics) {
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
         validate(candidate)
         if hasErrors(diagnostics) {
             throw OntologyCompilerError.packageError(diagnostics)
@@ -68,10 +71,89 @@ extension OntologyCompiler {
             ],
             path: "expectation"
         )
+        if string(root["apiVersion"]) != "ontology-induction.specgraph.io/v1alpha1" {
+            add("goldenIntent.apiVersion.invalid", "expectation.apiVersion", "apiVersion must be ontology-induction.specgraph.io/v1alpha1")
+        }
         if string(root["kind"]) != "GoldenIntentSemanticExpectation" {
             add("goldenIntent.kind.invalid", "expectation.kind", "kind must be GoldenIntentSemanticExpectation")
         }
+        validateGoldenIntentExpectationShape(root)
         return root
+    }
+
+    private func validateGoldenIntentExpectationShape(_ root: JSONObject) {
+        validateMinimumConceptShape(root)
+        validateMinimumRelationShape(root)
+        validatePolicyExpectationShape(root)
+        validateLifecycleExpectationShape(root)
+        validateForbiddenConceptShape(root)
+        validateCompetencyQuestionShape(root)
+    }
+
+    private func validateMinimumConceptShape(_ root: JSONObject) {
+        if let concepts = root["minimumConcepts"] as? JSONObject {
+            for category in concepts.keys.sorted() where concepts[category] as? [Any] == nil {
+                add("goldenIntent.minimumConcepts.type", "expectation.minimumConcepts.\(category)", "minimumConcepts categories must be arrays")
+            }
+        }
+    }
+
+    private func validateMinimumRelationShape(_ root: JSONObject) {
+        if root.keys.contains("minimumRelations") {
+            validateArrayOfObjects(root["minimumRelations"], path: "expectation.minimumRelations")
+        }
+    }
+
+    private func validatePolicyExpectationShape(_ root: JSONObject) {
+        if let policyExpectations = root["policyExpectations"] as? JSONObject {
+            if policyExpectations.keys.contains("mustInclude"), policyExpectations["mustInclude"] as? [Any] == nil {
+                add("goldenIntent.policyExpectations.type", "expectation.policyExpectations.mustInclude", "mustInclude must be an array")
+            }
+            if let enforceability = policyExpectations["enforceability"] as? JSONObject {
+                for level in enforceability.keys.sorted() where enforceability[level] as? [Any] == nil {
+                    add("goldenIntent.policyExpectations.type", "expectation.policyExpectations.enforceability.\(level)", "enforceability groups must be arrays")
+                }
+            }
+        }
+    }
+
+    private func validateLifecycleExpectationShape(_ root: JSONObject) {
+        if let lifecycle = root["lifecycleExpectations"] as? JSONObject,
+           lifecycle.keys.contains("stateMachines") {
+            validateArrayOfObjects(lifecycle["stateMachines"], path: "expectation.lifecycleExpectations.stateMachines")
+            for (index, machine) in ((lifecycle["stateMachines"] as? [Any]) ?? []).enumerated() {
+                guard let machineObject = machine as? JSONObject,
+                      machineObject.keys.contains("mustIncludeStates"),
+                      machineObject["mustIncludeStates"] as? [Any] == nil else {
+                    continue
+                }
+                add("goldenIntent.lifecycleExpectations.type", "expectation.lifecycleExpectations.stateMachines[\(index)].mustIncludeStates", "mustIncludeStates must be an array")
+            }
+        }
+    }
+
+    private func validateForbiddenConceptShape(_ root: JSONObject) {
+        if root.keys.contains("forbiddenCoreConcepts") {
+            validateArrayOfObjects(root["forbiddenCoreConcepts"], path: "expectation.forbiddenCoreConcepts")
+        }
+    }
+
+    private func validateCompetencyQuestionShape(_ root: JSONObject) {
+        if let competencyQuestions = root["competencyQuestions"] as? JSONObject,
+           competencyQuestions.keys.contains("mustCover"),
+           competencyQuestions["mustCover"] as? [Any] == nil {
+            add("goldenIntent.competencyQuestions.type", "expectation.competencyQuestions.mustCover", "mustCover must be an array")
+        }
+    }
+
+    private func validateArrayOfObjects(_ value: Any?, path: String) {
+        guard let array = value as? [Any] else {
+            add("goldenIntent.array.type", path, "\(path) must be an array")
+            return
+        }
+        for (index, item) in array.enumerated() where item as? JSONObject == nil {
+            add("goldenIntent.array.item.type", "\(path)[\(index)]", "\(path)[\(index)] must be an object")
+        }
     }
 
     private func goldenIntentReport(
@@ -156,9 +238,9 @@ extension OntologyCompiler {
             guard let relation = relations[id] as? JSONObject else {
                 return check(section: "minimumRelations", id: id, status: "fail", message: "required relation is missing")
             }
-            let domainOK = string(relation["domain"]) == string(expected["domain"])
+            let domainOK = string(relation["domain"]).map(refName) == string(expected["domain"]).map(refName)
             let expectedRange = string(expected["range"]) ?? ""
-            let rangeOK = relationRangeRefs(relation["range"] ?? "").contains(expectedRange)
+            let rangeOK = relationRangeRefs(relation["range"] ?? "").map(refName).contains(refName(expectedRange))
             if domainOK, rangeOK {
                 return check(section: "minimumRelations", id: id, status: "pass", message: "required relation shape is present")
             }

@@ -371,7 +371,6 @@ case "validate-golden-intent":
         }
         print("ontologyc validate-golden-intent: PASS \(candidatePath)\(reportTarget)")
     } catch let compilerError as OntologyCompilerError {
-        if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
         fputs("ontologyc validate-golden-intent: FAIL \(compilerError)\n", stderr)
         exit(1)
     } catch {

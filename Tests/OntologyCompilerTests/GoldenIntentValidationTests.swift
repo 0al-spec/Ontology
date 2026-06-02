@@ -41,6 +41,52 @@ final class GoldenIntentValidationTests: XCTestCase {
         XCTAssertTrue(checks.contains { $0["id"] as? String == "CalculatorButton" && $0["status"] as? String == "fail" })
     }
 
+    func testGoldenIntentValidationRejectsMalformedExpectationShape() throws {
+        let directory = try makeTemporaryDirectory(name: "golden-intent-malformed")
+        let expectation = try write(
+            goldenExpectation.replacingOccurrences(
+                of: """
+                  domainEntities:
+                    - Exam
+                    - ExamPolicyProfile
+                    - ExamModeSession
+                    - AuditLogEntry
+                """,
+                with: "  domainEntities: Exam"
+            ),
+            to: directory.appendingPathComponent("expectation.yaml")
+        )
+        let candidate = try write(passingCandidate, to: directory.appendingPathComponent("candidate.yaml"))
+
+        XCTAssertThrowsError(try OntologyCompiler().validateGoldenIntent(
+            expectationPath: OntologySourcePath(path: expectation.path),
+            candidatePath: OntologySourcePath(path: candidate.path),
+            outPath: nil
+        )) { error in
+            XCTAssertTrue(String(describing: error).contains("goldenIntent.minimumConcepts.type"), String(describing: error))
+        }
+    }
+
+    func testGoldenIntentValidationRejectsUnknownExpectationApiVersion() throws {
+        let directory = try makeTemporaryDirectory(name: "golden-intent-api-version")
+        let expectation = try write(
+            goldenExpectation.replacingOccurrences(
+                of: "apiVersion: ontology-induction.specgraph.io/v1alpha1",
+                with: "apiVersion: ontology-induction.specgraph.io/v9"
+            ),
+            to: directory.appendingPathComponent("expectation.yaml")
+        )
+        let candidate = try write(passingCandidate, to: directory.appendingPathComponent("candidate.yaml"))
+
+        XCTAssertThrowsError(try OntologyCompiler().validateGoldenIntent(
+            expectationPath: OntologySourcePath(path: expectation.path),
+            candidatePath: OntologySourcePath(path: candidate.path),
+            outPath: nil
+        )) { error in
+            XCTAssertTrue(String(describing: error).contains("goldenIntent.apiVersion.invalid"), String(describing: error))
+        }
+    }
+
     private func makeTemporaryDirectory(name: String) throws -> URL {
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("\(name)-\(UUID().uuidString)", isDirectory: true)
