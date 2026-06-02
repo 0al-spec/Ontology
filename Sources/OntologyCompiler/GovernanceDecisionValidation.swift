@@ -3,6 +3,7 @@ import Yams
 
 public struct GovernanceDecisionValidationResult {
     public let passed: Bool
+    public let decisionState: String?
     public let report: [String: Any]
     public let diagnostics: [Diagnostic]
 }
@@ -24,7 +25,7 @@ extension OntologyCompiler {
                 diagnostics: sorted
             )
             if let outPath { try writeYAML(report, to: outPath.url) }
-            return GovernanceDecisionValidationResult(passed: false, report: report, diagnostics: sorted)
+            return GovernanceDecisionValidationResult(passed: false, decisionState: nil, report: report, diagnostics: sorted)
         }
 
         validateGovernanceDecisionShape(decision)
@@ -47,7 +48,12 @@ extension OntologyCompiler {
         if let outPath {
             try writeYAML(report, to: outPath.url)
         }
-        return GovernanceDecisionValidationResult(passed: passed, report: report, diagnostics: sorted)
+        return GovernanceDecisionValidationResult(
+            passed: passed,
+            decisionState: decisionState(decision),
+            report: report,
+            diagnostics: sorted
+        )
     }
 
     private func loadGovernanceDecision(path: String) -> JSONObject? {

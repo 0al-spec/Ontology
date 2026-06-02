@@ -87,8 +87,11 @@ swift run ontologyc validate-governance-decision \
   --package SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
 ```
 
-This validation is a local quality gate. Registry publication is not gated by governance
-until the dedicated publish-flow integration lands.
+This validation is both a local quality gate and the trusted registry publication gate.
+`ontologyc publish` defaults to `--channel candidate`, which keeps draft publication
+compatible with existing workflows. `--channel trusted` requires `--decision` and rejects
+missing, invalid, non-approved, package-mismatched, version-mismatched, or evidence-failing
+decisions before any registry network call.
 
 ```yaml
 apiVersion: ontology-governance.specgraph.io/v1alpha1

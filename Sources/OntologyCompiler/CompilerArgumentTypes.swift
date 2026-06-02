@@ -75,6 +75,12 @@ public struct RegistryBaseURL: Equatable, Hashable, Sendable {
     }
 }
 
+/// Publication trust channel for registry uploads.
+public enum OntologyPublishChannel: String, Equatable, Hashable, Sendable {
+    case candidate
+    case trusted
+}
+
 /// Registry package reference in `<id>@<version>` form.
 public struct OntologyPackageReference: Equatable, Hashable, Sendable {
     public let packageId: OntologyPackageId

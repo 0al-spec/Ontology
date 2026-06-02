@@ -29,6 +29,36 @@ final class GovernanceDecisionCLITests: XCTestCase {
         XCTAssertTrue(fail.combinedOutput.contains("governance.decision.actor.authority.invalid"), fail.combinedOutput)
     }
 
+    func testPublishTrustedRequiresGovernanceDecisionBeforeRegistryRequest() throws {
+        let result = try ontologyc([
+            "publish",
+            "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml",
+            "--registry",
+            "https://registry.example.com",
+            "--channel",
+            "trusted"
+        ])
+
+        XCTAssertEqual(result.status, 1, result.combinedOutput)
+        XCTAssertTrue(result.stderr.contains("ontologyc publish: FAIL"), result.stderr)
+        XCTAssertTrue(result.combinedOutput.contains("registry.publish.governanceDecision.required"), result.combinedOutput)
+    }
+
+    func testPublishRejectsInvalidChannelUsage() throws {
+        let result = try ontologyc([
+            "publish",
+            "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml",
+            "--registry",
+            "https://registry.example.com",
+            "--channel",
+            "stable"
+        ])
+
+        XCTAssertEqual(result.status, 2, result.combinedOutput)
+        XCTAssertTrue(result.stderr.contains("invalid publish channel stable"), result.stderr)
+        XCTAssertTrue(result.stderr.contains("candidate or trusted"), result.stderr)
+    }
+
     private var repoRoot: URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
