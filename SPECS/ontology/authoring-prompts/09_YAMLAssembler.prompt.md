@@ -46,7 +46,10 @@ metadata:
   source: string
   approvalStatus: draft
 spec:
-  imports: []
+  imports:
+    - id: specgraph.foundation
+      namespace: sg
+      version: 0.1.0
   classes: {}
   relations: {}
   protocols: {}
