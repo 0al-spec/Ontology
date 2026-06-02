@@ -1,6 +1,6 @@
 # ONT-023: Ontology Governance Protocol
 
-**Status:** PRD Ready
+**Status:** Archived PASS
 **Created:** 2026-06-02
 **Source:** `SPECS/Workplan.md`
 
@@ -39,7 +39,7 @@ audit.
 | D1 | Governance protocol | `SPECS/ontology/governance-protocol.md` | Defines lifecycle, decisions, versioning, audit, and expectation feedback |
 | D2 | Authoring/induction links | `SPECS/ontology/authoring-guide.md`, `SPECS/ontology/induction-protocol.md` | Makes governance discoverable from authoring and promotion docs |
 | D3 | Workplan/next updates | `SPECS/Workplan.md`, `SPECS/INPROGRESS/next.md` | ONT-023 status and next-task state are synchronized |
-| D4 | Validation report | `SPECS/INPROGRESS/ONT-023_Validation_Report.md` | Records checks and residual risks |
+| D4 | Validation report | `SPECS/ARCHIVE/ONT-023_Ontology_Governance_Protocol/ONT-023_Validation_Report.md` | Records checks and residual risks |
 
 ## Functional Requirements
 

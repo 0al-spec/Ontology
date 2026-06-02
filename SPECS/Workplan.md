@@ -395,14 +395,14 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-022
 - **Parallelizable:** no
-- **Status:** PRD Ready
-- **PRD:** `SPECS/INPROGRESS/ONT-023_Ontology_Governance_Protocol.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-023_Ontology_Governance_Protocol/ONT-023_Ontology_Governance_Protocol.md`
 - **Origin:** Raw roadmap stage 5, "Ontology governance."
 - **Acceptance Criteria:**
-  - Protocol defines candidate, approved, rejected, superseded, and merged states.
-  - Protocol defines reviewer inputs, decision records, and provenance requirements.
-  - Protocol explains versioning and compatibility handling for accepted ontology deltas.
-  - Protocol defines how governance results feed back into golden intent expectations.
+  - Complete: Protocol defines candidate, approved, rejected, superseded, and merged states.
+  - Complete: Protocol defines reviewer inputs, decision records, and provenance requirements.
+  - Complete: Protocol explains versioning and compatibility handling for accepted ontology deltas.
+  - Complete: Protocol defines how governance results feed back into golden intent expectations.
 
 ---
 

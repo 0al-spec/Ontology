@@ -1,26 +1,29 @@
-# Next Tasks: Ontology Governance
+# Next Tasks: Post-Governance
 
-**Status:** ONT-023 selected for execution
+**Status:** Updated after ONT-023 archive
 
 ## Description
 
-ONT-023 is selected from `SPECS/Workplan.md`. ONT-022 is archived with PASS, so generated
-candidate ontology packages can now be evaluated before governance decisions.
+ONT-023 is archived with PASS. The golden intent and governance sequence is complete:
+semantic expectations, repeatability harness, and governance protocol are now documented
+or implemented.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| ONT-023 | Ontology Governance Protocol | 9 | P1 | `SPECS/Workplan.md` |
+| TBD | Planning cleanup or next product slice | TBD | TBD | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
+- ONT-023 is archived with PASS.
+- Governance defines approval, rejection, merge, versioning, provenance, audit, and
+  golden expectation feedback as a protocol, not compiler enforcement.
 - ONT-022 is archived with PASS.
 - The repeatability harness checks deterministic ontology surfaces and reports competency
   question expectations as manual review anchors.
 - ONT-021 is archived with PASS.
 - Expectations must remain minimum semantic criteria, not byte-exact ontology truth.
-- ONT-023 should define the governance protocol for approving candidate outputs.
 - ONT-020 Hypercode IR Import Spike is already merged on `main`; its PRD still lives in
   `SPECS/INPROGRESS/` until a later planning cleanup/archive pass.
 - ONT-019 is archived with PASS.
@@ -39,6 +42,7 @@ candidate ontology packages can now be evaluated before governance decisions.
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-023 | Ontology governance protocol | `SPECS/ARCHIVE/ONT-023_Ontology_Governance_Protocol/` |
 | ONT-022 | Golden intent repeatability harness | `SPECS/ARCHIVE/ONT-022_Golden_Intent_Repeatability_Harness/` |
 | ONT-021 | Golden intent semantic expectations | `SPECS/ARCHIVE/ONT-021_Golden_Intent_Semantic_Expectations/` |
 | ONT-020 | Hypercode IR import bridge | `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md` |
@@ -53,6 +57,7 @@ candidate ontology packages can now be evaluated before governance decisions.
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-023 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-023_Ontology_Governance_Protocol/` |
 | ONT-022 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-022_Golden_Intent_Repeatability_Harness/` |
 | ONT-021 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-021_Golden_Intent_Semantic_Expectations/` |
 | ONT-019 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/` |

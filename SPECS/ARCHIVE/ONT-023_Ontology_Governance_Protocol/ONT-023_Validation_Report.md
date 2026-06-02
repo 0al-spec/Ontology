@@ -40,7 +40,7 @@ bash tools/swift-quality.sh
 | D1 Governance protocol | `SPECS/ontology/governance-protocol.md` | PASS |
 | D2 Authoring/induction links | `SPECS/ontology/authoring-guide.md`, `SPECS/ontology/induction-protocol.md` | PASS |
 | D3 Workplan/next updates | `SPECS/Workplan.md`, `SPECS/INPROGRESS/next.md` | PASS |
-| D4 Validation report | `SPECS/INPROGRESS/ONT-023_Validation_Report.md` | PASS |
+| D4 Validation report | `SPECS/ARCHIVE/ONT-023_Ontology_Governance_Protocol/ONT-023_Validation_Report.md` | PASS |
 
 ## Residual Risks
 
