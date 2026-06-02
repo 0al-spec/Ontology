@@ -1,6 +1,6 @@
-# Next Tasks: Governance Enforcement
+# Next Task: ONT-026 Registry Publish Governance Gate
 
-**Status:** ONT-025 archived with PASS
+**Status:** ONT-026 selected
 
 ## Description
 
@@ -8,18 +8,21 @@ ONT-024 defined the `OntologyGovernanceDecision` artifact contract, and ONT-025 
 deterministic CLI validation for that artifact. The remaining stack item wires this
 validation into trusted registry publication.
 
-## Recommended Next Task
+## Selected Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
 | ONT-026 | Registry Publish Governance Gate | Phase 9 | P1 | `SPECS/Workplan.md` |
 
-## Sequencing Notes
+## Execution Notes
 
 - ONT-026 should integrate `validateGovernanceDecision` into `ontologyc publish`.
 - The policy boundary to decide in ONT-026: governance may be mandatory for trusted/stable
   publication while draft/candidate publication remains possible only if explicitly documented.
 - Existing `pull` and `compat-check` behavior should remain unchanged.
+- The implementation should reject trusted publication before any registry network call when
+  the governance decision is missing, invalid, not approved, mismatched, or backed by failing
+  golden intent evidence.
 
 ## Recently Implemented
 

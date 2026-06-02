@@ -452,7 +452,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-025
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **PRD:** `SPECS/INPROGRESS/ONT-026_Registry_Publish_Governance_Gate.md`
 - **Origin:** Follow-up to ONT-025 and the registry distribution workflow.
 - **Acceptance Criteria:**
