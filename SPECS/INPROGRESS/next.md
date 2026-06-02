@@ -1,22 +1,21 @@
-# Next Tasks: Golden Intent Semantic Expectations
+# Next Tasks: Repeatability Harness
 
-**Status:** ONT-021 selected for FLOW execution
+**Status:** Updated after ONT-021 archive
 
 ## Description
 
-ONT-021 adds minimum semantic expectation files for the initial golden intent seeds from
-ONT-019. These expectations define what future induction outputs must preserve without
-claiming that one draft is the only valid ontology.
+ONT-021 is archived with PASS. The golden intent set now has minimum semantic expectation
+files that future repeatability checks can consume.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| ONT-021 | Golden Intent Semantic Expectations | 9 | P1 | `SPECS/Workplan.md` |
+| ONT-022 | Golden Intent Repeatability Harness | 9 | P1 | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
-- ONT-021 is the first task in the golden-intent validation sequence.
+- ONT-021 is archived with PASS.
 - Expectations must remain minimum semantic criteria, not byte-exact ontology truth.
 - ONT-022 should consume these expectations in a repeatability harness.
 - ONT-023 should define the governance protocol for approving candidate outputs.
@@ -38,6 +37,7 @@ claiming that one draft is the only valid ontology.
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-021 | Golden intent semantic expectations | `SPECS/ARCHIVE/ONT-021_Golden_Intent_Semantic_Expectations/` |
 | ONT-020 | Hypercode IR import bridge | `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md` |
 | ONT-019 | Ontology induction protocol and prompt contracts | `SPECS/ARCHIVE/ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/` |
 | ONT-015 | Governing-concept central marker follow-up | `SPECS/Workplan.md` |
@@ -50,6 +50,7 @@ claiming that one draft is the only valid ontology.
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-021 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-021_Golden_Intent_Semantic_Expectations/` |
 | ONT-019 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/` |
 | ONT-018 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-018_CLI_Registry_Commands/` |
 | ONT-017 | 2026-06-02 | PASS | `SPECS/ARCHIVE/ONT-017_Zod_JSON_Schema_Validators_For_ABox/` |

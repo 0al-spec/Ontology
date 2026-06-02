@@ -355,18 +355,21 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-019
 - **Parallelizable:** yes
-- **Status:** INPROGRESS
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-021_Golden_Intent_Semantic_Expectations/ONT-021_Golden_Intent_Semantic_Expectations.md`
 - **Origin:** Follow-up to ONT-019 golden intent seeds and raw roadmap stage 4,
   "Golden intent set."
+- **Implementation Note:** Added structured minimum semantic expectation files for the
+  first two golden intents, plus README and authoring-guide discoverability links.
 - **Acceptance Criteria:**
-  - Expectations exist for `exam-controlled-calculator.intent.md` and
+  - Complete: Expectations exist for `exam-controlled-calculator.intent.md` and
     `voice-recorder-ai-transcription.intent.md`.
-  - Each expectation defines expected domain frame, governing concept, minimum concept
+  - Complete: Each expectation defines expected domain frame, governing concept, minimum concept
     coverage, policy/lifecycle/evidence expectations, competency question expectations,
     and forbidden surface concepts.
-  - Expectations are minimum semantic criteria, not byte-exact ontology outputs.
-  - A README explains how expectation files should be used by future repeatability checks.
-  - Documentation links from ontology authoring docs or README make the expectations
+  - Complete: Expectations are minimum semantic criteria, not byte-exact ontology outputs.
+  - Complete: A README explains how expectation files should be used by future repeatability checks.
+  - Complete: Documentation links from ontology authoring docs or README make the expectations
     discoverable.
 
 ---

@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-021 | [ONT-021_Golden_Intent_Semantic_Expectations/](ONT-021_Golden_Intent_Semantic_Expectations/) | 2026-06-02 | PASS |
 | ONT-019 | [ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/](ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/) | 2026-06-02 | PASS |
 | ONT-018 | [ONT-018_CLI_Registry_Commands/](ONT-018_CLI_Registry_Commands/) | 2026-06-02 | PASS |
 | ONT-017 | [ONT-017_Zod_JSON_Schema_Validators_For_ABox/](ONT-017_Zod_JSON_Schema_Validators_For_ABox/) | 2026-06-02 | PASS |
@@ -31,6 +32,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-02 | ONT-021 | Archived Golden_Intent_Semantic_Expectations (PASS) |
 | 2026-06-02 | ONT-019 | Archived REVIEW_ONT-019 report |
 | 2026-06-02 | ONT-019 | Archived SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts (PASS) |
 | 2026-06-02 | ONT-018 | Archived REVIEW_ONT-018 report |
