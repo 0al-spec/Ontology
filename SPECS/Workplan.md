@@ -395,8 +395,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-022
 - **Parallelizable:** no
-- **Status:** Not Started
-- **PRD:** TBD by FLOW
+- **Status:** PRD Ready
+- **PRD:** `SPECS/INPROGRESS/ONT-023_Ontology_Governance_Protocol.md`
 - **Origin:** Raw roadmap stage 5, "Ontology governance."
 - **Acceptance Criteria:**
   - Protocol defines candidate, approved, rejected, superseded, and merged states.
