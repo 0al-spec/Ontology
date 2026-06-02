@@ -79,6 +79,17 @@ review packets:
 - [`invalid-agent-approval.yaml`](examples/governance/invalid-agent-approval.yaml) shows
   the trust-boundary violation future validators must reject.
 
+Decision records can be checked locally before review:
+
+```bash
+swift run ontologyc validate-governance-decision \
+  SPECS/ontology/examples/governance/approved-decision.yaml \
+  --package SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+```
+
+This validation is a local quality gate. Registry publication is not gated by governance
+until the dedicated publish-flow integration lands.
+
 ```yaml
 apiVersion: ontology-governance.specgraph.io/v1alpha1
 kind: OntologyGovernanceDecision
