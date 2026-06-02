@@ -1,5 +1,6 @@
 import SpecificationCore
 
+/// Checks whether a namespace-qualified concept reference points at an imported ontology namespace.
 public struct ImportedConceptRefSpec: Specification {
     public typealias T = ConceptRefResolutionContext
 
@@ -11,6 +12,7 @@ public struct ImportedConceptRefSpec: Specification {
     }
 }
 
+/// Checks whether a concept reference resolves to a local symbol in the current package namespace.
 public struct LocalConceptRefSpec: Specification {
     public typealias T = ConceptRefResolutionContext
 
@@ -24,6 +26,7 @@ public struct LocalConceptRefSpec: Specification {
     }
 }
 
+/// Validates concept reference syntax and then checks local or imported resolution.
 public struct ResolvableConceptRefSpec: Specification {
     public typealias T = ConceptRefResolutionContext
 
@@ -34,11 +37,12 @@ public struct ResolvableConceptRefSpec: Specification {
     public init() {}
 
     public func isSatisfiedBy(_ candidate: ConceptRefResolutionContext) -> Bool {
-        syntax.isSatisfiedBy(candidate.ref) &&
+        syntax.isSatisfiedBy(OntologyConceptReferenceLiteral(rawValue: candidate.ref)) &&
             (imported.isSatisfiedBy(candidate) || local.isSatisfiedBy(candidate))
     }
 }
 
+/// Checks whether a command or event trigger reference resolves locally.
 public struct LocalTriggerRefSpec: Specification {
     public typealias T = TriggerRefResolutionContext
 

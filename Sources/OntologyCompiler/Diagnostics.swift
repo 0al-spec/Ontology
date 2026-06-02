@@ -2,12 +2,18 @@ import Foundation
 
 typealias JSONObject = [String: Any]
 
+/// One validation, compatibility, registry, or compiler diagnostic emitted by `OntologyCompiler`.
 public struct Diagnostic: Encodable, Sendable {
-    let code: String
-    let severity: String
-    let path: String
-    let message: String
-    let hint: String?
+    /// Stable machine-readable diagnostic code.
+    public let code: String
+    /// Diagnostic severity, currently `error` or `warning`.
+    public let severity: String
+    /// Source path or logical package path where the diagnostic applies.
+    public let path: String
+    /// Human-readable explanation of the problem.
+    public let message: String
+    /// Optional remediation hint.
+    public let hint: String?
 }
 
 struct LoadedPackage {

@@ -1,7 +1,8 @@
 import SpecificationCore
 
+/// Detects YAML mapping keys that imply executable hooks, plugins, or scripts.
 public struct UnsafeYamlKeySpec: Specification {
-    public typealias T = String
+    public typealias T = YamlMappingKey
 
     private let unsafeKeys = Set([
         "eval", "exec", "executable", "expression", "hook", "hooks",
@@ -10,13 +11,14 @@ public struct UnsafeYamlKeySpec: Specification {
 
     public init() {}
 
-    public func isSatisfiedBy(_ candidate: String) -> Bool {
-        unsafeKeys.contains(candidate.lowercased())
+    public func isSatisfiedBy(_ candidate: YamlMappingKey) -> Bool {
+        unsafeKeys.contains(candidate.rawValue.lowercased())
     }
 }
 
+/// Detects YAML scalar strings that look like executable shell, template, or runtime calls.
 public struct ExecutableLookingYamlValueSpec: Specification {
-    public typealias T = String
+    public typealias T = YamlScalarText
 
     private let unsafeValuePatterns = [
         #"\$\("#, #"`"#, #"<%"#, #"eval\("#, #"child_process"#,
@@ -25,17 +27,18 @@ public struct ExecutableLookingYamlValueSpec: Specification {
 
     public init() {}
 
-    public func isSatisfiedBy(_ candidate: String) -> Bool {
-        unsafeValuePatterns.contains { matches(candidate, $0) }
+    public func isSatisfiedBy(_ candidate: YamlScalarText) -> Bool {
+        unsafeValuePatterns.contains { matches(candidate.rawValue, $0) }
     }
 }
 
+/// Detects YAML tags that can request non-data object construction in unsafe YAML loaders.
 public struct UnsafeYamlTagSpec: Specification {
-    public typealias T = String
+    public typealias T = YamlSourceLine
 
     public init() {}
 
-    public func isSatisfiedBy(_ candidate: String) -> Bool {
-        matches(candidate, #"!![A-Za-z0-9_.:-]+|!<[^>]+>"#, caseInsensitive: true)
+    public func isSatisfiedBy(_ candidate: YamlSourceLine) -> Bool {
+        matches(candidate.rawValue, #"!![A-Za-z0-9_.:-]+|!<[^>]+>"#, caseInsensitive: true)
     }
 }

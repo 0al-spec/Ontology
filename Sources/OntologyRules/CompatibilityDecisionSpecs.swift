@@ -1,5 +1,6 @@
 import SpecificationCore
 
+/// Kinds of ontology changes that participate in compatibility decisions.
 public enum CompatibilityChangeKind: Equatable {
     case removedClass
     case removedRelation
@@ -7,6 +8,7 @@ public enum CompatibilityChangeKind: Equatable {
     case relationRangeChanged
 }
 
+/// Inputs required to classify one ontology symbol change against a previous package version.
 public struct CompatibilityChangeContext: Equatable {
     public let kind: CompatibilityChangeKind
     public let namespace: String
@@ -29,11 +31,13 @@ public struct CompatibilityChangeContext: Equatable {
     }
 }
 
+/// Compatibility outcome for a single ontology change.
 public enum CompatibilityChangeDecision: Equatable {
     case compatible
     case breaking(String)
 }
 
+/// Decides whether a tracked ontology change is compatible or breaking.
 public struct CompatibilityChangeDecisionSpec: DecisionSpec {
     public typealias Context = CompatibilityChangeContext
     public typealias Result = CompatibilityChangeDecision

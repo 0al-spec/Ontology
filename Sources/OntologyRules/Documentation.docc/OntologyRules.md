@@ -35,7 +35,36 @@ let decision = spec.decide(SpecGraphRefDecisionContext(
 ))
 ```
 
+## Typed Inputs
+
+Rule inputs should use semantic value types instead of raw Foundation
+primitives whenever the argument has domain meaning. For example,
+``OntologySymbolNameSpec`` accepts ``OntologySymbolName`` instead of `String`,
+and ``ExpectedOntologyApiVersionSpec`` accepts ``OntologyApiVersion`` instead of
+`String`.
+
+The value types are intentionally lightweight wrappers around parsed source
+values. They make call sites self-documenting and let Swift reject accidental
+mixing of package IDs, namespaces, versions, symbol names, YAML keys, and other
+domain literals. Validation remains the responsibility of the named
+`Specification` types.
+
 ## Topics
+
+### Semantic Value Types
+
+- ``OntologySymbolName``
+- ``OntologyStateName``
+- ``OntologyConceptReferenceLiteral``
+- ``OntologyPackageId``
+- ``OntologyNamespace``
+- ``OntologySemanticVersion``
+- ``OntologyApiVersion``
+- ``OntologyPackageKind``
+- ``PolicyEnforceability``
+- ``YamlMappingKey``
+- ``YamlScalarText``
+- ``YamlSourceLine``
 
 ### Reference Decisions
 
