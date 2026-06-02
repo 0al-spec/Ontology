@@ -46,7 +46,7 @@ bash tools/swift-quality.sh
 | D2 Voice recorder semantic expectations | `SPECS/ontology/golden-intents/expectations/voice-recorder-ai-transcription.expectation.yaml` | PASS |
 | D3 Expectations README | `SPECS/ontology/golden-intents/README.md` | PASS |
 | D4 Documentation links | `README.md`, `SPECS/ontology/authoring-guide.md` | PASS |
-| D5 Validation report | `SPECS/INPROGRESS/ONT-021_Validation_Report.md` | PASS |
+| D5 Validation report | `SPECS/ARCHIVE/ONT-021_Golden_Intent_Semantic_Expectations/ONT-021_Validation_Report.md` | PASS |
 
 ## Residual Risks
 

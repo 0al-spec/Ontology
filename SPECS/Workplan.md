@@ -372,6 +372,37 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Complete: Documentation links from ontology authoring docs or README make the expectations
     discoverable.
 
+#### ONT-022: Golden Intent Repeatability Harness
+- **Description:** Add a deterministic harness that consumes golden intent semantic expectations
+  and evaluates candidate ontology outputs against minimum semantic criteria.
+- **Priority:** P1
+- **Dependencies:** ONT-021
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** TBD by FLOW
+- **Origin:** Follow-up to ONT-021 and raw roadmap stage 4, "Golden intent set."
+- **Acceptance Criteria:**
+  - Harness accepts a golden intent expectation file and a candidate ontology artifact.
+  - Harness reports pass/fail results for required concepts, relations, policies, lifecycle,
+    evidence, and competency question coverage.
+  - Harness treats expectations as minimum semantic criteria, not byte-exact ontology truth.
+  - Harness output is deterministic and suitable for CI/regression use.
+
+#### ONT-023: Ontology Governance Protocol
+- **Description:** Define the approval, rejection, merge, versioning, and audit protocol for
+  generated ontology deltas before they become accepted ontology packages.
+- **Priority:** P1
+- **Dependencies:** ONT-022
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** TBD by FLOW
+- **Origin:** Raw roadmap stage 5, "Ontology governance."
+- **Acceptance Criteria:**
+  - Protocol defines candidate, approved, rejected, superseded, and merged states.
+  - Protocol defines reviewer inputs, decision records, and provenance requirements.
+  - Protocol explains versioning and compatibility handling for accepted ontology deltas.
+  - Protocol defines how governance results feed back into golden intent expectations.
+
 ---
 
 ## Task Status Legend

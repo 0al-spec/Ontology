@@ -49,7 +49,7 @@ competency question expectations, and forbidden surface concepts.
 | D2 | Voice recorder semantic expectations | `SPECS/ontology/golden-intents/expectations/voice-recorder-ai-transcription.expectation.yaml` | Defines minimum semantic expectations for multi-speaker transcription recorder |
 | D3 | Expectations README | `SPECS/ontology/golden-intents/README.md` | Explains expectation format, non-goals, and future harness usage |
 | D4 | Documentation links | `SPECS/ontology/authoring-guide.md` or README | Makes expectations discoverable |
-| D5 | Validation report | `SPECS/INPROGRESS/ONT-021_Validation_Report.md` | Records checks and residual risks |
+| D5 | Validation report | `SPECS/ARCHIVE/ONT-021_Golden_Intent_Semantic_Expectations/ONT-021_Validation_Report.md` | Records checks and residual risks |
 
 ## Functional Requirements
 
