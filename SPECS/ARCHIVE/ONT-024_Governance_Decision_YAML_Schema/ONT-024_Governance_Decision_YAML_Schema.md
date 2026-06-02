@@ -51,7 +51,7 @@ publication because tools cannot reliably answer:
 | D3 | Invalid agent approval example | `SPECS/ontology/examples/governance/invalid-agent-approval.yaml` |
 | D4 | Governance protocol schema linkage | `SPECS/ontology/governance-protocol.md` |
 | D5 | Authoring guide / ontology docs linkage | `SPECS/ontology/authoring-guide.md`, `SPECS/ontology/ontologyc.md` |
-| D6 | Validation report | `SPECS/INPROGRESS/ONT-024_Validation_Report.md` |
+| D6 | Validation report | `SPECS/ARCHIVE/ONT-024_Governance_Decision_YAML_Schema/ONT-024_Validation_Report.md` |
 
 ## Schema Requirements
 

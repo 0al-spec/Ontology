@@ -30,9 +30,17 @@ spec:
   evidence:
     sourceIntent:
       uri: SPECS/ontology/golden-intents/exam-controlled-calculator.intent.md
+    candidateArtifacts:
+      - uri: reports/examcalc-domain-frame.yaml
+      - uri: reports/examcalc-concept-set.yaml
     candidatePackage:
       uri: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
       digest: sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+    critiqueReport:
+      uri: reports/examcalc-critique.yaml
+      result: pass
+    competencyQuestions:
+      uri: SPECS/ontology/examples/examcalc.competency-questions.yaml
     compilerValidation:
       uri: reports/ontologyc-check.txt
       result: pass

@@ -166,13 +166,17 @@ properties:
         additionalProperties: false
         required:
           - sourceIntent
+          - candidateArtifacts
           - candidatePackage
+          - critiqueReport
+          - competencyQuestions
           - compilerValidation
         properties:
           sourceIntent:
             $ref: "#/$defs/evidenceRef"
           candidateArtifacts:
             type: array
+            minItems: 1
             items:
               $ref: "#/$defs/evidenceRef"
           candidatePackage:

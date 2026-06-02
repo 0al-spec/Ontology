@@ -17,12 +17,19 @@ spec:
       role: authoring_agent
     decidedAt: "2026-06-03T09:05:00Z"
     rationale:
-      - This example is intentionally invalid: generated agents may prepare evidence but cannot approve trusted ontology truth.
+      - "This example is intentionally invalid: generated agents may prepare evidence but cannot approve trusted ontology truth."
   evidence:
     sourceIntent:
       uri: SPECS/ontology/golden-intents/exam-controlled-calculator.intent.md
+    candidateArtifacts:
+      - uri: reports/examcalc-domain-frame.yaml
     candidatePackage:
       uri: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+    critiqueReport:
+      uri: reports/examcalc-critique.yaml
+      result: pass
+    competencyQuestions:
+      uri: SPECS/ontology/examples/examcalc.competency-questions.yaml
     compilerValidation:
       uri: reports/ontologyc-check.txt
       result: pass
