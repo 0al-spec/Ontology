@@ -378,8 +378,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-021
 - **Parallelizable:** no
-- **Status:** Not Started
-- **PRD:** TBD by FLOW
+- **Status:** PRD Ready
+- **PRD:** `SPECS/INPROGRESS/ONT-022_Golden_Intent_Repeatability_Harness.md`
 - **Origin:** Follow-up to ONT-021 and raw roadmap stage 4, "Golden intent set."
 - **Acceptance Criteria:**
   - Harness accepts a golden intent expectation file and a candidate ontology artifact.
