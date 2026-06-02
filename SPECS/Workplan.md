@@ -404,6 +404,58 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Complete: Protocol explains versioning and compatibility handling for accepted ontology deltas.
   - Complete: Protocol defines how governance results feed back into golden intent expectations.
 
+#### ONT-024: Governance Decision YAML Schema
+- **Description:** Define a machine-readable `OntologyGovernanceDecision` YAML schema,
+  canonical examples, and documentation so governance decisions become typed artifacts
+  instead of free-form Markdown.
+- **Priority:** P1
+- **Dependencies:** ONT-023
+- **Parallelizable:** no
+- **Status:** INPROGRESS
+- **PRD:** `SPECS/INPROGRESS/ONT-024_Governance_Decision_YAML_Schema.md`
+- **Origin:** Follow-up to ONT-023 enforcement boundary and SpecGraph integration proposal work.
+- **Acceptance Criteria:**
+  - Pending: Schema defines `apiVersion`, `kind`, metadata, package identity, decision state,
+    reviewer identity, rationale, evidence references, and optional digest fields.
+  - Pending: Schema constrains approval/rejection actors to human reviewer intent and keeps
+    generated agents out of approval authority.
+  - Pending: Valid and invalid governance decision examples are included.
+  - Pending: Governance protocol, authoring guide, and ontology docs link to the schema and examples.
+  - Pending: No compiler enforcement or registry behavior changes are introduced in this task.
+
+#### ONT-025: Governance Decision CLI Validation
+- **Description:** Add `ontologyc validate-governance-decision` to validate governance
+  decision YAML against the schema contract and related ontology package/golden intent evidence.
+- **Priority:** P1
+- **Dependencies:** ONT-024
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** `SPECS/INPROGRESS/ONT-025_Governance_Decision_CLI_Validation.md`
+- **Origin:** Follow-up to ONT-024 and the ONT-023 enforcement boundary.
+- **Acceptance Criteria:**
+  - Pending: CLI accepts a decision YAML path and optional package / golden intent report evidence paths.
+  - Pending: Validation rejects invalid `apiVersion`, `kind`, lifecycle state, missing reviewer,
+    missing rationale, malformed evidence, and approval records tied to failing reports.
+  - Pending: Validation confirms decision package/version metadata matches the supplied package when provided.
+  - Pending: Output is deterministic and suitable for CI.
+  - Pending: Unit and CLI regression tests cover pass/fail cases.
+
+#### ONT-026: Registry Publish Governance Gate
+- **Description:** Integrate governance decision validation into registry publication so
+  trusted package publishing requires an approved governance decision artifact.
+- **Priority:** P1
+- **Dependencies:** ONT-025
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** `SPECS/INPROGRESS/ONT-026_Registry_Publish_Governance_Gate.md`
+- **Origin:** Follow-up to ONT-025 and the registry distribution workflow.
+- **Acceptance Criteria:**
+  - Pending: `ontologyc publish` accepts a governance decision artifact for trusted publication.
+  - Pending: Publish rejects missing, non-approved, package-mismatched, version-mismatched, or evidence-failing decisions.
+  - Pending: The policy boundary documents whether governance is mandatory for all publish flows or only trusted/stable publication.
+  - Pending: Registry tests cover approval pass/fail behavior without requiring a live external registry.
+  - Pending: Existing pull and compat-check behavior remains unchanged.
+
 ---
 
 ## Task Status Legend
