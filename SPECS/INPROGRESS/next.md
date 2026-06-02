@@ -1,27 +1,27 @@
-# Next Tasks: Hypercode Import Bridge
+# Next Tasks: Golden Intent Semantic Expectations
 
-**Status:** Updated for ONT-020 implementation PR
+**Status:** ONT-021 selected for FLOW execution
 
 ## Description
 
-ONT-019 completed the ontology induction layer. ONT-020 adds the first deterministic
-Hypercode bridge: importing a `hypercode.ir/v1` resolved graph into a reviewable
-`DomainOntologyPackage` draft without making domain-authoritative claims.
+ONT-021 adds minimum semantic expectation files for the initial golden intent seeds from
+ONT-019. These expectations define what future induction outputs must preserve without
+claiming that one draft is the only valid ontology.
 
 ## Recommended Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| ONT-020 | Hypercode IR Import Spike | 9 | P2 | `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md` |
+| ONT-021 | Golden Intent Semantic Expectations | 9 | P1 | `SPECS/Workplan.md` |
 
 ## Sequencing Notes
 
-- ONT-020 is intentionally a bridge, not a full ontology induction replacement.
-- The importer maps Hypercode node `type` values into draft ontology classes and adds
-  synthetic review policy/lifecycle scaffolding so the output passes `ontologyc check`.
-- Hypercode `.hc`/`.hcs` parsing and context resolution remain owned by the Hypercode
-  repository; Ontology consumes only the resolved `hypercode.ir/v1` contract.
-- Future refinement can add richer relation inference after a real consumer needs it.
+- ONT-021 is the first task in the golden-intent validation sequence.
+- Expectations must remain minimum semantic criteria, not byte-exact ontology truth.
+- ONT-022 should consume these expectations in a repeatability harness.
+- ONT-023 should define the governance protocol for approving candidate outputs.
+- ONT-020 Hypercode IR Import Spike is already merged on `main`; its PRD still lives in
+  `SPECS/INPROGRESS/` until a later planning cleanup/archive pass.
 - ONT-019 is archived with PASS.
 - The final YAML artifact remains `DomainOntologyPackage`; ONT-019 documents how an
   ontology-authoring agent gets there from product/domain intent.
@@ -38,7 +38,7 @@ Hypercode bridge: importing a `hypercode.ir/v1` resolved graph into a reviewable
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
-| ONT-020 | Current PR | `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md` |
+| ONT-020 | Hypercode IR import bridge | `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md` |
 | ONT-019 | Ontology induction protocol and prompt contracts | `SPECS/ARCHIVE/ONT-019_SpecGraph_Ontology_Induction_Protocol_And_Prompt_Contracts/` |
 | ONT-015 | Governing-concept central marker follow-up | `SPECS/Workplan.md` |
 | ONT-013 | Strict SwiftLint warning gate follow-up | `SPECS/Workplan.md` |
