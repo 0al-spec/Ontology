@@ -1,11 +1,11 @@
 # Next Tasks: Ontology Governance
 
-**Status:** Updated after ONT-022 archive
+**Status:** ONT-023 selected for execution
 
 ## Description
 
-ONT-022 is archived with PASS. The golden intent set now has semantic expectations and
-a deterministic repeatability harness for candidate ontology packages.
+ONT-023 is selected from `SPECS/Workplan.md`. ONT-022 is archived with PASS, so generated
+candidate ontology packages can now be evaluated before governance decisions.
 
 ## Recommended Next Task
 
