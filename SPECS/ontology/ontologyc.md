@@ -109,6 +109,24 @@ changes:
   removedRelations: []
 ```
 
+## Governance Decision Artifact
+
+Ontology governance decisions are represented as inert YAML data with:
+
+```yaml
+apiVersion: ontology-governance.specgraph.io/v1alpha1
+kind: OntologyGovernanceDecision
+```
+
+The schema lives at [`governance-decision.schema.yaml`](governance-decision.schema.yaml).
+It records the package identity, lifecycle decision state, human reviewer authority,
+rationale, and evidence references used to approve, reject, merge, supersede, or withdraw
+an ontology candidate.
+
+Current boundary: this artifact is documentation-level contract only. `ontologyc` does
+not validate governance decisions in ONT-024. Future tasks add deterministic CLI
+validation and registry publish gating against this schema.
+
 ## Non-Goals for ONT-001
 
 - No production compiler implementation.

@@ -69,39 +69,64 @@ Invalid transition: generated agents must not move a candidate directly to `appr
 Decision records are audit artifacts. They may live in a registry, repository, or governance
 ledger, but must preserve the same fields.
 
+The machine-readable contract is defined in
+[`governance-decision.schema.yaml`](governance-decision.schema.yaml). Authors and agents
+should use the examples under [`examples/governance/`](examples/governance/) when preparing
+review packets:
+
+- [`approved-decision.yaml`](examples/governance/approved-decision.yaml) shows a valid
+  human approval record.
+- [`invalid-agent-approval.yaml`](examples/governance/invalid-agent-approval.yaml) shows
+  the trust-boundary violation future validators must reject.
+
 ```yaml
 apiVersion: ontology-governance.specgraph.io/v1alpha1
 kind: OntologyGovernanceDecision
 metadata:
   id: decision-2026-06-02-examcalc-policy-profile
   createdAt: "2026-06-02T20:00:00Z"
-  reviewer: human-reviewer-id
-  candidate: candidates/examcalc-policy-profile.yaml
+  reviewUrl: https://github.com/0al-spec/Ontology/pull/example
 spec:
   targetPackage:
     id: edu.university.examcalc
     namespace: examcalc
-    proposedVersion: 0.2.0
+    version: 0.2.0
+    source: candidates/examcalc-policy-profile.yaml
   priorVersion:
     version: 0.1.0
-    digest: sha256:example
-  verdict: approve
-  resultingState: approved
-  versionChange: minor
-  rationale:
-    - Adds policy evidence without changing existing relation semantics.
+    digest: sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789
+  decision:
+    state: approved
+    actor:
+      id: human-reviewer-id
+      kind: human
+      role: reviewer
+    decidedAt: "2026-06-02T20:00:00Z"
+    versionChange: minor
+    rationale:
+      - Adds policy evidence without changing existing relation semantics.
+    residualRisks:
+      - Competency question coverage reviewed manually.
+    followUp:
+      goldenExpectations:
+        action: no_change
+        rationale: Candidate satisfies existing expectations.
   evidence:
-    sourceIntent: SPECS/ontology/golden-intents/exam-controlled-calculator.intent.md
-    critiqueReport: reports/examcalc-critique.yaml
-    compilerValidation: reports/ontologyc-check.txt
-    repeatabilityReport: reports/golden-intent-report.yaml
-    compatibilityReport: reports/compatibility-report.yaml
-  residualRisks:
-    - Competency question coverage reviewed manually.
-  followUp:
-    goldenExpectations:
-      action: no_change
-      rationale: Candidate satisfies existing expectations.
+    sourceIntent:
+      uri: SPECS/ontology/golden-intents/exam-controlled-calculator.intent.md
+    candidatePackage:
+      uri: candidates/examcalc-policy-profile.yaml
+    critiqueReport:
+      uri: reports/examcalc-critique.yaml
+    compilerValidation:
+      uri: reports/ontologyc-check.txt
+      result: pass
+    repeatabilityReport:
+      uri: reports/golden-intent-report.yaml
+      result: pass
+    compatibilityReport:
+      uri: reports/compatibility-report.yaml
+      result: pass
 ```
 
 ## Versioning Rules

@@ -167,4 +167,7 @@ The final YAML must still pass `ontologyc check`; this guide does not authorize 
 schema fields.
 
 Promotion from candidate YAML to trusted ontology version is governed by
-[`governance-protocol.md`](governance-protocol.md).
+[`governance-protocol.md`](governance-protocol.md). The review output should be captured
+as an `OntologyGovernanceDecision` artifact using
+[`governance-decision.schema.yaml`](governance-decision.schema.yaml); future compiler and
+registry gates consume that decision record rather than free-form reviewer notes.

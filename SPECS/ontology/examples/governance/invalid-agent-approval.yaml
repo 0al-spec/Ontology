@@ -1,0 +1,35 @@
+apiVersion: ontology-governance.specgraph.io/v1alpha1
+kind: OntologyGovernanceDecision
+metadata:
+  id: decision-2026-06-03-agent-approval
+  createdAt: "2026-06-03T09:05:00Z"
+spec:
+  targetPackage:
+    id: edu.university.examcalc
+    namespace: examcalc
+    version: 0.1.0
+    source: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+  decision:
+    state: approved
+    actor:
+      id: ontology-authoring-agent
+      kind: agent
+      role: authoring_agent
+    decidedAt: "2026-06-03T09:05:00Z"
+    rationale:
+      - "This example is intentionally invalid: generated agents may prepare evidence but cannot approve trusted ontology truth."
+  evidence:
+    sourceIntent:
+      uri: SPECS/ontology/golden-intents/exam-controlled-calculator.intent.md
+    candidateArtifacts:
+      - uri: reports/examcalc-domain-frame.yaml
+    candidatePackage:
+      uri: SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+    critiqueReport:
+      uri: reports/examcalc-critique.yaml
+      result: pass
+    competencyQuestions:
+      uri: SPECS/ontology/examples/examcalc.competency-questions.yaml
+    compilerValidation:
+      uri: reports/ontologyc-check.txt
+      result: pass
