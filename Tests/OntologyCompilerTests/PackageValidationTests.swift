@@ -3,6 +3,52 @@ import XCTest
 @testable import OntologyCompiler
 
 final class PackageValidationTests: XCTestCase {
+    func testLoadedPackageStoresTypedMetadata() throws {
+        let packageURL = try writePackage("""
+        apiVersion: ontology.specgraph.io/v1alpha1
+        kind: DomainOntologyPackage
+        metadata:
+          id: test.metadata
+          namespace: test
+          version: 0.1.0
+        spec:
+          imports:
+            - id: specgraph.foundation
+              namespace: sg
+              version: 0.1.0
+          classes:
+            Document:
+              extends: sg:DomainEntity
+              description: Document.
+          relations:
+            owner:
+              domain: Document
+              range: sg:DomainEntity
+              description: Owner relation.
+          policies:
+            AllowDocument:
+              extends: sg:Policy
+              enforceability: runtime
+              appliesTo:
+                - Document
+              text: Documents are allowed.
+          stateMachines:
+            DocumentState:
+              states:
+                - draft
+                - approved
+              transitions:
+                - from: draft
+                  to: approved
+        """)
+
+        let package = try XCTUnwrap(OntologyCompiler().load(path: packageURL.path))
+
+        XCTAssertEqual(package.packageMetadata.id.rawValue, "test.metadata")
+        XCTAssertEqual(package.packageMetadata.namespace.rawValue, "test")
+        XCTAssertEqual(package.packageMetadata.version.rawValue, "0.1.0")
+    }
+
     func testProtocolRequiredFieldsMustBeClassRelationDomains() throws {
         let packageURL = try writePackage("""
         apiVersion: ontology.specgraph.io/v1alpha1

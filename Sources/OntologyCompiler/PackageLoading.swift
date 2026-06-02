@@ -69,9 +69,11 @@ extension OntologyCompiler {
             root: root,
             metadata: metadata,
             spec: spec,
-            id: id,
-            namespace: namespace,
-            version: version
+            packageMetadata: LoadedPackageMetadata(
+                id: OntologyPackageId(rawValue: id),
+                namespace: OntologyNamespace(rawValue: namespace),
+                version: OntologySemanticVersion(rawValue: version)
+            )
         )
     }
 }
