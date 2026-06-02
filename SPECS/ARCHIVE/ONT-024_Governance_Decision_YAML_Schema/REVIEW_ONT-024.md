@@ -33,7 +33,7 @@ None.
 - `git diff --check`: PASS
 - YAML parse smoke check: PASS
 - JSON Schema smoke check: PASS
-- `bash tools/swift-quality.sh`: PASS before review refinements
+- `bash tools/swift-quality.sh`: PASS on final branch state
   - SwiftFormat clean
   - SwiftLint 0 violations
   - Build passed
