@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 
 typealias JSONObject = [String: Any]
 
@@ -16,13 +17,21 @@ public struct Diagnostic: Encodable, Sendable {
     public let hint: String?
 }
 
+struct LoadedPackageMetadata {
+    let id: OntologyPackageId
+    let namespace: OntologyNamespace
+    let version: OntologySemanticVersion
+}
+
 struct LoadedPackage {
     let path: String
     let source: String
     let root: JSONObject
     let metadata: JSONObject
     let spec: JSONObject
-    let id: String
-    let namespace: String
-    let version: String
+    let packageMetadata: LoadedPackageMetadata
+
+    var id: String { packageMetadata.id.rawValue }
+    var namespace: String { packageMetadata.namespace.rawValue }
+    var version: String { packageMetadata.version.rawValue }
 }
