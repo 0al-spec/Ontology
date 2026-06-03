@@ -1,36 +1,37 @@
-# Next Tasks: CI Cache Follow-Up
+# Next Task: ONT-028 Node24 Cache Action Migration
 
-**Status:** ONT-027 archived with PASS
+**Status:** INPROGRESS
 
 ## Description
 
-ONT-024 defined the `OntologyGovernanceDecision` artifact contract, and ONT-025 added
-deterministic CLI validation for that artifact. ONT-026 now wires that validation into
-trusted registry publication.
+ONT-027 added standard GitHub Actions cache layers for Swift Quality and DocC, but
+post-merge CI still reports GitHub annotations because `actions/cache@v4` targets the
+Node20 action runtime. The temporary `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` environment
+switch runs the action on Node24, but the annotation remains.
 
-ONT-027 adds standard GitHub Actions cache layers for stable SwiftPM, DocC, and
-quality-tool artifacts.
+ONT-028 migrates cache steps to the Node24-native cache action release and removes the
+temporary runtime-forcing environment variables.
 
 ## Current State
 
-- Swift Quality restores cached `~/.ontology-ci/tools` and `.build/ci-quality`.
-- DocC restores package/checkouts/artifacts/plugin cache paths before generation.
-- `tools/swift-quality.sh` remains temporary-scratch by default locally.
-- CI opts into `ONTOLOGY_SWIFT_SCRATCH_PATH=.build/ci-quality`.
+- Swift Quality has two `actions/cache@v4` steps.
+- DocC has one `actions/cache@v4` step.
+- Both workflows currently set `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true`.
+- Official `actions/cache@v5` runs on Node.js 24 and keeps the v4-compatible inputs
+  used by this repository.
 
-## Potential Next Task
+## Selected Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| TBD | Zip-Pack System Build Cache | Quality | P3 | Follow-up if ONT-027 timings are still too slow |
+| ONT-028 | Node24 Cache Action Migration | Quality | P2 | ONT-027 post-merge CI annotation |
 
 ## Sequencing Notes
 
-- First observe PR and post-merge CI timings with the standard cache layers.
-- Add custom zip-pack/unpack only if `actions/cache` does not materially reduce repeated
-  SwiftSyntax/DocC build time.
-- Keep any future zip cache keyed by Swift version, runner OS/arch, package resolution, and
-  tool/workflow scripts.
+- Keep scope limited to cache action versioning and related documentation.
+- Do not change cache key semantics, cache paths, or Swift quality behavior.
+- Verify `tools/ci-cache-key.sh` still emits valid GitHub output.
+- PR CI must show both Swift Quality and DocC green.
 
 ## Recently Implemented
 

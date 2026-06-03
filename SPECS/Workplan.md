@@ -488,6 +488,22 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Complete: Cache misses remain safe and fall back to ordinary installation/build behavior.
   - Complete: The cache policy is documented with invalidation boundaries and residual risk.
 
+#### ONT-028: Node24 Cache Action Migration
+- **Description:** Replace Node20-targeting GitHub cache action usage with the Node24
+  cache action release so CI no longer relies on runtime-forcing compatibility warnings.
+- **Priority:** P2
+- **Dependencies:** ONT-027
+- **Parallelizable:** no
+- **Status:** INPROGRESS
+- **PRD:** `SPECS/INPROGRESS/ONT-028_Node24_Cache_Action_Migration.md`
+- **Origin:** Follow-up to ONT-027 post-merge CI annotations from `actions/cache@v4`.
+- **Acceptance Criteria:**
+  - Pending: Swift Quality cache steps use a Node24-native cache action release.
+  - Pending: DocC cache steps use a Node24-native cache action release.
+  - Pending: Temporary Node24 force environment variables are removed when no longer needed.
+  - Pending: CI cache policy documents the Node24 action requirement.
+  - Pending: Local workflow syntax/key generation checks pass and PR CI is green.
+
 ---
 
 ## Task Status Legend
