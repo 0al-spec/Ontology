@@ -40,6 +40,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-04 | ONT-029 | Archived REVIEW_ONT-029 report |
 | 2026-06-04 | ONT-029 | Archived Agent_Model_Selection_Guidance (PASS) |
 | 2026-06-03 | ONT-028 | Archived REVIEW_ONT-028 report |
 | 2026-06-03 | ONT-028 | Archived Node24_Cache_Action_Migration (PASS) |
