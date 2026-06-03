@@ -1,6 +1,6 @@
-# Next Tasks: Post-Governance Enforcement
+# Next Task: ONT-027 CI SwiftPM And Quality Tool Cache Optimization
 
-**Status:** ONT-026 archived with PASS
+**Status:** ONT-027 selected
 
 ## Description
 
@@ -8,25 +8,21 @@ ONT-024 defined the `OntologyGovernanceDecision` artifact contract, and ONT-025 
 deterministic CLI validation for that artifact. ONT-026 now wires that validation into
 trusted registry publication.
 
-## Current State
+The next quality slice reduces repeated CI setup/build time by caching stable SwiftPM,
+DocC, and quality-tool artifacts instead of rebuilding or reinstalling them on every run.
 
-- `ontologyc publish` defaults to `--channel candidate`.
-- `--channel trusted` requires an approved governance decision matching the package.
-- Trusted publish rejects invalid or evidence-failing decisions before registry network calls.
-- `pull` and `compat-check` remain unchanged.
-
-## Potential Next Task
+## Selected Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| TBD | CI SwiftPM and DocC Cache Optimization | Quality | P2 | Follow-up from repeated quality/CI runs |
+| ONT-027 | CI SwiftPM And Quality Tool Cache Optimization | Quality | P2 | `SPECS/Workplan.md` |
 
-## Sequencing Notes
+## Execution Notes
 
-- The governance enforcement stack is complete through local schema, CLI validation, and
-  trusted registry publish gating.
-- A focused CI optimization slice could reduce repeated SwiftSyntax/DocC dependency
-  materialization and build time.
+- Use ISOInspector as precedent for cached tool install directories and SwiftPM cache keys.
+- Start with standard `actions/cache@v4` cache layers rather than custom zip archives.
+- Keep cache misses safe: workflows must still pass from a clean runner.
+- Do not cache broad mutable paths unless keys include Swift version and package state.
 
 ## Recently Implemented
 
