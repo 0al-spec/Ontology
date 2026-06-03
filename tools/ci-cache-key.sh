@@ -41,7 +41,7 @@ runner_fragment() {
 }
 
 package_hash="$(hash_files Package.swift Package.resolved)"
-quality_hash="$(hash_files .swiftformat .swiftlint.yml tools/ci-cache-key.sh tools/swift-quality.sh tools/install-quality-tools.sh)"
+quality_hash="$(hash_files .swiftformat .swiftlint.yml tools/ci-cache-key.sh tools/swift-quality.sh tools/install-quality-tools.sh tools/check-github-actions-node24.sh)"
 workflow_hash="$(hash_files tools/ci-cache-key.sh .github/workflows/swift-quality.yml .github/workflows/documentation.yml)"
 swift_hash="$(swift_fragment)"
 runner="$(runner_fragment)"

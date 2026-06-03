@@ -1,41 +1,36 @@
-# Next Tasks: CI Cache Follow-Up
+# Next Tasks: GitHub Actions Maintenance Follow-Up
 
-**Status:** ONT-027 archived with PASS
+**Status:** ONT-028 archived with PASS
 
 ## Description
 
-ONT-024 defined the `OntologyGovernanceDecision` artifact contract, and ONT-025 added
-deterministic CLI validation for that artifact. ONT-026 now wires that validation into
-trusted registry publication.
-
-ONT-027 adds standard GitHub Actions cache layers for stable SwiftPM, DocC, and
-quality-tool artifacts.
+ONT-028 migrates Ontology workflows to the Node24-native cache action generation and
+adds a local GitHub Actions maintenance guard modeled after the 0AL SpecPM policy.
 
 ## Current State
 
-- Swift Quality restores cached `~/.ontology-ci/tools` and `.build/ci-quality`.
-- DocC restores package/checkouts/artifacts/plugin cache paths before generation.
-- `tools/swift-quality.sh` remains temporary-scratch by default locally.
-- CI opts into `ONTOLOGY_SWIFT_SCRATCH_PATH=.build/ci-quality`.
+- Swift Quality uses `actions/cache@v5` for quality tool and SwiftPM caches.
+- DocC uses `actions/cache@v5` for package/plugin caches.
+- Temporary `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env vars were removed.
+- `tools/check-github-actions-node24.sh` is part of `tools/swift-quality.sh`.
 
 ## Potential Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| TBD | Zip-Pack System Build Cache | Quality | P3 | Follow-up if ONT-027 timings are still too slow |
+| TBD | Broaden GitHub Actions Maintenance Policy | Quality | P3 | Optional follow-up if more official actions are added |
 
 ## Sequencing Notes
 
-- First observe PR and post-merge CI timings with the standard cache layers.
-- Add custom zip-pack/unpack only if `actions/cache` does not materially reduce repeated
-  SwiftSyntax/DocC build time.
-- Keep any future zip cache keyed by Swift version, runner OS/arch, package resolution, and
-  tool/workflow scripts.
+- Observe PR and post-merge CI logs for absence of Node20 cache action warnings.
+- If Ontology adds more official `actions/*` references, extend
+  `tools/check-github-actions-node24.sh` and `SPECS/ontology/ci-cache-policy.md`.
 
 ## Recently Implemented
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-028 | Node24 cache action migration | `SPECS/ARCHIVE/ONT-028_Node24_Cache_Action_Migration/` |
 | ONT-027 | CI SwiftPM and quality tool cache optimization | `SPECS/ARCHIVE/ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/` |
 | ONT-026 | Registry publish governance gate | `SPECS/ARCHIVE/ONT-026_Registry_Publish_Governance_Gate/` |
 | ONT-025 | Governance decision CLI validation | `SPECS/ARCHIVE/ONT-025_Governance_Decision_CLI_Validation/` |
@@ -45,6 +40,7 @@ quality-tool artifacts.
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-028 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-028_Node24_Cache_Action_Migration/` |
 | ONT-027 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/` |
 | ONT-026 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-026_Registry_Publish_Governance_Gate/` |
 | ONT-025 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-025_Governance_Decision_CLI_Validation/` |
