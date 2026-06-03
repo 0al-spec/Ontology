@@ -11,6 +11,15 @@ without relaxing quality gates.
 | Quality SwiftPM build | Swift Quality | `.build/ci-quality` | Reuse the stable scratch path used by `tools/swift-quality.sh` in CI. |
 | DocC SwiftPM dependencies | Deploy DocC Documentation | `.build/repositories`, `.build/checkouts`, `.build/artifacts`, `.build/plugins` | Reuse package and plugin artifacts used by DocC generation. |
 
+## GitHub Actions Runtime Boundary
+
+Workflow cache steps use `actions/cache@v5`, the Node24-native cache action release.
+Do not downgrade cache steps to `actions/cache@v4`; v4 targets the Node20 action runtime
+and produces GitHub Actions deprecation annotations even when runtime forcing is enabled.
+
+`tools/check-github-actions-node24.sh` guards maintained official `actions/*` references
+against known older runtime generations.
+
 ## Key Inputs
 
 `tools/ci-cache-key.sh` includes:
@@ -24,6 +33,7 @@ without relaxing quality gates.
 - `tools/ci-cache-key.sh`;
 - `tools/swift-quality.sh`;
 - `tools/install-quality-tools.sh`;
+- `tools/check-github-actions-node24.sh`;
 - workflow files for DocC cache keys.
 
 These inputs intentionally invalidate caches when package resolution, quality rules,

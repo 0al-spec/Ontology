@@ -49,6 +49,7 @@ run_coverage() {
 require_tool swiftformat "Install with: brew install swiftformat"
 require_tool swiftlint "Install with: brew install swiftlint"
 
+bash tools/check-github-actions-node24.sh
 swiftformat Sources Tests --lint
 if [[ "${GITHUB_ACTIONS:-}" == "true" ]]; then
     swiftlint lint --config .swiftlint.yml --reporter github-actions-logging

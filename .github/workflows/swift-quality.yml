@@ -6,9 +6,6 @@ on:
     branches:
       - main
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-
 jobs:
   quality:
     name: Lint, format, test, coverage
@@ -26,7 +23,7 @@ jobs:
         run: bash tools/ci-cache-key.sh >> "$GITHUB_OUTPUT"
 
       - name: Restore quality tool cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.ontology-ci/tools
           key: ${{ steps.cache-keys.outputs.quality-tools-cache-key }}
@@ -34,7 +31,7 @@ jobs:
             ontology-quality-tools-${{ steps.cache-keys.outputs.runner-fragment }}-
 
       - name: Restore SwiftPM quality cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .build/ci-quality
           key: ${{ steps.cache-keys.outputs.quality-build-cache-key }}

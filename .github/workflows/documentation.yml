@@ -7,9 +7,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-
 permissions:
   contents: read
   pages: write
@@ -32,7 +29,7 @@ jobs:
         run: bash tools/ci-cache-key.sh >> "$GITHUB_OUTPUT"
 
       - name: Restore SwiftPM DocC cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .build/repositories
