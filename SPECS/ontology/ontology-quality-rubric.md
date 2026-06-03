@@ -62,6 +62,17 @@ Reject the draft if any condition is true:
 | Future golden tests | Intent stability, expected ontology shape, output drift | Future induction harness |
 | Future governance | approve/reject/merge/versioning | Future ontology governance task |
 
+## Model Efficiency Boundary
+
+Model cost, latency, and provider ranking are operational concerns, not semantic quality
+criteria. Do not approve a weak ontology because it was produced cheaply, and do not trust a
+candidate solely because it was produced by the strongest available model.
+
+Use this rubric and the deterministic validation layers to decide whether a cheaper/faster
+model is good enough for a role. Escalate model strength only when outputs introduce hard
+rejects, repeated rubric regressions, unstable golden expectations, or unclear governance
+rationale.
+
 ## Expected Baseline for Examcalc
 
 The exam-controlled calculator ontology should score:

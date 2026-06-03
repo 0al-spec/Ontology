@@ -44,6 +44,40 @@ intent -> staged prompt contracts -> reviewed draft -> YAML -> ontologyc check -
 | `CompetencyQuestionAgent` | Generate test questions the ontology must answer | `CompetencyQuestionSet` |
 | `YAMLAssemblerAgent` | Convert reviewed draft artifacts into compiler YAML | `DomainOntologyPackageDraft` |
 
+## Model Selection Guidance
+
+Ontology authoring does not require every stage agent to use the strongest available
+model. Prefer the cheapest and fastest model that satisfies the stage contract and keeps
+downstream validation stable.
+
+Use stronger models when the stage depends on judgment, ambiguity resolution, or
+trust-sensitive synthesis:
+
+- `DomainFramerAgent` in unfamiliar, high-risk, or cross-domain intents;
+- `OntologySynthesizerAgent` when staged artifacts conflict or contain unresolved
+  assumptions;
+- `OntologyCriticAgent` when semantic gap detection, leakage detection, or overconfidence
+  review is the main risk;
+- governance-facing summaries where a human reviewer relies on the agent's rationale.
+
+Cheaper or faster models are acceptable when the task is highly structured and downstream
+checks are deterministic:
+
+- `IntentClassifierAgent` for routine intent classification;
+- `ConceptExtractorAgent`, `BehaviorExtractorAgent`, and `PolicyRiskExtractorAgent` when
+  prompt contracts require explicit evidence and uncertainty;
+- `CompetencyQuestionAgent` when questions are reviewed against the rubric;
+- `YAMLAssemblerAgent` when it only translates reviewed artifacts into schema-shaped YAML.
+
+Model choice is an operational decision, not a trust source. A model is acceptable for a
+role only when its outputs:
+
+- preserve golden intent expectations for the domain;
+- pass the quality rubric without new hard rejects;
+- keep assumptions and uncertainty explicit;
+- produce YAML that passes `ontologyc check`;
+- do not bypass governance for trusted publication.
+
 ## DomainOntologyPackage Skeleton
 
 Use the current package shape:

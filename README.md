@@ -149,6 +149,12 @@ Start with the [authoring guide](SPECS/ontology/authoring-guide.md), then use th
 [prompt contracts](SPECS/ontology/authoring-prompts/), and
 [quality rubric](SPECS/ontology/ontology-quality-rubric.md).
 
+Authoring agents do not need to use the strongest available model for every stage. Use
+role-specific model selection from the authoring guide: stronger models are most valuable
+for high-risk framing, critique, and governance-facing review, while cheaper/faster models
+are acceptable for structured extraction or YAML assembly when golden expectations,
+rubric review, and `ontologyc` validation remain stable.
+
 ## Quality Gate
 
 Run the same local gate shape used by CI:

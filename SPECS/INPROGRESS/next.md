@@ -1,35 +1,39 @@
-# Next Tasks: GitHub Actions Maintenance Follow-Up
+# Next Tasks: Agent Model Selection Follow-Up
 
-**Status:** ONT-028 archived with PASS
+**Status:** ONT-029 archived with PASS
 
 ## Description
 
-ONT-028 migrates Ontology workflows to the Node24-native cache action generation and
-adds a local GitHub Actions maintenance guard modeled after the 0AL SpecPM policy.
+ONT-029 documents that ontology-authoring model choice should be role-specific and
+validated by artifacts. Strongest/most expensive models are useful for high-risk framing,
+critique, and governance-facing review, but routine structured extraction and YAML assembly
+can use cheaper/faster models when validation remains stable.
 
 ## Current State
 
-- Swift Quality uses `actions/cache@v5` for quality tool and SwiftPM caches.
-- DocC uses `actions/cache@v5` for package/plugin caches.
-- Temporary `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env vars were removed.
-- `tools/check-github-actions-node24.sh` is part of `tools/swift-quality.sh`.
+- README points authors to role-specific model selection.
+- Authoring guide includes `Model Selection Guidance`.
+- Induction protocol includes `Model Selection Boundary`.
+- Rubric includes `Model Efficiency Boundary`.
 
 ## Potential Next Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| TBD | Broaden GitHub Actions Maintenance Policy | Quality | P3 | Optional follow-up if more official actions are added |
+| TBD | Model Selection Benchmark Harness | Quality | P3 | Optional follow-up if model routing needs measured regression evidence |
 
 ## Sequencing Notes
 
-- Observe PR and post-merge CI logs for absence of Node20 cache action warnings.
-- If Ontology adds more official `actions/*` references, extend
-  `tools/check-github-actions-node24.sh` and `SPECS/ontology/ci-cache-policy.md`.
+- Keep any future benchmark vendor/model-name neutral in repository docs.
+- Compare outputs against golden intent expectations and rubric outcomes, not subjective
+  preference alone.
+- Treat benchmark evidence as routing guidance, not as trusted ontology approval.
 
 ## Recently Implemented
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-029 | Agent model selection guidance | `SPECS/ARCHIVE/ONT-029_Agent_Model_Selection_Guidance/` |
 | ONT-028 | Node24 cache action migration | `SPECS/ARCHIVE/ONT-028_Node24_Cache_Action_Migration/` |
 | ONT-027 | CI SwiftPM and quality tool cache optimization | `SPECS/ARCHIVE/ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/` |
 | ONT-026 | Registry publish governance gate | `SPECS/ARCHIVE/ONT-026_Registry_Publish_Governance_Gate/` |
@@ -40,6 +44,7 @@ adds a local GitHub Actions maintenance guard modeled after the 0AL SpecPM polic
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-029 | 2026-06-04 | PASS | `SPECS/ARCHIVE/ONT-029_Agent_Model_Selection_Guidance/` |
 | ONT-028 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-028_Node24_Cache_Action_Migration/` |
 | ONT-027 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/` |
 | ONT-026 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-026_Registry_Publish_Governance_Gate/` |
