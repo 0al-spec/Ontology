@@ -504,6 +504,25 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Complete: CI cache policy documents the Node24 action requirement.
   - Complete: Local workflow syntax/key generation checks pass; PR CI remains required before merge.
 
+#### ONT-029: Agent Model Selection Guidance
+- **Description:** Document how ontology-authoring agents should choose models by role,
+  risk, and validation results instead of always defaulting to the strongest or most
+  expensive available model.
+- **Priority:** P2
+- **Dependencies:** ONT-019, ONT-021, ONT-023
+- **Parallelizable:** yes
+- **Status:** INPROGRESS
+- **PRD:** `SPECS/INPROGRESS/ONT-029_Agent_Model_Selection_Guidance.md`
+- **Origin:** Empirical prompt runs showed small quality deltas between stronger and
+  cheaper models on ontology-authoring prompts when judged against benchmark outputs.
+- **Acceptance Criteria:**
+  - Pending: Authoring guide gives role-level model selection guidance.
+  - Pending: Induction protocol states that validation artifacts are normative, model
+    choice is operational.
+  - Pending: Quality rubric distinguishes semantic quality from model cost/latency.
+  - Pending: README points authors to role-specific model selection.
+  - Pending: No compiler behavior changes are introduced.
+
 ---
 
 ## Task Status Legend

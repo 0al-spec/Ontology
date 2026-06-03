@@ -1,30 +1,35 @@
-# Next Tasks: GitHub Actions Maintenance Follow-Up
+# Next Task: ONT-029 Agent Model Selection Guidance
 
-**Status:** ONT-028 archived with PASS
+**Status:** INPROGRESS
 
 ## Description
 
-ONT-028 migrates Ontology workflows to the Node24-native cache action generation and
-adds a local GitHub Actions maintenance guard modeled after the 0AL SpecPM policy.
+Add documentation guidance for ontology-authoring agents that model choice should be
+role-specific and validated by artifacts. Strongest/most expensive models are useful for
+high-risk framing, critique, and governance-facing review, but routine structured
+extraction and YAML assembly can use cheaper/faster models when validation remains stable.
 
 ## Current State
 
-- Swift Quality uses `actions/cache@v5` for quality tool and SwiftPM caches.
-- DocC uses `actions/cache@v5` for package/plugin caches.
-- Temporary `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` env vars were removed.
-- `tools/check-github-actions-node24.sh` is part of `tools/swift-quality.sh`.
+- README links to authoring guide, induction protocol, prompt contracts, and rubric.
+- Authoring guide defines agent roles but does not yet explain model selection.
+- Induction protocol defines validation layers but does not yet state the model-selection
+  trust boundary.
+- Rubric evaluates semantic output quality but does not yet separate that from model cost
+  and latency.
 
-## Potential Next Task
+## Selected Task
 
 | Task ID | Title | Phase | Priority | Source |
 |---------|-------|-------|----------|--------|
-| TBD | Broaden GitHub Actions Maintenance Policy | Quality | P3 | Optional follow-up if more official actions are added |
+| ONT-029 | Agent Model Selection Guidance | Documentation | P2 | Prompt benchmark observation |
 
 ## Sequencing Notes
 
-- Observe PR and post-merge CI logs for absence of Node20 cache action warnings.
-- If Ontology adds more official `actions/*` references, extend
-  `tools/check-github-actions-node24.sh` and `SPECS/ontology/ci-cache-policy.md`.
+- Keep guidance vendor/model-name neutral.
+- Do not claim a universal benchmark result.
+- Make validation artifacts, not model ranking, the trust boundary.
+- No compiler behavior changes.
 
 ## Recently Implemented
 
