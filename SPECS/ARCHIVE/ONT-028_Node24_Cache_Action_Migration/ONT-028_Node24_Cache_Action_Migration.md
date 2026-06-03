@@ -1,6 +1,6 @@
 # ONT-028: Node24 Cache Action Migration
 
-**Status:** PRD Ready
+**Status:** Archived
 **Created:** 2026-06-03
 **Priority:** P2
 **Dependencies:** ONT-027
@@ -36,7 +36,7 @@ Ontology workflows.
 | D1 | Swift Quality cache action migration | `.github/workflows/swift-quality.yml` |
 | D2 | DocC cache action migration | `.github/workflows/documentation.yml` |
 | D3 | Cache policy update | `SPECS/ontology/ci-cache-policy.md` |
-| D4 | Validation report | `SPECS/INPROGRESS/ONT-028_Validation_Report.md` |
+| D4 | Validation report | `SPECS/ARCHIVE/ONT-028_Node24_Cache_Action_Migration/ONT-028_Validation_Report.md` |
 
 ## Acceptance Criteria
 
