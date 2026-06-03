@@ -466,6 +466,28 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Complete: Registry tests cover approval pass/fail behavior without requiring a live external registry.
   - Complete: Existing pull and compat-check behavior remains unchanged.
 
+#### ONT-027: CI SwiftPM And Quality Tool Cache Optimization
+- **Description:** Add deterministic CI cache layers for SwiftPM dependencies, DocC
+  plugin artifacts, and quality tool installation so repeated PR/main runs avoid
+  rebuilding stable system-like dependencies when inputs have not changed.
+- **Priority:** P2
+- **Dependencies:** ONT-026
+- **Parallelizable:** no
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization.md`
+- **Origin:** Follow-up to repeated ONT-026 CI runs and prior ISOInspector cache patterns.
+- **Implementation Note:** Added cache key and tool installer scripts, restored quality-tool
+  and SwiftPM cache layers in CI, made `tools/swift-quality.sh` accept a stable CI scratch
+  path, and documented cache invalidation policy.
+- **Acceptance Criteria:**
+  - Complete: CI restores SwiftPM dependency/build caches using keys tied to Swift version,
+    package resolution, and quality configuration.
+  - Complete: SwiftFormat/SwiftLint installation avoids repeated Homebrew work when cached
+    binaries are available.
+  - Complete: DocC workflow restores package/plugin caches before documentation generation.
+  - Complete: Cache misses remain safe and fall back to ordinary installation/build behavior.
+  - Complete: The cache policy is documented with invalidation boundaries and residual risk.
+
 ---
 
 ## Task Status Legend

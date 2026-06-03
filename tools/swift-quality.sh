@@ -55,9 +55,14 @@ if [[ "${GITHUB_ACTIONS:-}" == "true" ]]; then
 else
     swiftlint lint --config .swiftlint.yml
 fi
-tmp_root="${TMPDIR:-/tmp}"
-scratch="$(mktemp -d "${tmp_root%/}/ontology-quality.XXXXXX")"
-trap 'rm -rf "$scratch"' EXIT
+if [[ -n "${ONTOLOGY_SWIFT_SCRATCH_PATH:-}" ]]; then
+    scratch="$ONTOLOGY_SWIFT_SCRATCH_PATH"
+    mkdir -p "$scratch"
+else
+    tmp_root="${TMPDIR:-/tmp}"
+    scratch="$(mktemp -d "${tmp_root%/}/ontology-quality.XXXXXX")"
+    trap 'rm -rf "$scratch"' EXIT
+fi
 
 # Run the build gate inside the scratch path too, so it does not write to
 # the repo's default .build/ and all gate artifacts stay contained.

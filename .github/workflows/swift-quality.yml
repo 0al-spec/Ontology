@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   quality:
     name: Lint, format, test, coverage
@@ -18,12 +21,32 @@ jobs:
       - name: Show Swift version
         run: swift --version
 
+      - name: Compute CI cache keys
+        id: cache-keys
+        run: bash tools/ci-cache-key.sh >> "$GITHUB_OUTPUT"
+
+      - name: Restore quality tool cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ontology-ci/tools
+          key: ${{ steps.cache-keys.outputs.quality-tools-cache-key }}
+          restore-keys: |
+            ontology-quality-tools-${{ steps.cache-keys.outputs.runner-fragment }}-
+
+      - name: Restore SwiftPM quality cache
+        uses: actions/cache@v4
+        with:
+          path: .build/ci-quality
+          key: ${{ steps.cache-keys.outputs.quality-build-cache-key }}
+          restore-keys: |
+            ontology-quality-build-${{ steps.cache-keys.outputs.runner-fragment }}-${{ steps.cache-keys.outputs.swift-fragment }}-
+            ontology-quality-build-${{ steps.cache-keys.outputs.runner-fragment }}-
+
       - name: Install quality tools
-        run: |
-          brew list swiftformat >/dev/null 2>&1 || brew install swiftformat
-          brew list swiftlint >/dev/null 2>&1 || brew install swiftlint
+        run: bash tools/install-quality-tools.sh
 
       - name: Run Swift quality checks
         env:
           RUN_COVERAGE: "1"
+          ONTOLOGY_SWIFT_SCRATCH_PATH: .build/ci-quality
         run: bash ./tools/swift-quality.sh

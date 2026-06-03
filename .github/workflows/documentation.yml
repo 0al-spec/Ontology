@@ -7,6 +7,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 permissions:
   contents: read
   pages: write
@@ -20,6 +23,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Compute CI cache keys
+        id: cache-keys
+        run: bash tools/ci-cache-key.sh >> "$GITHUB_OUTPUT"
+
+      - name: Restore SwiftPM DocC cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build/repositories
+            .build/checkouts
+            .build/artifacts
+            .build/plugins
+          key: ${{ steps.cache-keys.outputs.docc-cache-key }}
+          restore-keys: |
+            ontology-docc-${{ steps.cache-keys.outputs.runner-fragment }}-${{ steps.cache-keys.outputs.swift-fragment }}-${{ steps.cache-keys.outputs.package-hash }}-
+            ontology-docc-${{ steps.cache-keys.outputs.runner-fragment }}-${{ steps.cache-keys.outputs.swift-fragment }}-
+            ontology-docc-${{ steps.cache-keys.outputs.runner-fragment }}-
 
       - name: Build OntologyRules documentation
         run: |
