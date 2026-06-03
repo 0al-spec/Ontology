@@ -201,6 +201,18 @@ swift run ontologyc compile <package.yaml> --target typescript --out <out-dir>
 | Regression validation | Golden intent stability and expected outputs | Future test harness |
 | Governance validation | Approval, merge, versioning, provenance | `SPECS/ontology/governance-protocol.md` |
 
+## Model Selection Boundary
+
+The induction protocol is model-agnostic. A stronger or more expensive model is not, by
+itself, trusted ontology evidence. Trust comes from the artifacts produced by the stage
+pipeline: prompt-contract outputs, critique results, competency questions, golden intent
+stability, compiler validation, and governance approval.
+
+Operators may use cheaper or faster models for structured stages when those artifacts stay
+stable. Escalate to stronger models when domain framing is ambiguous, critique quality
+degrades, golden intent expectations drift, or governance reviewers need higher-confidence
+rationale.
+
 ## Promotion Rule
 
 Only a package that has:
