@@ -22,8 +22,11 @@ ensure_tool() {
 
     if [[ -x "$cached" ]]; then
         echo "Using cached $tool from $cached"
-        "$cached" --version 2>/dev/null || "$cached" version 2>/dev/null || true
-        return 0
+        if "$cached" --version 2>/dev/null || "$cached" version 2>/dev/null; then
+            return 0
+        fi
+        echo "Cached $tool is not usable; refreshing it"
+        rm -f "$cached"
     fi
 
     if command -v "$tool" >/dev/null 2>&1; then

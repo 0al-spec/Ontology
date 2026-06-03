@@ -21,6 +21,7 @@ without relaxing quality gates.
 - `Package.resolved`;
 - `.swiftformat`;
 - `.swiftlint.yml`;
+- `tools/ci-cache-key.sh`;
 - `tools/swift-quality.sh`;
 - `tools/install-quality-tools.sh`;
 - workflow files for DocC cache keys.
