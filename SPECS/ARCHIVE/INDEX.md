@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-027 | [ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/](ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/) | 2026-06-03 | PASS |
 | ONT-026 | [ONT-026_Registry_Publish_Governance_Gate/](ONT-026_Registry_Publish_Governance_Gate/) | 2026-06-03 | PASS |
 | ONT-025 | [ONT-025_Governance_Decision_CLI_Validation/](ONT-025_Governance_Decision_CLI_Validation/) | 2026-06-03 | PASS |
 | ONT-024 | [ONT-024_Governance_Decision_YAML_Schema/](ONT-024_Governance_Decision_YAML_Schema/) | 2026-06-03 | PASS |
@@ -37,6 +38,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-03 | ONT-027 | Archived CI_SwiftPM_And_Quality_Tool_Cache_Optimization (PASS) |
 | 2026-06-03 | ONT-026 | Archived REVIEW_ONT-026 report |
 | 2026-06-03 | ONT-026 | Archived Registry_Publish_Governance_Gate (PASS) |
 | 2026-06-03 | ONT-025 | Archived REVIEW_ONT-025 report |
