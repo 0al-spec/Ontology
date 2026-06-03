@@ -44,7 +44,7 @@ actual build/test artifacts used by `tools/swift-quality.sh`.
 | D4 | Swift Quality workflow cache layers | `.github/workflows/swift-quality.yml` |
 | D5 | DocC workflow cache layers | `.github/workflows/documentation.yml` |
 | D6 | CI cache policy documentation | `SPECS/ontology/ci-cache-policy.md` |
-| D7 | Validation report | `SPECS/INPROGRESS/ONT-027_Validation_Report.md` |
+| D7 | Validation report | `SPECS/ARCHIVE/ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/ONT-027_Validation_Report.md` |
 
 ## Proposed Design
 

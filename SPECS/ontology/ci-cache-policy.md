@@ -27,7 +27,7 @@ without relaxing quality gates.
 - workflow files for DocC cache keys.
 
 These inputs intentionally invalidate caches when package resolution, quality rules,
-tool installation logic, workflow wiring, or Swift runtime changes.
+tool installation logic, workflow wiring, or Swift runtime version changes.
 
 ## Local Behavior
 
@@ -48,8 +48,8 @@ Cache misses must fall back to ordinary installation and build behavior. Caches 
 optimization only; they are not correctness inputs.
 
 The workflows do not cache broad mutable system directories such as Homebrew cellar or
-Xcode toolchains. If a cached binary is missing or unusable, `tools/install-quality-tools.sh`
-falls back to the system tool or Homebrew installation.
+Xcode toolchains. If a cached binary is missing, stale, or unusable,
+`tools/install-quality-tools.sh` falls back to the system tool or Homebrew installation.
 
 ## Residual Risk
 
