@@ -1,6 +1,6 @@
 # ONT-029: Agent Model Selection Guidance
 
-**Status:** PRD Ready
+**Status:** Archived
 **Created:** 2026-06-04
 **Priority:** P2
 **Dependencies:** ONT-019, ONT-021, ONT-023

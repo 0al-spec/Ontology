@@ -511,17 +511,17 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-019, ONT-021, ONT-023
 - **Parallelizable:** yes
-- **Status:** INPROGRESS
-- **PRD:** `SPECS/INPROGRESS/ONT-029_Agent_Model_Selection_Guidance.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-029_Agent_Model_Selection_Guidance/ONT-029_Agent_Model_Selection_Guidance.md`
 - **Origin:** Empirical prompt runs showed small quality deltas between stronger and
   cheaper models on ontology-authoring prompts when judged against benchmark outputs.
 - **Acceptance Criteria:**
-  - Pending: Authoring guide gives role-level model selection guidance.
-  - Pending: Induction protocol states that validation artifacts are normative, model
+  - Complete: Authoring guide gives role-level model selection guidance.
+  - Complete: Induction protocol states that validation artifacts are normative, model
     choice is operational.
-  - Pending: Quality rubric distinguishes semantic quality from model cost/latency.
-  - Pending: README points authors to role-specific model selection.
-  - Pending: No compiler behavior changes are introduced.
+  - Complete: Quality rubric distinguishes semantic quality from model cost/latency.
+  - Complete: README points authors to role-specific model selection.
+  - Complete: No compiler behavior changes are introduced.
 
 ---
 
