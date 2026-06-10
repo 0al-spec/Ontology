@@ -47,3 +47,13 @@ jobs:
           RUN_COVERAGE: "1"
           ONTOLOGY_SWIFT_SCRATCH_PATH: .build/ci-quality
         run: bash ./tools/swift-quality.sh
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: SPECS/ontology/package-lock.json
+
+      - name: Run TypeScript SDK smoke gate
+        run: bash ./tools/typescript-smoke.sh

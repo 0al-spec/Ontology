@@ -176,8 +176,14 @@ Run the gate with coverage reporting:
 RUN_COVERAGE=1 bash tools/swift-quality.sh
 ```
 
+Check the generated TypeScript SDK and Zod smoke fixture:
+
+```bash
+bash tools/typescript-smoke.sh
+```
+
 GitHub Actions runs the same script with `RUN_COVERAGE=1` on pull requests and
-pushes to `main`.
+pushes to `main`, followed by the TypeScript SDK smoke gate.
 
 ## Documentation
 
