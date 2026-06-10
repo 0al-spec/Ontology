@@ -1,7 +1,7 @@
 # ONT-031 Validation Report
 
-**Task:** ONT-031 SpecGraph Ontology Integration Process PRD  
-**Date:** 2026-06-11  
+**Task:** ONT-031 SpecGraph Ontology Integration Process PRD
+**Date:** 2026-06-11
 **Verdict:** PASS
 
 ## Summary
@@ -24,13 +24,13 @@ gap examples, and acceptance criteria for a future SpecGraph-side smoke slice.
 ## Validation Commands
 
 ```bash
-rg -n "OntologyImport|OntologyLockfile|ConceptRef|OntologyGap|OntologyDeltaRequest|OntologyGovernanceDecision|DomainOntologyPackage|publish/pull|lockfile|semantic refs|SpecGraph-side smoke|pseudo-concept" SPECS/INPROGRESS/ONT-031_SpecGraph_Ontology_Integration_Process_PRD.md
+rg -n "OntologyImport|OntologyLockfile|ConceptRef|OntologyGap|OntologyDeltaRequest|OntologyGovernanceDecision|DomainOntologyPackage|publish/pull|lockfile|semantic refs|SpecGraph-side smoke|pseudo-concept" SPECS/ARCHIVE/ONT-031_SpecGraph_Ontology_Integration_Process_PRD/ONT-031_SpecGraph_Ontology_Integration_Process_PRD.md
 ```
 
 Result: PASS. The PRD contains every required bridge artifact and boundary term.
 
 ```bash
-rg -n "bridge workflow|artifact|examcalc|smoke slice|copying|redefining|DomainOntologyPackage" SPECS/Workplan.md SPECS/INPROGRESS/ONT-031_SpecGraph_Ontology_Integration_Process_PRD.md
+rg -n "bridge workflow|artifact|examcalc|smoke slice|copying|redefining|DomainOntologyPackage" SPECS/Workplan.md SPECS/ARCHIVE/ONT-031_SpecGraph_Ontology_Integration_Process_PRD/ONT-031_SpecGraph_Ontology_Integration_Process_PRD.md
 ```
 
 Result: PASS. ONT-031 Workplan acceptance criteria are reflected in the PRD.
