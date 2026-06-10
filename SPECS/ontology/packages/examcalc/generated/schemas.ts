@@ -21,6 +21,8 @@ export const EndExamModeSchema = z.object({
 export const ExamSchema = z.object({
   $type: z.literal("examcalc:Exam"),
   id: z.string().optional(),
+  durationMinutes: z.number().int().optional(),
+  title: z.string(),
 });
 
 export const ExamModeSessionSchema = z.object({

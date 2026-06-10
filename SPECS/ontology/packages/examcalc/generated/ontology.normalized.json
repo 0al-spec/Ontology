@@ -52,6 +52,20 @@
       "central" : false,
       "description" : "University exam that requires a controlled calculator policy.",
       "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "description" : "Planned exam duration in minutes.",
+          "id" : "durationMinutes",
+          "required" : false,
+          "type" : "integer"
+        },
+        {
+          "description" : "Human-readable exam title.",
+          "id" : "title",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
       "fqid" : "examcalc:Exam",
       "id" : "Exam",
       "implements" : [
@@ -383,7 +397,7 @@
       "uri" : "ontology://edu.university.examcalc/0.1.0/relations/requires_policy"
     }
   ],
-  "sourceDigest" : "sha256:57fcb796e6f8d3cd5e163df36879dbbdfac7471a134cddf46160253dd4b68ff1",
+  "sourceDigest" : "sha256:7cdf061c1c845e0d0d801c7d935b6d4b765db1317ec595910da2cb910eca9e2f",
   "stateMachines" : [
     {
       "fqid" : "examcalc:ExamModeSessionState",

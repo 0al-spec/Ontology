@@ -23,6 +23,39 @@ public struct OntologyStateNameSpec: Specification {
     }
 }
 
+/// Validates TypeScript-safe class data field names.
+public struct OntologyFieldNameSpec: Specification {
+    public typealias T = OntologyFieldName
+
+    public init() {}
+
+    public func isSatisfiedBy(_ candidate: OntologyFieldName) -> Bool {
+        matches(candidate.rawValue, #"^[a-z][A-Za-z0-9_]*$"#)
+    }
+}
+
+/// Rejects class data field names reserved by generated SDK base properties.
+public struct ReservedOntologyClassFieldNameSpec: Specification {
+    public typealias T = OntologyFieldName
+
+    public init() {}
+
+    public func isSatisfiedBy(_ candidate: OntologyFieldName) -> Bool {
+        ["id"].contains(candidate.rawValue)
+    }
+}
+
+/// Validates primitive class data field types supported by generated SDK output.
+public struct OntologyFieldTypeSpec: Specification {
+    public typealias T = OntologyFieldType
+
+    public init() {}
+
+    public func isSatisfiedBy(_ candidate: OntologyFieldType) -> Bool {
+        ["string", "boolean", "integer", "number"].contains(candidate.rawValue)
+    }
+}
+
 /// Validates local or namespace-qualified ontology concept reference literals.
 public struct OntologyConceptRefPatternSpec: Specification {
     public typealias T = OntologyConceptReferenceLiteral

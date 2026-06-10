@@ -1,10 +1,13 @@
 apiVersion: ontology.specgraph.io/v1alpha1
 changes:
   addedClasses: []
+  addedFields: []
   addedRelations: []
   breakingChanges:
   - change relation range examcalc:allows
+  changedFields: []
   removedClasses: []
+  removedFields: []
   removedRelations: []
 kind: OntologyCompatibilityReport
 metadata:

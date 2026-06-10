@@ -126,6 +126,29 @@ $defs:
         type: array
         items:
           $ref: "#/$defs/nameReference"
+      fields:
+        type: object
+        propertyNames:
+          $ref: "#/$defs/fieldName"
+        additionalProperties:
+          $ref: "#/$defs/classFieldDefinition"
+  classFieldDefinition:
+    type: object
+    additionalProperties: false
+    required:
+      - type
+      - required
+    properties:
+      type:
+        enum:
+          - string
+          - boolean
+          - integer
+          - number
+      required:
+        type: boolean
+      description:
+        type: string
   protocolDefinition:
     type: object
     additionalProperties: false
@@ -262,6 +285,11 @@ $defs:
   nameReference:
     type: string
     pattern: "^[A-Za-z][A-Za-z0-9_]*$"
+  fieldName:
+    type: string
+    pattern: "^[a-z][A-Za-z0-9_]*$"
+    not:
+      const: id
   stateName:
     type: string
     pattern: "^[a-z][a-z0-9_]*$"

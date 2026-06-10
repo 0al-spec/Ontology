@@ -232,6 +232,67 @@ final class RegistryClientTests: XCTestCase {
         XCTAssertTrue(compatible, "Adding a class must not be a breaking change")
     }
 
+    func testCompatibilityReportClassFieldChanges() {
+        let compiler = OntologyCompiler()
+        let fromIR: [String: Any] = [
+            "id": "test-ontology",
+            "namespace": "test",
+            "version": "1.0.0",
+            "sourceDigest": "",
+            "classes": [
+                [
+                    "id": "Exam",
+                    "fqid": "test:Exam",
+                    "kind": "Entity",
+                    "fields": [
+                        ["id": "title", "type": "string", "required": false],
+                        ["id": "durationMinutes", "type": "integer", "required": false],
+                        ["id": "legacyCode", "type": "string", "required": false]
+                    ]
+                ] as [String: Any]
+            ],
+            "protocols": [] as [Any],
+            "relations": [] as [Any],
+            "policies": [] as [Any],
+            "stateMachines": [] as [Any]
+        ]
+        let toIR: [String: Any] = [
+            "id": "test-ontology",
+            "namespace": "next",
+            "version": "2.0.0",
+            "sourceDigest": "",
+            "classes": [
+                [
+                    "id": "Exam",
+                    "fqid": "next:Exam",
+                    "kind": "Entity",
+                    "fields": [
+                        ["id": "title", "type": "string", "required": true],
+                        ["id": "durationMinutes", "type": "number", "required": false],
+                        ["id": "optionalNote", "type": "string", "required": false],
+                        ["id": "requiredCode", "type": "string", "required": true]
+                    ]
+                ] as [String: Any]
+            ],
+            "protocols": [] as [Any],
+            "relations": [] as [Any],
+            "policies": [] as [Any],
+            "stateMachines": [] as [Any]
+        ]
+
+        let report = compiler.compatibilityReport(fromIR: fromIR, toIR: toIR)
+        let changes = try? XCTUnwrap(report["changes"] as? [String: Any])
+        let breaking = changes?["breakingChanges"] as? [String] ?? []
+
+        XCTAssertEqual(changes?["addedFields"] as? [String], ["next:Exam.optionalNote", "next:Exam.requiredCode"])
+        XCTAssertEqual(changes?["removedFields"] as? [String], ["test:Exam.legacyCode"])
+        XCTAssertEqual(changes?["changedFields"] as? [String], ["test:Exam.durationMinutes", "test:Exam.title"])
+        XCTAssertTrue(breaking.contains("add required field next:Exam.requiredCode"), "\(breaking)")
+        XCTAssertTrue(breaking.contains("remove field test:Exam.legacyCode"), "\(breaking)")
+        XCTAssertTrue(breaking.contains("change field type test:Exam.durationMinutes"), "\(breaking)")
+        XCTAssertTrue(breaking.contains("make field required test:Exam.title"), "\(breaking)")
+    }
+
     func testCompatCheckReportsLocalPackageDiagnosticsBeforeRegistryPull() throws {
         let compiler = OntologyCompiler()
         let invalidPackage = repoRoot

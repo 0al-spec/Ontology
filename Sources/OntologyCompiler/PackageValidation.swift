@@ -113,7 +113,7 @@ extension OntologyCompiler {
                 continue
             }
 
-            validateKnownKeys(definition, allowed: ["extends", "implements", "description", "central", "lifecycle", "aliases"], path: path)
+            validateKnownKeys(definition, allowed: ["extends", "implements", "description", "central", "lifecycle", "aliases", "fields"], path: path)
             let extendsValue = definition["extends"]
             if let extendsArray = extendsValue as? [Any], !extendsArray.isEmpty {
                 add("class.extends.multiple", "\(path).extends", "Class extends must be one scalar reference; multiple inheritance is not allowed")
@@ -141,8 +141,34 @@ extension OntologyCompiler {
             if let lifecycle = string(definition["lifecycle"]), !context.stateMachineNames.contains(lifecycle) {
                 add("class.lifecycle.unresolved", "\(path).lifecycle", "Lifecycle state machine \(lifecycle) cannot be resolved")
             }
+            validateClassFields(definition["fields"], path: "\(path).fields")
         }
         return triggerNames
+    }
+
+    func validateClassFields(_ value: Any?, path: String) {
+        guard let value else { return }
+        guard let fields = value as? JSONObject else {
+            add("class.fields.type", path, "Class fields must be an object")
+            return
+        }
+        for name in fields.keys.sorted() {
+            let fieldPath = "\(path).\(name)"
+            validateClassFieldName(name, path: fieldPath)
+            guard let definition = fields[name] as? JSONObject else {
+                add("class.field.type", fieldPath, "Class field definition must be an object")
+                continue
+            }
+            validateKnownKeys(definition, allowed: ["type", "required", "description"], path: fieldPath)
+            if let type = requiredString(definition, "type", path: "\(fieldPath).type", code: "class.field.type.required"),
+               !OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: type)) {
+                add("class.field.type.unsupported", "\(fieldPath).type", "Class field type \(type) is not supported")
+            }
+            _ = requiredBool(definition, "required", path: "\(fieldPath).required", code: "class.field.required.required")
+            if definition.keys.contains("description"), string(definition["description"]) == nil {
+                add("class.field.description.type", "\(fieldPath).description", "Class field description must be a string")
+            }
+        }
     }
 
     func validateImplementsRefs(

@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-032 | [ONT-032_Class_Field_Semantics_And_Rich_SDK_Generation/](ONT-032_Class_Field_Semantics_And_Rich_SDK_Generation/) | 2026-06-11 | PASS |
 | ONT-031 | [ONT-031_SpecGraph_Ontology_Integration_Process_PRD/](ONT-031_SpecGraph_Ontology_Integration_Process_PRD/) | 2026-06-11 | PASS |
 | ONT-030 | [ONT-030_TypeScript_SDK_Smoke_Gate/](ONT-030_TypeScript_SDK_Smoke_Gate/) | 2026-06-11 | PASS |
 | ONT-029 | [ONT-029_Agent_Model_Selection_Guidance/](ONT-029_Agent_Model_Selection_Guidance/) | 2026-06-04 | PASS |
@@ -42,6 +43,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-11 | ONT-032 | Archived REVIEW_ONT-032 report |
+| 2026-06-11 | ONT-032 | Archived Class_Field_Semantics_And_Rich_SDK_Generation (PASS) |
 | 2026-06-11 | ONT-031 | Archived REVIEW_ONT-031 report |
 | 2026-06-11 | ONT-031 | Archived SpecGraph_Ontology_Integration_Process_PRD (PASS) |
 | 2026-06-11 | ONT-030 | Archived REVIEW_ONT-030 report |

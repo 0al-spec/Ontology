@@ -84,10 +84,16 @@ extension OntologyCompiler {
                 referencedProtoNames.append(proto)
             }
             let extendsClause = localProtos.isEmpty ? "" : " extends \(localProtos.joined(separator: ", "))"
+            let fieldLines = emittedClassFields(item).map {
+                "  readonly \(fieldId($0))\(fieldRequired($0) ? "" : "?"): \(tsFieldType(fieldType($0)));"
+            }
+            let interfaceBody = ([
+                "  readonly $type: \"\(fqid)\";",
+                "  readonly id?: string;"
+            ] + fieldLines).joined(separator: "\n")
             interfaceLines.append("""
             export interface \(id)\(extendsClause) {
-              readonly $type: "\(fqid)";
-              readonly id?: string;
+            \(interfaceBody)
             }
             """)
         }
@@ -141,10 +147,16 @@ extension OntologyCompiler {
         let schemaDecls = classes.map { item -> String in
             let id = string(item["id"]) ?? "Unknown"
             let fqid = string(item["fqid"]) ?? id
+            let fieldLines = emittedClassFields(item).map {
+                "  \(fieldId($0)): \(zodFieldExpression(field: $0)),"
+            }
+            let schemaBody = ([
+                "  $type: z.literal(\"\(fqid)\"),",
+                "  id: z.string().optional(),"
+            ] + fieldLines).joined(separator: "\n")
             return """
             export const \(id)Schema = z.object({
-              $type: z.literal("\(fqid)"),
-              id: z.string().optional(),
+            \(schemaBody)
             });
             """
         }.joined(separator: "\n\n")
@@ -267,5 +279,50 @@ extension OntologyCompiler {
         }
 
         """
+    }
+
+    private func emittedClassFields(_ item: JSONObject) -> [JSONObject] {
+        if let fields = item["fields"] as? [JSONObject] {
+            return fields
+        }
+        return (item["fields"] as? [Any] ?? []).compactMap { $0 as? JSONObject }
+    }
+
+    private func fieldId(_ field: JSONObject) -> String {
+        string(field["id"]) ?? ""
+    }
+
+    private func fieldType(_ field: JSONObject) -> String {
+        string(field["type"]) ?? "string"
+    }
+
+    private func fieldRequired(_ field: JSONObject) -> Bool {
+        (field["required"] as? Bool) ?? false
+    }
+
+    private func tsFieldType(_ type: String) -> String {
+        switch type {
+        case "boolean":
+            return "boolean"
+        case "integer", "number":
+            return "number"
+        default:
+            return "string"
+        }
+    }
+
+    private func zodFieldExpression(field: JSONObject) -> String {
+        let base: String
+        switch fieldType(field) {
+        case "boolean":
+            base = "z.boolean()"
+        case "integer":
+            base = "z.number().int()"
+        case "number":
+            base = "z.number()"
+        default:
+            base = "z.string()"
+        }
+        return fieldRequired(field) ? base : "\(base).optional()"
     }
 }

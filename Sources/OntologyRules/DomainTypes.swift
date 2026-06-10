@@ -52,6 +52,24 @@ public struct OntologySemanticVersion: RawRepresentable, Equatable, Hashable, Se
     }
 }
 
+/// A class-owned data field name projected into generated SDK interfaces and schemas.
+public struct OntologyFieldName: RawRepresentable, Equatable, Hashable, Sendable {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
+/// A primitive class field type supported by the first SDK data-shape slice.
+public struct OntologyFieldType: RawRepresentable, Equatable, Hashable, Sendable {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
 /// The ontology package API version literal.
 public struct OntologyApiVersion: RawRepresentable, Equatable, Hashable, Sendable {
     public let rawValue: String

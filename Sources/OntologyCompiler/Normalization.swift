@@ -56,6 +56,26 @@ extension OntologyCompiler {
             if let lifecycle = string(definition["lifecycle"]) {
                 normalized["lifecycle"] = lifecycle
             }
+            let fields = normalizeFields(definition["fields"])
+            if !fields.isEmpty {
+                normalized["fields"] = fields
+            }
+            return normalized
+        }
+    }
+
+    private func normalizeFields(_ value: Any?) -> [JSONObject] {
+        guard let fieldsObject = value as? JSONObject else { return [] }
+        return fieldsObject.keys.sorted().map { name -> JSONObject in
+            let definition = fieldsObject[name] as? JSONObject ?? [:]
+            var normalized: JSONObject = [
+                "id": name,
+                "type": string(definition["type"]) ?? "",
+                "required": (definition["required"] as? Bool) ?? false
+            ]
+            if let description = string(definition["description"]) {
+                normalized["description"] = description
+            }
             return normalized
         }
     }

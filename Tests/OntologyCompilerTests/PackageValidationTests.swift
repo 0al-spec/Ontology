@@ -157,6 +157,112 @@ final class PackageValidationTests: XCTestCase {
         )
     }
 
+    func testClassFieldsValidateSupportedShape() throws {
+        let packageURL = try writePackage("""
+        apiVersion: ontology.specgraph.io/v1alpha1
+        kind: DomainOntologyPackage
+        metadata:
+          id: test.fields
+          namespace: test
+          version: 0.1.0
+        spec:
+          imports:
+            - id: specgraph.foundation
+              namespace: sg
+              version: 0.1.0
+          classes:
+            Exam:
+              extends: sg:DomainEntity
+              description: Field-bearing exam.
+              fields:
+                title:
+                  type: string
+                  required: true
+                durationMinutes:
+                  type: integer
+                  required: false
+          relations:
+            owner:
+              domain: Exam
+              range: sg:DomainEntity
+              description: Owner relation.
+          policies:
+            AllowExam:
+              extends: sg:Policy
+              enforceability: runtime
+              appliesTo:
+                - Exam
+              text: Exams are allowed.
+          stateMachines:
+            ExamState:
+              states:
+                - draft
+                - approved
+              transitions:
+                - from: draft
+                  to: approved
+        """)
+
+        let compiler = OntologyCompiler()
+        let diagnostics = compiler.check(path: OntologySourcePath(url: packageURL))
+
+        XCTAssertFalse(compiler.hasErrors(diagnostics), "Expected valid fields, got \(diagnostics)")
+    }
+
+    func testClassFieldsRejectInvalidShape() throws {
+        let packageURL = try writePackage("""
+        apiVersion: ontology.specgraph.io/v1alpha1
+        kind: DomainOntologyPackage
+        metadata:
+          id: test.fields
+          namespace: test
+          version: 0.1.0
+        spec:
+          imports:
+            - id: specgraph.foundation
+              namespace: sg
+              version: 0.1.0
+          classes:
+            Exam:
+              extends: sg:DomainEntity
+              description: Invalid field-bearing exam.
+              fields:
+                Invalid-Field:
+                  type: date-time
+                  required: "yes"
+                id:
+                  type: string
+                  required: false
+          relations:
+            owner:
+              domain: Exam
+              range: sg:DomainEntity
+              description: Owner relation.
+          policies:
+            AllowExam:
+              extends: sg:Policy
+              enforceability: runtime
+              appliesTo:
+                - Exam
+              text: Exams are allowed.
+          stateMachines:
+            ExamState:
+              states:
+                - draft
+                - approved
+              transitions:
+                - from: draft
+                  to: approved
+        """)
+
+        let diagnostics = OntologyCompiler().check(path: OntologySourcePath(url: packageURL))
+
+        XCTAssertTrue(diagnostics.contains { $0.code == "class.field.name.invalid" }, "\(diagnostics)")
+        XCTAssertTrue(diagnostics.contains { $0.code == "class.field.name.reserved" }, "\(diagnostics)")
+        XCTAssertTrue(diagnostics.contains { $0.code == "class.field.type.unsupported" }, "\(diagnostics)")
+        XCTAssertTrue(diagnostics.contains { $0.code == "class.field.required.required.type" }, "\(diagnostics)")
+    }
+
     private func writePackage(_ text: String) throws -> URL {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("ontology-package-\(UUID().uuidString)", isDirectory: true)

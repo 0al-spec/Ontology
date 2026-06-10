@@ -84,6 +84,18 @@ extension OntologyCompiler {
         return value
     }
 
+    func requiredBool(_ object: JSONObject, _ key: String, path: String, code: String) -> Bool? {
+        guard object.keys.contains(key) else {
+            add(code, path, "\(path) is required")
+            return nil
+        }
+        guard let value = object[key] as? Bool else {
+            add("\(code).type", path, "\(path) must be a boolean")
+            return nil
+        }
+        return value
+    }
+
     func validate(_ value: String, path: String, code: String, isSatisfied: (String) -> Bool) {
         if !value.isEmpty && !isSatisfied(value) {
             add(code, path, "\(path) has invalid format")
@@ -99,6 +111,19 @@ extension OntologyCompiler {
     func validateStateName(_ value: String, path: String, code: String) {
         validate(value, path: path, code: code) {
             OntologyStateNameSpec().isSatisfiedBy(OntologyStateName(rawValue: $0))
+        }
+    }
+
+    func validateFieldName(_ value: String, path: String, code: String) {
+        validate(value, path: path, code: code) {
+            OntologyFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: $0))
+        }
+    }
+
+    func validateClassFieldName(_ value: String, path: String) {
+        validateFieldName(value, path: path, code: "class.field.name.invalid")
+        if ReservedOntologyClassFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: value)) {
+            add("class.field.name.reserved", path, "Class field name \(value) is reserved by generated SDK output")
         }
     }
 
