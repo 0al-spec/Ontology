@@ -1,6 +1,6 @@
 # Current Task: ONT-031 SpecGraph Ontology Integration Process PRD
 
-**Status:** ONT-030 archived with PASS; ONT-031 is the next recommended task.
+**Status:** ONT-031 selected and in progress.
 
 ## Description
 
@@ -36,7 +36,7 @@ intent
 -> publish/pull
 ```
 
-ONT-030 completed the `generated SDK/IR` smoke gate. ONT-031 should define the bridge
+ONT-030 completed the `generated SDK/IR` smoke gate. ONT-031 defines the bridge
 workflow for the `SpecGraph semantic refs -> lockfile/gaps` segment.
 
 ## Current State

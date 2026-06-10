@@ -562,7 +562,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-005, ONT-019, ONT-026, ONT-030
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **Origin:** SpecGraph integration discussion and SpecGraph proposal 0060 external ontology
   import plane.
 - **Acceptance Criteria:**
