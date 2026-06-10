@@ -31,6 +31,8 @@ final class MetadataSpecsTests: XCTestCase {
         XCTAssertTrue(OntologyFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: "duration_minutes")))
         XCTAssertFalse(OntologyFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: "DurationMinutes")))
         XCTAssertFalse(OntologyFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: "duration-minutes")))
+        XCTAssertTrue(ReservedOntologyClassFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: "id")))
+        XCTAssertFalse(ReservedOntologyClassFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: "title")))
 
         XCTAssertTrue(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "string")))
         XCTAssertTrue(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "integer")))

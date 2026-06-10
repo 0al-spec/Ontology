@@ -230,6 +230,9 @@ final class PackageValidationTests: XCTestCase {
                 Invalid-Field:
                   type: date-time
                   required: "yes"
+                id:
+                  type: string
+                  required: false
           relations:
             owner:
               domain: Exam
@@ -255,6 +258,7 @@ final class PackageValidationTests: XCTestCase {
         let diagnostics = OntologyCompiler().check(path: OntologySourcePath(url: packageURL))
 
         XCTAssertTrue(diagnostics.contains { $0.code == "class.field.name.invalid" }, "\(diagnostics)")
+        XCTAssertTrue(diagnostics.contains { $0.code == "class.field.name.reserved" }, "\(diagnostics)")
         XCTAssertTrue(diagnostics.contains { $0.code == "class.field.type.unsupported" }, "\(diagnostics)")
         XCTAssertTrue(diagnostics.contains { $0.code == "class.field.required.required.type" }, "\(diagnostics)")
     }

@@ -34,6 +34,17 @@ public struct OntologyFieldNameSpec: Specification {
     }
 }
 
+/// Rejects class data field names reserved by generated SDK base properties.
+public struct ReservedOntologyClassFieldNameSpec: Specification {
+    public typealias T = OntologyFieldName
+
+    public init() {}
+
+    public func isSatisfiedBy(_ candidate: OntologyFieldName) -> Bool {
+        ["id"].contains(candidate.rawValue)
+    }
+}
+
 /// Validates primitive class data field types supported by generated SDK output.
 public struct OntologyFieldTypeSpec: Specification {
     public typealias T = OntologyFieldType

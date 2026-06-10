@@ -125,7 +125,6 @@ extension OntologyCompiler {
             classId: classId,
             fieldIds: sortedDifference(Set(afterFields.keys), Set(beforeFields.keys)),
             fields: afterFields,
-            fromNamespace: fromNamespace,
             toNamespace: toNamespace,
             decision: decision
         ))
@@ -154,7 +153,6 @@ extension OntologyCompiler {
         classId: String,
         fieldIds: [String],
         fields: [String: JSONObject],
-        fromNamespace: String,
         toNamespace: String,
         decision: CompatibilityChangeDecisionSpec
     ) -> CompatibilityFieldChanges {
@@ -165,7 +163,7 @@ extension OntologyCompiler {
             if (fields[fieldId]?["required"] as? Bool) == true,
                let message = breakingMessage(decision.decide(CompatibilityChangeContext(
                    kind: .classRequiredFieldAdded,
-                   namespace: fromNamespace,
+                   namespace: toNamespace,
                    symbolId: symbolId
                ))) {
                 changes.breakingChanges.append(message)

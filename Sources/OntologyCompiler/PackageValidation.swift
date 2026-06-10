@@ -154,7 +154,7 @@ extension OntologyCompiler {
         }
         for name in fields.keys.sorted() {
             let fieldPath = "\(path).\(name)"
-            validateFieldName(name, path: fieldPath, code: "class.field.name.invalid")
+            validateClassFieldName(name, path: fieldPath)
             guard let definition = fields[name] as? JSONObject else {
                 add("class.field.type", fieldPath, "Class field definition must be an object")
                 continue

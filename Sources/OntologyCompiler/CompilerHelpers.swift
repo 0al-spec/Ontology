@@ -120,6 +120,13 @@ extension OntologyCompiler {
         }
     }
 
+    func validateClassFieldName(_ value: String, path: String) {
+        validateFieldName(value, path: path, code: "class.field.name.invalid")
+        if ReservedOntologyClassFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: value)) {
+            add("class.field.name.reserved", path, "Class field name \(value) is reserved by generated SDK output")
+        }
+    }
+
     func add(_ code: String, _ path: String, _ message: String, hint: String? = nil) {
         diagnostics.append(Diagnostic(code: code, severity: "error", path: path, message: message, hint: hint))
     }
