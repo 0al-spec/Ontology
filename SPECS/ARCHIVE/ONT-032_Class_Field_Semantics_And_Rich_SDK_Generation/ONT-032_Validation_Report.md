@@ -1,7 +1,7 @@
 # ONT-032 Validation Report
 
-**Task:** ONT-032 Class Field Semantics And Rich SDK Generation  
-**Date:** 2026-06-11  
+**Task:** ONT-032 Class Field Semantics And Rich SDK Generation
+**Date:** 2026-06-11
 **Verdict:** PASS
 
 ## Summary
