@@ -581,16 +581,17 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-030, ONT-031
 - **Parallelizable:** no
-- **Status:** INPROGRESS
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-032_Class_Field_Semantics_And_Rich_SDK_Generation/ONT-032_Class_Field_Semantics_And_Rich_SDK_Generation.md`
 - **Origin:** Post-ONT-029 review finding that the generated SDK currently carries semantic refs
   and protocol-required fields but no first-class per-class data fields.
 - **Acceptance Criteria:**
-  - `domain-ontology-package.schema.yaml` accepts a constrained `fields` section for classes.
-  - Compiler validation rejects unsupported field types, invalid field names, and invalid required/optional declarations.
-  - Normalized IR includes deterministic field metadata.
-  - `types.ts` and `schemas.ts` project fields into generated TypeScript/Zod outputs.
-  - Compatibility diff classifies field additions/removals/type changes according to documented semver rules.
-  - The TypeScript smoke gate from ONT-030 covers field-bearing generated output.
+  - Complete: `domain-ontology-package.schema.yaml` accepts a constrained `fields` section for classes.
+  - Complete: Compiler validation rejects unsupported field types, invalid field names, and invalid required/optional declarations.
+  - Complete: Normalized IR includes deterministic field metadata.
+  - Complete: `types.ts` and `schemas.ts` project fields into generated TypeScript/Zod outputs.
+  - Complete: Compatibility diff classifies field additions/removals/type changes according to documented semver rules.
+  - Complete: The TypeScript smoke gate from ONT-030 covers field-bearing generated output.
 
 #### ONT-033: File And Git Registry Transport
 - **Description:** Add a filesystem/git-backed registry transport for `publish`, `pull`, and
