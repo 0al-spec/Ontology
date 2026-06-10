@@ -540,7 +540,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-017, ONT-028
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **Origin:** Post-ONT-029 review finding that generated TypeScript artifacts are snapshot-locked
   but not checked by the TypeScript compiler.
 - **Acceptance Criteria:**

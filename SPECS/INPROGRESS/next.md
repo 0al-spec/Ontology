@@ -1,8 +1,25 @@
-# Next Tasks: SpecGraph Value Loop Closure
+# Current Task: ONT-030 TypeScript SDK Smoke Gate
 
-**Status:** ONT-030 is the next recommended task.
+**Status:** ONT-030 selected and in progress
 
 ## Description
+
+Add a local and CI quality gate that compiles the generated examcalc TypeScript SDK with
+`tsc --noEmit` and exercises the generated Zod schemas through a minimal smoke fixture.
+This protects the generated SDK before richer class-field emitters are added.
+
+## Task Metadata
+
+| Field | Value |
+|-------|-------|
+| Task ID | ONT-030 |
+| Title | TypeScript SDK Smoke Gate |
+| Phase | SpecGraph Value Loop Closure |
+| Priority | P0 |
+| Dependencies | ONT-017, ONT-028 |
+| Parallelizable | no |
+
+## Value Loop Context
 
 The current Ontology repository has strong compiler, governance, registry-client, and
 authoring-protocol foundations, but the live product loop is still not fully closed:
@@ -19,7 +36,8 @@ intent
 -> publish/pull
 ```
 
-The next tasks should prioritize that loop over new standalone process artifacts.
+ONT-030 addresses the `generated SDK/IR` segment by making generated TypeScript artifacts
+compiler-checked rather than only regression-hash checked.
 
 ## Current State
 
@@ -34,7 +52,6 @@ The next tasks should prioritize that loop over new standalone process artifacts
 
 | Task ID | Title | Phase | Priority | Why Next |
 |---------|-------|-------|----------|----------|
-| ONT-030 | TypeScript SDK Smoke Gate | SpecGraph Value Loop Closure | P0 | Protect generated SDK output before richer emitters are added |
 | ONT-031 | SpecGraph Ontology Integration Process PRD | SpecGraph Value Loop Closure | P0 | Prevent Ontology work from drifting away from the SpecGraph consumer contract |
 | ONT-032 | Class Field Semantics And Rich SDK Generation | SpecGraph Value Loop Closure | P0 | Make generated SDK materially useful after TS smoke exists |
 | ONT-033 | File And Git Registry Transport | SpecGraph Value Loop Closure | P1 | Dogfood publish/pull/compat-check without waiting for an HTTP registry service |
