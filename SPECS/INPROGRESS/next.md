@@ -1,33 +1,55 @@
-# Next Tasks: Agent Model Selection Follow-Up
+# Next Tasks: SpecGraph Value Loop Closure
 
-**Status:** ONT-029 archived with PASS
+**Status:** ONT-030 is the next recommended task.
 
 ## Description
 
-ONT-029 documents that ontology-authoring model choice should be role-specific and
-validated by artifacts. Strongest/most expensive models are useful for high-risk framing,
-critique, and governance-facing review, but routine structured extraction and YAML assembly
-can use cheaper/faster models when validation remains stable.
+The current Ontology repository has strong compiler, governance, registry-client, and
+authoring-protocol foundations, but the live product loop is still not fully closed:
+
+```text
+intent
+-> induction artifacts
+-> DomainOntologyPackage
+-> ontologyc validation/compile
+-> generated SDK/IR
+-> SpecGraph semantic refs
+-> lockfile/gaps
+-> governance decision
+-> publish/pull
+```
+
+The next tasks should prioritize that loop over new standalone process artifacts.
 
 ## Current State
 
-- README points authors to role-specific model selection.
-- Authoring guide includes `Model Selection Guidance`.
-- Induction protocol includes `Model Selection Boundary`.
-- Rubric includes `Model Efficiency Boundary`.
+- Generated TypeScript artifacts are regression-locked but not compiled with `tsc`.
+- `SPECS/ontology/typescript-smoke/` exists, but it is not wired into local or CI quality gates.
+- SpecGraph proposal 0060 exists in the sibling SpecGraph repository, but there is no
+  executable consumer slice yet.
+- Prompt-contract intermediate artifacts are documented, but most are not machine-validated.
+- Registry HTTP commands exist; a filesystem/git registry transport does not yet exist.
 
-## Potential Next Task
+## Recommended Sequence
 
-| Task ID | Title | Phase | Priority | Source |
-|---------|-------|-------|----------|--------|
-| TBD | Model Selection Benchmark Harness | Quality | P3 | Optional follow-up if model routing needs measured regression evidence |
+| Task ID | Title | Phase | Priority | Why Next |
+|---------|-------|-------|----------|----------|
+| ONT-030 | TypeScript SDK Smoke Gate | SpecGraph Value Loop Closure | P0 | Protect generated SDK output before richer emitters are added |
+| ONT-031 | SpecGraph Ontology Integration Process PRD | SpecGraph Value Loop Closure | P0 | Prevent Ontology work from drifting away from the SpecGraph consumer contract |
+| ONT-032 | Class Field Semantics And Rich SDK Generation | SpecGraph Value Loop Closure | P0 | Make generated SDK materially useful after TS smoke exists |
+| ONT-033 | File And Git Registry Transport | SpecGraph Value Loop Closure | P1 | Dogfood publish/pull/compat-check without waiting for an HTTP registry service |
+| ONT-034 | Induction Artifact Schemas And Draft Validation | SpecGraph Value Loop Closure | P1 | Make staged agent outputs deterministic and CI-checkable |
+| ONT-035 | SpecGraph Proposal 0060 Minimal Consumer Slice | SpecGraph Value Loop Closure | P1 | Close the first consumer-side lock/ref/gap path |
 
 ## Sequencing Notes
 
-- Keep any future benchmark vendor/model-name neutral in repository docs.
-- Compare outputs against golden intent expectations and rubric outcomes, not subjective
-  preference alone.
-- Treat benchmark evidence as routing guidance, not as trusted ontology approval.
+- Run ONT-030 before ONT-032 so TypeScript emitter changes have a compiler-backed safety net.
+- Keep ONT-031 small and process-focused; it should define the bridge contract before richer
+  Ontology features grow around assumptions.
+- Treat ONT-035 as cross-repo coordination: Ontology tracks the dependency, but the executable
+  consumer slice belongs in the sibling SpecGraph repository.
+- Keep any model-selection benchmark work P3 until the core value loop has at least one
+  end-to-end consumer path.
 
 ## Recently Implemented
 
