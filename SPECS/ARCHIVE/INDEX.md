@@ -42,6 +42,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-11 | ONT-031 | Archived REVIEW_ONT-031 report |
 | 2026-06-11 | ONT-031 | Archived SpecGraph_Ontology_Integration_Process_PRD (PASS) |
 | 2026-06-11 | ONT-030 | Archived REVIEW_ONT-030 report |
 | 2026-06-11 | ONT-030 | Archived TypeScript_SDK_Smoke_Gate (PASS) |
