@@ -1,11 +1,12 @@
 # Tasks Archive
 
-**Last Updated:** 2026-06-04
+**Last Updated:** 2026-06-11
 
 ## Archived Tasks
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-030 | [ONT-030_TypeScript_SDK_Smoke_Gate/](ONT-030_TypeScript_SDK_Smoke_Gate/) | 2026-06-11 | PASS |
 | ONT-029 | [ONT-029_Agent_Model_Selection_Guidance/](ONT-029_Agent_Model_Selection_Guidance/) | 2026-06-04 | PASS |
 | ONT-028 | [ONT-028_Node24_Cache_Action_Migration/](ONT-028_Node24_Cache_Action_Migration/) | 2026-06-03 | PASS |
 | ONT-027 | [ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/](ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/) | 2026-06-03 | PASS |
@@ -40,6 +41,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-11 | ONT-030 | Archived TypeScript_SDK_Smoke_Gate (PASS) |
 | 2026-06-04 | ONT-029 | Archived REVIEW_ONT-029 report |
 | 2026-06-04 | ONT-029 | Archived Agent_Model_Selection_Guidance (PASS) |
 | 2026-06-03 | ONT-028 | Archived REVIEW_ONT-028 report |
