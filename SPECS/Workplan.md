@@ -525,6 +525,120 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+## Phase 10: SpecGraph Value Loop Closure
+
+> Tasks in this phase are derived from the post-ONT-029 repository review and the
+> SpecGraph integration follow-up discussion. The phase priority is to close the
+> live loop: intent -> induction artifacts -> `DomainOntologyPackage` ->
+> `ontologyc` validation/compile -> generated SDK/IR -> SpecGraph semantic refs ->
+> lockfile/gaps -> governance -> publish/pull.
+
+#### ONT-030: TypeScript SDK Smoke Gate
+- **Description:** Add a local and CI quality gate that compiles the generated examcalc
+  TypeScript SDK with `tsc --noEmit` and exercises the generated Zod schemas through a
+  minimal smoke fixture.
+- **Priority:** P0
+- **Dependencies:** ONT-017, ONT-028
+- **Parallelizable:** no
+- **Status:** Not Started
+- **Origin:** Post-ONT-029 review finding that generated TypeScript artifacts are snapshot-locked
+  but not checked by the TypeScript compiler.
+- **Acceptance Criteria:**
+  - `SPECS/ontology/typescript-smoke/` has a minimal package setup that imports the committed
+    generated examcalc SDK.
+  - A local script or documented command runs `tsc --noEmit` against the generated SDK and smoke fixture.
+  - The smoke fixture parses at least one class schema and calls `toJsonSchemaFor`.
+  - CI runs the TypeScript smoke gate before any class-field emitter expansion.
+  - Swift quality gates remain unchanged and green.
+
+#### ONT-031: SpecGraph Ontology Integration Process PRD
+- **Description:** Define the minimal implementation process for SpecGraph consuming Ontology
+  artifacts without redefining ontology semantics locally.
+- **Priority:** P0
+- **Dependencies:** ONT-005, ONT-019, ONT-026, ONT-030
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **Origin:** SpecGraph integration discussion and SpecGraph proposal 0060 external ontology
+  import plane.
+- **Acceptance Criteria:**
+  - PRD describes the bridge workflow: ontology import -> lockfile -> semantic refs ->
+    `ConceptRef`/`OntologyGap` outputs -> delta request -> governance evidence -> publish/pull.
+  - PRD identifies which artifacts are owned by Ontology and which are owned by SpecGraph.
+  - PRD includes one concrete examcalc-style requirement/binding example.
+  - PRD defines the minimum acceptance criteria for a future SpecGraph-side smoke slice.
+  - PRD explicitly prevents SpecGraph from copying or redefining `DomainOntologyPackage` semantics.
+
+#### ONT-032: Class Field Semantics And Rich SDK Generation
+- **Description:** Add first-class class field semantics to `DomainOntologyPackage` and project
+  them into normalized IR, generated TypeScript interfaces, generated Zod schemas, JSON Schema,
+  and compatibility reports.
+- **Priority:** P0
+- **Dependencies:** ONT-030, ONT-031
+- **Parallelizable:** no
+- **Status:** Not Started
+- **Origin:** Post-ONT-029 review finding that the generated SDK currently carries semantic refs
+  and protocol-required fields but no first-class per-class data fields.
+- **Acceptance Criteria:**
+  - `domain-ontology-package.schema.yaml` accepts a constrained `fields` section for classes.
+  - Compiler validation rejects unsupported field types, invalid field names, and invalid required/optional declarations.
+  - Normalized IR includes deterministic field metadata.
+  - `types.ts` and `schemas.ts` project fields into generated TypeScript/Zod outputs.
+  - Compatibility diff classifies field additions/removals/type changes according to documented semver rules.
+  - The TypeScript smoke gate from ONT-030 covers field-bearing generated output.
+
+#### ONT-033: File And Git Registry Transport
+- **Description:** Add a filesystem/git-backed registry transport for `publish`, `pull`, and
+  `compat-check` so the registry loop can be dogfooded without an HTTP service.
+- **Priority:** P1
+- **Dependencies:** ONT-018, ONT-026, ONT-031
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **Origin:** Post-ONT-029 review recommendation to close the registry loop before building a
+  reference HTTP registry server.
+- **Acceptance Criteria:**
+  - `ontologyc publish` can materialize candidate/trusted packages into a local registry directory.
+  - `ontologyc pull` can resolve packages from the local registry directory using the same package reference model.
+  - `ontologyc compat-check` works against the local registry transport.
+  - Trusted publication keeps the existing governance decision gate.
+  - Documentation explains how to use a git repository as the reviewable registry backing store.
+
+#### ONT-034: Induction Artifact Schemas And Draft Validation
+- **Description:** Add machine-readable schemas and validation for the core intermediate
+  ontology-induction artifacts produced before final `DomainOntologyPackage` YAML assembly.
+- **Priority:** P1
+- **Dependencies:** ONT-019, ONT-021, ONT-022, ONT-031
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **Origin:** Post-ONT-029 review finding that prompt-contract outputs are described in Markdown
+  but not validated as deterministic artifacts.
+- **Acceptance Criteria:**
+  - Schemas exist for the first minimal artifact set: `IntentClassification`,
+    `ProductOntologyDraft`, `DraftCritique`, and `DomainOntologyPackageDraft`.
+  - Valid and invalid fixtures cover required fields, uncertainty/provenance fields, and unsupported schema drift.
+  - `ontologyc validate-draft` validates the artifact set without approving ontology truth.
+  - The validation report is deterministic and suitable for CI.
+  - Authoring docs explain that final trust still comes from compiler validation and governance.
+
+#### ONT-035: SpecGraph Proposal 0060 Minimal Consumer Slice
+- **Description:** Coordinate the first SpecGraph-side implementation slice for proposal 0060:
+  one requirement or binding imports an Ontology package through a lockfile, resolves known
+  refs, and reports a gap for one unresolved ref.
+- **Priority:** P1
+- **Dependencies:** ONT-031, ONT-033
+- **Parallelizable:** no
+- **Status:** Not Started
+- **Origin:** SpecGraph proposal `0060_external_ontology_import_plane.md` and the Ontology
+  value-loop closure review.
+- **Acceptance Criteria:**
+  - SpecGraph-side work consumes Ontology-generated IR or registry materialization instead of
+    duplicating Ontology package semantics.
+  - A minimal requirement/binding fixture resolves at least one known examcalc concept.
+  - A missing concept produces an explicit gap artifact instead of a local pseudo-concept.
+  - The slice records the imported ontology version and digest/lock metadata.
+  - Ontology docs link to the SpecGraph-side consumer slice once it exists.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
