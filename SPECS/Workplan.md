@@ -544,12 +544,13 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **PRD:** `SPECS/ARCHIVE/ONT-030_TypeScript_SDK_Smoke_Gate/ONT-030_TypeScript_SDK_Smoke_Gate.md`
 - **Origin:** Post-ONT-029 review finding that generated TypeScript artifacts are snapshot-locked
   but not checked by the TypeScript compiler.
-- **Implementation Note:** Added a lockfile-backed TypeScript smoke package, local helper,
+- **Implementation Note:** Added a lockfile-backed TypeScript smoke package at
+  `SPECS/ontology`, local helper,
   CI workflow step, Node24 action guard coverage, and documentation. The gate runs
   `tsc --noEmit` plus a runtime Zod smoke fixture against the generated examcalc SDK.
 - **Acceptance Criteria:**
-  - Complete: `SPECS/ontology/typescript-smoke/` has a minimal package setup that imports the committed
-    generated examcalc SDK.
+  - Complete: `SPECS/ontology` has a minimal package setup and `typescript-smoke/`
+    has a fixture that imports the committed generated examcalc SDK.
   - Complete: A local script or documented command runs `tsc --noEmit` against the generated SDK and smoke fixture.
   - Complete: The smoke fixture parses at least one class schema and calls `toJsonSchemaFor`.
   - Complete: CI runs the TypeScript smoke gate before any class-field emitter expansion.

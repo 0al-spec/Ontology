@@ -1,4 +1,4 @@
 .build/
 .swiftpm/
 docs/
-SPECS/ontology/typescript-smoke/node_modules/
+SPECS/ontology/node_modules/

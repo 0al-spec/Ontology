@@ -35,8 +35,8 @@ Add a local and CI TypeScript smoke gate that:
 
 ### In Scope
 
-- Add a minimal `package.json`, `package-lock.json`, and `tsconfig.json` under
-  `SPECS/ontology/typescript-smoke/`.
+- Add a minimal `package.json` and `package-lock.json` under `SPECS/ontology`, plus
+  `tsconfig.json` under `SPECS/ontology/typescript-smoke/`.
 - Keep the smoke fixture focused on generated schema import, `ExamSchema.parse`, and
   `toJsonSchemaFor(ExamSchema)`.
 - Add a repo-level helper script for running the TypeScript smoke gate locally.
@@ -55,9 +55,9 @@ Add a local and CI TypeScript smoke gate that:
 
 | ID | Deliverable | Path | Acceptance Criteria |
 |----|-------------|------|---------------------|
-| D1 | TypeScript smoke package | `SPECS/ontology/typescript-smoke/package.json` | Defines deterministic `typecheck` and smoke commands |
+| D1 | TypeScript smoke package | `SPECS/ontology/package.json` | Defines deterministic `typecheck` and smoke commands |
 | D2 | TypeScript compiler config | `SPECS/ontology/typescript-smoke/tsconfig.json` | Includes smoke fixture and generated examcalc SDK |
-| D3 | Dependency lockfile | `SPECS/ontology/typescript-smoke/package-lock.json` | Pins `typescript` and `zod` dependency resolution |
+| D3 | Dependency lockfile | `SPECS/ontology/package-lock.json` | Pins `typescript` and `zod` dependency resolution |
 | D4 | Local helper | `tools/typescript-smoke.sh` | Runs install/check steps from repo root |
 | D5 | CI wiring | `.github/workflows/swift-quality.yml` or dedicated workflow | Runs the TypeScript smoke gate on PRs and main pushes |
 | D6 | Documentation | `README.md` or `SPECS/ontology/ontologyc.md` | Documents the local command |
@@ -71,14 +71,15 @@ Add a local and CI TypeScript smoke gate that:
 | FR-003 | The smoke fixture must call `toJsonSchemaFor`. | `npm run smoke` or equivalent |
 | FR-004 | CI must fail if generated TypeScript no longer type-checks. | PR workflow |
 | FR-005 | Swift quality behavior must remain unchanged except for adding the TypeScript smoke gate. | `bash tools/swift-quality.sh` |
-| FR-006 | The gate must not require a global Node package install. | `npm ci` under the smoke package |
+| FR-006 | The gate must not require a global Node package install. | `npm ci` under `SPECS/ontology` |
 
 ## Implementation Plan
 
-1. Add `package.json` and `tsconfig.json` under `SPECS/ontology/typescript-smoke/`.
+1. Add `package.json` under `SPECS/ontology` and `tsconfig.json` under
+   `SPECS/ontology/typescript-smoke/`.
 2. Generate and commit `package-lock.json`.
 3. Add `tools/typescript-smoke.sh` that runs `npm ci`, `npm run typecheck`, and the runtime
-   smoke command from the smoke package directory.
+   smoke command from `SPECS/ontology`.
 4. Add a GitHub Actions step after Swift quality checks to run the helper.
 5. Document the local command.
 6. Run local validation:

@@ -9,7 +9,7 @@ without relaxing quality gates.
 |-------|----------|------|---------|
 | Quality tools | Swift Quality | `~/.ontology-ci/tools` | Reuse `swiftformat` and `swiftlint` binaries. |
 | Quality SwiftPM build | Swift Quality | `.build/ci-quality` | Reuse the stable scratch path used by `tools/swift-quality.sh` in CI. |
-| TypeScript smoke npm | Swift Quality | npm cache via `actions/setup-node` | Reuse dependencies for `SPECS/ontology/typescript-smoke`. |
+| TypeScript smoke npm | Swift Quality | npm cache via `actions/setup-node` | Reuse dependencies for the `SPECS/ontology` smoke package. |
 | DocC SwiftPM dependencies | Deploy DocC Documentation | `.build/repositories`, `.build/checkouts`, `.build/artifacts`, `.build/plugins` | Reuse package and plugin artifacts used by DocC generation. |
 
 ## GitHub Actions Runtime Boundary
@@ -38,7 +38,7 @@ against known older runtime generations.
 - workflow files for DocC cache keys.
 
 The TypeScript smoke cache is managed by `actions/setup-node` from
-`SPECS/ontology/typescript-smoke/package-lock.json`.
+`SPECS/ontology/package-lock.json`.
 
 These inputs intentionally invalidate caches when package resolution, quality rules,
 tool installation logic, workflow wiring, or Swift runtime version changes.

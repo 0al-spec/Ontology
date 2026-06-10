@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "smoke": "tsx examcalc-schemas.ts"
+    "typecheck": "tsc --project typescript-smoke/tsconfig.json --noEmit",
+    "smoke": "tsx typescript-smoke/examcalc-schemas.ts"
   },
   "devDependencies": {
     "tsx": "4.22.4",

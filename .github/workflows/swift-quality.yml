@@ -53,7 +53,7 @@ jobs:
         with:
           node-version: "24"
           cache: npm
-          cache-dependency-path: SPECS/ontology/typescript-smoke/package-lock.json
+          cache-dependency-path: SPECS/ontology/package-lock.json
 
       - name: Run TypeScript SDK smoke gate
         run: bash ./tools/typescript-smoke.sh

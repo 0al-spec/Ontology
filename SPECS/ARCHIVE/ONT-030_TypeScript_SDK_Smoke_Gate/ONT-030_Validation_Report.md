@@ -52,9 +52,9 @@ violations, the Swift build completed, and 79 Swift tests passed.
 ## Implementation Notes
 
 - The first local `tsc --noEmit` run failed because generated TypeScript files live outside
-  the smoke package and could not resolve `zod` from `typescript-smoke/node_modules`.
-- The fix is contained in `SPECS/ontology/typescript-smoke/tsconfig.json` using `paths`
-  mappings for `zod` and `zod/*`.
+  the fixture directory and could not resolve `zod` from a sibling `typescript-smoke/node_modules`.
+- The fix is to keep the lockfile-backed smoke package at `SPECS/ontology`, so generated
+  SDK imports resolve `zod` through normal Node ancestor lookup.
 - The smoke package uses a lockfile-backed `npm ci` flow and does not require global Node
   packages.
 

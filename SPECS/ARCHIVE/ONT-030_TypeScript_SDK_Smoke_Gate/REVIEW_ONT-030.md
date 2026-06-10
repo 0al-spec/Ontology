@@ -21,10 +21,10 @@ None.
 
 - The change correctly keeps TypeScript validation as a smoke gate for generated artifacts,
   not as a broader npm packaging or consumer-runtime contract.
-- The nested smoke package avoids turning the repository into a JavaScript monorepo while
-  still giving generated TypeScript a target-compiler check.
-- The `tsconfig.json` `paths` mapping is justified because generated SDK files live outside
-  the smoke package but import the package-local `zod` dependency.
+- The smoke package stays scoped to `SPECS/ontology`, avoiding a repository-wide JavaScript
+  workspace while letting generated SDK files resolve `zod` through ordinary Node ancestor
+  lookup.
+- The `tsconfig.json` remains fixture-focused and does not require a custom `paths` mapping.
 - Adding `actions/setup-node@v6` is consistent with the repository's Node24 action posture,
   and the Node24 guard now covers that action family.
 
