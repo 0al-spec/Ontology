@@ -10,6 +10,7 @@ minimum_major_for_action() {
     case "$1" in
         actions/checkout) printf '6' ;;
         actions/cache) printf '5' ;;
+        actions/setup-node) printf '6' ;;
         actions/upload-pages-artifact) printf '5' ;;
         actions/deploy-pages) printf '5' ;;
         *) return 1 ;;

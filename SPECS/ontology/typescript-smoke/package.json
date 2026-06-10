@@ -1,0 +1,15 @@
+{
+  "name": "@0al/ontology-typescript-smoke",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "smoke": "tsx examcalc-schemas.ts"
+  },
+  "devDependencies": {
+    "tsx": "4.22.4",
+    "typescript": "6.0.3",
+    "zod": "4.4.3"
+  }
+}
