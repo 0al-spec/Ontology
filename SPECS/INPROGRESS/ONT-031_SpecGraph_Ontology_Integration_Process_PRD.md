@@ -1,9 +1,9 @@
 # ONT-031: SpecGraph Ontology Integration Process PRD
 
-**Status:** PRD Draft  
-**Priority:** P0  
-**Phase:** SpecGraph Value Loop Closure  
-**Reasoning Effort:** medium  
+**Status:** PRD Ready
+**Priority:** P0
+**Phase:** SpecGraph Value Loop Closure
+**Reasoning Effort:** medium
 **Dependencies:** ONT-005, ONT-019, ONT-026, ONT-030
 
 ## TL;DR
@@ -216,12 +216,12 @@ Minimum acceptance criteria:
 
 ## Acceptance Criteria
 
-- [ ] PRD describes the bridge workflow from ontology import to lockfile, semantic refs,
+- [x] PRD describes the bridge workflow from ontology import to lockfile, semantic refs,
   gaps, delta request, governance evidence, and publish/pull.
-- [ ] PRD identifies Ontology-owned and SpecGraph-owned artifacts.
-- [ ] PRD includes one examcalc-style requirement/binding example and one gap example.
-- [ ] PRD defines minimum acceptance criteria for a future SpecGraph-side smoke slice.
-- [ ] PRD explicitly prevents SpecGraph from copying or redefining `DomainOntologyPackage`
+- [x] PRD identifies Ontology-owned and SpecGraph-owned artifacts.
+- [x] PRD includes one examcalc-style requirement/binding example and one gap example.
+- [x] PRD defines minimum acceptance criteria for a future SpecGraph-side smoke slice.
+- [x] PRD explicitly prevents SpecGraph from copying or redefining `DomainOntologyPackage`
   semantics.
 
 ## Validation Plan
