@@ -41,6 +41,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-11 | ONT-030 | Archived REVIEW_ONT-030 report |
 | 2026-06-11 | ONT-030 | Archived TypeScript_SDK_Smoke_Gate (PASS) |
 | 2026-06-04 | ONT-029 | Archived REVIEW_ONT-029 report |
 | 2026-06-04 | ONT-029 | Archived Agent_Model_Selection_Guidance (PASS) |
