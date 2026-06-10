@@ -581,7 +581,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-030, ONT-031
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **Origin:** Post-ONT-029 review finding that the generated SDK currently carries semantic refs
   and protocol-required fields but no first-class per-class data fields.
 - **Acceptance Criteria:**

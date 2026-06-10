@@ -1,6 +1,6 @@
 # Current Task: ONT-032 Class Field Semantics And Rich SDK Generation
 
-**Status:** ONT-031 archived with PASS; ONT-032 is the next recommended task.
+**Status:** ONT-032 selected and in progress.
 
 ## Description
 
