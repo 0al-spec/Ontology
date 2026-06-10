@@ -19,6 +19,15 @@ spec:
       implements:
         - sg:Auditable
       description: University exam that requires a controlled calculator policy.
+      fields:
+        title:
+          type: string
+          required: true
+          description: Human-readable exam title.
+        durationMinutes:
+          type: integer
+          required: false
+          description: Planned exam duration in minutes.
 
     ExamSession:
       extends: sg:DomainEntity

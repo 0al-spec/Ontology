@@ -78,4 +78,47 @@ final class TypeScriptEmitterTests: XCTestCase {
         )
         XCTAssertTrue(schemas.contains("return z.toJSONSchema(schema);"), schemas)
     }
+
+    func testEmitTypesProjectsClassFields() {
+        let ir: [String: Any] = [
+            "protocols": [] as [Any],
+            "classes": [
+                [
+                    "id": "Exam",
+                    "fqid": "examcalc:Exam",
+                    "fields": [
+                        ["id": "durationMinutes", "type": "integer", "required": false],
+                        ["id": "title", "type": "string", "required": true],
+                        ["id": "proctored", "type": "boolean", "required": false]
+                    ]
+                ] as [String: Any]
+            ]
+        ]
+
+        let types = OntologyCompiler().emitTypes(ir)
+
+        XCTAssertTrue(types.contains("readonly durationMinutes?: number;"), types)
+        XCTAssertTrue(types.contains("readonly title: string;"), types)
+        XCTAssertTrue(types.contains("readonly proctored?: boolean;"), types)
+    }
+
+    func testEmitSchemasProjectsClassFields() {
+        let ir: [String: Any] = [
+            "classes": [
+                [
+                    "id": "Exam",
+                    "fqid": "examcalc:Exam",
+                    "fields": [
+                        ["id": "durationMinutes", "type": "integer", "required": false],
+                        ["id": "title", "type": "string", "required": true]
+                    ]
+                ] as [String: Any]
+            ]
+        ]
+
+        let schemas = OntologyCompiler().emitSchemas(ir)
+
+        XCTAssertTrue(schemas.contains("durationMinutes: z.number().int().optional(),"), schemas)
+        XCTAssertTrue(schemas.contains("title: z.string(),"), schemas)
+    }
 }

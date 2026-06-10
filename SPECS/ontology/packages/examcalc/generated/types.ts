@@ -22,6 +22,8 @@ export interface EndExamMode {
 export interface Exam {
   readonly $type: "examcalc:Exam";
   readonly id?: string;
+  readonly durationMinutes?: number;
+  readonly title: string;
 }
 
 export interface ExamModeSession {

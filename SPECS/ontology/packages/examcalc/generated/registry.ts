@@ -9,7 +9,7 @@ import { protocolDefinitions } from "./protocols";
 export const ontologyMetadata = {
   "id" : "edu.university.examcalc",
   "namespace" : "examcalc",
-  "sourceDigest" : "sha256:57fcb796e6f8d3cd5e163df36879dbbdfac7471a134cddf46160253dd4b68ff1",
+  "sourceDigest" : "sha256:7cdf061c1c845e0d0d801c7d935b6d4b765db1317ec595910da2cb910eca9e2f",
   "version" : "0.1.0"
 } as const;
 

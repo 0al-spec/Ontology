@@ -54,6 +54,15 @@ extension OntologyCompiler {
             }
         }
 
+        let fieldChanges = compatibilityFieldChanges(
+            fromClasses: fromClasses,
+            toClasses: toClasses,
+            fromNamespace: fromNamespace,
+            toNamespace: toNamespace,
+            decision: compatibilityDecision
+        )
+        breakingChanges.append(contentsOf: fieldChanges.breakingChanges)
+
         return [
             "apiVersion": "ontology.specgraph.io/v1alpha1",
             "kind": "OntologyCompatibilityReport",
@@ -67,12 +76,201 @@ extension OntologyCompiler {
             ],
             "changes": [
                 "addedClasses": addedClasses,
+                "addedFields": fieldChanges.addedFields,
                 "addedRelations": addedRelations,
+                "changedFields": fieldChanges.changedFields,
                 "removedClasses": removedClasses,
+                "removedFields": fieldChanges.removedFields,
                 "removedRelations": removedRelations,
                 "breakingChanges": breakingChanges
             ]
         ]
+    }
+
+    func compatibilityFieldChanges(
+        fromClasses: [String: JSONObject],
+        toClasses: [String: JSONObject],
+        fromNamespace: String,
+        toNamespace: String,
+        decision: CompatibilityChangeDecisionSpec
+    ) -> CompatibilityFieldChanges {
+        var changes = CompatibilityFieldChanges()
+        for classId in Set(fromClasses.keys).intersection(Set(toClasses.keys)).sorted() {
+            guard let beforeClass = fromClasses[classId], let afterClass = toClasses[classId] else { continue }
+            changes.append(classFieldChanges(
+                classId: classId,
+                beforeClass: beforeClass,
+                afterClass: afterClass,
+                fromNamespace: fromNamespace,
+                toNamespace: toNamespace,
+                decision: decision
+            ))
+        }
+        return changes
+    }
+
+    func classFieldChanges(
+        classId: String,
+        beforeClass: JSONObject,
+        afterClass: JSONObject,
+        fromNamespace: String,
+        toNamespace: String,
+        decision: CompatibilityChangeDecisionSpec
+    ) -> CompatibilityFieldChanges {
+        let beforeFields = mapById(compatClassFields(beforeClass))
+        let afterFields = mapById(compatClassFields(afterClass))
+        var changes = CompatibilityFieldChanges()
+
+        changes.append(addedClassFieldChanges(
+            classId: classId,
+            fieldIds: sortedDifference(Set(afterFields.keys), Set(beforeFields.keys)),
+            fields: afterFields,
+            fromNamespace: fromNamespace,
+            toNamespace: toNamespace,
+            decision: decision
+        ))
+        changes.append(removedClassFieldChanges(
+            classId: classId,
+            fieldIds: sortedDifference(Set(beforeFields.keys), Set(afterFields.keys)),
+            fromNamespace: fromNamespace,
+            decision: decision
+        ))
+
+        for fieldId in Set(beforeFields.keys).intersection(Set(afterFields.keys)).sorted() {
+            guard let beforeField = beforeFields[fieldId], let afterField = afterFields[fieldId] else { continue }
+            changes.append(changedClassFieldChanges(
+                classId: classId,
+                fieldId: fieldId,
+                beforeField: beforeField,
+                afterField: afterField,
+                fromNamespace: fromNamespace,
+                decision: decision
+            ))
+        }
+        return changes
+    }
+
+    func addedClassFieldChanges(
+        classId: String,
+        fieldIds: [String],
+        fields: [String: JSONObject],
+        fromNamespace: String,
+        toNamespace: String,
+        decision: CompatibilityChangeDecisionSpec
+    ) -> CompatibilityFieldChanges {
+        var changes = CompatibilityFieldChanges()
+        for fieldId in fieldIds {
+            let symbolId = "\(classId).\(fieldId)"
+            changes.addedFields.append("\(toNamespace):\(symbolId)")
+            if (fields[fieldId]?["required"] as? Bool) == true,
+               let message = breakingMessage(decision.decide(CompatibilityChangeContext(
+                   kind: .classRequiredFieldAdded,
+                   namespace: fromNamespace,
+                   symbolId: symbolId
+               ))) {
+                changes.breakingChanges.append(message)
+            }
+        }
+        return changes
+    }
+
+    func removedClassFieldChanges(
+        classId: String,
+        fieldIds: [String],
+        fromNamespace: String,
+        decision: CompatibilityChangeDecisionSpec
+    ) -> CompatibilityFieldChanges {
+        var changes = CompatibilityFieldChanges()
+        for fieldId in fieldIds {
+            let symbolId = "\(classId).\(fieldId)"
+            changes.removedFields.append("\(fromNamespace):\(symbolId)")
+            if let message = breakingMessage(decision.decide(CompatibilityChangeContext(
+                kind: .classFieldRemoved,
+                namespace: fromNamespace,
+                symbolId: symbolId
+            ))) {
+                changes.breakingChanges.append(message)
+            }
+        }
+        return changes
+    }
+
+    func changedClassFieldChanges(
+        classId: String,
+        fieldId: String,
+        beforeField: JSONObject,
+        afterField: JSONObject,
+        fromNamespace: String,
+        decision: CompatibilityChangeDecisionSpec
+    ) -> CompatibilityFieldChanges {
+        let symbolId = "\(classId).\(fieldId)"
+        var changes = CompatibilityFieldChanges()
+        appendTypeChange(
+            symbolId: symbolId,
+            beforeField: beforeField,
+            afterField: afterField,
+            fromNamespace: fromNamespace,
+            decision: decision,
+            changes: &changes
+        )
+        appendRequirednessChange(
+            symbolId: symbolId,
+            beforeField: beforeField,
+            afterField: afterField,
+            fromNamespace: fromNamespace,
+            decision: decision,
+            changes: &changes
+        )
+        return changes
+    }
+
+    func appendTypeChange(
+        symbolId: String,
+        beforeField: JSONObject,
+        afterField: JSONObject,
+        fromNamespace: String,
+        decision: CompatibilityChangeDecisionSpec,
+        changes: inout CompatibilityFieldChanges
+    ) {
+        let beforeType = string(beforeField["type"]) ?? ""
+        let afterType = string(afterField["type"]) ?? ""
+        guard beforeType != afterType else { return }
+        changes.changedFields.append("\(fromNamespace):\(symbolId)")
+        if let message = breakingMessage(decision.decide(CompatibilityChangeContext(
+            kind: .classFieldTypeChanged,
+            namespace: fromNamespace,
+            symbolId: symbolId,
+            beforeComparable: beforeType,
+            afterComparable: afterType
+        ))) {
+            changes.breakingChanges.append(message)
+        }
+    }
+
+    func appendRequirednessChange(
+        symbolId: String,
+        beforeField: JSONObject,
+        afterField: JSONObject,
+        fromNamespace: String,
+        decision: CompatibilityChangeDecisionSpec,
+        changes: inout CompatibilityFieldChanges
+    ) {
+        let beforeRequired = ((beforeField["required"] as? Bool) ?? false).description
+        let afterRequired = ((afterField["required"] as? Bool) ?? false).description
+        guard beforeRequired != afterRequired else { return }
+        let fieldRef = "\(fromNamespace):\(symbolId)"
+        if !changes.changedFields.contains(fieldRef) {
+            changes.changedFields.append(fieldRef)
+        }
+        if let message = breakingMessage(decision.decide(CompatibilityChangeContext(
+            kind: .classFieldRequirednessChanged,
+            namespace: fromNamespace,
+            symbolId: symbolId,
+            beforeComparable: beforeRequired,
+            afterComparable: afterRequired
+        ))) {
+            changes.breakingChanges.append(message)
+        }
     }
 
     func mapById(_ items: [JSONObject]) -> [String: JSONObject] {
@@ -85,6 +283,10 @@ extension OntologyCompiler {
 
     func sortedDifference(_ lhs: Set<String>, _ rhs: Set<String>) -> [String] {
         Array(lhs.subtracting(rhs)).sorted()
+    }
+
+    func compatClassFields(_ item: JSONObject) -> [JSONObject] {
+        (item["fields"] as? [Any] ?? []).compactMap { $0 as? JSONObject }
     }
 
     func breakingMessage(_ decision: CompatibilityChangeDecision?) -> String? {
@@ -114,5 +316,19 @@ extension OntologyCompiler {
             "alias": "\(namespace):\(id)",
             "uri": string(item["uri"]) ?? "ontology://\(ontologyId)/\(version)/\(id)"
         ]
+    }
+}
+
+struct CompatibilityFieldChanges {
+    var addedFields = [String]()
+    var removedFields = [String]()
+    var changedFields = [String]()
+    var breakingChanges = [String]()
+
+    mutating func append(_ changes: CompatibilityFieldChanges) {
+        addedFields.append(contentsOf: changes.addedFields)
+        removedFields.append(contentsOf: changes.removedFields)
+        changedFields.append(contentsOf: changes.changedFields)
+        breakingChanges.append(contentsOf: changes.breakingChanges)
     }
 }

@@ -26,6 +26,17 @@ final class MetadataSpecsTests: XCTestCase {
         XCTAssertFalse(OntologyConceptRefPatternSpec().isSatisfiedBy(OntologyConceptReferenceLiteral(rawValue: "bad-ref")))
     }
 
+    func testFieldNameAndTypeSpecs() {
+        XCTAssertTrue(OntologyFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: "durationMinutes")))
+        XCTAssertTrue(OntologyFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: "duration_minutes")))
+        XCTAssertFalse(OntologyFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: "DurationMinutes")))
+        XCTAssertFalse(OntologyFieldNameSpec().isSatisfiedBy(OntologyFieldName(rawValue: "duration-minutes")))
+
+        XCTAssertTrue(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "string")))
+        XCTAssertTrue(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "integer")))
+        XCTAssertFalse(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "date-time")))
+    }
+
     func testPackageShapeSpecs() {
         XCTAssertTrue(ExpectedOntologyApiVersionSpec().isSatisfiedBy(OntologyApiVersion(rawValue: "ontology.specgraph.io/v1alpha1")))
         XCTAssertFalse(ExpectedOntologyApiVersionSpec().isSatisfiedBy(OntologyApiVersion(rawValue: "v1")))

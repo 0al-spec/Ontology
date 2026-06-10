@@ -6,6 +6,10 @@ public enum CompatibilityChangeKind: Equatable {
     case removedRelation
     case relationDomainChanged
     case relationRangeChanged
+    case classRequiredFieldAdded
+    case classFieldRemoved
+    case classFieldTypeChanged
+    case classFieldRequirednessChanged
 }
 
 /// Inputs required to classify one ontology symbol change against a previous package version.
@@ -58,6 +62,21 @@ public struct CompatibilityChangeDecisionSpec: DecisionSpec {
             return context.beforeComparable == context.afterComparable
                 ? .compatible
                 : .breaking("change relation range \(context.namespace):\(context.symbolId)")
+        case .classRequiredFieldAdded:
+            return .breaking("add required field \(context.namespace):\(context.symbolId)")
+        case .classFieldRemoved:
+            return .breaking("remove field \(context.namespace):\(context.symbolId)")
+        case .classFieldTypeChanged:
+            return context.beforeComparable == context.afterComparable
+                ? .compatible
+                : .breaking("change field type \(context.namespace):\(context.symbolId)")
+        case .classFieldRequirednessChanged:
+            if context.beforeComparable == context.afterComparable {
+                return .compatible
+            }
+            return context.beforeComparable == "false" && context.afterComparable == "true"
+                ? .breaking("make field required \(context.namespace):\(context.symbolId)")
+                : .compatible
         }
     }
 }

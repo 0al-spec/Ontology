@@ -39,4 +39,47 @@ final class CompatibilityDecisionSpecsTests: XCTestCase {
             .compatible
         )
     }
+
+    func testClassFieldChangeDecisions() {
+        let spec = CompatibilityChangeDecisionSpec()
+
+        XCTAssertEqual(
+            spec.decide(CompatibilityChangeContext(kind: .classRequiredFieldAdded, namespace: "examcalc", symbolId: "Exam.title")),
+            .breaking("add required field examcalc:Exam.title")
+        )
+        XCTAssertEqual(
+            spec.decide(CompatibilityChangeContext(kind: .classFieldRemoved, namespace: "examcalc", symbolId: "Exam.title")),
+            .breaking("remove field examcalc:Exam.title")
+        )
+        XCTAssertEqual(
+            spec.decide(CompatibilityChangeContext(
+                kind: .classFieldTypeChanged,
+                namespace: "examcalc",
+                symbolId: "Exam.durationMinutes",
+                beforeComparable: "integer",
+                afterComparable: "number"
+            )),
+            .breaking("change field type examcalc:Exam.durationMinutes")
+        )
+        XCTAssertEqual(
+            spec.decide(CompatibilityChangeContext(
+                kind: .classFieldRequirednessChanged,
+                namespace: "examcalc",
+                symbolId: "Exam.title",
+                beforeComparable: "false",
+                afterComparable: "true"
+            )),
+            .breaking("make field required examcalc:Exam.title")
+        )
+        XCTAssertEqual(
+            spec.decide(CompatibilityChangeContext(
+                kind: .classFieldRequirednessChanged,
+                namespace: "examcalc",
+                symbolId: "Exam.title",
+                beforeComparable: "true",
+                afterComparable: "false"
+            )),
+            .compatible
+        )
+    }
 }
