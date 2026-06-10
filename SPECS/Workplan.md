@@ -562,16 +562,17 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-005, ONT-019, ONT-026, ONT-030
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-031_SpecGraph_Ontology_Integration_Process_PRD/ONT-031_SpecGraph_Ontology_Integration_Process_PRD.md`
 - **Origin:** SpecGraph integration discussion and SpecGraph proposal 0060 external ontology
   import plane.
 - **Acceptance Criteria:**
-  - PRD describes the bridge workflow: ontology import -> lockfile -> semantic refs ->
+  - Complete: PRD describes the bridge workflow: ontology import -> lockfile -> semantic refs ->
     `ConceptRef`/`OntologyGap` outputs -> delta request -> governance evidence -> publish/pull.
-  - PRD identifies which artifacts are owned by Ontology and which are owned by SpecGraph.
-  - PRD includes one concrete examcalc-style requirement/binding example.
-  - PRD defines the minimum acceptance criteria for a future SpecGraph-side smoke slice.
-  - PRD explicitly prevents SpecGraph from copying or redefining `DomainOntologyPackage` semantics.
+  - Complete: PRD identifies which artifacts are owned by Ontology and which are owned by SpecGraph.
+  - Complete: PRD includes one concrete examcalc-style requirement/binding example.
+  - Complete: PRD defines the minimum acceptance criteria for a future SpecGraph-side smoke slice.
+  - Complete: PRD explicitly prevents SpecGraph from copying or redefining `DomainOntologyPackage` semantics.
 
 #### ONT-032: Class Field Semantics And Rich SDK Generation
 - **Description:** Add first-class class field semantics to `DomainOntologyPackage` and project

@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-031 | [ONT-031_SpecGraph_Ontology_Integration_Process_PRD/](ONT-031_SpecGraph_Ontology_Integration_Process_PRD/) | 2026-06-11 | PASS |
 | ONT-030 | [ONT-030_TypeScript_SDK_Smoke_Gate/](ONT-030_TypeScript_SDK_Smoke_Gate/) | 2026-06-11 | PASS |
 | ONT-029 | [ONT-029_Agent_Model_Selection_Guidance/](ONT-029_Agent_Model_Selection_Guidance/) | 2026-06-04 | PASS |
 | ONT-028 | [ONT-028_Node24_Cache_Action_Migration/](ONT-028_Node24_Cache_Action_Migration/) | 2026-06-03 | PASS |
@@ -41,6 +42,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-11 | ONT-031 | Archived REVIEW_ONT-031 report |
+| 2026-06-11 | ONT-031 | Archived SpecGraph_Ontology_Integration_Process_PRD (PASS) |
 | 2026-06-11 | ONT-030 | Archived REVIEW_ONT-030 report |
 | 2026-06-11 | ONT-030 | Archived TypeScript_SDK_Smoke_Gate (PASS) |
 | 2026-06-04 | ONT-029 | Archived REVIEW_ONT-029 report |
