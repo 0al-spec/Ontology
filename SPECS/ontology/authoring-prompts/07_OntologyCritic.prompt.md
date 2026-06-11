@@ -36,7 +36,8 @@ Review a candidate ontology draft and decide whether it can proceed to YAML asse
 ## Output Schema
 
 ```yaml
-kind: OntologyCritiqueReport
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: DraftCritique
 status: approved_for_yaml | needs_clarification | needs_revision | rejected
 summary: string
 scores:
@@ -61,6 +62,9 @@ questions:
   - id: string
     question: string
     blocksApproval: boolean
+provenance:
+  - source: string
+    note: string
 ```
 
 ## Quality Checks

@@ -1,0 +1,82 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://specgraph.io/schemas/ontology-induction/intent-classification.schema.yaml"
+title: IntentClassification
+type: object
+additionalProperties: false
+required:
+  - apiVersion
+  - kind
+  - intentType
+  - domain
+  - productType
+  - criticality
+  - primaryConcern
+  - requiresExistingOntology
+  - confidence
+  - uncertainties
+  - provenance
+properties:
+  apiVersion:
+    const: ontology-induction.specgraph.io/v1alpha1
+  kind:
+    const: IntentClassification
+  intentType:
+    enum:
+      - ProductCreationIntent
+      - FeatureIntent
+      - ChangeIntent
+      - ClarificationIntent
+      - EvidenceIntent
+      - ArchitectureIntent
+      - PolicyIntent
+  domain:
+    type: string
+  subdomain:
+    type: string
+  productType:
+    type: string
+  criticality:
+    enum:
+      - low
+      - medium
+      - high
+  primaryConcern:
+    type: string
+  requiresExistingOntology:
+    type: boolean
+  confidence:
+    type: number
+    minimum: 0
+    maximum: 1
+  uncertainties:
+    type: array
+    items:
+      $ref: "#/$defs/uncertainty"
+  provenance:
+    type: array
+    minItems: 1
+    items:
+      $ref: "#/$defs/provenance"
+$defs:
+  uncertainty:
+    type: object
+    additionalProperties: false
+    required:
+      - id
+      - question
+    properties:
+      id:
+        type: string
+      question:
+        type: string
+  provenance:
+    type: object
+    additionalProperties: false
+    required:
+      - source
+      - note
+    properties:
+      source:
+        type: string
+      note:
+        type: string

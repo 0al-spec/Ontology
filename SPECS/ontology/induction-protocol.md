@@ -35,9 +35,10 @@ ProductIntent
   -> BehaviorModel
   -> PolicyRiskModel
   -> ProductOntologyDraft
-  -> OntologyCritiqueReport
+  -> DraftCritique
   -> ClarificationQuestionSet
   -> DomainOntologyPackageDraft
+  -> InductionDraftValidationReport
   -> ValidationReport
   -> ApprovedOntologyPackage
 ```
@@ -53,11 +54,12 @@ ProductIntent
 | 5. Behavior extraction | `04_BehaviorExtractor` | Concepts plus frame | `BehaviorModel` | Candidate |
 | 6. Policy/risk extraction | `05_PolicyRiskExtractor` | Concepts plus behavior | `PolicyRiskModel` | Candidate |
 | 7. Draft synthesis | `06_OntologySynthesizer` | Prior stage artifacts | `ProductOntologyDraft` | Candidate |
-| 8. Critique | `07_OntologyCritic` | Intent plus draft | `OntologyCritiqueReport` | Review evidence |
+| 8. Critique | `07_OntologyCritic` | Intent plus draft | `DraftCritique` | Review evidence |
 | 9. Competency questions | `08_CompetencyQuestionGenerator` | Draft plus critique | `CompetencyQuestionSet` | Review evidence |
 | 10. YAML assembly | `09_YAMLAssembler` | Approved draft inputs | `DomainOntologyPackageDraft` | Candidate YAML |
-| 11. Compiler validation | `ontologyc` | YAML draft | Diagnostics, IR, SDK | Deterministic evidence |
-| 12. Promotion | Human or governance process | Validation report | Approved ontology version | Trusted artifact |
+| 11. Draft artifact validation | `ontologyc validate-draft` | Draft artifact directory | `InductionDraftValidationReport` | Structural evidence |
+| 12. Compiler validation | `ontologyc` | YAML draft | Diagnostics, IR, SDK | Deterministic evidence |
+| 13. Promotion | Human or governance process | Validation report | Approved ontology version | Trusted artifact |
 
 ## Trust Boundary
 
@@ -129,49 +131,46 @@ domain.
 Intermediate draft artifacts should preserve rationale and uncertainty:
 
 ```yaml
+apiVersion: ontology-induction.specgraph.io/v1alpha1
 kind: ProductOntologyDraft
-schemaVersion: ontology-induction.specgraph.io/v1alpha1
 metadata:
   sourceIntentId: string
   status: candidate
   producedBy: string
   confidence: 0.0
+  provenance: []
+  uncertainties: []
 spec:
-  domain:
-    id: string
-    label: string
-    description: string
-  classification:
-    intentType: ProductCreationIntent
-    criticality: low | medium | high
-    primaryConcern: string
+  namespaceCandidate: string
   governingConcept:
     id: string
     rationale: string
-    confidence: 0.0
-  boundedContexts:
-    - id: string
-      rationale: string
-  concepts:
-    - id: string
-      metaClass: DomainEntity
-      rationale: string
-      confidence: 0.0
-      needsClarification: false
-  relations:
-    - id: string
-      domain: string
-      range: string
-      rationale: string
-      confidence: 0.0
+  classes: []
+  relations: []
   policies: []
   stateMachines: []
   assumptions: []
-  competencyQuestions: []
+  validationNotes: []
 ```
 
 The `ProductOntologyDraft` format is a prompt-contract artifact, not the compiler input.
 `DomainOntologyPackage` remains the compiler input.
+
+The first machine-validated artifact set consists of:
+
+- `IntentClassification`;
+- `ProductOntologyDraft`;
+- `DraftCritique`;
+- `DomainOntologyPackageDraft`.
+
+Write these files into one directory and run:
+
+```bash
+swift run ontologyc validate-draft <draft-directory> --out <draft-validation-report.yaml>
+```
+
+This validation checks structure, provenance, uncertainty fields, schema drift, and the
+draft package profile. It does not approve ontology truth.
 
 ## YAML Assembly Contract
 
@@ -196,6 +195,7 @@ swift run ontologyc compile <package.yaml> --target typescript --out <out-dir>
 | Layer | Checks | Owner |
 |---|---|---|
 | Prompt contract | Required input/output sections, uncertainty, rationale | Stage agent |
+| Draft artifact validation | Artifact schema version, provenance, uncertainty, package draft profile | `ontologyc validate-draft` |
 | Rubric review | Semantic quality, leakage, inflation, missing behavior | Reviewer/Critic |
 | Compiler validation | YAML shape, references, state-machine consistency, unsafe YAML | `ontologyc` |
 | Regression validation | Golden intent stability and expected outputs | Future test harness |

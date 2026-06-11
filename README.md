@@ -157,13 +157,24 @@ swift run ontologyc import-hypercode <hypercode-ir.json> \
 `DomainOntologyPackage` class drafts. The output is always `approvalStatus: draft`;
 review and domain refinement still happen through the ontology authoring workflow.
 
+Staged ontology-induction artifacts can be checked before final compiler validation:
+
+```bash
+swift run ontologyc validate-draft <draft-directory> --out <draft-validation-report.yaml>
+```
+
+The draft directory contains `intent-classification.yaml`, `product-ontology-draft.yaml`,
+`draft-critique.yaml`, and `domain-ontology-package-draft.yaml`. This command checks
+artifact shape, provenance, uncertainty fields, and draft package status. It is structural
+evidence only; trusted publication still requires compiler validation and governance.
+
 ## Ontology Authoring
 
 Do not start ontology authoring by writing YAML directly. For new product/domain intents,
 use the staged induction workflow:
 
 ```text
-intent -> prompt contracts -> reviewed ontology draft -> DomainOntologyPackage YAML
+intent -> prompt contracts -> validate-draft -> DomainOntologyPackage YAML
        -> ontologyc check -> ontologyc compile
 ```
 

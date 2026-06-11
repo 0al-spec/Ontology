@@ -15,6 +15,7 @@ Commands:
   pull                Download published ontology IR from a registry.
   compat-check        Compare local package compatibility against registry IR.
   import-hypercode    Convert Hypercode IR into a DomainOntologyPackage draft.
+  validate-draft      Validate staged ontology-induction draft artifacts.
   validate-golden-intent
                       Validate candidate ontology YAML against a golden intent expectation.
   validate-governance-decision
@@ -32,6 +33,7 @@ let commandUsage: [String: String] = [
     "pull": "Usage:\n  ontologyc pull <id>@<version> --registry <url|file-url> --out <directory> [--token <token>]",
     "compat-check": "Usage:\n  ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url|file-url> [--out <report.yaml>] [--token <token>]",
     "import-hypercode": "Usage:\n  ontologyc import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>",
+    "validate-draft": "Usage:\n  ontologyc validate-draft <draft-directory> [--out <report.yaml>]",
     "validate-golden-intent": "Usage:\n  ontologyc validate-golden-intent <expectation.yaml> --candidate <package.yaml> [--out <report.yaml>]",
     "validate-governance-decision": "Usage:\n  ontologyc validate-governance-decision <decision.yaml> [--package <package.yaml>] [--golden-report <report.yaml>] [--out <report.yaml>]"
 ]

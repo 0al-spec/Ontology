@@ -1,0 +1,46 @@
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: ProductOntologyDraft
+metadata:
+  status: candidate
+  sourceIntentId: voice-recorder-ai-transcription
+  producedBy: OntologySynthesizerAgent
+  confidence: 0.78
+  provenance:
+    - source: SPECS/ontology/golden-intents/voice-recorder-ai-transcription.intent.md
+      note: Draft synthesized from the golden intent seed.
+spec:
+  namespaceCandidate: voicerecorder
+  governingConcept:
+    id: RecordingSession
+    rationale: The session anchors captured audio, speaker evidence, and transcription lifecycle.
+  classes:
+    - id: RecordingSession
+      category: domainEntity
+    - id: AudioSegment
+      category: evidence
+    - id: Speaker
+      category: actor
+    - id: Transcript
+      category: domainEntity
+    - id: TranscriptionJob
+      category: process
+  relations:
+    - id: containsSegment
+      domain: RecordingSession
+      range: AudioSegment
+    - id: hasSpeaker
+      domain: AudioSegment
+      range: Speaker
+    - id: producesTranscript
+      domain: TranscriptionJob
+      range: Transcript
+  protocols: []
+  policies:
+    - id: ConsentRequiredPolicy
+      enforceability: manual
+  stateMachines:
+    - id: TranscriptionJobState
+      appliesTo: TranscriptionJob
+  assumptions:
+    - Audio and transcript retention rules are domain-specific and require human review.
+  validationNotes: []
