@@ -44,6 +44,12 @@ SpecGraph validation uses the normalized IR to emit:
 | `ontology.lock.yaml` | Pinned ontology import metadata for semantic drift control. |
 | `ontology-gaps.yaml` | Missing ontology references that must become ontology follow-up work. |
 
+The first SpecGraph-side proposal 0060 consumer slice is tracked in
+[SpecGraph PR #522](https://github.com/0al-spec/SpecGraph/pull/522). It consumes the
+Ontology-generated examcalc normalized IR as a materialized fixture, resolves known
+`examcalc:*` refs, and preserves an unresolved ref as an explicit ontology gap without
+copying `DomainOntologyPackage` semantics into SpecGraph.
+
 ## Requirements
 
 - Swift 6.0+

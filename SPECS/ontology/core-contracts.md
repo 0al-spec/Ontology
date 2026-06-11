@@ -137,6 +137,12 @@ Rules:
 2. The gap MUST identify the source artifact and target ontology.
 3. The gap SHOULD include a proposed action such as `proposeOntologyDelta`.
 
+Implementation evidence: the first bounded SpecGraph proposal 0060 consumer slice is
+tracked in [SpecGraph PR #522](https://github.com/0al-spec/SpecGraph/pull/522). That
+slice consumes an Ontology-generated examcalc normalized IR fixture, resolves known refs
+from the imported materialization, and emits a reviewable ontology gap for
+`examcalc:CASFunction`.
+
 ## OntologyDeltaRequest
 
 `OntologyDeltaRequest` is the handoff from SpecGraph to the Ontology Service.

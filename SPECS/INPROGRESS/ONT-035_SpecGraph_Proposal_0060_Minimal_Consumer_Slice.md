@@ -119,22 +119,23 @@ Update Ontology docs after the SpecGraph PR exists:
 
 ## Acceptance Criteria
 
-- [ ] SpecGraph-side work consumes Ontology-generated IR or registry materialization
+- [x] SpecGraph-side work consumes Ontology-generated IR or registry materialization
       instead of duplicating Ontology package semantics.
-- [ ] A minimal requirement or binding fixture resolves at least one known examcalc concept
+- [x] A minimal requirement or binding fixture resolves at least one known examcalc concept
       or relation.
-- [ ] A missing concept produces an explicit gap artifact instead of a local
+- [x] A missing concept produces an explicit gap artifact instead of a local
       pseudo-concept.
-- [ ] The slice records imported ontology version and digest/lock metadata.
-- [ ] Ontology docs link to the SpecGraph-side consumer slice once it exists.
-- [ ] SpecGraph tests validate the consumer slice without requiring a live HTTP registry.
-- [ ] Ontology quality gate records the cross-repo validation evidence.
+- [x] The slice records imported ontology version and digest/lock metadata.
+- [x] Ontology docs link to the SpecGraph-side consumer slice once it exists.
+- [x] SpecGraph tests validate the consumer slice without requiring a live HTTP registry.
+- [x] Ontology quality gate records the cross-repo validation evidence.
 
 ## Execution Plan
 
 1. Create a dedicated SpecGraph branch from its current default branch without disturbing any
    unrelated local SpecGraph branch.
 2. Implement D1-D4 in SpecGraph and open a SpecGraph PR.
+   - Done: <https://github.com/0al-spec/SpecGraph/pull/522>
 3. Update Ontology docs with a link-back to the SpecGraph PR or merged files.
 4. Run Ontology gates and record a validation report that names both Ontology and SpecGraph
    checks.
