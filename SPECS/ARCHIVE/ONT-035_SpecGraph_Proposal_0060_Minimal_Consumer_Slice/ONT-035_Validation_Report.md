@@ -31,13 +31,16 @@ refs (`examcalc:Exam`, `examcalc:requires_policy`), and emits an explicit ontolo
 
 ## SpecGraph Checks
 
+Local runs used a Python 3.10 interpreter with PyYAML available; commands below use the
+portable `python3.10` spelling instead of a machine-specific interpreter path.
+
 | Command | Result |
 |---------|--------|
-| `PYTHON=/opt/homebrew/bin/python3.10 make ontology-imports` | PASS |
-| `/opt/homebrew/bin/python3.10 -m pytest tests/test_ontology_import_policy.py` | PASS, `5 passed` |
-| `PYTHON=/opt/homebrew/bin/python3.10 make proposal-tracking-gate` | PASS, `blocking_count: 0` |
-| `PYTHON=/opt/homebrew/bin/python3.10 make test` | PASS, `1001 passed` |
-| `/opt/homebrew/bin/python3.10 -m ruff check tools/ontology_imports.py tests/test_ontology_import_policy.py` | PASS |
+| `PYTHON=python3.10 make ontology-imports` | PASS |
+| `python3.10 -m pytest tests/test_ontology_import_policy.py` | PASS, `5 passed` |
+| `PYTHON=python3.10 make proposal-tracking-gate` | PASS, `blocking_count: 0` |
+| `PYTHON=python3.10 make test` | PASS, `1001 passed` |
+| `python3.10 -m ruff check tools/ontology_imports.py tests/test_ontology_import_policy.py` | PASS |
 | `git diff --check` | PASS |
 
 ## Ontology Checks
