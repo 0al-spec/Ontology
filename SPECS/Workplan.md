@@ -599,7 +599,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-018, ONT-026, ONT-031
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **Origin:** Post-ONT-029 review recommendation to close the registry loop before building a
   reference HTTP registry server.
 - **Acceptance Criteria:**

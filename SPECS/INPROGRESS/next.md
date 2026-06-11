@@ -1,7 +1,6 @@
-# Next Task: ONT-033 File And Git Registry Transport
+# Current Task: ONT-033 File And Git Registry Transport
 
-**Status:** ONT-032 archived with PASS. ONT-033 is the recommended next task, not yet
-selected in a task branch.
+**Status:** ONT-033 selected and in progress.
 
 ## Description
 
