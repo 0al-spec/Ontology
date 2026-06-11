@@ -57,21 +57,42 @@ public struct RegistryBaseURL: Equatable, Hashable, Sendable {
     public let url: URL
 
     public init?(string: String) {
-        guard let url = URL(string: string), url.scheme != nil, url.host != nil else {
+        guard let url = URL(string: string), Self.isSupportedRegistryURL(url) else {
             return nil
         }
         self.url = url
     }
 
     public init?(url: URL) {
-        guard url.scheme != nil, url.host != nil else {
+        guard Self.isSupportedRegistryURL(url) else {
             return nil
         }
         self.url = url
     }
 
+    public var isFileRegistry: Bool {
+        url.isFileURL
+    }
+
+    public var fileRootURL: URL? {
+        guard isFileRegistry else { return nil }
+        return url.standardizedFileURL
+    }
+
     public var absoluteString: String {
         url.absoluteString.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+    }
+
+    private static func isSupportedRegistryURL(_ url: URL) -> Bool {
+        guard let scheme = url.scheme?.lowercased() else { return false }
+        switch scheme {
+        case "http", "https":
+            return url.host != nil
+        case "file":
+            return url.isFileURL && (url.host ?? "").isEmpty && !url.path.isEmpty && url.path != "/"
+        default:
+            return false
+        }
     }
 }
 

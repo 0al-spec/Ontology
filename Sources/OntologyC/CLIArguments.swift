@@ -28,9 +28,9 @@ let commandUsage: [String: String] = [
     "compile": "Usage:\n  ontologyc compile <package.yaml> --target typescript --out <directory>",
     "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory>",
     "diff": "Usage:\n  ontologyc diff --from <old-package.yaml> --to <new-package.yaml> --out <report.yaml>",
-    "publish": "Usage:\n  ontologyc publish <package.yaml> --registry <url> [--token <token>] [--channel candidate|trusted] [--decision <decision.yaml>] [--golden-report <report.yaml>]",
-    "pull": "Usage:\n  ontologyc pull <id>@<version> --registry <url> --out <directory> [--token <token>]",
-    "compat-check": "Usage:\n  ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url> [--out <report.yaml>] [--token <token>]",
+    "publish": "Usage:\n  ontologyc publish <package.yaml> --registry <url|file-url> [--token <token>] [--channel candidate|trusted] [--decision <decision.yaml>] [--golden-report <report.yaml>]",
+    "pull": "Usage:\n  ontologyc pull <id>@<version> --registry <url|file-url> --out <directory> [--token <token>]",
+    "compat-check": "Usage:\n  ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url|file-url> [--out <report.yaml>] [--token <token>]",
     "import-hypercode": "Usage:\n  ontologyc import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>",
     "validate-golden-intent": "Usage:\n  ontologyc validate-golden-intent <expectation.yaml> --candidate <package.yaml> [--out <report.yaml>]",
     "validate-governance-decision": "Usage:\n  ontologyc validate-governance-decision <decision.yaml> [--package <package.yaml>] [--golden-report <report.yaml>] [--out <report.yaml>]"

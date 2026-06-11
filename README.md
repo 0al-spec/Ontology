@@ -108,11 +108,34 @@ swift run ontologyc diff \
 Registry-oriented commands are also available:
 
 ```bash
-swift run ontologyc publish <package.yaml> --registry <url> [--token <token>] \
+swift run ontologyc publish <package.yaml> --registry <url|file-url> [--token <token>] \
   [--channel candidate|trusted] [--decision <decision.yaml>] [--golden-report <report.yaml>]
-swift run ontologyc pull <id>@<version> --registry <url> --out <directory>
-swift run ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url> [--out <report.yaml>]
+swift run ontologyc pull <id>@<version> --registry <url|file-url> --out <directory>
+swift run ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url|file-url> [--out <report.yaml>]
 ```
+
+`--registry` accepts HTTP(S) registry URLs and local `file://` registry URLs. A local
+registry directory can be kept in git and reviewed as ordinary files:
+
+```bash
+REGISTRY_URL="file:///tmp/ontology-registry"
+
+swift run ontologyc publish SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
+  --registry "$REGISTRY_URL"
+
+swift run ontologyc pull edu.university.examcalc@0.1.0 \
+  --registry "$REGISTRY_URL" \
+  --out /tmp/pulled-ontology
+
+swift run ontologyc compat-check SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
+  --against edu.university.examcalc@0.1.0 \
+  --registry "$REGISTRY_URL" \
+  --out /tmp/examcalc-compatibility-report.yaml
+```
+
+Local publication writes deterministic artifacts under `ontologies/` plus channel index
+metadata under `channels/`. `ontologyc` does not run git commands; the registry root is
+git-backed when you place it inside a repository and review/commit the resulting files.
 
 `publish` defaults to `--channel candidate`. Trusted publication requires an approved
 governance decision artifact that matches the package being published. `--golden-report`

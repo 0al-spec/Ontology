@@ -195,6 +195,12 @@ public final class OntologyCompiler {
         let ir = normalize(package)
         let id = string(ir["id"]) ?? ""
         let version = string(ir["version"]) ?? ""
+        let packageRef = OntologyPackageReference(id: id, version: version)
+        if request.registry.isFileRegistry {
+            try publishLocalPackage(ir: ir, ref: packageRef, registry: request.registry, channel: request.channel)
+            return (diagnostics: diagnostics, packageRef: packageRef)
+        }
+
         let urlString = "\(request.registry.absoluteString)/ontologies/\(id)/\(version)"
         guard let url = URL(string: urlString) else {
             add("registry.url.invalid", "publish", "Invalid registry URL: \(urlString)")
@@ -205,7 +211,7 @@ public final class OntologyCompiler {
             options: [.sortedKeys, .prettyPrinted, .withoutEscapingSlashes]
         )
         try put(url, data, request.token)
-        return (diagnostics: diagnostics, packageRef: OntologyPackageReference(id: id, version: version))
+        return (diagnostics: diagnostics, packageRef: packageRef)
     }
 
     private func validatePublishGovernanceGate(
@@ -287,6 +293,9 @@ public final class OntologyCompiler {
     }
 
     private func pullPackageData(ref: OntologyPackageReference, registry: RegistryBaseURL, token: String?) throws -> Data {
+        if registry.isFileRegistry {
+            return try pullLocalPackageData(ref: ref, registry: registry)
+        }
         let urlString = "\(registry.absoluteString)/ontologies/\(ref.id)/\(ref.version)"
         guard let url = URL(string: urlString) else {
             throw OntologyCompilerError.invalidArgument("Invalid registry URL: \(urlString)")
