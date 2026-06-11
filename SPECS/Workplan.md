@@ -638,16 +638,21 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-031, ONT-033
 - **Parallelizable:** no
-- **Status:** PRD Ready
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice/ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice.md`
 - **Origin:** SpecGraph proposal `0060_external_ontology_import_plane.md` and the Ontology
   value-loop closure review.
+- **Implementation Note:** Opened SpecGraph PR #522 with a read-only proposal 0060 consumer
+  slice that consumes the Ontology-generated examcalc normalized IR fixture, resolves known
+  refs, emits an explicit gap for `examcalc:CASFunction`, and records package lock metadata.
+  Ontology docs now link back to that consumer evidence.
 - **Acceptance Criteria:**
-  - SpecGraph-side work consumes Ontology-generated IR or registry materialization instead of
+  - Complete: SpecGraph-side work consumes Ontology-generated IR or registry materialization instead of
     duplicating Ontology package semantics.
-  - A minimal requirement/binding fixture resolves at least one known examcalc concept.
-  - A missing concept produces an explicit gap artifact instead of a local pseudo-concept.
-  - The slice records the imported ontology version and digest/lock metadata.
-  - Ontology docs link to the SpecGraph-side consumer slice once it exists.
+  - Complete: A minimal requirement/binding fixture resolves at least one known examcalc concept.
+  - Complete: A missing concept produces an explicit gap artifact instead of a local pseudo-concept.
+  - Complete: The slice records the imported ontology version and digest/lock metadata.
+  - Complete: Ontology docs link to the SpecGraph-side consumer slice once it exists.
 
 ---
 
