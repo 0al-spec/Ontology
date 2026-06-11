@@ -1,76 +1,57 @@
-# Next Task: ONT-035 SpecGraph Proposal 0060 Minimal Consumer Slice
+# Next Task: No Queued Workplan Task
 
-**Status:** ONT-034 archived with PASS. ONT-035 is the recommended next task, not yet
-selected in a task branch.
+**Status:** ONT-035 archived with PASS. `SPECS/Workplan.md` currently has no remaining
+`Not Started`, `INPROGRESS`, or `PRD Ready` tasks.
 
-## Description
+## Recently Completed Value Loop
 
-Coordinate the first SpecGraph-side implementation slice for proposal 0060: one
-requirement or binding imports an Ontology package through a lockfile, resolves known refs,
-and reports a gap for one unresolved ref.
-
-## Task Metadata
-
-| Field | Value |
-|-------|-------|
-| Task ID | ONT-035 |
-| Title | SpecGraph Proposal 0060 Minimal Consumer Slice |
-| Phase | SpecGraph Value Loop Closure |
-| Priority | P1 |
-| Dependencies | ONT-031, ONT-033 |
-| Parallelizable | no |
-
-## Value Loop Context
-
-ONT-034 made staged induction outputs deterministic and CI-checkable. The next missing
-piece is the consumer side: SpecGraph should import a compiled/published Ontology package
-instead of duplicating domain concepts locally.
+ONT-035 closed the first cross-repo consumer evidence loop for SpecGraph proposal 0060:
 
 ```text
-Ontology package / local registry
--> SpecGraph ontology import or lock metadata
--> known ConceptRef resolves
--> missing ConceptRef creates explicit OntologyGap
+Ontology-generated examcalc normalized IR
+-> SpecGraph read-only import fixture
+-> known refs resolve
+-> missing ref emits ontology gap
+-> Ontology docs link back to consumer evidence
 ```
+
+SpecGraph evidence PR:
+
+- <https://github.com/0al-spec/SpecGraph/pull/522>
 
 ## Current State
 
-- ONT-031 defines the integration process and boundary.
-- ONT-033 provides a deterministic local `file://` registry transport.
-- ONT-034 validates staged induction artifacts before package validation.
-- The first SpecGraph consumer slice still needs to be coordinated outside this repository
-  or represented as a cross-repo PRD.
+- Ontology still owns `DomainOntologyPackage`, compiler behavior, normalized IR, registry
+  materialization, governance decisions, and trusted publish gates.
+- SpecGraph now has an open PR for the first proposal 0060 consumer slice:
+  `tools/ontology_import_policy.json`, `tools/ontology_imports.py`, checked-in examcalc
+  normalized-IR fixture, focused tests, and proposal runtime markers.
+- ONT-035 validation recorded both SpecGraph checks and Ontology checks.
 
-## Recommended Sequence
+## Recommended New Task Candidate
 
-| Task ID | Title | Phase | Priority | Why Next |
-|---------|-------|-------|----------|----------|
-| ONT-035 | SpecGraph Proposal 0060 Minimal Consumer Slice | SpecGraph Value Loop Closure | P1 | Close the first consumer-side lock/ref/gap path |
+No Workplan task has been created yet. The strongest next candidate is:
 
-## Sequencing Notes
-
-- Keep Ontology as the producer/compiler boundary; SpecGraph should consume IR, lock, or
-  registry materialization rather than re-modeling package semantics.
-- Use examcalc as the minimal known-ref fixture unless proposal 0060 requires a different
-  package.
-- Include one unresolved ref to prove explicit `OntologyGap` behavior.
-- Link back to Ontology docs once the consumer slice exists.
+| Candidate | Why |
+|-----------|-----|
+| `ontologyc validate-specgraph` adapter/report contract for SpecGraph | PR #522 proves fixture-driven consumption; the next stronger slice would invoke the real Ontology compiler contract from SpecGraph without allowing canonical graph mutation. |
 
 ## Recently Implemented
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-035 | SpecGraph Proposal 0060 minimal consumer slice | `SPECS/ARCHIVE/ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice/` |
 | ONT-034 | Induction artifact schemas and draft validation | `SPECS/ARCHIVE/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation/` |
 | ONT-033 | File and git registry transport | `SPECS/ARCHIVE/ONT-033_File_And_Git_Registry_Transport/` |
 | ONT-032 | Class field semantics and rich SDK generation | `SPECS/ARCHIVE/ONT-032_Class_Field_Semantics_And_Rich_SDK_Generation/` |
 | ONT-031 | SpecGraph Ontology integration process PRD | `SPECS/ARCHIVE/ONT-031_SpecGraph_Ontology_Integration_Process_PRD/` |
 | ONT-030 | TypeScript SDK smoke gate | `SPECS/ARCHIVE/ONT-030_TypeScript_SDK_Smoke_Gate/` |
-| ONT-029 | Agent model selection guidance | `SPECS/ARCHIVE/ONT-029_Agent_Model_Selection_Guidance/` |
 
 ## Recently Archived
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-035 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice/` |
 | ONT-034 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation/` |
 | ONT-033 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-033_File_And_Git_Registry_Transport/` |
 | ONT-032 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-032_Class_Field_Semantics_And_Rich_SDK_Generation/` |
