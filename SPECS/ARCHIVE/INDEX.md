@@ -46,6 +46,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-11 | ONT-035 | Archived REVIEW_ONT-035 report |
 | 2026-06-11 | ONT-035 | Archived SpecGraph_Proposal_0060_Minimal_Consumer_Slice (PASS) |
 | 2026-06-11 | ONT-034 | Archived REVIEW_ONT-034 report |
 | 2026-06-11 | ONT-034 | Archived Induction_Artifact_Schemas_And_Draft_Validation (PASS) |
