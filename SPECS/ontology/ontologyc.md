@@ -159,6 +159,16 @@ Registry `publish` has an explicit trust boundary:
 The trusted gate runs before any registry network call. `pull` and `compat-check` do not
 consume governance decisions.
 
+Registry transports:
+
+- HTTP(S) registries keep the ONT-018 contract: `publish` PUTs normalized IR to
+  `<registry>/ontologies/<id>/<version>`, and `pull`/`compat-check` GET the same ref.
+- Local `file://` registries write deterministic files under
+  `ontologies/<id>/<version>/ontology.normalized.json` with review metadata in
+  `registry-entry.yaml` and `channels/<channel>/<id>/<version>.yaml`.
+- A local registry becomes git-backed when its root directory lives in a git repository.
+  `ontologyc` does not clone, commit, push, or contact a git remote.
+
 ## Non-Goals for ONT-001
 
 - No production compiler implementation.
