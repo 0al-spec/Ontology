@@ -1,7 +1,7 @@
 # Next Task: ONT-035 SpecGraph Proposal 0060 Minimal Consumer Slice
 
-**Status:** ONT-034 archived with PASS. ONT-035 is the recommended next task, not yet
-selected in a task branch.
+**Status:** ONT-035 selected in branch
+`feature/ONT-035-specgraph-proposal-0060-consumer-slice`.
 
 ## Description
 
@@ -38,8 +38,14 @@ Ontology package / local registry
 - ONT-031 defines the integration process and boundary.
 - ONT-033 provides a deterministic local `file://` registry transport.
 - ONT-034 validates staged induction artifacts before package validation.
-- The first SpecGraph consumer slice still needs to be coordinated outside this repository
-  or represented as a cross-repo PRD.
+- The first SpecGraph consumer slice is cross-repo work: SpecGraph should own the
+  lock/ref/gap artifacts and any implementation tests, while Ontology owns the producer
+  package, compiler, registry materialization, and docs link-back.
+- SpecGraph proposal `0060_external_ontology_import_plane.md` already names the intended
+  runtime surfaces: `tools/ontology_import_policy.json`,
+  `runs/ontology_package_index.json`, `runs/ontology_import_gap_index.json`,
+  `runs/ontology_governance_evidence_index.json`,
+  `runs/ontology_binding_preview.json`, and `runs/ontology_prompt_invocation_index.json`.
 
 ## Recommended Sequence
 
@@ -55,6 +61,9 @@ Ontology package / local registry
   package.
 - Include one unresolved ref to prove explicit `OntologyGap` behavior.
 - Link back to Ontology docs once the consumer slice exists.
+- Do not reuse SpecGraph `specs/nodes/SG-SPEC-0060.yaml` for this proposal: that node is
+  currently about proposal/split readiness verdict checkpoints, not the external ontology
+  import plane.
 
 ## Recently Implemented
 

@@ -638,7 +638,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-031, ONT-033
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **Origin:** SpecGraph proposal `0060_external_ontology_import_plane.md` and the Ontology
   value-loop closure review.
 - **Acceptance Criteria:**
