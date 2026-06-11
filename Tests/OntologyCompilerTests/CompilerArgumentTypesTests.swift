@@ -18,6 +18,10 @@ final class CompilerArgumentTypesTests: XCTestCase {
         XCTAssertNotNil(RegistryBaseURL(url: URL(fileURLWithPath: "/tmp/ontology-registry", isDirectory: true)))
         XCTAssertNil(RegistryBaseURL(string: "registry.example.com"))
         XCTAssertNil(RegistryBaseURL(string: "ftp://registry.example.com"))
+        XCTAssertNil(RegistryBaseURL(string: "file://tmp/ontology-registry"))
+        XCTAssertNil(RegistryBaseURL(string: "file://example.com/ontology-registry"))
+        XCTAssertNil(RegistryBaseURL(string: "file:///"))
+        XCTAssertNil(RegistryBaseURL(url: URL(fileURLWithPath: "/", isDirectory: true)))
     }
 
     func testPackageReferenceParsesIdAndVersion() throws {

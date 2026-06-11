@@ -89,7 +89,7 @@ public struct RegistryBaseURL: Equatable, Hashable, Sendable {
         case "http", "https":
             return url.host != nil
         case "file":
-            return url.isFileURL && !url.path.isEmpty
+            return url.isFileURL && (url.host ?? "").isEmpty && !url.path.isEmpty && url.path != "/"
         default:
             return false
         }
