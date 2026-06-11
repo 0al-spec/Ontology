@@ -599,15 +599,16 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-018, ONT-026, ONT-031
 - **Parallelizable:** yes
-- **Status:** INPROGRESS
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-033_File_And_Git_Registry_Transport/ONT-033_File_And_Git_Registry_Transport.md`
 - **Origin:** Post-ONT-029 review recommendation to close the registry loop before building a
   reference HTTP registry server.
 - **Acceptance Criteria:**
-  - `ontologyc publish` can materialize candidate/trusted packages into a local registry directory.
-  - `ontologyc pull` can resolve packages from the local registry directory using the same package reference model.
-  - `ontologyc compat-check` works against the local registry transport.
-  - Trusted publication keeps the existing governance decision gate.
-  - Documentation explains how to use a git repository as the reviewable registry backing store.
+  - Complete: `ontologyc publish` can materialize candidate/trusted packages into a local registry directory.
+  - Complete: `ontologyc pull` can resolve packages from the local registry directory using the same package reference model.
+  - Complete: `ontologyc compat-check` works against the local registry transport.
+  - Complete: Trusted publication keeps the existing governance decision gate.
+  - Complete: Documentation explains how to use a git repository as the reviewable registry backing store.
 
 #### ONT-034: Induction Artifact Schemas And Draft Validation
 - **Description:** Add machine-readable schemas and validation for the core intermediate

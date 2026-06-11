@@ -1,78 +1,80 @@
-# Current Task: ONT-033 File And Git Registry Transport
+# Next Task: ONT-034 Induction Artifact Schemas And Draft Validation
 
-**Status:** ONT-033 selected and in progress.
+**Status:** ONT-033 archived with PASS. ONT-034 is the recommended next task, not yet
+selected in a task branch.
 
 ## Description
 
-Add a filesystem/git-backed registry transport for `publish`, `pull`, and `compat-check`
-so the registry loop can be dogfooded without an HTTP registry service.
+Add machine-readable schemas and validation for the core intermediate ontology-induction
+artifacts produced before final `DomainOntologyPackage` YAML assembly.
 
 ## Task Metadata
 
 | Field | Value |
 |-------|-------|
-| Task ID | ONT-033 |
-| Title | File And Git Registry Transport |
+| Task ID | ONT-034 |
+| Title | Induction Artifact Schemas And Draft Validation |
 | Phase | SpecGraph Value Loop Closure |
 | Priority | P1 |
-| Dependencies | ONT-018, ONT-026, ONT-031 |
+| Dependencies | ONT-019, ONT-021, ONT-022, ONT-031 |
 | Parallelizable | yes |
 
 ## Value Loop Context
 
-ONT-032 made generated SDK artifacts materially useful by adding first-class class fields
-to ontology packages and generated TypeScript/Zod outputs. The next missing loop closure
-is dogfooding registry flows without waiting for a reference HTTP service.
+ONT-033 closed the local registry dogfood path: `publish`, `pull`, and `compat-check` can
+now run against a deterministic `file://` registry directory. The next missing value-loop
+piece is making pre-package induction artifacts deterministic and CI-checkable before they
+become final `DomainOntologyPackage` YAML.
 
 ```text
-ontologyc publish
--> local/git registry directory
--> ontologyc pull
--> ontologyc compat-check
--> governance-gated trusted promotion
+prompt-contract outputs
+-> draft artifact schemas
+-> ontologyc validate-draft
+-> deterministic report
+-> final YAML assembly remains compiler/governance gated
 ```
 
 ## Current State
 
-- `publish`, `pull`, and `compat-check` exist for the registry protocol path.
-- Trusted publication already has a governance decision gate.
-- The project still lacks a local registry transport that can be used as a reviewable
-  git-backed artifact store.
-- ONT-032 is archived and the generated SDK now includes field-bearing class shapes.
+- ONT-019 documents the induction protocol and prompt contracts.
+- ONT-021 and ONT-022 provide golden intent expectations and repeatability validation.
+- The intermediate prompt-contract outputs are still Markdown-described artifacts, not
+  machine-validated schema instances.
+- ONT-033 now gives later publication flows a local registry for dogfooding.
 
 ## Recommended Sequence
 
 | Task ID | Title | Phase | Priority | Why Next |
 |---------|-------|-------|----------|----------|
-| ONT-033 | File And Git Registry Transport | SpecGraph Value Loop Closure | P1 | Dogfood publish/pull/compat-check without waiting for an HTTP registry service |
 | ONT-034 | Induction Artifact Schemas And Draft Validation | SpecGraph Value Loop Closure | P1 | Make staged agent outputs deterministic and CI-checkable |
 | ONT-035 | SpecGraph Proposal 0060 Minimal Consumer Slice | SpecGraph Value Loop Closure | P1 | Close the first consumer-side lock/ref/gap path |
 
 ## Sequencing Notes
 
-- Keep ONT-033 scoped to filesystem/git transport; do not build an HTTP registry server yet.
-- Preserve the existing governance gate for trusted publication.
-- The local registry layout should be deterministic and reviewable in git.
-- Use ONT-032 field-bearing examcalc output as a practical package for dogfooding.
+- Keep ONT-034 focused on artifact schemas and validation reports, not on approving ontology truth.
+- `validate-draft` should validate staged outputs before YAML assembly, while final trust still
+  comes from package compiler validation and governance decisions.
+- Use the existing prompt-contract names from ONT-019 instead of inventing a new induction workflow.
+- Preserve the SpecGraph/Ontology boundary from ONT-031.
 
 ## Recently Implemented
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-033 | File and git registry transport | `SPECS/ARCHIVE/ONT-033_File_And_Git_Registry_Transport/` |
 | ONT-032 | Class field semantics and rich SDK generation | `SPECS/ARCHIVE/ONT-032_Class_Field_Semantics_And_Rich_SDK_Generation/` |
 | ONT-031 | SpecGraph Ontology integration process PRD | `SPECS/ARCHIVE/ONT-031_SpecGraph_Ontology_Integration_Process_PRD/` |
 | ONT-030 | TypeScript SDK smoke gate | `SPECS/ARCHIVE/ONT-030_TypeScript_SDK_Smoke_Gate/` |
 | ONT-029 | Agent model selection guidance | `SPECS/ARCHIVE/ONT-029_Agent_Model_Selection_Guidance/` |
 | ONT-028 | Node24 cache action migration | `SPECS/ARCHIVE/ONT-028_Node24_Cache_Action_Migration/` |
-| ONT-027 | CI SwiftPM and quality tool cache optimization | `SPECS/ARCHIVE/ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/` |
 
 ## Recently Archived
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-033 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-033_File_And_Git_Registry_Transport/` |
 | ONT-032 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-032_Class_Field_Semantics_And_Rich_SDK_Generation/` |
 | ONT-031 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-031_SpecGraph_Ontology_Integration_Process_PRD/` |
 | ONT-030 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-030_TypeScript_SDK_Smoke_Gate/` |
 | ONT-029 | 2026-06-04 | PASS | `SPECS/ARCHIVE/ONT-029_Agent_Model_Selection_Guidance/` |
 | ONT-028 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-028_Node24_Cache_Action_Migration/` |
-| ONT-027 | 2026-06-03 | PASS | `SPECS/ARCHIVE/ONT-027_CI_SwiftPM_And_Quality_Tool_Cache_Optimization/` |
