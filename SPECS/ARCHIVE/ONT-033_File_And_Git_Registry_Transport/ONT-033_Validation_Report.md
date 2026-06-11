@@ -41,8 +41,9 @@ unsupported schemes and raw relative strings.
 swift test --filter LocalRegistryTransportTests
 ```
 
-Result: PASS. Local `publish -> pull -> compatCheckPackage` round trip works and trusted
-publication rejects before writing when governance evidence is missing.
+Result: PASS. Local `publish -> pull -> compatCheckPackage` round trip works, trusted
+publication rejects before writing when governance evidence is missing, and approved
+trusted publication writes the trusted channel index.
 
 ```bash
 swift test --filter RegistryClientTests
@@ -66,7 +67,7 @@ Result: PASS. CLI `publish -> pull -> compat-check` works through a `file://` re
 bash tools/swift-quality.sh
 ```
 
-Result: PASS. SwiftFormat, SwiftLint, build, and all `89` Swift tests pass.
+Result: PASS. SwiftFormat, SwiftLint, build, and all `90` Swift tests pass.
 
 ```bash
 tmp_registry=$(mktemp -d /tmp/ontology-registry.XXXXXX)

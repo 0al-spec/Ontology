@@ -77,6 +77,26 @@ final class LocalRegistryTransportTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: registryRoot.appendingPathComponent("ontologies").path))
     }
 
+    func testTrustedLocalPublishWritesTrustedChannelAfterApprovedDecision() throws {
+        let registryRoot = try makeTemporaryDirectory(name: "ontology-local-registry-trusted")
+        let registry = try XCTUnwrap(RegistryBaseURL(url: registryRoot))
+
+        _ = try OntologyCompiler().publishPackage(
+            path: examcalcPackage,
+            registry: registry,
+            token: nil,
+            channel: .trusted,
+            governanceDecisionPath: OntologySourcePath(path: "SPECS/ontology/examples/governance/approved-decision.yaml")
+        )
+
+        let trustedEntry = registryRoot
+            .appendingPathComponent("channels", isDirectory: true)
+            .appendingPathComponent("trusted", isDirectory: true)
+            .appendingPathComponent("edu.university.examcalc", isDirectory: true)
+            .appendingPathComponent("0.1.0.yaml")
+        XCTAssertTrue(try String(contentsOf: trustedEntry).contains("channel: trusted"))
+    }
+
     private var repoRoot: URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
