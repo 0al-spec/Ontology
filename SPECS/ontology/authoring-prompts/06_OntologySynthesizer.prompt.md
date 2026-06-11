@@ -38,13 +38,15 @@ Synthesize the staged artifacts into one candidate `ProductOntologyDraft`.
 ## Output Schema
 
 ```yaml
+apiVersion: ontology-induction.specgraph.io/v1alpha1
 kind: ProductOntologyDraft
-schemaVersion: ontology-induction.specgraph.io/v1alpha1
 metadata:
   status: candidate
   sourceIntentId: string
   producedBy: OntologySynthesizerAgent
   confidence: 0.0
+  provenance: []
+  uncertainties: []
 spec:
   namespaceCandidate: string
   governingConcept:

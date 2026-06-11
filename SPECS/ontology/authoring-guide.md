@@ -13,7 +13,7 @@ Do not start by writing YAML. Start by inducing a domain model from intent, revi
 candidate, then assemble YAML and validate it with `ontologyc`.
 
 ```text
-intent -> staged prompt contracts -> reviewed draft -> YAML -> ontologyc check -> compile
+intent -> staged prompt contracts -> validate-draft -> YAML -> ontologyc check -> compile
 ```
 
 ## Authoring Steps
@@ -27,8 +27,9 @@ intent -> staged prompt contracts -> reviewed draft -> YAML -> ontologyc check -
 7. Critique the draft using the quality rubric.
 8. Generate competency questions.
 9. Assemble `DomainOntologyPackage` YAML.
-10. Run compiler validation.
-11. Submit candidate output to ontology governance before treating it as trusted.
+10. Run draft artifact validation.
+11. Run compiler validation.
+12. Submit candidate output to ontology governance before treating it as trusted.
 
 ## Role Set
 
@@ -40,7 +41,7 @@ intent -> staged prompt contracts -> reviewed draft -> YAML -> ontologyc check -
 | `BehaviorExtractorAgent` | Extract commands, events, state machines, transitions | `BehaviorModel` |
 | `PolicyRiskExtractorAgent` | Extract policies, invariants, risks, and evidence requirements | `PolicyRiskModel` |
 | `OntologySynthesizerAgent` | Combine staged artifacts into a candidate ontology draft | `ProductOntologyDraft` |
-| `OntologyCriticAgent` | Find semantic gaps, inflation, leakage, ambiguity, and overconfidence | `OntologyCritiqueReport` |
+| `OntologyCriticAgent` | Find semantic gaps, inflation, leakage, ambiguity, and overconfidence | `DraftCritique` |
 | `CompetencyQuestionAgent` | Generate test questions the ontology must answer | `CompetencyQuestionSet` |
 | `YAMLAssemblerAgent` | Convert reviewed draft artifacts into compiler YAML | `DomainOntologyPackageDraft` |
 
@@ -134,6 +135,28 @@ spec:
 For golden intent experiments, compare candidate drafts against the minimum semantic
 expectations in `SPECS/ontology/golden-intents/expectations/`. These expectations are
 review anchors, not byte-exact ontology outputs.
+
+## Draft Artifact Validation
+
+Before treating staged prompt outputs as ready for final package validation, write the
+minimal artifact set to one draft directory:
+
+```text
+intent-classification.yaml
+product-ontology-draft.yaml
+draft-critique.yaml
+domain-ontology-package-draft.yaml
+```
+
+Then run:
+
+```bash
+swift run ontologyc validate-draft <draft-directory> --out <draft-validation-report.yaml>
+```
+
+This command validates artifact shape, schema version, provenance, uncertainty surfaces,
+and the draft package profile. It does not approve ontology truth. A passing report means
+the candidate artifacts are structurally ready for `ontologyc check` and governance review.
 
 ## Compiler Validation
 

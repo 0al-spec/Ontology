@@ -1,0 +1,76 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://specgraph.io/schemas/ontology-induction/draft-critique.schema.yaml"
+title: DraftCritique
+type: object
+additionalProperties: false
+required:
+  - apiVersion
+  - kind
+  - status
+  - summary
+  - scores
+  - issues
+  - questions
+  - provenance
+properties:
+  apiVersion:
+    const: ontology-induction.specgraph.io/v1alpha1
+  kind:
+    const: DraftCritique
+  status:
+    enum:
+      - approved_for_yaml
+      - needs_clarification
+      - needs_revision
+      - rejected
+  summary:
+    type: string
+  scores:
+    type: object
+  issues:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - severity
+        - message
+      properties:
+        id:
+          type: string
+        severity:
+          enum:
+            - low
+            - medium
+            - high
+            - blocker
+        message:
+          type: string
+        affects:
+          type: array
+          items:
+            type: string
+        suggestedFix:
+          type: string
+  questions:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - question
+        - blocksApproval
+      properties:
+        id:
+          type: string
+        question:
+          type: string
+        blocksApproval:
+          type: boolean
+  provenance:
+    type: array
+    minItems: 1
+    items:
+      $ref: "intent-classification.schema.yaml#/$defs/provenance"

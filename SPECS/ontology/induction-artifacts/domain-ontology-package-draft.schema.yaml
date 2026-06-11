@@ -1,0 +1,17 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://specgraph.io/schemas/ontology-induction/domain-ontology-package-draft.schema.yaml"
+title: DomainOntologyPackageDraft
+description: >
+  Profile of DomainOntologyPackage used as the final candidate YAML artifact.
+  The document kind remains DomainOntologyPackage so ontologyc check can validate it.
+allOf:
+  - $ref: "../domain-ontology-package.schema.yaml"
+  - type: object
+    properties:
+      metadata:
+        type: object
+        required:
+          - approvalStatus
+        properties:
+          approvalStatus:
+            const: draft

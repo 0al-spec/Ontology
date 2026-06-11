@@ -1,0 +1,16 @@
+apiVersion: ontology-induction.specgraph.io/v9
+kind: IntentClassification
+intentType: ProductCreationIntent
+domain: ProductivityAudio
+subdomain: MultiSpeakerTranscription
+productType: VoiceRecorderApplication
+criticality: medium
+primaryConcern: Capture and attribute multi-speaker speech while preserving consent and provenance.
+requiresExistingOntology: false
+confidence: 0.82
+uncertainties:
+  - id: retention-policy
+    question: What retention policy applies to audio and transcript artifacts?
+provenance:
+  - source: SPECS/ontology/golden-intents/voice-recorder-ai-transcription.intent.md
+    note: Golden intent seed used as source material.

@@ -9,7 +9,7 @@ You are a YAML Assembler for `DomainOntologyPackage` documents.
 ```yaml
 kind: YAMLAssemblyInput
 draft: ProductOntologyDraft
-critique: OntologyCritiqueReport
+critique: DraftCritique
 competencyQuestions: CompetencyQuestionSet
 targetSchema: SPECS/ontology/domain-ontology-package.schema.yaml
 ```
@@ -25,6 +25,7 @@ Convert an approved candidate draft into `DomainOntologyPackage` YAML.
 - Mark only justified governing concepts as `central: true`.
 - Keep YAML inert: no hooks, code, commands, or executable-looking content.
 - Produce YAML that should pass `ontologyc check`.
+- Preserve draft status so `ontologyc validate-draft` can verify candidate-only output.
 
 ## Must Not
 

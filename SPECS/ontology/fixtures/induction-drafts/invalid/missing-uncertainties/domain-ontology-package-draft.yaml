@@ -1,0 +1,81 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: app.voice.recorder
+  namespace: voicerecorder
+  version: 0.1.0
+  publisher: OntologyService
+  source: SPECS/ontology/golden-intents/voice-recorder-ai-transcription.intent.md
+  approvalStatus: draft
+spec:
+  imports:
+    - id: specgraph.foundation
+      namespace: sg
+      version: 0.1.0
+  classes:
+    RecordingSession:
+      extends: sg:DomainEntity
+      description: Session that captures audio and anchors transcript provenance.
+      central: true
+    AudioSegment:
+      extends: sg:Evidence
+      description: Time-bounded audio evidence captured during a recording session.
+    Speaker:
+      extends: sg:Actor
+      description: Participant whose speech may be attributed in a transcript.
+    Transcript:
+      extends: sg:DomainEntity
+      description: Text artifact produced from recorded speech.
+      fields:
+        text:
+          type: string
+          required: false
+          description: Transcript text when available.
+    TranscriptionJob:
+      extends: sg:DomainEntity
+      lifecycle: TranscriptionJobState
+      description: Process that transforms recorded audio into a transcript.
+    StartTranscription:
+      extends: sg:Command
+      description: Command that starts AI transcription.
+    TranscriptionCompleted:
+      extends: sg:Event
+      description: Event emitted when transcription finishes.
+  protocols: {}
+  relations:
+    containsSegment:
+      domain: RecordingSession
+      range: AudioSegment
+      description: Recording session contains audio segments.
+    hasSpeaker:
+      domain: AudioSegment
+      range: Speaker
+      description: Audio segment is attributed to a speaker candidate.
+    processesSession:
+      domain: TranscriptionJob
+      range: RecordingSession
+      description: Transcription job processes a recording session.
+    producesTranscript:
+      domain: TranscriptionJob
+      range: Transcript
+      description: Transcription job produces transcript text.
+  policies:
+    ConsentRequiredPolicy:
+      extends: sg:Policy
+      enforceability: manual
+      appliesTo:
+        - RecordingSession
+      text: Recording requires an operator-reviewed consent policy before trusted use.
+  stateMachines:
+    TranscriptionJobState:
+      states:
+        - queued
+        - transcribing
+        - completed
+      transitions:
+        - from: queued
+          to: transcribing
+          command: StartTranscription
+        - from: transcribing
+          to: completed
+          event: TranscriptionCompleted

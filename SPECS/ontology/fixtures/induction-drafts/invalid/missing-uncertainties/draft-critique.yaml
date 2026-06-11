@@ -1,0 +1,23 @@
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: DraftCritique
+status: approved_for_yaml
+summary: Candidate draft is structurally ready for YAML assembly but retention policy remains a review note.
+scores:
+  domainFraming: 4
+  conceptCoverage: 4
+  behavioralModeling: 3
+  policyModeling: 3
+  trustAndEvidence: 4
+  uncertaintyHandling: 4
+  implementationLeakage: 5
+  relationQuality: 4
+  competencyQuestions: 3
+  yamlReadiness: 4
+issues: []
+questions:
+  - id: retention-policy
+    question: What retention policy applies to audio and transcript artifacts?
+    blocksApproval: false
+provenance:
+  - source: SPECS/ontology/ontology-quality-rubric.md
+    note: Draft reviewed against ontology quality rubric categories.

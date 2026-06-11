@@ -10,7 +10,7 @@ You are a Competency Question Generator for SpecGraph ontology induction.
 kind: CompetencyQuestionInput
 intent: ProductIntent
 draft: ProductOntologyDraft
-critique: OntologyCritiqueReport
+critique: DraftCritique
 ```
 
 ## Task

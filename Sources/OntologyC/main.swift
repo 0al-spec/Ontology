@@ -208,6 +208,30 @@ case "import-hypercode":
         exit(1)
     }
 
+case "validate-draft":
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--out"], command: command)
+    requirePositionals(1, in: parsed, command: command)
+    let draftDirectory = parsed.positional[0]
+    do {
+        let result = try compiler.validateInductionDraft(
+            directory: OntologySourcePath(path: draftDirectory),
+            outPath: parsed.options["--out"].map(OntologyOutputPath.init(path:))
+        )
+        let reportTarget = parsed.options["--out"].map { " report=\($0)" } ?? ""
+        if !result.passed {
+            compiler.printDiagnostics(result.diagnostics)
+            fputs("ontologyc validate-draft: FAIL \(draftDirectory)\(reportTarget)\n", stderr)
+            exit(1)
+        }
+        print("ontologyc validate-draft: PASS \(draftDirectory)\(reportTarget)")
+    } catch let compilerError as OntologyCompilerError {
+        fputs("ontologyc validate-draft: FAIL \(compilerError)\n", stderr)
+        exit(1)
+    } catch {
+        fputs("ontologyc validate-draft: FAIL \(error)\n", stderr)
+        exit(1)
+    }
+
 case "validate-golden-intent":
     let parsed = parseArguments(commandArgs, allowedOptions: ["--candidate", "--out"], command: command)
     requirePositionals(1, in: parsed, command: command)

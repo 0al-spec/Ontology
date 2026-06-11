@@ -169,6 +169,30 @@ Registry transports:
 - A local registry becomes git-backed when its root directory lives in a git repository.
   `ontologyc` does not clone, commit, push, or contact a git remote.
 
+### `ontologyc validate-draft`
+
+```bash
+swift run ontologyc validate-draft \
+  SPECS/ontology/fixtures/induction-drafts/valid/voice-recorder \
+  --out /tmp/induction-draft-validation.yaml
+```
+
+Behavior:
+
+1. Parse the four staged induction artifacts as inert YAML data.
+2. Validate `IntentClassification`, `ProductOntologyDraft`, and `DraftCritique` against
+   the minimal induction artifact contract.
+3. Validate `domain-ontology-package-draft.yaml` through the existing
+   `DomainOntologyPackage` compiler rules.
+4. Require the package draft to keep `metadata.approvalStatus: draft`.
+5. Emit an `InductionDraftValidationReport` when `--out` is supplied.
+6. Exit non-zero for structural, provenance, uncertainty, schema-version, or package
+   validation errors.
+
+This command is not governance. A passing draft-validation report means staged candidate
+artifacts are structurally ready for `ontologyc check`, golden-intent comparison where
+applicable, and human/governance review.
+
 ## Non-Goals for ONT-001
 
 - No production compiler implementation.

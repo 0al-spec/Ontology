@@ -1,0 +1,85 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://specgraph.io/schemas/ontology-induction/product-ontology-draft.schema.yaml"
+title: ProductOntologyDraft
+type: object
+additionalProperties: false
+required:
+  - apiVersion
+  - kind
+  - metadata
+  - spec
+properties:
+  apiVersion:
+    const: ontology-induction.specgraph.io/v1alpha1
+  kind:
+    const: ProductOntologyDraft
+  metadata:
+    type: object
+    additionalProperties: false
+    required:
+      - status
+      - sourceIntentId
+      - producedBy
+      - confidence
+      - provenance
+      - uncertainties
+    properties:
+      status:
+        const: candidate
+      sourceIntentId:
+        type: string
+      producedBy:
+        type: string
+      confidence:
+        type: number
+        minimum: 0
+        maximum: 1
+      provenance:
+        type: array
+        minItems: 1
+        items:
+          $ref: "intent-classification.schema.yaml#/$defs/provenance"
+      uncertainties:
+        type: array
+        items:
+          $ref: "intent-classification.schema.yaml#/$defs/uncertainty"
+  spec:
+    type: object
+    additionalProperties: false
+    required:
+      - namespaceCandidate
+      - governingConcept
+      - classes
+      - relations
+      - policies
+      - stateMachines
+      - assumptions
+      - validationNotes
+    properties:
+      namespaceCandidate:
+        type: string
+      governingConcept:
+        type: object
+        additionalProperties: false
+        required:
+          - id
+          - rationale
+        properties:
+          id:
+            type: string
+          rationale:
+            type: string
+      classes:
+        type: array
+      relations:
+        type: array
+      protocols:
+        type: array
+      policies:
+        type: array
+      stateMachines:
+        type: array
+      assumptions:
+        type: array
+      validationNotes:
+        type: array
