@@ -1,7 +1,6 @@
-# Next Task: ONT-034 Induction Artifact Schemas And Draft Validation
+# Current Task: ONT-034 Induction Artifact Schemas And Draft Validation
 
-**Status:** ONT-033 archived with PASS. ONT-034 is the recommended next task, not yet
-selected in a task branch.
+**Status:** Selected in `feature/ONT-034-induction-artifact-schemas`.
 
 ## Description
 
@@ -42,12 +41,16 @@ prompt-contract outputs
   machine-validated schema instances.
 - ONT-033 now gives later publication flows a local registry for dogfooding.
 
-## Recommended Sequence
+## Selected Task
 
 | Task ID | Title | Phase | Priority | Why Next |
 |---------|-------|-------|----------|----------|
 | ONT-034 | Induction Artifact Schemas And Draft Validation | SpecGraph Value Loop Closure | P1 | Make staged agent outputs deterministic and CI-checkable |
 | ONT-035 | SpecGraph Proposal 0060 Minimal Consumer Slice | SpecGraph Value Loop Closure | P1 | Close the first consumer-side lock/ref/gap path |
+
+ONT-034 is selected before ONT-035 because SpecGraph integration needs stable, reviewable
+candidate artifacts before the consumer-side lock/ref/gap slice can rely on induction
+outputs.
 
 ## Sequencing Notes
 

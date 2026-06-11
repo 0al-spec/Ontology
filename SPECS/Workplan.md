@@ -616,7 +616,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-019, ONT-021, ONT-022, ONT-031
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **Origin:** Post-ONT-029 review finding that prompt-contract outputs are described in Markdown
   but not validated as deterministic artifacts.
 - **Acceptance Criteria:**
