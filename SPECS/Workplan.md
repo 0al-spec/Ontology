@@ -616,17 +616,20 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-019, ONT-021, ONT-022, ONT-031
 - **Parallelizable:** yes
-- **Status:** INPROGRESS
-- **PRD:** `SPECS/INPROGRESS/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation.md`
 - **Origin:** Post-ONT-029 review finding that prompt-contract outputs are described in Markdown
   but not validated as deterministic artifacts.
+- **Implementation Note:** Added induction artifact schemas, valid/invalid draft fixtures,
+  `ontologyc validate-draft`, deterministic draft-validation reports, tests, and authoring
+  documentation updates while preserving candidate-only trust boundaries.
 - **Acceptance Criteria:**
-  - Schemas exist for the first minimal artifact set: `IntentClassification`,
+  - Complete: Schemas exist for the first minimal artifact set: `IntentClassification`,
     `ProductOntologyDraft`, `DraftCritique`, and `DomainOntologyPackageDraft`.
-  - Valid and invalid fixtures cover required fields, uncertainty/provenance fields, and unsupported schema drift.
-  - `ontologyc validate-draft` validates the artifact set without approving ontology truth.
-  - The validation report is deterministic and suitable for CI.
-  - Authoring docs explain that final trust still comes from compiler validation and governance.
+  - Complete: Valid and invalid fixtures cover required fields, uncertainty/provenance fields, and unsupported schema drift.
+  - Complete: `ontologyc validate-draft` validates the artifact set without approving ontology truth.
+  - Complete: The validation report is deterministic and suitable for CI.
+  - Complete: Authoring docs explain that final trust still comes from compiler validation and governance.
 
 #### ONT-035: SpecGraph Proposal 0060 Minimal Consumer Slice
 - **Description:** Coordinate the first SpecGraph-side implementation slice for proposal 0060:
