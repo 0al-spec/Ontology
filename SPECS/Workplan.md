@@ -617,6 +617,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Dependencies:** ONT-019, ONT-021, ONT-022, ONT-031
 - **Parallelizable:** yes
 - **Status:** INPROGRESS
+- **PRD:** `SPECS/INPROGRESS/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation.md`
 - **Origin:** Post-ONT-029 review finding that prompt-contract outputs are described in Markdown
   but not validated as deterministic artifacts.
 - **Acceptance Criteria:**

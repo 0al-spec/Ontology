@@ -1,6 +1,6 @@
 # Current Task: ONT-034 Induction Artifact Schemas And Draft Validation
 
-**Status:** Selected in `feature/ONT-034-induction-artifact-schemas`.
+**Status:** PRD Ready in `feature/ONT-034-induction-artifact-schemas`.
 
 ## Description
 
@@ -16,6 +16,7 @@ artifacts produced before final `DomainOntologyPackage` YAML assembly.
 | Phase | SpecGraph Value Loop Closure |
 | Priority | P1 |
 | Dependencies | ONT-019, ONT-021, ONT-022, ONT-031 |
+| PRD | `SPECS/INPROGRESS/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation.md` |
 | Parallelizable | yes |
 
 ## Value Loop Context
