@@ -9,8 +9,8 @@
 ## TL;DR
 
 Add a small deterministic `ontologyc import-hypercode` command that consumes a
-Hypercode resolved graph IR (`hypercode.ir/v1`) and writes a reviewable
-`DomainOntologyPackage` draft.
+Hypercode resolved graph IR (`hypercode.ir/v1`/`hypercode.ir/v2`) and writes a
+reviewable `DomainOntologyPackage` draft.
 
 ## Objective
 
@@ -23,7 +23,8 @@ only the resolved IR contract and emits YAML that can be checked by the existing
 ### In Scope
 
 - `ontologyc import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>`.
-- Validate that the input is JSON object IR with `version: hypercode.ir/v1`.
+- Validate that the input is JSON object IR with `version: hypercode.ir/v1` or
+  `version: hypercode.ir/v2`.
 - Traverse IR nodes and map each unique node `type` to a draft ontology class.
 - Mark the root node type as the central class.
 - Emit synthetic review scaffolding:
@@ -31,6 +32,10 @@ only the resolved IR contract and emits YAML that can be checked by the existing
   - `GeneratedDraftRequiresReview` policy;
   - `GeneratedDraftLifecycle` state machine;
   - `ReviewGeneratedDraft` command.
+- For ontology-shaped IR v2 graphs (`Package > Metadata/Imports/Classes/Relations/
+  Policies/StateMachines/Compatibility`), map resolved properties into the corresponding
+  `DomainOntologyPackage` sections instead of synthesizing generic class scaffolding.
+- Reject ontology-shaped IR v2 whose resolved `approval_status` is not `draft`.
 - Regression test that the generated YAML passes `ontologyc check`.
 - README documentation.
 
@@ -47,8 +52,8 @@ only the resolved IR contract and emits YAML that can be checked by the existing
 The importer is a draft bridge. It preserves the separation:
 
 ```text
-Hypercode repo: .hc + .hcs -> hypercode.ir/v1
-Ontology repo: hypercode.ir/v1 -> DomainOntologyPackage draft
+Hypercode repo: .hc + .hcs -> hypercode.ir/v1|v2
+Ontology repo: hypercode.ir/v1|v2 -> DomainOntologyPackage draft
 ```
 
 The output MUST remain `approvalStatus: draft`; domain refinement and approval happen via

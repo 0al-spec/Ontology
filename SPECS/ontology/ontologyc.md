@@ -94,6 +94,31 @@ Behavior:
 review surfaces. When omitted, the report leaves those fields empty. The digest
 authority remains the normalized IR `sourceDigest`.
 
+### `ontologyc import-hypercode`
+
+```bash
+swift run ontologyc import-hypercode <hypercode-ir.json> \
+  --out /tmp/domain-ontology-package.yaml \
+  --id org.0al.example \
+  --namespace example \
+  --version 0.1.0
+```
+
+Behavior:
+
+1. Parse Hypercode resolved IR as inert JSON data. No `.hc`/`.hcs` parsing or cascade
+   resolution happens inside Ontology.
+2. Accept `hypercode.ir/v1` and `hypercode.ir/v2`.
+3. For generic graphs, emit a reviewable `DomainOntologyPackage` draft from unique node
+   types, preserving the original ONT-020 spike behavior.
+4. For `hypercode.ir/v2` graphs shaped as an Ontology package
+   (`Package > Metadata/Imports/Classes/Relations/Policies/StateMachines/Compatibility`),
+   map resolved properties into real package sections.
+5. Require the imported package status to remain `metadata.approvalStatus: draft`.
+   Hypercode context may describe lifecycle state, but trusted ontology approval remains a
+   governance decision boundary, not an import side effect.
+6. Emit YAML that must pass `ontologyc check`.
+
 ## Validation Details
 
 | Area | Required Checks |

@@ -330,20 +330,25 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 #### ONT-020: Hypercode IR Import Spike
 - **Description:** Add the first deterministic bridge from Hypercode resolved graph IR
-  (`hypercode.ir/v1`) into a `DomainOntologyPackage` draft. The importer treats Hypercode
-  node types as candidate ontology classes and emits review scaffolding, not an approved
-  domain ontology.
+  (`hypercode.ir/v1`/`hypercode.ir/v2`) into a `DomainOntologyPackage` draft. Generic
+  graphs map node types to candidate ontology classes; ontology-shaped IR v2 graphs map
+  resolved properties into real package sections. The importer emits reviewable drafts,
+  not approved domain ontologies.
 - **Priority:** P2
 - **Dependencies:** ONT-019
 - **Parallelizable:** yes
 - **Status:** Complete
 - **PRD:** `SPECS/INPROGRESS/ONT-020_Hypercode_IR_Import_Spike.md`
 - **Origin:** Cross-repo Hypercode tooling integration.
-- **Implementation Note:** Implemented as a small `ontologyc import-hypercode` spike.
+- **Implementation Note:** Implemented as `ontologyc import-hypercode`; later hardened to
+  accept IR v2 and the HC-121 `examcalc` ontology-shaped resolved graph while preserving
+  the draft-only governance boundary.
 - **Acceptance Criteria:**
   - Complete: CLI accepts `import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>`.
-  - Complete: Importer rejects non-`hypercode.ir/v1` JSON before writing output.
+  - Complete: Importer rejects non-`hypercode.ir/v1`/`hypercode.ir/v2` JSON before writing output.
   - Complete: Hypercode node `type` values are deterministically mapped to ontology class names.
+  - Complete: Ontology-shaped IR v2 package graphs map resolved metadata, imports,
+    classes, fields, relations, policies, state machines, and compatibility sections.
   - Complete: Output package is marked `approvalStatus: draft` and includes review policy/lifecycle scaffolding.
   - Complete: Generated draft passes `ontologyc check`.
   - Complete: README documents the command as a draft bridge, not a full ontology induction workflow.
