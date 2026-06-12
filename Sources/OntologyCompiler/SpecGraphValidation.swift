@@ -2,6 +2,16 @@ import Foundation
 import Yams
 
 extension OntologyCompiler {
+    struct OntologycAdapterReportContext {
+        let bindingPath: String
+        let ontologyIRPath: String
+        let ir: JSONObject
+        let resolvedCount: Int
+        let gapCount: Int
+        let sourceURI: String
+        let sourceRef: String
+    }
+
     func loadJSON(path: String) throws -> JSONObject {
         let data = try Data(contentsOf: URL(fileURLWithPath: path))
         guard let object = try JSONSerialization.jsonObject(with: data) as? JSONObject else {
@@ -158,5 +168,53 @@ extension OntologyCompiler {
                 ]]
             ]
         ]
+    }
+
+    func ontologycAdapterReport(_ context: OntologycAdapterReportContext) -> JSONObject {
+        [
+            "artifact_kind": "ontologyc_adapter_report",
+            "schema_version": 1,
+            "proposal_id": "0060",
+            "producer": [
+                "tool": "ontologyc",
+                "command": "validate-specgraph",
+                "command_contract_ref": "Ontology:SPECS/ontology/ontologyc.md#validate-specgraph"
+            ],
+            "package": [
+                "package_id": string(context.ir["id"]) ?? "",
+                "namespace": string(context.ir["namespace"]) ?? "",
+                "version": string(context.ir["version"]) ?? "",
+                "source_uri": context.sourceURI,
+                "source_ref": context.sourceRef,
+                "digest": string(context.ir["sourceDigest"]) ?? ""
+            ],
+            "inputs": [
+                "binding_ref": portableRef(context.bindingPath),
+                "normalized_ir_ref": portableRef(context.ontologyIRPath)
+            ],
+            "outputs": [
+                "concept_refs_ref": "concept-refs.yaml",
+                "ontology_lock_ref": "ontology.lock.yaml",
+                "ontology_gaps_ref": "ontology-gaps.yaml"
+            ],
+            "summary": [
+                "status": "passed",
+                "resolved_ref_count": context.resolvedCount,
+                "gap_count": context.gapCount,
+                "canonical_mutations_allowed": false,
+                "tracked_artifacts_written": false
+            ],
+            "authority_boundary": [
+                "report_is_authority": false,
+                "digest_authority": "normalized_ir_sourceDigest",
+                "ontology_lock_is_canonical": false,
+                "automatic_import_lock_update": false,
+                "automatic_canonical_node_update": false
+            ]
+        ]
+    }
+
+    func portableRef(_ path: String) -> String {
+        URL(fileURLWithPath: path).lastPathComponent
     }
 }

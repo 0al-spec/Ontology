@@ -57,7 +57,9 @@ public final class OntologyCompiler {
     public func validateSpecGraph(
         bindingPath: OntologySourcePath,
         ontologyIRPath: OntologySourcePath,
-        outDirectory: OntologyOutputDirectory
+        outDirectory: OntologyOutputDirectory,
+        sourceURI: String = "",
+        sourceRef: String = ""
     ) throws -> (resolved: Int, gaps: Int) {
         let ir = try loadJSON(path: ontologyIRPath.path)
         let namespace = string(ir["namespace"]) ?? ""
@@ -116,6 +118,21 @@ public final class OntologyCompiler {
                 "gaps": gaps
             ]
         ], to: outURL.appendingPathComponent("ontology-gaps.yaml"))
+
+        try writeYAML(
+            ontologycAdapterReport(
+                OntologycAdapterReportContext(
+                    bindingPath: bindingPath.path,
+                    ontologyIRPath: ontologyIRPath.path,
+                    ir: ir,
+                    resolvedCount: resolvedRefs.count,
+                    gapCount: gaps.count,
+                    sourceURI: sourceURI,
+                    sourceRef: sourceRef
+                )
+            ),
+            to: outURL.appendingPathComponent("ontologyc-adapter-report.yaml")
+        )
 
         return (resolvedRefs.count, gaps.count)
     }

@@ -27,7 +27,7 @@ Run `ontologyc <command> --help` for command-specific usage.
 let commandUsage: [String: String] = [
     "check": "Usage:\n  ontologyc check <package.yaml>",
     "compile": "Usage:\n  ontologyc compile <package.yaml> --target typescript --out <directory>",
-    "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory>",
+    "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory> [--source-uri <uri>] [--source-ref <ref>]",
     "diff": "Usage:\n  ontologyc diff --from <old-package.yaml> --to <new-package.yaml> --out <report.yaml>",
     "publish": "Usage:\n  ontologyc publish <package.yaml> --registry <url|file-url> [--token <token>] [--channel candidate|trusted] [--decision <decision.yaml>] [--golden-report <report.yaml>]",
     "pull": "Usage:\n  ontologyc pull <id>@<version> --registry <url|file-url> --out <directory> [--token <token>]",

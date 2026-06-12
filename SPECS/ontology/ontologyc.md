@@ -64,6 +64,35 @@ SpecGraph validation emits separate semantic reference artifacts:
 | `concept-refs.yaml` | Resolved ontology concepts referenced by SpecGraph artifacts. |
 | `ontology.lock.yaml` | Resolved ontology import lock data. |
 | `ontology-gaps.yaml` | Missing semantic references requiring ontology follow-up. |
+| `ontologyc-adapter-report.yaml` | Review-only adapter report binding validation outputs to package source/version/digest and explicit no-canonical-mutation authority flags. |
+
+### `ontologyc validate-specgraph`
+
+```bash
+swift run ontologyc validate-specgraph \
+  SPECS/specgraph/semantic-validation/missing-ref-semantic-binding.yaml \
+  --ontology-ir SPECS/ontology/packages/examcalc/generated/ontology.normalized.json \
+  --out /tmp/examcalc-semantic-validation \
+  --source-uri git+https://github.com/0al-spec/Ontology.git \
+  --source-ref main
+```
+
+Behavior:
+
+1. Parse SpecGraph semantic binding YAML as inert data.
+2. Resolve refs against the supplied normalized ontology IR.
+3. Emit `concept-refs.yaml`, `ontology.lock.yaml`, and `ontology-gaps.yaml`.
+4. Emit `ontologyc-adapter-report.yaml` with package id, namespace, version,
+   source URI/ref, and digest from normalized IR `sourceDigest`.
+5. Set report authority flags so the report remains evidence only:
+   `report_is_authority: false`, `ontology_lock_is_canonical: false`,
+   `automatic_import_lock_update: false`, and
+   `automatic_canonical_node_update: false`.
+6. Preserve existing PASS/FAIL stdout and non-zero failure behavior.
+
+`--source-uri` and `--source-ref` are optional metadata fields for downstream
+review surfaces. When omitted, the report leaves those fields empty. The digest
+authority remains the normalized IR `sourceDigest`.
 
 ## Validation Details
 

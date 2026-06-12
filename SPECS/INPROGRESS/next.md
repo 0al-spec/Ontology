@@ -1,6 +1,6 @@
 # Next Task: No Queued Workplan Task
 
-**Status:** ONT-035 archived with PASS. `SPECS/Workplan.md` currently has no remaining
+**Status:** ONT-036 archived with PASS. `SPECS/Workplan.md` currently has no remaining
 `Not Started`, `INPROGRESS`, or `PRD Ready` tasks.
 
 ## Recently Completed Value Loop
@@ -23,23 +23,38 @@ SpecGraph evidence PR:
 
 - Ontology still owns `DomainOntologyPackage`, compiler behavior, normalized IR, registry
   materialization, governance decisions, and trusted publish gates.
-- SpecGraph now has an open PR for the first proposal 0060 consumer slice:
-  `tools/ontology_import_policy.json`, `tools/ontology_imports.py`, checked-in examcalc
-  normalized-IR fixture, focused tests, and proposal runtime markers.
+- SpecGraph has merged the first proposal 0060 consumer slice and the follow-up
+  adapter/report contract slice.
 - ONT-035 validation recorded both SpecGraph checks and Ontology checks.
 
-## Recommended New Task Candidate
+## Completed ONT-036 Scope
 
-No Workplan task has been created yet. The strongest next candidate is:
+ONT-036 turned the proposal candidate into an Ontology-owned compiler artifact:
 
-| Candidate | Why |
-|-----------|-----|
-| `ontologyc validate-specgraph` adapter/report contract for SpecGraph | PR #522 proves fixture-driven consumption; the next stronger slice would invoke the real Ontology compiler contract from SpecGraph without allowing canonical graph mutation. |
+```text
+SpecGraph binding + normalized IR
+-> ontologyc validate-specgraph
+-> concept-refs.yaml / ontology.lock.yaml / ontology-gaps.yaml
+-> ontologyc-adapter-report.yaml
+```
+
+The report is evidence for SpecGraph and future SpecSpace review surfaces. It is
+not canonical SpecGraph state, not an accepted import lock, and not permission
+for `ontologyc` to mutate `specs/nodes/*.yaml`.
+
+## Non-Goals
+
+- No prompt-agent invocation boundary.
+- No SpecSpace UI or mutation action.
+- No Platform/Docker packaging.
+- No canonical SpecGraph import lock writeback.
+- No change to `DomainOntologyPackage` source schema.
 
 ## Recently Implemented
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-036 | `ontologyc` adapter report artifact | `SPECS/ARCHIVE/ONT-036_ontologyc_Adapter_Report_Artifact/` |
 | ONT-035 | SpecGraph Proposal 0060 minimal consumer slice | `SPECS/ARCHIVE/ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice/` |
 | ONT-034 | Induction artifact schemas and draft validation | `SPECS/ARCHIVE/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation/` |
 | ONT-033 | File and git registry transport | `SPECS/ARCHIVE/ONT-033_File_And_Git_Registry_Transport/` |
@@ -51,6 +66,7 @@ No Workplan task has been created yet. The strongest next candidate is:
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-036 | 2026-06-12 | PASS | `SPECS/ARCHIVE/ONT-036_ontologyc_Adapter_Report_Artifact/` |
 | ONT-035 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice/` |
 | ONT-034 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation/` |
 | ONT-033 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-033_File_And_Git_Registry_Transport/` |

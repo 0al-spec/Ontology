@@ -43,12 +43,18 @@ SpecGraph validation uses the normalized IR to emit:
 | `concept-refs.yaml` | Resolved ontology references used by SpecGraph artifacts. |
 | `ontology.lock.yaml` | Pinned ontology import metadata for semantic drift control. |
 | `ontology-gaps.yaml` | Missing ontology references that must become ontology follow-up work. |
+| `ontologyc-adapter-report.yaml` | Review-only adapter report binding the outputs to package source/version/digest and explicit no-canonical-mutation authority flags. |
 
 The first SpecGraph-side proposal 0060 consumer slice is tracked in
 [SpecGraph PR #522](https://github.com/0al-spec/SpecGraph/pull/522). It consumes the
 Ontology-generated examcalc normalized IR as a materialized fixture, resolves known
 `examcalc:*` refs, and preserves an unresolved ref as an explicit ontology gap without
 copying `DomainOntologyPackage` semantics into SpecGraph.
+
+The follow-up `ontologyc` adapter report contract is tracked by SpecGraph in
+`docs/ontologyc_adapter_report_contract.md`. Ontology emits
+`ontologyc-adapter-report.yaml` as evidence for that contract; the report is not a
+canonical SpecGraph import lock and does not authorize updates to `specs/nodes/*.yaml`.
 
 ## Requirements
 
@@ -99,7 +105,9 @@ Validate a SpecGraph semantic binding against the compiled ontology IR:
 swift run ontologyc validate-specgraph \
   SPECS/specgraph/semantic-validation/valid-semantic-binding.yaml \
   --ontology-ir SPECS/ontology/packages/examcalc/generated/ontology.normalized.json \
-  --out /tmp/examcalc-semantic-validation
+  --out /tmp/examcalc-semantic-validation \
+  --source-uri git+https://github.com/0al-spec/Ontology.git \
+  --source-ref main
 ```
 
 Run compatibility analysis between package versions:

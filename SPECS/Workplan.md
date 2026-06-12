@@ -656,6 +656,44 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+## Phase 11: External Ontology Import Plane Follow-Ups
+
+> Tasks in this phase are derived from SpecGraph proposal 0060 and the first
+> read-only SpecGraph consumer slices. The phase priority is to make Ontology's
+> compiler boundary explicit enough for downstream review surfaces without
+> letting generated reports mutate canonical SpecGraph state.
+
+#### ONT-036: `ontologyc` Adapter Report Artifact
+- **Description:** Teach `ontologyc validate-specgraph` to emit a typed
+  `ontologyc_adapter_report` artifact that summarizes package authority,
+  input/output refs, resolved/gap counts, and the non-authoritative report
+  boundary expected by SpecGraph proposal 0060.
+- **Priority:** P0
+- **Dependencies:** ONT-035
+- **Parallelizable:** no
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-036_ontologyc_Adapter_Report_Artifact/ONT-036_ontologyc_Adapter_Report_Artifact.md`
+- **Origin:** SpecGraph proposal `0060_external_ontology_import_plane.md` and the
+  SpecGraph `ontologyc` adapter/report contract consumer slice.
+- **Implementation Note:** `ontologyc validate-specgraph` now emits
+  `ontologyc-adapter-report.yaml` with package identity, optional source URI/ref,
+  normalized IR digest, portable input/output refs, summary counts, and explicit
+  evidence-only authority flags. Existing validation outputs and PASS/FAIL behavior
+  remain backward-compatible.
+- **Acceptance Criteria:**
+  - Complete: `ontologyc validate-specgraph` can write `ontologyc-adapter-report.yaml`
+    beside existing `concept-refs.yaml`, `ontology.lock.yaml`, and
+    `ontology-gaps.yaml` outputs.
+  - Complete: The report includes package id, namespace, version, source URI/ref, digest,
+    input refs, output refs, summary counts, and explicit authority-boundary flags.
+  - Complete: The digest authority is the normalized IR `sourceDigest`; the report never
+    claims canonical SpecGraph authority or tracked artifact mutation.
+  - Complete: Existing `validate-specgraph` outputs and public PASS/FAIL behavior remain
+    backward-compatible.
+  - Complete: Tests cover deterministic report shape and the no-canonical-mutation boundary.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
