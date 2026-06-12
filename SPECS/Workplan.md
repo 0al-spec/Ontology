@@ -671,21 +671,26 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-035
 - **Parallelizable:** no
-- **Status:** INPROGRESS
-- **PRD:** `SPECS/INPROGRESS/ONT-036_ontologyc_Adapter_Report_Artifact.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-036_ontologyc_Adapter_Report_Artifact/ONT-036_ontologyc_Adapter_Report_Artifact.md`
 - **Origin:** SpecGraph proposal `0060_external_ontology_import_plane.md` and the
   SpecGraph `ontologyc` adapter/report contract consumer slice.
+- **Implementation Note:** `ontologyc validate-specgraph` now emits
+  `ontologyc-adapter-report.yaml` with package identity, optional source URI/ref,
+  normalized IR digest, portable input/output refs, summary counts, and explicit
+  evidence-only authority flags. Existing validation outputs and PASS/FAIL behavior
+  remain backward-compatible.
 - **Acceptance Criteria:**
-  - `ontologyc validate-specgraph` can write `ontologyc-adapter-report.yaml`
+  - Complete: `ontologyc validate-specgraph` can write `ontologyc-adapter-report.yaml`
     beside existing `concept-refs.yaml`, `ontology.lock.yaml`, and
     `ontology-gaps.yaml` outputs.
-  - The report includes package id, namespace, version, source URI/ref, digest,
+  - Complete: The report includes package id, namespace, version, source URI/ref, digest,
     input refs, output refs, summary counts, and explicit authority-boundary flags.
-  - The digest authority is the normalized IR `sourceDigest`; the report never
+  - Complete: The digest authority is the normalized IR `sourceDigest`; the report never
     claims canonical SpecGraph authority or tracked artifact mutation.
-  - Existing `validate-specgraph` outputs and public PASS/FAIL behavior remain
+  - Complete: Existing `validate-specgraph` outputs and public PASS/FAIL behavior remain
     backward-compatible.
-  - Tests cover deterministic report shape and the no-canonical-mutation boundary.
+  - Complete: Tests cover deterministic report shape and the no-canonical-mutation boundary.
 
 ---
 

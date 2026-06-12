@@ -1,19 +1,7 @@
-# Next Task: ONT-036 `ontologyc` Adapter Report Artifact
+# Next Task: No Queued Workplan Task
 
-**Status:** SELECTED / INPROGRESS.
-
-## Task Metadata
-
-| Field | Value |
-|-------|-------|
-| Task ID | ONT-036 |
-| Name | `ontologyc` Adapter Report Artifact |
-| Priority | P0 |
-| Dependencies | ONT-035 |
-| Branch | `codex/ont-036-ontologyc-adapter-report` |
-| PRD | `SPECS/INPROGRESS/ONT-036_ontologyc_Adapter_Report_Artifact.md` |
-| Source proposal | SpecGraph `docs/proposals/0060_external_ontology_import_plane.md` |
-| Consumer contract | SpecGraph `docs/ontologyc_adapter_report_contract.md` |
+**Status:** ONT-036 archived with PASS. `SPECS/Workplan.md` currently has no remaining
+`Not Started`, `INPROGRESS`, or `PRD Ready` tasks.
 
 ## Recently Completed Value Loop
 
@@ -39,9 +27,9 @@ SpecGraph evidence PR:
   adapter/report contract slice.
 - ONT-035 validation recorded both SpecGraph checks and Ontology checks.
 
-## Selected Scope
+## Completed ONT-036 Scope
 
-ONT-036 turns the proposal candidate into an Ontology-owned compiler artifact:
+ONT-036 turned the proposal candidate into an Ontology-owned compiler artifact:
 
 ```text
 SpecGraph binding + normalized IR
@@ -66,6 +54,7 @@ for `ontologyc` to mutate `specs/nodes/*.yaml`.
 
 | Task ID | Implemented | Folder |
 |---------|-------------|--------|
+| ONT-036 | `ontologyc` adapter report artifact | `SPECS/ARCHIVE/ONT-036_ontologyc_Adapter_Report_Artifact/` |
 | ONT-035 | SpecGraph Proposal 0060 minimal consumer slice | `SPECS/ARCHIVE/ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice/` |
 | ONT-034 | Induction artifact schemas and draft validation | `SPECS/ARCHIVE/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation/` |
 | ONT-033 | File and git registry transport | `SPECS/ARCHIVE/ONT-033_File_And_Git_Registry_Transport/` |
@@ -77,6 +66,7 @@ for `ontologyc` to mutate `specs/nodes/*.yaml`.
 
 | Task ID | Archived | Verdict | Folder |
 |---------|----------|---------|--------|
+| ONT-036 | 2026-06-12 | PASS | `SPECS/ARCHIVE/ONT-036_ontologyc_Adapter_Report_Artifact/` |
 | ONT-035 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice/` |
 | ONT-034 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-034_Induction_Artifact_Schemas_And_Draft_Validation/` |
 | ONT-033 | 2026-06-11 | PASS | `SPECS/ARCHIVE/ONT-033_File_And_Git_Registry_Transport/` |
