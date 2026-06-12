@@ -47,6 +47,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-12 | ONT-036 | Archived REVIEW_ONT-036 report |
 | 2026-06-12 | ONT-036 | Archived ontologyc_Adapter_Report_Artifact (PASS) |
 | 2026-06-11 | ONT-035 | Archived REVIEW_ONT-035 report |
 | 2026-06-11 | ONT-035 | Archived SpecGraph_Proposal_0060_Minimal_Consumer_Slice (PASS) |
