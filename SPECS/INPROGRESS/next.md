@@ -1,7 +1,19 @@
-# Next Task: No Queued Workplan Task
+# Next Task: ONT-036 `ontologyc` Adapter Report Artifact
 
-**Status:** ONT-035 archived with PASS. `SPECS/Workplan.md` currently has no remaining
-`Not Started`, `INPROGRESS`, or `PRD Ready` tasks.
+**Status:** SELECTED / INPROGRESS.
+
+## Task Metadata
+
+| Field | Value |
+|-------|-------|
+| Task ID | ONT-036 |
+| Name | `ontologyc` Adapter Report Artifact |
+| Priority | P0 |
+| Dependencies | ONT-035 |
+| Branch | `codex/ont-036-ontologyc-adapter-report` |
+| PRD | `SPECS/INPROGRESS/ONT-036_ontologyc_Adapter_Report_Artifact.md` |
+| Source proposal | SpecGraph `docs/proposals/0060_external_ontology_import_plane.md` |
+| Consumer contract | SpecGraph `docs/ontologyc_adapter_report_contract.md` |
 
 ## Recently Completed Value Loop
 
@@ -23,18 +35,32 @@ SpecGraph evidence PR:
 
 - Ontology still owns `DomainOntologyPackage`, compiler behavior, normalized IR, registry
   materialization, governance decisions, and trusted publish gates.
-- SpecGraph now has an open PR for the first proposal 0060 consumer slice:
-  `tools/ontology_import_policy.json`, `tools/ontology_imports.py`, checked-in examcalc
-  normalized-IR fixture, focused tests, and proposal runtime markers.
+- SpecGraph has merged the first proposal 0060 consumer slice and the follow-up
+  adapter/report contract slice.
 - ONT-035 validation recorded both SpecGraph checks and Ontology checks.
 
-## Recommended New Task Candidate
+## Selected Scope
 
-No Workplan task has been created yet. The strongest next candidate is:
+ONT-036 turns the proposal candidate into an Ontology-owned compiler artifact:
 
-| Candidate | Why |
-|-----------|-----|
-| `ontologyc validate-specgraph` adapter/report contract for SpecGraph | PR #522 proves fixture-driven consumption; the next stronger slice would invoke the real Ontology compiler contract from SpecGraph without allowing canonical graph mutation. |
+```text
+SpecGraph binding + normalized IR
+-> ontologyc validate-specgraph
+-> concept-refs.yaml / ontology.lock.yaml / ontology-gaps.yaml
+-> ontologyc-adapter-report.yaml
+```
+
+The report is evidence for SpecGraph and future SpecSpace review surfaces. It is
+not canonical SpecGraph state, not an accepted import lock, and not permission
+for `ontologyc` to mutate `specs/nodes/*.yaml`.
+
+## Non-Goals
+
+- No prompt-agent invocation boundary.
+- No SpecSpace UI or mutation action.
+- No Platform/Docker packaging.
+- No canonical SpecGraph import lock writeback.
+- No change to `DomainOntologyPackage` source schema.
 
 ## Recently Implemented
 
