@@ -1,6 +1,6 @@
 ## REVIEW REPORT — ONT-036
 
-**Scope:** `origin/main..HEAD`  
+**Scope:** `origin/main..HEAD`
 **Files:** 14
 
 ### Summary Verdict

@@ -1,8 +1,8 @@
 # ONT-036 Validation Report
 
-**Task:** `ontologyc` Adapter Report Artifact  
-**Branch:** `codex/ont-036-ontologyc-adapter-report`  
-**Date:** 2026-06-12  
+**Task:** `ontologyc` Adapter Report Artifact
+**Branch:** `codex/ont-036-ontologyc-adapter-report`
+**Date:** 2026-06-12
 **Verdict:** PASS
 
 ## Summary

@@ -1,10 +1,10 @@
 # ONT-036: `ontologyc` Adapter Report Artifact PRD
 
-**Status:** PRD Ready  
-**Priority:** P0  
-**Phase:** External Ontology Import Plane Follow-Ups  
-**Reasoning Effort:** high  
-**Dependencies:** ONT-035  
+**Status:** PRD Ready
+**Priority:** P0
+**Phase:** External Ontology Import Plane Follow-Ups
+**Reasoning Effort:** high
+**Dependencies:** ONT-035
 **Branch:** `codex/ont-036-ontologyc-adapter-report`
 
 ## TL;DR
