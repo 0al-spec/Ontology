@@ -59,7 +59,11 @@ case "compile":
     }
 
 case "validate-specgraph":
-    let parsed = parseArguments(commandArgs, allowedOptions: ["--ontology-ir", "--out"], command: command)
+    let parsed = parseArguments(
+        commandArgs,
+        allowedOptions: ["--ontology-ir", "--out", "--source-uri", "--source-ref"],
+        command: command
+    )
     requirePositionals(1, in: parsed, command: command)
     let bindingPath = parsed.positional[0]
     let ontologyIR = requireOption("--ontology-ir", in: parsed, command: command)
@@ -68,7 +72,9 @@ case "validate-specgraph":
         let result = try compiler.validateSpecGraph(
             bindingPath: OntologySourcePath(path: bindingPath),
             ontologyIRPath: OntologySourcePath(path: ontologyIR),
-            outDirectory: OntologyOutputDirectory(path: outDirectory)
+            outDirectory: OntologyOutputDirectory(path: outDirectory),
+            sourceURI: parsed.options["--source-uri"] ?? "",
+            sourceRef: parsed.options["--source-ref"] ?? ""
         )
         print("ontologyc validate-specgraph: PASS \(bindingPath) resolved=\(result.resolved) gaps=\(result.gaps)")
     } catch {

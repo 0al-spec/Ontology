@@ -208,7 +208,11 @@ final class OntologyCRegressionTests: XCTestCase {
             "--ontology-ir",
             "SPECS/ontology/packages/examcalc/generated/ontology.normalized.json",
             "--out",
-            missingOutput.path
+            missingOutput.path,
+            "--source-uri",
+            "git+https://github.com/0al-spec/Ontology.git",
+            "--source-ref",
+            "main"
         ])
 
         XCTAssertEqual(missing.status, 0, missing.combinedOutput)
@@ -217,6 +221,8 @@ final class OntologyCRegressionTests: XCTestCase {
             missingOutput.appendingPathComponent("ontology-gaps.yaml"),
             matches: "SPECS/specgraph/semantic-validation/out/missing/ontology-gaps.yaml"
         )
+
+        try assertOntologycAdapterReport(missingOutput.appendingPathComponent("ontologyc-adapter-report.yaml"))
     }
 
     func testCompatibilityDiffOutputMatchesBaseline() throws {

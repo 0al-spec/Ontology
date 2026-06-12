@@ -43,13 +43,18 @@ swift run ontologyc compile \
 
 `validate-specgraph` resolves imported ontology references from SpecGraph
 artifacts and emits `concept-refs.yaml`, `ontology.lock.yaml`, and
-`ontology-gaps.yaml`.
+`ontology-gaps.yaml`. It also emits `ontologyc-adapter-report.yaml`, a
+review-only adapter boundary report that records package source/version/digest,
+input and output refs, summary counts, and explicit no-canonical-mutation
+authority flags.
 
 ```bash
 swift run ontologyc validate-specgraph \
   SPECS/specgraph/semantic-validation/valid-semantic-binding.yaml \
   --ontology-ir SPECS/ontology/packages/examcalc/generated/ontology.normalized.json \
-  --out /tmp/examcalc-semantic-validation
+  --out /tmp/examcalc-semantic-validation \
+  --source-uri git+https://github.com/0al-spec/Ontology.git \
+  --source-ref main
 ```
 
 ### Compatibility Reports
