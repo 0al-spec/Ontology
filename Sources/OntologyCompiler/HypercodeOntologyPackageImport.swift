@@ -12,6 +12,12 @@ private let ontologyPackageSections = [
 ]
 
 extension OntologyCompiler {
+    func isHypercodeOntologyPackageRoot(_ root: JSONObject) -> Bool {
+        guard string(root["type"]) == "Package" else { return false }
+        let sectionTypes = Set(children(root).compactMap { string($0["type"]) })
+        return Set(ontologyPackageSections).isSubset(of: sectionTypes)
+    }
+
     func hypercodeOntologyPackage(_ root: JSONObject, sourcePath: String) throws -> JSONObject {
         let sections = try uniqueChildrenByType(root, path: "nodes[0]")
         for section in ontologyPackageSections where sections[section] == nil {
@@ -51,8 +57,8 @@ extension OntologyCompiler {
                 "id": try requiredStringProperty(metadata, "package_id", path: "Metadata.package_id"),
                 "namespace": try requiredStringProperty(metadata, "namespace", path: "Metadata.namespace"),
                 "version": try requiredStringProperty(metadata, "version", path: "Metadata.version"),
-                "publisher": try requiredStringProperty(metadata, "publisher", path: "Metadata.publisher"),
-                "source": try requiredStringProperty(metadata, "source", path: "Metadata.source"),
+                "publisher": optionalStringProperty(metadata, "publisher") ?? "ontologyc import-hypercode",
+                "source": optionalStringProperty(metadata, "source") ?? sourcePath,
                 "approvalStatus": approvalStatus
             ],
             "spec": spec
@@ -60,19 +66,22 @@ extension OntologyCompiler {
     }
 
     private func hypercodeOntologyImports(_ section: JSONObject) throws -> [JSONObject] {
-        try children(section, type: "Import").map { node in
+        try requireNonEmptyChildren(section, type: "Import", section: "Imports").map { node in
             let values = propertyValues(node)
-            return [
+            var entry: JSONObject = [
                 "id": try requiredStringProperty(values, "import_id", path: "\(nodePath(node)).import_id"),
-                "namespace": try requiredStringProperty(values, "namespace", path: "\(nodePath(node)).namespace"),
                 "version": try requiredStringProperty(values, "version", path: "\(nodePath(node)).version")
             ]
+            if let namespace = optionalStringProperty(values, "namespace") {
+                entry["namespace"] = namespace
+            }
+            return entry
         }
     }
 
     private func hypercodeOntologyClasses(_ section: JSONObject) throws -> JSONObject {
         var classes = JSONObject()
-        for node in children(section, type: "Class") {
+        for node in try requireNonEmptyChildren(section, type: "Class", section: "Classes") {
             let id = try requiredNodeID(node)
             let values = propertyValues(node)
             var entry: JSONObject = [
@@ -115,7 +124,7 @@ extension OntologyCompiler {
 
     private func hypercodeOntologyRelations(_ section: JSONObject) throws -> JSONObject {
         var relations = JSONObject()
-        for node in children(section, type: "Relation") {
+        for node in try requireNonEmptyChildren(section, type: "Relation", section: "Relations") {
             let id = try requiredNodeID(node)
             let values = propertyValues(node)
             let targets = try csv(
@@ -154,7 +163,7 @@ extension OntologyCompiler {
 
     private func hypercodeOntologyPolicies(_ section: JSONObject) throws -> JSONObject {
         var policies = JSONObject()
-        for node in children(section, type: "Policy") {
+        for node in try requireNonEmptyChildren(section, type: "Policy", section: "Policies") {
             let id = try requiredNodeID(node)
             let values = propertyValues(node)
             try put(&policies, key: id, value: [
@@ -176,7 +185,7 @@ extension OntologyCompiler {
 
     private func hypercodeOntologyStateMachines(_ section: JSONObject) throws -> JSONObject {
         var machines = JSONObject()
-        for node in children(section, type: "Machine") {
+        for node in try requireNonEmptyChildren(section, type: "Machine", section: "StateMachines") {
             let id = try requiredNodeID(node)
             let values = propertyValues(node)
             try put(&machines, key: id, value: [
@@ -254,6 +263,20 @@ extension OntologyCompiler {
         return node
     }
 
+    private func requireNonEmptyChildren(
+        _ node: JSONObject,
+        type: String,
+        section: String
+    ) throws -> [JSONObject] {
+        let nodes = children(node, type: type)
+        guard !nodes.isEmpty else {
+            throw OntologyCompilerError.invalidArgument(
+                "Hypercode ontology package \(section) must contain at least one \(type)"
+            )
+        }
+        return nodes
+    }
+
     private func children(_ node: JSONObject, type: String? = nil) -> [JSONObject] {
         guard let rawChildren = node["children"] as? [Any] else { return [] }
         return rawChildren.compactMap { child in
@@ -306,6 +329,11 @@ extension OntologyCompiler {
         return text
     }
 
+    private func optionalStringProperty(_ values: JSONObject, _ key: String) -> String? {
+        guard let text = string(values[key]), !text.isEmpty else { return nil }
+        return text
+    }
+
     private func requiredBoolProperty(_ values: JSONObject, _ key: String, path: String) throws -> Bool {
         let value = try requiredProperty(values, key, path: path)
         guard let boolean = bool(value) else {
@@ -322,7 +350,10 @@ extension OntologyCompiler {
         guard let text = string(value) else {
             throw OntologyCompilerError.invalidArgument("Hypercode ontology package property \(path) must be a comma list")
         }
-        let values = text.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+        let values = text.split(
+            separator: ",",
+            omittingEmptySubsequences: false
+        ).map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
         guard !values.isEmpty, values.allSatisfy({ !$0.isEmpty }) else {
             throw OntologyCompilerError.invalidArgument("Hypercode ontology package property \(path) must not be empty")
         }

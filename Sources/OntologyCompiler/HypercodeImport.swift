@@ -30,7 +30,7 @@ extension OntologyCompiler {
         let package: JSONObject
         if string(ir["version"]) == "hypercode.ir/v2",
            let root = firstHypercodeRoot(ir),
-           string(root["type"]) == "Package" {
+           isHypercodeOntologyPackageRoot(root) {
             package = try hypercodeOntologyPackage(root, sourcePath: path.path)
         } else {
             let nodeTypes = collectHypercodeNodeTypes(ir)
