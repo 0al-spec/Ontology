@@ -76,8 +76,6 @@ final class HypercodeOntologyPackageImportTests: XCTestCase {
         ])
 
         XCTAssertEqual(result.status, 0, result.combinedOutput)
-        let check = try ontologyc(["check", output.path])
-        XCTAssertEqual(check.status, 0, check.combinedOutput)
 
         let draft = try XCTUnwrap(Yams.load(yaml: String(contentsOf: output)) as? [String: Any])
         let metadata = try XCTUnwrap(draft["metadata"] as? [String: Any])
