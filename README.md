@@ -167,9 +167,13 @@ swift run ontologyc import-hypercode <hypercode-ir.json> \
   --version 0.1.0
 ```
 
-`import-hypercode` is a deterministic bridge from `hypercode.ir/v1` node types to
-`DomainOntologyPackage` class drafts. The output is always `approvalStatus: draft`;
-review and domain refinement still happen through the ontology authoring workflow.
+`import-hypercode` is a deterministic bridge from Hypercode resolved IR to
+Ontology-owned YAML. Generic `hypercode.ir/v1`/`hypercode.ir/v2` graphs still become
+reviewable class drafts from node types. A `hypercode.ir/v2` graph shaped as an
+Ontology package (`Package > Metadata/Imports/Classes/Relations/Policies/StateMachines/
+Compatibility`) maps resolved properties into the corresponding `DomainOntologyPackage`
+sections. Imported packages must remain `approvalStatus: draft`; review and governance
+approval still happen through the ontology authoring workflow.
 
 Staged ontology-induction artifacts can be checked before final compiler validation:
 

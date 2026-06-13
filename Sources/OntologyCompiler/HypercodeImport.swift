@@ -12,6 +12,11 @@ private struct HypercodeDraftContext {
     let reviewCommand: String
 }
 
+private let supportedHypercodeIRVersions = Set([
+    "hypercode.ir/v1",
+    "hypercode.ir/v2"
+])
+
 extension OntologyCompiler {
     public func importHypercode(
         path: OntologySourcePath,
@@ -22,24 +27,31 @@ extension OntologyCompiler {
     ) throws -> [Diagnostic] {
         diagnostics = []
         let ir = try loadHypercodeIR(path: path)
-        let nodeTypes = collectHypercodeNodeTypes(ir)
-        guard !nodeTypes.isEmpty else {
-            throw OntologyCompilerError.invalidArgument("Hypercode IR has no nodes: \(path.path)")
-        }
+        let package: JSONObject
+        if string(ir["version"]) == "hypercode.ir/v2",
+           let root = firstHypercodeRoot(ir),
+           isHypercodeOntologyPackageRoot(root) {
+            package = try hypercodeOntologyPackage(root, sourcePath: path.path)
+        } else {
+            let nodeTypes = collectHypercodeNodeTypes(ir)
+            guard !nodeTypes.isEmpty else {
+                throw OntologyCompilerError.invalidArgument("Hypercode IR has no nodes: \(path.path)")
+            }
 
-        let symbols = uniqueSymbols(for: nodeTypes)
-        let rootSymbol = symbols.first ?? "ImportedHypercodeRoot"
-        let reviewCommand = uniqueGeneratedSymbol("ReviewGeneratedDraft", existing: Set(symbols))
-        let package = hypercodeDraftPackage(HypercodeDraftContext(
-            path: path,
-            packageId: packageId,
-            namespace: namespace,
-            version: version,
-            nodeTypes: nodeTypes,
-            symbols: symbols,
-            rootSymbol: rootSymbol,
-            reviewCommand: reviewCommand
-        ))
+            let symbols = uniqueSymbols(for: nodeTypes)
+            let rootSymbol = symbols.first ?? "ImportedHypercodeRoot"
+            let reviewCommand = uniqueGeneratedSymbol("ReviewGeneratedDraft", existing: Set(symbols))
+            package = hypercodeDraftPackage(HypercodeDraftContext(
+                path: path,
+                packageId: packageId,
+                namespace: namespace,
+                version: version,
+                nodeTypes: nodeTypes,
+                symbols: symbols,
+                rootSymbol: rootSymbol,
+                reviewCommand: reviewCommand
+            ))
+        }
 
         if let parent = outPath.url.deletingLastPathComponentIfPresent {
             try FileManager.default.createDirectory(at: parent, withIntermediateDirectories: true)
@@ -204,8 +216,11 @@ extension OntologyCompiler {
         guard let root = try JSONSerialization.jsonObject(with: data) as? JSONObject else {
             throw OntologyCompilerError.invalidArgument("Hypercode IR root must be a JSON object: \(path.path)")
         }
-        guard string(root["version"]) == "hypercode.ir/v1" else {
-            throw OntologyCompilerError.invalidArgument("Expected Hypercode IR version hypercode.ir/v1 in \(path.path)")
+        guard let version = string(root["version"]),
+              supportedHypercodeIRVersions.contains(version) else {
+            throw OntologyCompilerError.invalidArgument(
+                "Expected Hypercode IR version hypercode.ir/v1 or hypercode.ir/v2 in \(path.path)"
+            )
         }
         guard let nodes = root["nodes"] as? [Any] else {
             throw OntologyCompilerError.invalidArgument("Hypercode IR must contain a nodes array: \(path.path)")
@@ -242,6 +257,10 @@ extension OntologyCompiler {
             visit(node)
         }
         return ordered
+    }
+
+    private func firstHypercodeRoot(_ ir: JSONObject) -> JSONObject? {
+        (ir["nodes"] as? [Any])?.first as? JSONObject
     }
 
     private func uniqueSymbols(for rawValues: [String]) -> [String] {
