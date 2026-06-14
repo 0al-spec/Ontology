@@ -704,19 +704,24 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-036
 - **Parallelizable:** no
-- **Status:** INPROGRESS
-- **PRD:** `SPECS/INPROGRESS/ONT-037_SpecGraph_Owner_Decision_Report_Export.md`
+- **Status:** Complete
+- **PRD:** `SPECS/ARCHIVE/ONT-037_SpecGraph_Owner_Decision_Report_Export/ONT-037_SpecGraph_Owner_Decision_Report_Export.md`
 - **Origin:** SpecGraph proposals `0114_ontology_owner_decision_contract`,
   `0115_ontology_decision_import_preview`, and `0118_ontology_prompt_agent_context_artifact`.
+- **Implementation Note:** `ontologyc export-specgraph-owner-decisions` now emits
+  deterministic `ontology_owner_decision_report` JSON from an Ontology-owned
+  owner decision set. The report supports accepted, rejected, and
+  needs-clarification decisions while preserving explicit evidence-only
+  authority boundaries.
 - **Acceptance Criteria:**
-  - Defines an Ontology-side candidate decision input fixture or schema for SpecGraph
+  - Complete: Defines an Ontology-side candidate decision input fixture or schema for SpecGraph
     delta candidates.
-  - Emits a deterministic `ontology_owner_decision_report` compatible with SpecGraph's
+  - Complete: Emits a deterministic `ontology_owner_decision_report` compatible with SpecGraph's
     read-only decision report contract.
-  - Supports `accepted`, `rejected`, and `needs_clarification` owner decisions.
-  - Preserves explicit false authority flags for SpecGraph import, semantic gate closure,
+  - Complete: Supports `accepted`, `rejected`, and `needs_clarification` owner decisions.
+  - Complete: Preserves explicit false authority flags for SpecGraph import, semantic gate closure,
     canonical spec mutation, Ontology package writes, and lockfile updates.
-  - Adds tests and docs showing the report is owner-decision evidence, not an automatic
+  - Complete: Adds tests and docs showing the report is owner-decision evidence, not an automatic
     package or SpecGraph mutation.
 
 ---

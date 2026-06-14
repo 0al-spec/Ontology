@@ -3,7 +3,7 @@
 **Task:** SpecGraph Owner Decision Report Export
 **Branch:** `codex/ont-037-specgraph-owner-decisions`
 **Date:** 2026-06-14
-**Verdict:** LOCAL SWIFT BUILD BLOCKED
+**Verdict:** PASS
 
 ## Summary
 
@@ -85,20 +85,17 @@ Result:
 
 - PASS
 
+Remote PR validation:
+
+- PR #55 `Build DocC` — PASS.
+- PR #55 `Lint, format, test, coverage` — PASS.
+- PR #55 review thread about private diagnostic sorting was fixed in
+  `c40e035` and resolved.
+
+Local Swift test commands:
+
 ```bash
 swift test --filter SpecGraphOwnerDecisionExportTests
-```
-
-Result:
-
-- BLOCKED before Ontology targets compile.
-- Apple Swift version:
-  `Apple Swift version 6.3.2 (swiftlang-6.3.2.1.108 clang-2100.1.1.101)`.
-- Failure is in remote dependency `SpecificationCore` 1.0.0:
-
-```text
-SpecificationCore/Sources/SpecificationCore/Specs/FirstMatchSpec.swift:206:13:
-error: ambiguous use of 'init(_:includeMetadata:)'
 ```
 
 ```bash
@@ -107,8 +104,15 @@ bash tools/swift-quality.sh
 
 Result:
 
-- BLOCKED at the same `SpecificationCore` 1.0.0 compile error after
-  SwiftFormat and SwiftLint pass.
+- BLOCKED locally before Ontology targets compile.
+- Apple Swift version:
+  `Apple Swift version 6.3.2 (swiftlang-6.3.2.1.108 clang-2100.1.1.101)`.
+- Failure is in remote dependency `SpecificationCore` 1.0.0:
+
+```text
+SpecificationCore/Sources/SpecificationCore/Specs/FirstMatchSpec.swift:206:13:
+error: ambiguous use of 'init(_:includeMetadata:)'
+```
 
 ## Dependency Check
 
@@ -135,15 +139,13 @@ Result:
       lockfile updates.
 - [x] Adds tests and docs showing the report is owner-decision evidence, not an
       automatic package or SpecGraph mutation.
-- [ ] Full Swift test execution is not locally proven because Swift 6.3.2 fails
-      to compile `SpecificationCore` 1.0.0 before Ontology code is built.
+- [x] Full Swift quality execution is proven by GitHub PR #55.
 
 ## Residual Risks
 
-- Remote CI may pass if its Xcode/Swift toolchain does not expose the
-  `SpecificationCore` overload ambiguity. If remote CI also fails, the follow-up
-  should be a separate dependency/toolchain compatibility fix rather than
-  broadening ONT-037.
+- Local Apple Swift 6.3.2 still cannot compile `SpecificationCore` 1.0.0
+  before Ontology code is built. Remote PR validation passed, so this remains a
+  local toolchain/dependency compatibility risk rather than an ONT-037 blocker.
 - This slice emits owner decision evidence only. A later slice can connect the
   exporter to registry-backed owner workflow state, signatures, or trusted
   publication decisions.
