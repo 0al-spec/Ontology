@@ -4,7 +4,7 @@
 **Phase:** External Ontology Import Plane Follow-Ups
 **Effort:** 4-6 hours
 **Dependencies:** ONT-036
-**Status:** Selected
+**Status:** Executed locally; Swift build blocked by `SpecificationCore` 1.0.0 on Apple Swift 6.3.2
 
 ## Description
 
@@ -16,4 +16,5 @@ semantic gates, or canonical SpecGraph specs.
 
 ## Next Step
 
-Run the PLAN command to generate the implementation-ready PRD.
+Open the focused PR, inspect remote CI, and archive the task after validation
+is green or the dependency/toolchain blocker is explicitly resolved.

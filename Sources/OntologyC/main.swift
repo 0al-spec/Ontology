@@ -289,6 +289,26 @@ case "validate-governance-decision":
         exit(1)
     }
 
+case "export-specgraph-owner-decisions":
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--out"], command: command)
+    requirePositionals(1, in: parsed, command: command)
+    let decisionSetPath = parsed.positional[0]
+    let outPath = requireOption("--out", in: parsed, command: command)
+    do {
+        let result = try compiler.exportSpecGraphOwnerDecisions(
+            decisionSetPath: OntologySourcePath(path: decisionSetPath),
+            outPath: OntologyOutputPath(path: outPath)
+        )
+        print("ontologyc export-specgraph-owner-decisions: PASS \(outPath) decisions=\(result.decisionCount)")
+    } catch let compilerError as OntologyCompilerError {
+        if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
+        fputs("ontologyc export-specgraph-owner-decisions: FAIL \(compilerError)\n", stderr)
+        exit(1)
+    } catch {
+        fputs("ontologyc export-specgraph-owner-decisions: FAIL \(error)\n", stderr)
+        exit(1)
+    }
+
 default:
     usageError("unknown command \(command)")
 }

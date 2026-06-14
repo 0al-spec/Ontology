@@ -1,0 +1,35 @@
+artifact_kind: ontology_specgraph_owner_decision_set
+schema_version: 1
+source_artifacts:
+  ontology_closed_loop_evidence: runs/ontology_closed_loop_evidence.json
+target:
+  target_kind: proposal
+  target_ref: SG-RFC-0114
+decisions:
+  - decision_id: ontology-owner-decision-accept-casfunction
+    candidate_id: ontology-delta-candidate-examcalc-casfunction
+    intake_id: ontology-delta-draft-intake-ontology-delta-candidate-examcalc-casfunction
+    decision_state: accepted
+    ontology_decision_ref: ontology-decision://edu.university.examcalc/0.1.0/casfunction/accepted
+    decided_by: ontology-owner
+    decided_at: "2026-06-14T00:00:00Z"
+    reason: Accepted as an owner-reviewed package draft candidate for CASFunction.
+    accepted_ontology_delta: true
+  - decision_id: ontology-owner-decision-clarify-policyprofile
+    candidate_id: ontology-delta-candidate-examcalc-policyprofile
+    intake_id: ontology-delta-draft-intake-ontology-delta-candidate-examcalc-policyprofile
+    decision_state: needs_clarification
+    ontology_decision_ref: ontology-decision://edu.university.examcalc/0.1.0/policyprofile/needs-clarification
+    decided_by: ontology-owner
+    decided_at: "2026-06-14T00:00:00Z"
+    reason: Needs clarification because the proposed policy profile overlaps an existing accepted concept.
+    accepted_ontology_delta: false
+  - decision_id: ontology-owner-decision-reject-legacyterm
+    candidate_id: ontology-delta-candidate-examcalc-legacyterm
+    intake_id: ontology-delta-draft-intake-ontology-delta-candidate-examcalc-legacyterm
+    decision_state: rejected
+    ontology_decision_ref: ontology-decision://edu.university.examcalc/0.1.0/legacyterm/rejected
+    decided_by: ontology-owner
+    decided_at: "2026-06-14T00:00:00Z"
+    reason: Rejected because the term is outside the accepted package vocabulary.
+    accepted_ontology_delta: false
