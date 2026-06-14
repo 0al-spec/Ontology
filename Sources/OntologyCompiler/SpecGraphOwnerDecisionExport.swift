@@ -24,13 +24,13 @@ extension OntologyCompiler {
     ) throws -> SpecGraphOwnerDecisionExportResult {
         diagnostics = []
         guard let decisionSet = loadSpecGraphOwnerDecisionSet(path: decisionSetPath.path) else {
-            throw OntologyCompilerError.packageError(sortedDiagnostics())
+            throw OntologyCompilerError.packageError(sortedSpecGraphOwnerDecisionDiagnostics())
         }
 
         let sourceArtifacts = validateSpecGraphOwnerDecisionSourceArtifacts(decisionSet)
         let decisions = validateSpecGraphOwnerDecisions(decisionSet)
 
-        let sorted = sortedDiagnostics()
+        let sorted = sortedSpecGraphOwnerDecisionDiagnostics()
         if hasErrors(sorted) {
             throw OntologyCompilerError.packageError(sorted)
         }
@@ -45,6 +45,13 @@ extension OntologyCompiler {
         try FileManager.default.createDirectory(at: parent, withIntermediateDirectories: true)
         try write(json: report, to: outPath.url)
         return SpecGraphOwnerDecisionExportResult(report: report, decisionCount: decisions.count)
+    }
+
+    private func sortedSpecGraphOwnerDecisionDiagnostics() -> [Diagnostic] {
+        diagnostics.sorted {
+            [$0.path, $0.code, $0.message].joined(separator: "\u{1f}") <
+                [$1.path, $1.code, $1.message].joined(separator: "\u{1f}")
+        }
     }
 
     private func loadSpecGraphOwnerDecisionSet(path: String) -> JSONObject? {
