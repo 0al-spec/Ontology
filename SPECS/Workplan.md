@@ -697,6 +697,28 @@ This workplan tracks the specification work for the Ontology repository. The ini
     backward-compatible.
   - Complete: Tests cover deterministic report shape and the no-canonical-mutation boundary.
 
+#### ONT-037: SpecGraph Owner Decision Report Export
+- **Description:** Add an Ontology-owned owner-decision export for SpecGraph ontology
+  delta candidates so accepted, rejected, and needs-clarification decisions come from
+  Ontology review artifacts instead of SpecGraph-side fixtures.
+- **Priority:** P0
+- **Dependencies:** ONT-036
+- **Parallelizable:** no
+- **Status:** INPROGRESS
+- **PRD:** `SPECS/INPROGRESS/ONT-037_SpecGraph_Owner_Decision_Report_Export.md`
+- **Origin:** SpecGraph proposals `0114_ontology_owner_decision_contract`,
+  `0115_ontology_decision_import_preview`, and `0118_ontology_prompt_agent_context_artifact`.
+- **Acceptance Criteria:**
+  - Defines an Ontology-side candidate decision input fixture or schema for SpecGraph
+    delta candidates.
+  - Emits a deterministic `ontology_owner_decision_report` compatible with SpecGraph's
+    read-only decision report contract.
+  - Supports `accepted`, `rejected`, and `needs_clarification` owner decisions.
+  - Preserves explicit false authority flags for SpecGraph import, semantic gate closure,
+    canonical spec mutation, Ontology package writes, and lockfile updates.
+  - Adds tests and docs showing the report is owner-decision evidence, not an automatic
+    package or SpecGraph mutation.
+
 ---
 
 ## Task Status Legend
