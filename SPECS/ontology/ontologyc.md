@@ -213,6 +213,33 @@ Registry `publish` has an explicit trust boundary:
 The trusted gate runs before any registry network call. `pull` and `compat-check` do not
 consume governance decisions.
 
+### `ontologyc export-specgraph-owner-decisions`
+
+```bash
+swift run ontologyc export-specgraph-owner-decisions \
+  SPECS/ontology/examples/specgraph-owner-decisions/examcalc-owner-decisions.yaml \
+  --out /tmp/ontology-owner-decision-report.json
+```
+
+Behavior:
+
+1. Parse the owner decision set YAML as inert data.
+2. Validate `artifact_kind`, `schema_version`, source artifacts, `SG-RFC-0114`
+   target, required decision identity fields, and owner decision states.
+3. Support `accepted`, `rejected`, and `needs_clarification`.
+4. Require `accepted_ontology_delta: true` only for accepted decisions.
+5. Write deterministic JSON with `artifact_kind: ontology_owner_decision_report`.
+6. Exit non-zero and write no report for invalid decision input.
+
+Authority boundary:
+
+- The report may be consumed by SpecGraph decision import previews and SpecSpace
+  review dashboards.
+- The report does not import decisions into SpecGraph.
+- The report does not close semantic gates.
+- The report does not mutate canonical SpecGraph specs.
+- The report does not write Ontology packages or update ontology lockfiles.
+
 Registry transports:
 
 - HTTP(S) registries keep the ONT-018 contract: `publish` PUTs normalized IR to

@@ -160,6 +160,41 @@ spec:
     - examcalc:CASFunction
 ```
 
+## OntologyOwnerDecisionReport
+
+`OntologyOwnerDecisionReport` is the Ontology-owned response to SpecGraph delta
+candidate review. It reports owner decisions in the shape SpecGraph can preview,
+without applying those decisions.
+
+```json
+{
+  "artifact_kind": "ontology_owner_decision_report",
+  "schema_version": 1,
+  "proposal_id": "0114",
+  "decisions": [
+    {
+      "decision_id": "ontology-owner-decision-accept-casfunction",
+      "candidate_id": "ontology-delta-candidate-examcalc-casfunction",
+      "intake_id": "ontology-delta-draft-intake-ontology-delta-candidate-examcalc-casfunction",
+      "decision_state": "accepted",
+      "ontology_decision_ref": "ontology-decision://edu.university.examcalc/0.1.0/casfunction/accepted",
+      "accepted_ontology_delta": true,
+      "imports_into_specgraph": false,
+      "closes_semantic_gate": false,
+      "mutates_canonical_specs": false
+    }
+  ]
+}
+```
+
+Rules:
+
+1. Owner decisions MAY be accepted, rejected, or needs-clarification.
+2. `accepted_ontology_delta` MUST be true only for accepted decisions.
+3. The report MUST NOT import decisions into SpecGraph.
+4. The report MUST NOT close semantic gates or mutate canonical SpecGraph specs.
+5. The report MUST NOT write Ontology packages or update ontology lockfiles.
+
 ## OntologyCompatibilityReport
 
 ```yaml

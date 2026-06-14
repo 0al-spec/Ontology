@@ -20,6 +20,8 @@ Commands:
                       Validate candidate ontology YAML against a golden intent expectation.
   validate-governance-decision
                       Validate ontology governance decision YAML.
+  export-specgraph-owner-decisions
+                      Export SpecGraph-compatible owner decision report JSON.
 
 Run `ontologyc <command> --help` for command-specific usage.
 """
@@ -35,7 +37,8 @@ let commandUsage: [String: String] = [
     "import-hypercode": "Usage:\n  ontologyc import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>",
     "validate-draft": "Usage:\n  ontologyc validate-draft <draft-directory> [--out <report.yaml>]",
     "validate-golden-intent": "Usage:\n  ontologyc validate-golden-intent <expectation.yaml> --candidate <package.yaml> [--out <report.yaml>]",
-    "validate-governance-decision": "Usage:\n  ontologyc validate-governance-decision <decision.yaml> [--package <package.yaml>] [--golden-report <report.yaml>] [--out <report.yaml>]"
+    "validate-governance-decision": "Usage:\n  ontologyc validate-governance-decision <decision.yaml> [--package <package.yaml>] [--golden-report <report.yaml>] [--out <report.yaml>]",
+    "export-specgraph-owner-decisions": "Usage:\n  ontologyc export-specgraph-owner-decisions <decisions.yaml> --out <report.json>"
 ]
 
 struct ParsedArguments {

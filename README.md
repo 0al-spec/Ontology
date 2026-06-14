@@ -110,6 +110,18 @@ swift run ontologyc validate-specgraph \
   --source-ref main
 ```
 
+Export Ontology owner decisions for SpecGraph delta candidates:
+
+```bash
+swift run ontologyc export-specgraph-owner-decisions \
+  SPECS/ontology/examples/specgraph-owner-decisions/examcalc-owner-decisions.yaml \
+  --out /tmp/ontology-owner-decision-report.json
+```
+
+The exported `ontology_owner_decision_report` is review evidence for SpecGraph and
+SpecSpace. It does not import decisions into SpecGraph, close semantic gates, write
+Ontology packages, update lockfiles, or mutate canonical specs.
+
 Run compatibility analysis between package versions:
 
 ```bash

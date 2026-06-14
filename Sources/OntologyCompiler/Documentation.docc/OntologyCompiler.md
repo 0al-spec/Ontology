@@ -62,6 +62,15 @@ swift run ontologyc validate-specgraph \
 `diff` compares package versions and emits an
 `OntologyCompatibilityReport` describing compatible and breaking changes.
 
+### SpecGraph Owner Decisions
+
+`export-specgraph-owner-decisions` validates an Ontology-owned owner decision
+set for SpecGraph delta candidates and writes a deterministic
+`ontology_owner_decision_report` JSON artifact. The report supports accepted,
+rejected, and needs-clarification decisions, but remains evidence only: it does
+not import decisions into SpecGraph, close semantic gates, write Ontology
+packages, update lockfiles, or mutate canonical specs.
+
 ## Security Boundary
 
 Ontology YAML is untrusted input. The compiler must not execute hooks, imports,
