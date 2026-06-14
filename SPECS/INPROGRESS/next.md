@@ -1,20 +1,14 @@
-# Next Task: ONT-037 — SpecGraph Owner Decision Report Export
+# Next Task
 
-**Priority:** P0
-**Phase:** External Ontology Import Plane Follow-Ups
-**Effort:** 4-6 hours
-**Dependencies:** ONT-036
-**Status:** Executed locally; Swift build blocked by `SpecificationCore` 1.0.0 on Apple Swift 6.3.2
+No active Ontology task is selected.
 
-## Description
+## Recently Archived
 
-Add an Ontology-owned owner-decision export for SpecGraph ontology delta
-candidates. The report should carry accepted, rejected, and needs-clarification
-decisions in the shape SpecGraph already consumes, while preserving the boundary
-that decisions are evidence only and do not mutate Ontology packages, lockfiles,
-semantic gates, or canonical SpecGraph specs.
+- ONT-037 — SpecGraph Owner Decision Report Export archived on 2026-06-14.
 
-## Next Step
+## Suggested Next Steps
 
-Open the focused PR, inspect remote CI, and archive the task after validation
-is green or the dependency/toolchain blocker is explicitly resolved.
+- Continue the cross-repo Ontology line in SpecSpace with the acknowledgement /
+  operator workflow.
+- Return to Ontology when a registry-backed owner workflow, signature boundary,
+  or package publication decision slice is selected.

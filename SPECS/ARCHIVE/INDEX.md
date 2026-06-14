@@ -1,11 +1,12 @@
 # Tasks Archive
 
-**Last Updated:** 2026-06-12
+**Last Updated:** 2026-06-14
 
 ## Archived Tasks
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-037 | [ONT-037_SpecGraph_Owner_Decision_Report_Export/](ONT-037_SpecGraph_Owner_Decision_Report_Export/) | 2026-06-14 | PASS |
 | ONT-036 | [ONT-036_ontologyc_Adapter_Report_Artifact/](ONT-036_ontologyc_Adapter_Report_Artifact/) | 2026-06-12 | PASS |
 | ONT-035 | [ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice/](ONT-035_SpecGraph_Proposal_0060_Minimal_Consumer_Slice/) | 2026-06-11 | PASS |
 | ONT-034 | [ONT-034_Induction_Artifact_Schemas_And_Draft_Validation/](ONT-034_Induction_Artifact_Schemas_And_Draft_Validation/) | 2026-06-11 | PASS |
@@ -47,6 +48,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-06-14 | ONT-037 | Archived REVIEW_ONT-037 report |
+| 2026-06-14 | ONT-037 | Archived SpecGraph_Owner_Decision_Report_Export (PASS) |
 | 2026-06-12 | ONT-036 | Archived REVIEW_ONT-036 report |
 | 2026-06-12 | ONT-036 | Archived ontologyc_Adapter_Report_Artifact (PASS) |
 | 2026-06-11 | ONT-035 | Archived REVIEW_ONT-035 report |
