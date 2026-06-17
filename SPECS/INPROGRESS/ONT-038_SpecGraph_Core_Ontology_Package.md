@@ -58,7 +58,8 @@ hardcoded UI data.
 | D3 | Package docs | `SPECS/ontology/packages/specgraph-core/README.md` | Explains scope, draft authority, and downstream use. |
 | D4 | Regression tests | `Tests/OntologyCompilerTests/SpecGraphCorePackageTests.swift` | Verifies check, compile, core refs, and relation ids. |
 | D5 | README/docs update | `README.md` | Mentions `specgraph-core` alongside `examcalc` as a compiler-backed package. |
-| D6 | Validation report | `SPECS/INPROGRESS/ONT-038_Validation_Report.md` | Records local checks and residual risks. |
+| D6 | Swift 6.3 SpecificationCore compatibility | `Vendor/SpecificationCore/` | Restores `OntologyRules` build on Swift 6.3 while preserving the `Specification` / `DecisionSpec` API used by this repo. |
+| D7 | Validation report | `SPECS/INPROGRESS/ONT-038_Validation_Report.md` | Records local checks and residual risks. |
 
 ## Functional Requirements
 
@@ -70,6 +71,7 @@ hardcoded UI data.
 | FR-004 | `ontologyc check` MUST pass for the package. | CLI check and test. |
 | FR-005 | `ontologyc compile` MUST emit deterministic generated artifacts. | CLI compile and committed generated files. |
 | FR-006 | The package MUST remain a draft source, not trusted authority. | Metadata assertion and docs. |
+| FR-007 | The repository MUST build on Swift 6.3 without relying on the upstream `SpecificationCore` 1.0.0 overload that fails to compile. | `swift build` / `swift test`. |
 
 ## Risks
 
@@ -78,6 +80,7 @@ hardcoded UI data.
 | The core package is mistaken for approved ontology truth. | Keep `approvalStatus: draft` and document governance boundary. |
 | SpecGraph hardcodes the UI seed instead of consuming compiler IR. | Treat this package as the next downstream input for semantic bindings and gap/diff surfaces. |
 | Relation verbs are too generic for long-term ontology design. | Accept generic seed relations for v0; future diffs can refine them under compatibility review. |
+| Replacing the remote SpecificationCore dependency weakens the shared dependency story. | Keep a minimal local compatibility package with the same public primitives currently used by `OntologyRules`; document this as a Swift 6.3 build compatibility boundary. |
 
 ## Notes
 

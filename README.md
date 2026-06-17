@@ -9,6 +9,14 @@ The current golden example is `edu.university.examcalc@0.1.0`: an exam-controlle
 calculator ontology with concepts for exams, calculator functions, policy profiles,
 exam-mode sessions, audit entries, policies, protocols, and state machines.
 
+`org.0al.specgraph.core@0.1.0` is the draft compiler-backed seed for the
+SpecGraph/SpecSpace ontology layer. It contains the small core vocabulary
+(`SpecGraph`, `Spec`, `Node`, `Edge`, `Requirement`, `AcceptanceCriterion`,
+`Evidence`, and adjacent lifecycle concepts) used by downstream semantic
+binding, gap, diff, and demo review surfaces. It remains `approvalStatus: draft`
+and does not authorize canonical SpecGraph mutations or trusted ontology
+publication.
+
 ## Layer Model
 
 | Layer | Owns | Does not own |
@@ -55,6 +63,18 @@ The follow-up `ontologyc` adapter report contract is tracked by SpecGraph in
 `docs/ontologyc_adapter_report_contract.md`. Ontology emits
 `ontologyc-adapter-report.yaml` as evidence for that contract; the report is not a
 canonical SpecGraph import lock and does not authorize updates to `specs/nodes/*.yaml`.
+
+The SpecGraph core package follows the same compiler path:
+
+```bash
+swift run ontologyc check \
+  SPECS/ontology/packages/specgraph-core/domain-ontology-package.yaml
+
+swift run ontologyc compile \
+  SPECS/ontology/packages/specgraph-core/domain-ontology-package.yaml \
+  --target typescript \
+  --out SPECS/ontology/packages/specgraph-core/generated
+```
 
 ## Requirements
 
@@ -300,9 +320,11 @@ SPECS/
 ## Specification Pattern
 
 Validation and classification logic belongs in `OntologyRules` as named
-`Specification` or `DecisionSpec` types from
-[SpecificationCore](https://github.com/SoundBlaster/SpecificationCore). Compiler
-phases should call those rules instead of embedding domain decisions inline.
+`Specification` or `DecisionSpec` types. The repository currently vendors the
+minimal `SpecificationCore` compatibility surface under
+`Vendor/SpecificationCore` so Swift 6.3 builds do not depend on the upstream
+1.0.0 overload that fails to compile locally. Compiler phases should call those
+rules instead of embedding domain decisions inline.
 
 Examples:
 
@@ -326,19 +348,26 @@ Examples:
 - [Ontology quality rubric](SPECS/ontology/ontology-quality-rubric.md)
 - [Golden intent set](SPECS/ontology/golden-intents/README.md)
 - [Examcalc golden package](SPECS/ontology/packages/examcalc/README.md)
+- [SpecGraph core package](SPECS/ontology/packages/specgraph-core/README.md)
 - [Hypercode roadmap](SPECS/ontology/hypercode-roadmap.md)
 
 ## Generated Baselines
 
 Regression tests compare generated files in
-`SPECS/ontology/packages/examcalc/generated/` byte-for-byte. When compiler output
-changes intentionally, regenerate the baselines with:
+`SPECS/ontology/packages/examcalc/generated/` and
+`SPECS/ontology/packages/specgraph-core/generated/` byte-for-byte. When compiler
+output changes intentionally, regenerate the baselines with:
 
 ```bash
 swift run ontologyc compile \
   SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
   --target typescript \
   --out SPECS/ontology/packages/examcalc/generated
+
+swift run ontologyc compile \
+  SPECS/ontology/packages/specgraph-core/domain-ontology-package.yaml \
+  --target typescript \
+  --out SPECS/ontology/packages/specgraph-core/generated
 ```
 
 Commit compiler changes and regenerated baselines together.
