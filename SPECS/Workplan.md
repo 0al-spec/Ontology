@@ -726,6 +726,36 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+## Phase 12: SpecGraph Core Ontology Integration
+
+> Tasks in this phase turn the curated SpecGraph Core Ontology seed into
+> compiler-backed Ontology artifacts that SpecGraph and SpecSpace can consume for
+> resolved refs, gaps, compatibility diffs, and owner-decision review workflows.
+
+#### ONT-038: SpecGraph Core Ontology Package
+- **Description:** Materialize the small SpecGraph Core Ontology seed as an
+  Ontology-owned `DomainOntologyPackage` with generated compiler outputs.
+- **Priority:** P0
+- **Dependencies:** ONT-036, ONT-037
+- **Parallelizable:** no
+- **Status:** INPROGRESS
+- **PRD:** `SPECS/INPROGRESS/ONT-038_SpecGraph_Core_Ontology_Package.md`
+- **Origin:** Cross-repo Ontology-SpecGraph-SpecSpace plan for compiler-backed
+  gaps, diffs, and curated ontology surfaces.
+- **Acceptance Criteria:**
+  - Pending: `specgraph-core` package defines the 14 curated core concepts.
+  - Pending: Package defines the 16 seed semantic relations used by the core
+    ontology graph.
+  - Pending: `ontologyc check` passes.
+  - Pending: `ontologyc compile` emits deterministic generated artifacts and
+    normalized IR.
+  - Pending: Tests assert package metadata, class ids, relation ids, and draft
+    authority state.
+  - Pending: Docs describe the package as draft compiler-backed input for
+    downstream SpecGraph semantic binding/gap/diff work.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

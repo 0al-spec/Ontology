@@ -1,15 +1,6 @@
 {
-  "originHash" : "766bc96d182732386b92f169105577663ed1d79e717d9c6680ce4ed48249ef3e",
+  "originHash" : "8e9e6e1e821f900783ab7368df8d6ce5fe2c7a1dbb9ee8042ef64ab8abe61725",
   "pins" : [
-    {
-      "identity" : "specificationcore",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SoundBlaster/SpecificationCore",
-      "state" : {
-        "revision" : "af5b0642282541ae36baffd1328a5dd7c5e61146",
-        "version" : "1.0.0"
-      }
-    },
     {
       "identity" : "swift-docc-plugin",
       "kind" : "remoteSourceControl",
@@ -26,15 +17,6 @@
       "state" : {
         "revision" : "b45d1f2ed151d057b54504d653e0da5552844e34",
         "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftlang/swift-syntax",
-      "state" : {
-        "revision" : "2bc86522d115234d1f588efe2bcb4ce4be8f8b82",
-        "version" : "510.0.3"
       }
     },
     {
