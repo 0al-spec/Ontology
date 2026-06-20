@@ -19,6 +19,9 @@ extension OntologyCompiler {
         if let compatibility = spec["compatibility"] as? JSONObject {
             ir["compatibility"] = compatibility
         }
+        if let modelApplicability = normalizeModelApplicability(spec["modelApplicability"]) {
+            ir["modelApplicability"] = modelApplicability
+        }
         return ir
     }
 
@@ -184,5 +187,49 @@ extension OntologyCompiler {
         if let layer = string(definition["layer"]) {
             normalized["layer"] = layer
         }
+    }
+
+    private func normalizeModelApplicability(_ value: Any?) -> JSONObject? {
+        guard let profile = value as? JSONObject else { return nil }
+        var normalized = JSONObject()
+        if let appliesTo = normalizeApplicabilityScope(profile["appliesTo"]) {
+            normalized["appliesTo"] = appliesTo
+        }
+        if let excludes = normalizeApplicabilityScope(profile["excludes"]) {
+            normalized["excludes"] = excludes
+        }
+        if let assumptions = normalizeApplicabilityRecords(profile["assumptions"]) {
+            normalized["assumptions"] = assumptions
+        }
+        if let triggers = normalizeApplicabilityRecords(profile["invalidationTriggers"]) {
+            normalized["invalidationTriggers"] = triggers
+        }
+        return normalized
+    }
+
+    private func normalizeApplicabilityScope(_ value: Any?) -> JSONObject? {
+        guard let scope = value as? JSONObject else { return nil }
+        var normalized = JSONObject()
+        for key in ["agentTypes", "contexts", "domains", "lifecyclePhases", "platforms", "runtimes", "subsystems"] {
+            let values = (scope[key] as? [Any] ?? []).compactMap { string($0) }.sorted()
+            if !values.isEmpty {
+                normalized[key] = values
+            }
+        }
+        return normalized
+    }
+
+    private func normalizeApplicabilityRecords(_ value: Any?) -> [JSONObject]? {
+        guard let records = value as? [Any] else { return nil }
+        return records.compactMap { $0 as? JSONObject }
+            .map { record -> JSONObject in
+                var normalized: JSONObject = [
+                    "id": string(record["id"]) ?? "",
+                    "text": string(record["text"]) ?? ""
+                ]
+                copyLayer(from: record, to: &normalized)
+                return normalized
+            }
+            .sorted { (string($0["id"]) ?? "") < (string($1["id"]) ?? "") }
     }
 }

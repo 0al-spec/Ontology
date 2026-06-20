@@ -800,18 +800,21 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-039
 - **Parallelizable:** yes
-- **Status:** PRD Ready
+- **Status:** Complete
 - **PRD:** `SPECS/INPROGRESS/ONT-040_Model_Applicability_And_Structural_Change_Classification.md`
 - **Origin:** Follow-up to the layered ontology stack discussion.
+- **Implementation Note:** Implemented as an additive compiler contract. `modelApplicability`
+  is optional package-level review data, normalized IR preserves it, and compatibility
+  reports now include review-only structural, annotation, and applicability buckets.
 - **Acceptance Criteria:**
-  - Pending: A minimal `ModelApplicabilityProfile` shape is specified for
+  - Complete: A minimal `ModelApplicabilityProfile` shape is specified for
     downstream SpecGraph consumption.
-  - Pending: compatibility reports can identify `dataChange` versus
-    `structuralChange` where the compiler has enough information.
-  - Pending: invalidation triggers and execution assumptions are represented as
+  - Complete: compatibility reports identify structural changes separately from
+    annotation and applicability changes where the compiler has enough information.
+  - Complete: invalidation triggers and execution assumptions are represented as
     inert review data, not runtime enforcement.
-  - Pending: tests cover at least one data-only change, one structural change,
-    and one applicability-profile mismatch.
+  - Complete: tests cover annotation-only/layer change, structural change, and
+    applicability-profile mismatch / invalidation trigger drift.
 
 ---
 

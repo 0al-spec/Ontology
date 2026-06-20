@@ -2,8 +2,8 @@
 
 ## ONT-040 — Model Applicability And Structural Change Classification
 
-Status: PRD Ready
-Branch: `codex/ont-040-model-applicability-plan`
+Status: Complete
+Branch: `codex/ont-040-model-applicability`
 Priority: P1
 Dependencies: ONT-039
 
@@ -18,30 +18,34 @@ The slice should remain compiler-owned and inert. It should not add SpecGraph
 runtime behavior, SpecSpace UI, automatic ontology package writes, or runtime
 policy enforcement.
 
+## Implementation Summary
+
+- `DomainOntologyPackage` accepts optional package-level `spec.modelApplicability`.
+- `ontologyc check` validates applicability scope, assumptions, invalidation
+  triggers, and ONT-039 layer values where present.
+- normalized IR preserves authored applicability data as inert review metadata.
+- compatibility reports now include review-only `changeClassification` buckets:
+  `structuralChanges`, `annotationChanges`, and `applicabilityChanges`.
+- Existing authority boundaries remain unchanged: no runtime enforcement,
+  publication decision, package write, or SpecGraph mutation is introduced.
+
 ## Recently Completed
 
 - ONT-038 — SpecGraph Core Ontology Package merged in PR #57 on 2026-06-20.
 - ONT-039 — Layered Ontology Model Contract merged in PR #59 on 2026-06-20.
+- ONT-040 — Model Applicability And Structural Change Classification completed
+  locally on 2026-06-20; PR pending.
 - SpecGraph has downstream layer consumers for package import, gap/diff review,
   and SpecAuthor layer context.
 - SpecSpace has a read-only Ontology Workbench layer lens.
 
 ## Suggested Next Steps
 
-- Implement
-  `SPECS/INPROGRESS/ONT-040_Model_Applicability_And_Structural_Change_Classification.md`.
-- Add a minimal `modelApplicability` shape to `DomainOntologyPackage`
-  metadata or package spec in a way that stays optional for existing packages.
-- Preserve applicability data in normalized IR without changing governance
-  authority.
-- Extend compatibility reports with review-only `changeClassification` records
-  that distinguish structural ontology changes from non-structural data or
-  annotation changes where the compiler can do so deterministically.
-- Include invalidation triggers and execution assumptions as inert review data.
-- Add tests for at least:
-  - one data-only or annotation-only change;
-  - one structural ontology change;
-  - one applicability-profile mismatch or changed invalidation trigger.
+- Open and merge the ONT-040 implementation PR.
+- Start the downstream SpecGraph slice that imports `modelApplicability` and
+  `changeClassification` into package index / gap-diff review artifacts.
+- Then expose applicability and invalidation triggers in the SpecSpace
+  Ontology Workbench.
 
 ## Deferred
 
