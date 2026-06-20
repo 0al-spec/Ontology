@@ -775,20 +775,22 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-038
 - **Parallelizable:** no
-- **Status:** INPROGRESS
+- **Status:** Complete
 - **PRD:** `SPECS/INPROGRESS/ONT-039_Layered_Ontology_Model_Contract.md`
+- **Implementation Note:** Merged in Ontology PR #59 on 2026-06-20. Archive
+  materialization remains a follow-up workflow task.
 - **Origin:** Cross-repo Ontology-SpecGraph-SpecSpace roadmap update after the
   layered ontology gaps review.
 - **Acceptance Criteria:**
-  - Pending: The YAML schema accepts a constrained `layer` field on the
+  - Complete: The YAML schema accepts a constrained `layer` field on the
     ontology elements selected by the PRD.
-  - Pending: `ontologyc check` rejects unknown layer values with deterministic
+  - Complete: `ontologyc check` rejects unknown layer values with deterministic
     diagnostics.
-  - Pending: normalized IR preserves layer metadata without changing existing
+  - Complete: normalized IR preserves layer metadata without changing existing
     package authority semantics.
-  - Pending: TypeScript output exposes layer metadata for downstream consumers.
-  - Pending: compatibility diff classifies layer additions/changes explicitly.
-  - Pending: Fixtures show `specgraph-core` or another minimal package with
+  - Complete: TypeScript output exposes layer metadata for downstream consumers.
+  - Complete: compatibility diff classifies layer additions/changes explicitly.
+  - Complete: Fixtures show `specgraph-core` or another minimal package with
     objective, mechanics, execution, meta, and multi-agent examples.
 
 #### ONT-040: Model Applicability And Structural Change Classification
@@ -798,8 +800,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-039
 - **Parallelizable:** yes
-- **Status:** Not Started
-- **PRD:** TBD
+- **Status:** PRD Ready
+- **PRD:** `SPECS/INPROGRESS/ONT-040_Model_Applicability_And_Structural_Change_Classification.md`
 - **Origin:** Follow-up to the layered ontology stack discussion.
 - **Acceptance Criteria:**
   - Pending: A minimal `ModelApplicabilityProfile` shape is specified for
