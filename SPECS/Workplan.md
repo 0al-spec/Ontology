@@ -738,21 +738,78 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-036, ONT-037
 - **Parallelizable:** no
-- **Status:** INPROGRESS
+- **Status:** Complete
 - **PRD:** `SPECS/INPROGRESS/ONT-038_SpecGraph_Core_Ontology_Package.md`
+- **Implementation Note:** Merged in Ontology PR #57 on 2026-06-20. Archive
+  materialization remains a follow-up workflow task.
 - **Origin:** Cross-repo Ontology-SpecGraph-SpecSpace plan for compiler-backed
   gaps, diffs, and curated ontology surfaces.
 - **Acceptance Criteria:**
-  - Pending: `specgraph-core` package defines the 14 curated core concepts.
-  - Pending: Package defines the 16 seed semantic relations used by the core
+  - Complete: `specgraph-core` package defines the 14 curated core concepts.
+  - Complete: Package defines the 16 seed semantic relations used by the core
     ontology graph.
-  - Pending: `ontologyc check` passes.
-  - Pending: `ontologyc compile` emits deterministic generated artifacts and
+  - Complete: `ontologyc check` passes.
+  - Complete: `ontologyc compile` emits deterministic generated artifacts and
     normalized IR.
-  - Pending: Tests assert package metadata, class ids, relation ids, and draft
+  - Complete: Tests assert package metadata, class ids, relation ids, and draft
     authority state.
-  - Pending: Docs describe the package as draft compiler-backed input for
+  - Complete: Docs describe the package as draft compiler-backed input for
     downstream SpecGraph semantic binding/gap/diff work.
+
+---
+
+## Phase 13: Layered Ontology Stack
+
+> Tasks in this phase turn ontology references from a flat concept list into a
+> layered model that can distinguish goals, deterministic mechanics, execution
+> assumptions, ontology change semantics, and adaptive multi-agent dynamics.
+> Product ontologies should remain project/workspace-owned data compiled by
+> `ontologyc`; this repository owns the compiler contract, examples, validation,
+> normalized IR, and generated SDK behavior.
+
+#### ONT-039: Layered Ontology Model Contract
+- **Description:** Add first-class layer metadata to `DomainOntologyPackage`,
+  normalized IR, and generated TypeScript artifacts so concepts and relations
+  can be classified as `objective`, `mechanics`, `execution`, `meta`, or
+  `multi_agent`.
+- **Priority:** P0
+- **Dependencies:** ONT-038
+- **Parallelizable:** no
+- **Status:** Not Started
+- **PRD:** TBD
+- **Origin:** Cross-repo Ontology-SpecGraph-SpecSpace roadmap update after the
+  layered ontology gaps review.
+- **Acceptance Criteria:**
+  - Pending: The YAML schema accepts a constrained `layer` field on the
+    ontology elements selected by the PRD.
+  - Pending: `ontologyc check` rejects unknown layer values with deterministic
+    diagnostics.
+  - Pending: normalized IR preserves layer metadata without changing existing
+    package authority semantics.
+  - Pending: TypeScript output exposes layer metadata for downstream consumers.
+  - Pending: compatibility diff classifies layer additions/changes explicitly.
+  - Pending: Fixtures show `specgraph-core` or another minimal package with
+    objective, mechanics, execution, meta, and multi-agent examples.
+
+#### ONT-040: Model Applicability And Structural Change Classification
+- **Description:** Define compiler-side artifacts for model applicability
+  assumptions and for distinguishing data changes from structural ontology
+  changes before SpecGraph turns them into validation/gap reports.
+- **Priority:** P1
+- **Dependencies:** ONT-039
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **PRD:** TBD
+- **Origin:** Follow-up to the layered ontology stack discussion.
+- **Acceptance Criteria:**
+  - Pending: A minimal `ModelApplicabilityProfile` shape is specified for
+    downstream SpecGraph consumption.
+  - Pending: compatibility reports can identify `dataChange` versus
+    `structuralChange` where the compiler has enough information.
+  - Pending: invalidation triggers and execution assumptions are represented as
+    inert review data, not runtime enforcement.
+  - Pending: tests cover at least one data-only change, one structural change,
+    and one applicability-profile mismatch.
 
 ---
 
