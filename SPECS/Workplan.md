@@ -775,8 +775,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P0
 - **Dependencies:** ONT-038
 - **Parallelizable:** no
-- **Status:** Not Started
-- **PRD:** TBD
+- **Status:** INPROGRESS
+- **PRD:** `SPECS/INPROGRESS/ONT-039_Layered_Ontology_Model_Contract.md`
 - **Origin:** Cross-repo Ontology-SpecGraph-SpecSpace roadmap update after the
   layered ontology gaps review.
 - **Acceptance Criteria:**

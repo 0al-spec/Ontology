@@ -7,53 +7,21 @@ extension OntologyCompiler {
         let toClasses = mapById(toIR["classes"] as? [JSONObject] ?? [])
         let fromRelations = mapById(fromIR["relations"] as? [JSONObject] ?? [])
         let toRelations = mapById(toIR["relations"] as? [JSONObject] ?? [])
-
         let fromNamespace = string(fromIR["namespace"]) ?? ""
         let toNamespace = string(toIR["namespace"]) ?? ""
-        let addedClassIds = sortedDifference(Set(toClasses.keys), Set(fromClasses.keys))
-        let removedClassIds = sortedDifference(Set(fromClasses.keys), Set(toClasses.keys))
-        let addedRelationIds = sortedDifference(Set(toRelations.keys), Set(fromRelations.keys))
-        let removedRelationIds = sortedDifference(Set(fromRelations.keys), Set(toRelations.keys))
-        let addedClasses = addedClassIds.map { "\(toNamespace):\($0)" }
-        let removedClasses = removedClassIds.map { "\(fromNamespace):\($0)" }
-        let addedRelations = addedRelationIds.map { "\(toNamespace):\($0)" }
-        let removedRelations = removedRelationIds.map { "\(fromNamespace):\($0)" }
-
-        var breakingChanges = [String]()
         let compatibilityDecision = CompatibilityChangeDecisionSpec()
-        breakingChanges.append(contentsOf: removedClassIds.compactMap {
-            breakingMessage(compatibilityDecision.decide(
-                CompatibilityChangeContext(kind: .removedClass, namespace: fromNamespace, symbolId: $0)
-            ))
-        })
-        breakingChanges.append(contentsOf: removedRelationIds.compactMap {
-            breakingMessage(compatibilityDecision.decide(
-                CompatibilityChangeContext(kind: .removedRelation, namespace: fromNamespace, symbolId: $0)
-            ))
-        })
-
-        for relationId in Set(fromRelations.keys).intersection(Set(toRelations.keys)).sorted() {
-            guard let before = fromRelations[relationId], let after = toRelations[relationId] else { continue }
-            if let domainMessage = breakingMessage(compatibilityDecision.decide(CompatibilityChangeContext(
-                kind: .relationDomainChanged,
-                namespace: fromNamespace,
-                symbolId: relationId,
-                beforeComparable: jsonComparable(before["domain"]),
-                afterComparable: jsonComparable(after["domain"])
-            ))) {
-                breakingChanges.append(domainMessage)
-            }
-            if let rangeMessage = breakingMessage(compatibilityDecision.decide(CompatibilityChangeContext(
-                kind: .relationRangeChanged,
-                namespace: fromNamespace,
-                symbolId: relationId,
-                beforeComparable: jsonComparable(before["range"]),
-                afterComparable: jsonComparable(after["range"])
-            ))) {
-                breakingChanges.append(rangeMessage)
-            }
-        }
-
+        var breakingChanges = compatibilityBreakingRemovals(
+            removedClassIds: sortedDifference(Set(fromClasses.keys), Set(toClasses.keys)),
+            removedRelationIds: sortedDifference(Set(fromRelations.keys), Set(toRelations.keys)),
+            fromNamespace: fromNamespace,
+            decision: compatibilityDecision
+        )
+        breakingChanges.append(contentsOf: relationShapeBreakingChanges(
+            fromRelations: fromRelations,
+            toRelations: toRelations,
+            fromNamespace: fromNamespace,
+            decision: compatibilityDecision
+        ))
         let fieldChanges = compatibilityFieldChanges(
             fromClasses: fromClasses,
             toClasses: toClasses,
@@ -63,28 +31,17 @@ extension OntologyCompiler {
         )
         breakingChanges.append(contentsOf: fieldChanges.breakingChanges)
 
-        return [
-            "apiVersion": "ontology.specgraph.io/v1alpha1",
-            "kind": "OntologyCompatibilityReport",
-            "metadata": [
-                "from": "\(string(fromIR["id"]) ?? "")@\(string(fromIR["version"]) ?? "")",
-                "to": "\(string(toIR["id"]) ?? "")@\(string(toIR["version"]) ?? "")"
-            ],
-            "result": [
-                "compatible": breakingChanges.isEmpty,
-                "requiredSpecGraphActions": breakingChanges.isEmpty ? ["updateLockfile"] : ["reviewBreakingOntologyChange"]
-            ],
-            "changes": [
-                "addedClasses": addedClasses,
-                "addedFields": fieldChanges.addedFields,
-                "addedRelations": addedRelations,
-                "changedFields": fieldChanges.changedFields,
-                "removedClasses": removedClasses,
-                "removedFields": fieldChanges.removedFields,
-                "removedRelations": removedRelations,
-                "breakingChanges": breakingChanges
-            ]
-        ]
+        let changes = compatibilityChanges(CompatibilityChangesInput(
+            fromClasses: fromClasses,
+            toClasses: toClasses,
+            fromRelations: fromRelations,
+            toRelations: toRelations,
+            namespaces: CompatibilityNamespaces(from: fromNamespace, to: toNamespace),
+            fieldChanges: fieldChanges,
+            breakingChanges: breakingChanges,
+            decision: compatibilityDecision
+        ))
+        return compatibilityReportPayload(fromIR: fromIR, toIR: toIR, breakingChanges: breakingChanges, changes: changes)
     }
 
     func compatibilityFieldChanges(
@@ -305,7 +262,7 @@ extension OntologyCompiler {
         let namespace = string(ir["namespace"]) ?? ""
         let ontologyId = string(ir["id"]) ?? ""
         let version = string(ir["version"]) ?? ""
-        return [
+        var literal: JSONObject = [
             "ontology": ontologyId,
             "version": version,
             "namespace": namespace,
@@ -314,6 +271,10 @@ extension OntologyCompiler {
             "alias": "\(namespace):\(id)",
             "uri": string(item["uri"]) ?? "ontology://\(ontologyId)/\(version)/\(id)"
         ]
+        if let layer = string(item["layer"]) {
+            literal["layer"] = layer
+        }
+        return literal
     }
 }
 

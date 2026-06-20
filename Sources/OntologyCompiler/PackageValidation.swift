@@ -113,7 +113,8 @@ extension OntologyCompiler {
                 continue
             }
 
-            validateKnownKeys(definition, allowed: ["extends", "implements", "description", "central", "lifecycle", "aliases", "fields"], path: path)
+            validateKnownKeys(definition, allowed: ["extends", "implements", "description", "central", "lifecycle", "aliases", "fields", "layer"], path: path)
+            validateLayer(definition, path: path)
             let extendsValue = definition["extends"]
             if let extendsArray = extendsValue as? [Any], !extendsArray.isEmpty {
                 add("class.extends.multiple", "\(path).extends", "Class extends must be one scalar reference; multiple inheritance is not allowed")
@@ -171,6 +172,17 @@ extension OntologyCompiler {
         }
     }
 
+    func validateLayer(_ definition: JSONObject, path: String) {
+        guard definition.keys.contains("layer") else { return }
+        guard let layer = string(definition["layer"]) else {
+            add("ontology.layer.type", "\(path).layer", "Ontology layer must be a string")
+            return
+        }
+        if !OntologyLayerSpec().isSatisfiedBy(OntologyLayer(rawValue: layer)) {
+            add("ontology.layer.invalid", "\(path).layer", "Ontology layer \(layer) is not supported")
+        }
+    }
+
     func validateImplementsRefs(
         _ classes: JSONObject,
         protocolNames: Set<String>,
@@ -217,7 +229,8 @@ extension OntologyCompiler {
                 add("relation.type", path, "Relation definition must be an object")
                 continue
             }
-            validateKnownKeys(definition, allowed: ["domain", "range", "cardinality", "description"], path: path)
+            validateKnownKeys(definition, allowed: ["domain", "range", "cardinality", "description", "layer"], path: path)
+            validateLayer(definition, path: path)
 
             if let domain = requiredString(definition, "domain", path: "\(path).domain", code: "relation.domain.required"),
                !resolves(domain, localNames: classNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces) {
@@ -253,7 +266,8 @@ extension OntologyCompiler {
                 add("policy.type", path, "Policy definition must be an object")
                 continue
             }
-            validateKnownKeys(definition, allowed: ["extends", "enforceability", "appliesTo", "text"], path: path)
+            validateKnownKeys(definition, allowed: ["extends", "enforceability", "appliesTo", "text", "layer"], path: path)
+            validateLayer(definition, path: path)
 
             if let extends = requiredString(definition, "extends", path: "\(path).extends", code: "policy.extends.required"),
                !resolves(extends, localNames: policyNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces) {
@@ -294,7 +308,8 @@ extension OntologyCompiler {
                 add("stateMachine.type", path, "State machine definition must be an object")
                 continue
             }
-            validateKnownKeys(definition, allowed: ["states", "transitions"], path: path)
+            validateKnownKeys(definition, allowed: ["states", "transitions", "layer"], path: path)
+            validateLayer(definition, path: path)
 
             let stateSet = validateStateNames(definition, path: path)
             validateTransitions(definition, path: path, stateSet: stateSet, triggerNames: triggerNames, packageNamespace: packageNamespace)

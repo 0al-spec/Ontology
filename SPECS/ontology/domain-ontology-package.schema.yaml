@@ -118,6 +118,8 @@ $defs:
           $ref: "#/$defs/conceptReference"
       description:
         type: string
+      layer:
+        $ref: "#/$defs/ontologyLayer"
       central:
         type: boolean
       lifecycle:
@@ -157,6 +159,8 @@ $defs:
     properties:
       description:
         type: string
+      layer:
+        $ref: "#/$defs/ontologyLayer"
       requiredFields:
         type: array
         items:
@@ -205,6 +209,8 @@ $defs:
               - const: "*"
       description:
         type: string
+      layer:
+        $ref: "#/$defs/ontologyLayer"
   policyDefinition:
     type: object
     additionalProperties: false
@@ -229,6 +235,8 @@ $defs:
           $ref: "#/$defs/conceptReference"
       text:
         type: string
+      layer:
+        $ref: "#/$defs/ontologyLayer"
   stateMachineDefinition:
     type: object
     additionalProperties: false
@@ -236,6 +244,8 @@ $defs:
       - states
       - transitions
     properties:
+      layer:
+        $ref: "#/$defs/ontologyLayer"
       states:
         type: array
         minItems: 1
@@ -293,6 +303,13 @@ $defs:
   stateName:
     type: string
     pattern: "^[a-z][a-z0-9_]*$"
+  ontologyLayer:
+    enum:
+      - objective
+      - mechanics
+      - execution
+      - meta
+      - multi_agent
   conceptReference:
     type: string
     pattern: "^([A-Za-z][A-Za-z0-9_]*|[A-Za-z][A-Za-z0-9_.-]*:[A-Za-z][A-Za-z0-9_]*)$"

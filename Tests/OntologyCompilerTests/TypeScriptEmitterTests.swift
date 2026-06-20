@@ -121,4 +121,43 @@ final class TypeScriptEmitterTests: XCTestCase {
         XCTAssertTrue(schemas.contains("durationMinutes: z.number().int().optional(),"), schemas)
         XCTAssertTrue(schemas.contains("title: z.string(),"), schemas)
     }
+
+    func testEmitRefsAndDefinitionsProjectOntologyLayers() {
+        let ir: [String: Any] = [
+            "id": "test.layers",
+            "namespace": "layers",
+            "version": "0.1.0",
+            "classes": [
+                [
+                    "id": "ProductGoal",
+                    "fqid": "layers:ProductGoal",
+                    "uri": "ontology://test.layers/0.1.0/classes/ProductGoal",
+                    "kind": "DomainEntity",
+                    "layer": "objective"
+                ] as [String: Any]
+            ],
+            "relations": [
+                [
+                    "id": "supportsGoal",
+                    "fqid": "layers:supportsGoal",
+                    "uri": "ontology://test.layers/0.1.0/relations/supportsGoal",
+                    "layer": "mechanics"
+                ] as [String: Any]
+            ],
+            "policies": [] as [Any],
+            "stateMachines": [] as [Any]
+        ]
+
+        let compiler = OntologyCompiler()
+        let refs = compiler.emitRefs(ir)
+        let relations = compiler.emitRelations(ir)
+
+        XCTAssertTrue(
+            refs.contains("export type OntologyLayer = \"objective\" | \"mechanics\" | \"execution\" | \"meta\" | \"multi_agent\";"),
+            refs
+        )
+        XCTAssertTrue(refs.contains(#""layer" : "objective""#), refs)
+        XCTAssertTrue(refs.contains(#""layer" : "mechanics""#), refs)
+        XCTAssertTrue(relations.contains(#""layer" : "mechanics""#), relations)
+    }
 }

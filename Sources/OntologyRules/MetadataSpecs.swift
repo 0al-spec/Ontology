@@ -56,6 +56,19 @@ public struct OntologyFieldTypeSpec: Specification {
     }
 }
 
+/// Validates ontology semantic layers used by downstream scoped reasoning.
+public struct OntologyLayerSpec: Specification {
+    public typealias T = OntologyLayer
+
+    private let allowed = Set(["objective", "mechanics", "execution", "meta", "multi_agent"])
+
+    public init() {}
+
+    public func isSatisfiedBy(_ candidate: OntologyLayer) -> Bool {
+        allowed.contains(candidate.rawValue)
+    }
+}
+
 /// Validates local or namespace-qualified ontology concept reference literals.
 public struct OntologyConceptRefPatternSpec: Specification {
     public typealias T = OntologyConceptReferenceLiteral
