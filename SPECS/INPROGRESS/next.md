@@ -2,7 +2,7 @@
 
 ## ONT-039 — Layered Ontology Model Contract
 
-Status: Not Started
+Status: INPROGRESS
 Branch: `codex/ont-039-layered-ontology-model`
 Priority: P0
 Dependencies: ONT-038
@@ -37,12 +37,13 @@ SpecGraph or SpecSpace behavior directly.
 
 ## Suggested Next Steps
 
-- Create `SPECS/INPROGRESS/ONT-039_Layered_Ontology_Model_Contract.md`.
-- Decide whether `layer` belongs on concepts only for the first slice or also
-  on relations, invariants, policies, and generated IR entries.
+- Implement `SPECS/INPROGRESS/ONT-039_Layered_Ontology_Model_Contract.md`.
+- Add optional `layer` to classes, protocols, relations, policies, and state
+  machines.
 - Extend the YAML schema and compiler validation for the constrained
   `OntologyLayer` vocabulary.
 - Preserve layer metadata in normalized IR and TypeScript output.
-- Add compatibility diff coverage for layer additions/changes.
+- Add compatibility diff coverage for class/relation layer additions and
+  changes.
 - Add fixtures that show objective, mechanics, execution, meta, and multi-agent
   layer examples without making product ontology data canonical here.
