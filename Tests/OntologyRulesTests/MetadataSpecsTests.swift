@@ -39,6 +39,18 @@ final class MetadataSpecsTests: XCTestCase {
         XCTAssertFalse(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "date-time")))
     }
 
+    func testOntologyLayerSpec() {
+        let spec = OntologyLayerSpec()
+
+        XCTAssertTrue(spec.isSatisfiedBy(OntologyLayer(rawValue: "objective")))
+        XCTAssertTrue(spec.isSatisfiedBy(OntologyLayer(rawValue: "mechanics")))
+        XCTAssertTrue(spec.isSatisfiedBy(OntologyLayer(rawValue: "execution")))
+        XCTAssertTrue(spec.isSatisfiedBy(OntologyLayer(rawValue: "meta")))
+        XCTAssertTrue(spec.isSatisfiedBy(OntologyLayer(rawValue: "multi_agent")))
+        XCTAssertFalse(spec.isSatisfiedBy(OntologyLayer(rawValue: "multi-agent")))
+        XCTAssertFalse(spec.isSatisfiedBy(OntologyLayer(rawValue: "unknown")))
+    }
+
     func testPackageShapeSpecs() {
         XCTAssertTrue(ExpectedOntologyApiVersionSpec().isSatisfiedBy(OntologyApiVersion(rawValue: "ontology.specgraph.io/v1alpha1")))
         XCTAssertFalse(ExpectedOntologyApiVersionSpec().isSatisfiedBy(OntologyApiVersion(rawValue: "v1")))

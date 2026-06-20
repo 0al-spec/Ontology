@@ -23,6 +23,23 @@ export interface NormalizedOntologyIR {
 }
 ```
 
+## Ontology Layer
+
+```ts
+export type OntologyLayer =
+  | "objective"
+  | "mechanics"
+  | "execution"
+  | "meta"
+  | "multi_agent";
+```
+
+`layer` is optional metadata in the first compiler slice. It preserves author
+intent for downstream systems that need to distinguish goals, deterministic
+mechanics, execution assumptions, ontology-change semantics, and adaptive
+multi-agent dynamics. Absence of `layer` does not make an existing package
+invalid.
+
 ## Import IR
 
 ```ts
@@ -43,6 +60,7 @@ export interface NormalizedClass {
   readonly fqid: string;
   readonly uri: string;
   readonly kind: ConceptKind;
+  readonly layer?: OntologyLayer;
   readonly extends: string;
   readonly implements: readonly string[];
   readonly description: string;
@@ -59,6 +77,20 @@ Rules:
 3. `extends` MUST resolve to a foundation or imported class.
 4. `implements` MUST resolve to protocols.
 
+## Protocol IR
+
+```ts
+export interface NormalizedProtocol {
+  readonly id: string;
+  readonly fqid: string;
+  readonly uri: string;
+  readonly layer?: OntologyLayer;
+  readonly description: string;
+  readonly requiredFields?: readonly string[];
+  readonly requiredRelations?: readonly string[];
+}
+```
+
 ## Relation IR
 
 ```ts
@@ -66,6 +98,7 @@ export interface NormalizedRelation {
   readonly id: string;
   readonly fqid: string;
   readonly uri: string;
+  readonly layer?: OntologyLayer;
   readonly domain: string;
   readonly range: string | { readonly oneOf: readonly string[] };
   readonly cardinality?: {
@@ -88,6 +121,7 @@ Rules:
 export interface NormalizedPolicy {
   readonly id: string;
   readonly fqid: string;
+  readonly layer?: OntologyLayer;
   readonly extends: string;
   readonly enforceability: "design" | "runtime" | "manual" | "audit";
   readonly appliesTo: readonly string[];
@@ -101,6 +135,7 @@ export interface NormalizedPolicy {
 export interface NormalizedStateMachine {
   readonly id: string;
   readonly fqid: string;
+  readonly layer?: OntologyLayer;
   readonly states: readonly string[];
   readonly transitions: readonly NormalizedTransition[];
 }

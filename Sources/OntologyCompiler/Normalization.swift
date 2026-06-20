@@ -56,6 +56,7 @@ extension OntologyCompiler {
             if let lifecycle = string(definition["lifecycle"]) {
                 normalized["lifecycle"] = lifecycle
             }
+            copyLayer(from: definition, to: &normalized)
             let fields = normalizeFields(definition["fields"])
             if !fields.isEmpty {
                 normalized["fields"] = fields
@@ -97,6 +98,7 @@ extension OntologyCompiler {
             if let description = string(definition["description"]) {
                 normalized["description"] = description
             }
+            copyLayer(from: definition, to: &normalized)
             return normalized
         }
     }
@@ -105,7 +107,7 @@ extension OntologyCompiler {
         let policiesObject = spec["policies"] as? JSONObject ?? [:]
         return policiesObject.keys.sorted().map { name -> JSONObject in
             let definition = policiesObject[name] as? JSONObject ?? [:]
-            return [
+            var normalized: JSONObject = [
                 "id": name,
                 "fqid": "\(package.namespace):\(name)",
                 "extends": normalizeRef(string(definition["extends"]) ?? "", namespace: package.namespace),
@@ -113,6 +115,8 @@ extension OntologyCompiler {
                 "appliesTo": normalizedRefs(definition["appliesTo"], namespace: package.namespace),
                 "text": string(definition["text"]) ?? ""
             ]
+            copyLayer(from: definition, to: &normalized)
+            return normalized
         }
     }
 
@@ -120,12 +124,14 @@ extension OntologyCompiler {
         let stateMachinesObject = spec["stateMachines"] as? JSONObject ?? [:]
         return stateMachinesObject.keys.sorted().map { name -> JSONObject in
             let definition = stateMachinesObject[name] as? JSONObject ?? [:]
-            return [
+            var normalized: JSONObject = [
                 "id": name,
                 "fqid": "\(package.namespace):\(name)",
                 "states": (definition["states"] as? [Any] ?? []).compactMap { string($0) }.sorted(),
                 "transitions": normalizeTransitions(definition, namespace: package.namespace)
             ]
+            copyLayer(from: definition, to: &normalized)
+            return normalized
         }
     }
 
@@ -161,6 +167,7 @@ extension OntologyCompiler {
             if !requiredFields.isEmpty { normalized["requiredFields"] = requiredFields }
             let requiredRelations = sortedStrings(definition["requiredRelations"])
             if !requiredRelations.isEmpty { normalized["requiredRelations"] = requiredRelations }
+            copyLayer(from: definition, to: &normalized)
             return normalized
         }
     }
@@ -171,5 +178,11 @@ extension OntologyCompiler {
 
     private func sortedStrings(_ value: Any?) -> [String] {
         (value as? [Any] ?? []).compactMap { string($0) }.sorted()
+    }
+
+    private func copyLayer(from definition: JSONObject, to normalized: inout JSONObject) {
+        if let layer = string(definition["layer"]) {
+            normalized["layer"] = layer
+        }
     }
 }

@@ -70,6 +70,15 @@ public struct OntologyFieldType: RawRepresentable, Equatable, Hashable, Sendable
     }
 }
 
+/// A semantic layer assigned to ontology elements for downstream scoped reasoning.
+public struct OntologyLayer: RawRepresentable, Equatable, Hashable, Sendable {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
 /// The ontology package API version literal.
 public struct OntologyApiVersion: RawRepresentable, Equatable, Hashable, Sendable {
     public let rawValue: String

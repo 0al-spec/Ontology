@@ -4,6 +4,8 @@ import SpecificationCore
 public enum CompatibilityChangeKind: Equatable {
     case removedClass
     case removedRelation
+    case classLayerChanged
+    case relationLayerChanged
     case relationDomainChanged
     case relationRangeChanged
     case classRequiredFieldAdded
@@ -54,6 +56,8 @@ public struct CompatibilityChangeDecisionSpec: DecisionSpec {
             return .breaking("remove class \(context.namespace):\(context.symbolId)")
         case .removedRelation:
             return .breaking("remove relation \(context.namespace):\(context.symbolId)")
+        case .classLayerChanged, .relationLayerChanged:
+            return .compatible
         case .relationDomainChanged:
             return context.beforeComparable == context.afterComparable
                 ? .compatible

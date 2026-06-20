@@ -12,9 +12,10 @@ extension OntologyCompiler {
             }
             validateKnownKeys(
                 definition,
-                allowed: ["description", "requiredFields", "requiredRelations", "semanticConstraints"],
+                allowed: ["description", "requiredFields", "requiredRelations", "semanticConstraints", "layer"],
                 path: path
             )
+            validateLayer(definition, path: path)
             _ = requiredString(definition, "description", path: "\(path).description", code: "protocol.description.required")
             validateProtocolNameList(definition, key: "requiredFields", path: path, code: "protocol.field.name.invalid")
             validateProtocolNameList(definition, key: "requiredRelations", path: path, code: "protocol.relation.name.invalid")
