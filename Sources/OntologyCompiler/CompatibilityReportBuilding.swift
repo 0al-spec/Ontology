@@ -15,6 +15,8 @@ struct CompatibilityChangesInput {
     let fieldChanges: CompatibilityFieldChanges
     let breakingChanges: [String]
     let decision: CompatibilityChangeDecisionSpec
+    let fromApplicability: JSONObject?
+    let toApplicability: JSONObject?
 }
 
 extension OntologyCompiler {
@@ -80,6 +82,7 @@ extension OntologyCompiler {
         if !layerChanges.isEmpty {
             changes["layerChanges"] = layerChanges
         }
+        changes["changeClassification"] = compatibilityChangeClassification(input: input, layerChanges: layerChanges)
         return changes
     }
 

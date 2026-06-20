@@ -18,7 +18,7 @@ extension OntologyCompiler {
         let spec = package.spec
         validateKnownKeys(
             spec,
-            allowed: ["imports", "classes", "protocols", "relations", "policies", "stateMachines", "compatibility"],
+            allowed: ["imports", "classes", "protocols", "relations", "policies", "stateMachines", "compatibility", "modelApplicability"],
             path: "spec"
         )
 
@@ -74,6 +74,9 @@ extension OntologyCompiler {
             triggerNames: triggerNames,
             packageNamespace: package.namespace
         )
+        if let modelApplicability = spec["modelApplicability"] {
+            validateModelApplicability(modelApplicability, path: "spec.modelApplicability")
+        }
         validateProtocolConformance(
             classes: classes,
             protocols: protocols,

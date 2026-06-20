@@ -39,7 +39,9 @@ extension OntologyCompiler {
             namespaces: CompatibilityNamespaces(from: fromNamespace, to: toNamespace),
             fieldChanges: fieldChanges,
             breakingChanges: breakingChanges,
-            decision: compatibilityDecision
+            decision: compatibilityDecision,
+            fromApplicability: fromIR["modelApplicability"] as? JSONObject,
+            toApplicability: toIR["modelApplicability"] as? JSONObject
         ))
         return compatibilityReportPayload(fromIR: fromIR, toIR: toIR, breakingChanges: breakingChanges, changes: changes)
     }

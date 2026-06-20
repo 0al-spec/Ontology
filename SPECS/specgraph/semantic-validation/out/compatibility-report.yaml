@@ -5,6 +5,12 @@ changes:
   addedRelations: []
   breakingChanges:
   - change relation range examcalc:allows
+  changeClassification:
+    annotationChanges: []
+    applicabilityChanges: []
+    structuralChanges:
+    - kind: relationRangeChanged
+      ref: examcalc:allows
   changedFields: []
   removedClasses: []
   removedFields: []

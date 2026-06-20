@@ -102,6 +102,8 @@ properties:
           $ref: "#/$defs/stateMachineDefinition"
       compatibility:
         $ref: "#/$defs/compatibilityDefinition"
+      modelApplicability:
+        $ref: "#/$defs/modelApplicabilityProfile"
 $defs:
   classDefinition:
     type: object
@@ -292,6 +294,61 @@ $defs:
         type: array
         items:
           type: string
+  modelApplicabilityProfile:
+    type: object
+    additionalProperties: false
+    properties:
+      appliesTo:
+        $ref: "#/$defs/applicabilityScope"
+      excludes:
+        $ref: "#/$defs/applicabilityScope"
+      assumptions:
+        type: array
+        items:
+          $ref: "#/$defs/applicabilityRecord"
+      invalidationTriggers:
+        type: array
+        items:
+          $ref: "#/$defs/applicabilityRecord"
+  applicabilityScope:
+    type: object
+    additionalProperties: false
+    properties:
+      domains:
+        $ref: "#/$defs/nonEmptyStringList"
+      lifecyclePhases:
+        $ref: "#/$defs/nonEmptyStringList"
+      agentTypes:
+        $ref: "#/$defs/nonEmptyStringList"
+      subsystems:
+        $ref: "#/$defs/nonEmptyStringList"
+      runtimes:
+        $ref: "#/$defs/nonEmptyStringList"
+      platforms:
+        $ref: "#/$defs/nonEmptyStringList"
+      contexts:
+        $ref: "#/$defs/nonEmptyStringList"
+  applicabilityRecord:
+    type: object
+    additionalProperties: false
+    required:
+      - id
+      - text
+    properties:
+      id:
+        type: string
+        pattern: "^[a-z][A-Za-z0-9_]*$"
+      text:
+        type: string
+        minLength: 1
+      layer:
+        $ref: "#/$defs/ontologyLayer"
+  nonEmptyStringList:
+    type: array
+    minItems: 1
+    items:
+      type: string
+      minLength: 1
   nameReference:
     type: string
     pattern: "^[A-Za-z][A-Za-z0-9_]*$"
