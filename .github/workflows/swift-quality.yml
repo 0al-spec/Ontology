@@ -80,3 +80,4 @@ jobs:
           name: examcalc-ontology-viewer-archive
           path: .build/ontology-viewer-artifacts/examcalc-ontology-viewer-archive.zip
           if-no-files-found: error
+          archive: false
