@@ -41,6 +41,7 @@ final class OntologyCRegressionTests: XCTestCase {
         XCTAssertTrue(result.stdout.contains("validate-golden-intent"), result.stdout)
         XCTAssertTrue(result.stdout.contains("validate-governance-decision"), result.stdout)
         XCTAssertTrue(result.stdout.contains("export-specgraph-owner-decisions"), result.stdout)
+        XCTAssertTrue(result.stdout.contains("export-viewer-archive-manifest"), result.stdout)
         XCTAssertEqual(result.stderr, "")
     }
 

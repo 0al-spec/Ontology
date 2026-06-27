@@ -76,6 +76,32 @@ swift run ontologyc compile \
   --out SPECS/ontology/packages/specgraph-core/generated
 ```
 
+## SpecSpace Viewer Archive Manifest
+
+SpecSpace `/ontology` can consume local Ontology package folders or archives.
+To avoid making the viewer infer package shape forever, `ontologyc` can emit a
+stable manifest that lists the public-safe viewer inputs:
+
+```bash
+swift run ontologyc export-viewer-archive-manifest \
+  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
+  --generated SPECS/ontology/packages/examcalc/generated \
+  --out /tmp/examcalc-ontology-viewer-archive-manifest.json
+```
+
+The manifest is JSON with `artifact_kind: ontology_viewer_archive_manifest` and
+`schema_version: 1`. It references:
+
+- `domain-ontology-package.yaml` as `package_source`;
+- `generated/ontology.normalized.json` as `normalized_ir`;
+- generated TypeScript SDK files as optional `generated_sdk` artifacts.
+
+These roles are public-safe viewer inputs. Governance decisions, private review
+records, unpublished owner evidence, and local approval material remain
+local-only unless a later governance process explicitly publishes them. The
+manifest is an inert SpecSpace input contract: it does not approve package
+publication, authorize registry writes, or mutate SpecGraph.
+
 ## Requirements
 
 - Swift 6.0+
