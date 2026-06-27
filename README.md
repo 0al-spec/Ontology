@@ -102,6 +102,10 @@ local-only unless a later governance process explicitly publishes them. The
 manifest is an inert SpecSpace input contract: it does not approve package
 publication, authorize registry writes, or mutate SpecGraph.
 
+The Swift Quality workflow also uploads `examcalc-ontology-viewer-archive.zip`
+as the `examcalc-ontology-viewer-archive` artifact. That sample archive can be
+dropped directly into SpecSpace `/ontology` for cross-repo smoke checks.
+
 ## Requirements
 
 - Swift 6.0+

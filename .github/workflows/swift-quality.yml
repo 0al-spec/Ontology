@@ -57,3 +57,26 @@ jobs:
 
       - name: Run TypeScript SDK smoke gate
         run: bash ./tools/typescript-smoke.sh
+
+      - name: Build SpecSpace ontology viewer sample archive
+        run: |
+          set -euo pipefail
+          archive_root=".build/ontology-viewer-artifacts/examcalc"
+          archive_zip=".build/ontology-viewer-artifacts/examcalc-ontology-viewer-archive.zip"
+          rm -rf ".build/ontology-viewer-artifacts"
+          mkdir -p "$archive_root"
+          cp SPECS/ontology/packages/examcalc/domain-ontology-package.yaml "$archive_root/domain-ontology-package.yaml"
+          cp -R SPECS/ontology/packages/examcalc/generated "$archive_root/generated"
+          swift run ontologyc export-viewer-archive-manifest \
+            "$archive_root/domain-ontology-package.yaml" \
+            --generated "$archive_root/generated" \
+            --out "$archive_root/ontology-viewer-archive-manifest.json"
+          (cd "$archive_root" && zip -r "../examcalc-ontology-viewer-archive.zip" .)
+          test -s "$archive_zip"
+
+      - name: Upload SpecSpace ontology viewer sample archive
+        uses: actions/upload-artifact@v7
+        with:
+          name: examcalc-ontology-viewer-archive
+          path: .build/ontology-viewer-artifacts/examcalc-ontology-viewer-archive.zip
+          if-no-files-found: error
