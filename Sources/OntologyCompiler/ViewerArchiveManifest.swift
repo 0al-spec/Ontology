@@ -24,14 +24,11 @@ extension OntologyCompiler {
         let manifestURL = outPath.url
         let normalizedIRURL = generatedURL.appendingPathComponent("ontology.normalized.json")
 
-        guard FileManager.default.fileExists(atPath: normalizedIRURL.path) else {
-            add(
-                "viewerArchive.normalizedIR.missing",
-                generatedDirectory.path,
-                "generated directory must contain ontology.normalized.json"
-            )
-            throw OntologyCompilerError.packageError(diagnostics)
-        }
+        try validateViewerArchiveNormalizedIR(
+            normalizedIRURL: normalizedIRURL,
+            generatedDirectory: generatedDirectory,
+            package: package
+        )
 
         let artifacts = viewerArchiveArtifacts(
             packageURL: packageURL,
@@ -123,6 +120,38 @@ extension OntologyCompiler {
             "registry.ts",
             "validators.ts"
         ]
+    }
+
+    private func validateViewerArchiveNormalizedIR(
+        normalizedIRURL: URL,
+        generatedDirectory: OntologyOutputDirectory,
+        package: LoadedPackage
+    ) throws {
+        guard FileManager.default.fileExists(atPath: normalizedIRURL.path) else {
+            add(
+                "viewerArchive.normalizedIR.missing",
+                generatedDirectory.path,
+                "generated directory must contain ontology.normalized.json"
+            )
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
+
+        let ir = try loadJSON(path: normalizedIRURL.path)
+        let expected: [(key: String, value: String, path: String)] = [
+            ("id", package.id, "id"),
+            ("namespace", package.namespace, "namespace"),
+            ("version", package.version, "version")
+        ]
+        for field in expected where string(ir[field.key]) != field.value {
+            add(
+                "viewerArchive.normalizedIR.mismatch",
+                "generated/ontology.normalized.json.\(field.path)",
+                "normalized IR \(field.key) must match package metadata \(field.value)"
+            )
+        }
+        if hasErrors(diagnostics) {
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
     }
 
     private func relativePath(from baseFile: URL, to target: URL) -> String {

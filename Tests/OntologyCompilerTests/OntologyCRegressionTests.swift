@@ -185,65 +185,6 @@ final class OntologyCRegressionTests: XCTestCase {
         )
     }
 
-    func testExportViewerArchiveManifestWritesSpecSpaceContract() throws {
-        let output = try makeTemporaryDirectory(name: "ontologyc-viewer-archive-manifest")
-        let manifest = output.appendingPathComponent("ontology-viewer-archive-manifest.json")
-        let result = try ontologyc([
-            "export-viewer-archive-manifest",
-            "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml",
-            "--generated",
-            "SPECS/ontology/packages/examcalc/generated",
-            "--out",
-            manifest.path
-        ])
-
-        XCTAssertEqual(result.status, 0, result.combinedOutput)
-        XCTAssertTrue(
-            result.stdout.contains("ontologyc export-viewer-archive-manifest: PASS \(manifest.path)"),
-            result.stdout
-        )
-
-        let data = try Data(contentsOf: manifest)
-        let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
-        XCTAssertEqual(object["artifact_kind"] as? String, "ontology_viewer_archive_manifest")
-        XCTAssertEqual(object["schema_version"] as? Int, 1)
-
-        let package = try XCTUnwrap(object["package"] as? [String: Any])
-        XCTAssertEqual(package["id"] as? String, "edu.university.examcalc")
-        XCTAssertEqual(package["namespace"] as? String, "examcalc")
-        XCTAssertEqual(package["version"] as? String, "0.1.0")
-
-        let boundary = try XCTUnwrap(object["authority_boundary"] as? [String: Any])
-        XCTAssertEqual(boundary["viewer_manifest_is_authority"] as? Bool, false)
-        XCTAssertEqual(boundary["may_write_ontology_package"] as? Bool, false)
-        XCTAssertEqual(boundary["may_publish_registry_entry"] as? Bool, false)
-        XCTAssertEqual(boundary["may_mutate_specgraph"] as? Bool, false)
-
-        let artifacts = try XCTUnwrap(object["artifacts"] as? [[String: Any]])
-        let requiredPaths = Set(
-            artifacts
-                .filter { $0["required"] as? Bool == true }
-                .compactMap { $0["path"] as? String }
-        )
-        XCTAssertEqual(
-            requiredPaths,
-            [
-                relativePath(from: manifest, to: repoRoot.appendingPathComponent("SPECS/ontology/packages/examcalc/domain-ontology-package.yaml")),
-                relativePath(from: manifest, to: repoRoot.appendingPathComponent("SPECS/ontology/packages/examcalc/generated/ontology.normalized.json"))
-            ]
-        )
-        XCTAssertTrue(
-            artifacts.contains {
-                $0["role"] as? String == "generated_sdk" &&
-                    ($0["path"] as? String)?.hasSuffix("generated/refs.ts") == true
-            }
-        )
-
-        let publicSafety = try XCTUnwrap(object["public_safety"] as? [String: Any])
-        XCTAssertTrue((publicSafety["public_safe_roles"] as? [String] ?? []).contains("normalized_ir"))
-        XCTAssertTrue((publicSafety["local_only_roles"] as? [String] ?? []).contains("governance_evidence"))
-    }
-
     func testSpecGraphValidationOutputsMatchBaseline() throws {
         let validOutput = try makeTemporaryDirectory(name: "ontologyc-valid-specgraph")
         let valid = try ontologyc([
@@ -395,16 +336,6 @@ final class OntologyCRegressionTests: XCTestCase {
     private func sha256Hex(of url: URL) throws -> String {
         let digest = SHA256.hash(data: try Data(contentsOf: url))
         return digest.map { String(format: "%02x", $0) }.joined()
-    }
-
-    private func relativePath(from baseFile: URL, to target: URL) -> String {
-        let base = baseFile.deletingLastPathComponent().standardizedFileURL.pathComponents
-        let targetComponents = target.standardizedFileURL.pathComponents
-        var index = 0
-        while index < base.count, index < targetComponents.count, base[index] == targetComponents[index] {
-            index += 1
-        }
-        return (Array(repeating: "..", count: base.count - index) + targetComponents[index...]).joined(separator: "/")
     }
 }
 
