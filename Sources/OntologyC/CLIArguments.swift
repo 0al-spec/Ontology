@@ -22,6 +22,8 @@ Commands:
                       Validate ontology governance decision YAML.
   export-specgraph-owner-decisions
                       Export SpecGraph-compatible owner decision report JSON.
+  export-viewer-archive-manifest
+                      Export SpecSpace-compatible viewer archive manifest JSON.
 
 Run `ontologyc <command> --help` for command-specific usage.
 """
@@ -38,7 +40,8 @@ let commandUsage: [String: String] = [
     "validate-draft": "Usage:\n  ontologyc validate-draft <draft-directory> [--out <report.yaml>]",
     "validate-golden-intent": "Usage:\n  ontologyc validate-golden-intent <expectation.yaml> --candidate <package.yaml> [--out <report.yaml>]",
     "validate-governance-decision": "Usage:\n  ontologyc validate-governance-decision <decision.yaml> [--package <package.yaml>] [--golden-report <report.yaml>] [--out <report.yaml>]",
-    "export-specgraph-owner-decisions": "Usage:\n  ontologyc export-specgraph-owner-decisions <decisions.yaml> --out <report.json>"
+    "export-specgraph-owner-decisions": "Usage:\n  ontologyc export-specgraph-owner-decisions <decisions.yaml> --out <report.json>",
+    "export-viewer-archive-manifest": "Usage:\n  ontologyc export-viewer-archive-manifest <package.yaml> --generated <directory> --out <manifest.json>"
 ]
 
 struct ParsedArguments {

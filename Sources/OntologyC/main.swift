@@ -309,6 +309,28 @@ case "export-specgraph-owner-decisions":
         exit(1)
     }
 
+case "export-viewer-archive-manifest":
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--generated", "--out"], command: command)
+    requirePositionals(1, in: parsed, command: command)
+    let packagePath = parsed.positional[0]
+    let generatedDirectory = requireOption("--generated", in: parsed, command: command)
+    let outPath = requireOption("--out", in: parsed, command: command)
+    do {
+        let result = try compiler.exportViewerArchiveManifest(
+            packagePath: OntologySourcePath(path: packagePath),
+            generatedDirectory: OntologyOutputDirectory(path: generatedDirectory),
+            outPath: OntologyOutputPath(path: outPath)
+        )
+        print("ontologyc export-viewer-archive-manifest: PASS \(outPath) artifacts=\(result.artifactCount)")
+    } catch let compilerError as OntologyCompilerError {
+        if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
+        fputs("ontologyc export-viewer-archive-manifest: FAIL \(compilerError)\n", stderr)
+        exit(1)
+    } catch {
+        fputs("ontologyc export-viewer-archive-manifest: FAIL \(error)\n", stderr)
+        exit(1)
+    }
+
 default:
     usageError("unknown command \(command)")
 }
