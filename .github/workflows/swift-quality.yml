@@ -77,7 +77,7 @@ jobs:
       - name: Upload SpecSpace ontology viewer sample archive
         uses: actions/upload-artifact@v7
         with:
-          name: examcalc-ontology-viewer-archive
+          name: examcalc-ontology-viewer-archive.zip
           path: .build/ontology-viewer-artifacts/examcalc-ontology-viewer-archive.zip
           if-no-files-found: error
           archive: false
