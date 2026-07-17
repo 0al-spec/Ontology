@@ -1,8 +1,8 @@
-# Next Task
+# Near-Term Applicability Roadmap
 
 ## ONT-040 — Model Applicability And Structural Change Classification
 
-Status: Complete
+Status: Complete; merged in PR #61
 Branch: `codex/ont-040-model-applicability`
 Priority: P1
 Dependencies: ONT-039
@@ -33,19 +33,36 @@ policy enforcement.
 
 - ONT-038 — SpecGraph Core Ontology Package merged in PR #57 on 2026-06-20.
 - ONT-039 — Layered Ontology Model Contract merged in PR #59 on 2026-06-20.
-- ONT-040 — Model Applicability And Structural Change Classification completed
-  locally on 2026-06-20; PR pending.
+- ONT-040 — Model Applicability And Structural Change Classification merged in
+  PR #61 on 2026-06-20.
 - SpecGraph has downstream layer consumers for package import, gap/diff review,
   and SpecAuthor layer context.
 - SpecSpace has a read-only Ontology Workbench layer lens.
 
-## Suggested Next Steps
+## Cross-Repo Delivery Order
 
-- Open and merge the ONT-040 implementation PR.
-- Start the downstream SpecGraph slice that imports `modelApplicability` and
-  `changeClassification` into package index / gap-diff review artifacts.
-- Then expose applicability and invalidation triggers in the SpecSpace
-  Ontology Workbench.
+1. Platform and SpecSpace first complete the external durable mutable-state
+   backend and its production managed-mode migration/recovery evidence. This is
+   operational sequencing, not a dependency of the Ontology compiler contract.
+2. SpecGraph imports ONT-040 `modelApplicability` and
+   `changeClassification` from compiler normalized IR and compatibility
+   reports into package index, gap/diff, candidate overview, and review
+   evidence.
+3. SpecSpace exposes scopes, assumptions, exclusions, invalidation triggers,
+   and classified changes in the Ontology Workbench and Product Workspace as
+   read-only review evidence.
+4. Feed concrete consumer gaps back into a new Ontology task only when the
+   compiler contract lacks required provenance or deterministic structure.
+
+## Consumer Acceptance Boundary
+
+- Downstream consumers reuse the compiler vocabulary instead of defining a
+  parallel applicability schema.
+- Missing applicability remains unknown/not-published, not a zero score or
+  implicit failure.
+- Applicability and change classification remain review-only metadata.
+- No consumer may treat the profile as runtime enforcement, ontology write
+  authority, term acceptance, candidate approval, or promotion permission.
 
 ## Deferred
 
