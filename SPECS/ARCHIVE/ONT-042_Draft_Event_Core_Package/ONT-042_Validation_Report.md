@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-27
 **Verdict:** PASS — draft vocabulary and structural compiler evidence
-**Input:** `SPECS/INPROGRESS/ONT-042_Draft_Event_Core_Package.md`
+**Input:** `SPECS/ARCHIVE/ONT-042_Draft_Event_Core_Package/ONT-042_Draft_Event_Core_Package.md`
 **Package:** `org.0al.events.core@0.1.0` (`eventcore`), approval status draft
 **Source digest:** `sha256:7e914e9bc22142ce888d8d92ed48713c3e3a2b31dea635daf9c5417dc4bf8181`
 

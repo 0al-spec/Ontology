@@ -854,18 +854,21 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-041; proposal review
 - **Parallelizable:** no
-- **Status:** INPROGRESS
-- **PRD:** `SPECS/INPROGRESS/ONT-042_Draft_Event_Core_Package.md`
+- **Status:** Complete — draft implementation; PR review/CI pending
+- **PRD:** `SPECS/ARCHIVE/ONT-042_Draft_Event_Core_Package/ONT-042_Draft_Event_Core_Package.md`
 - **Origin:** ONT-041 proposal, stages 1 and competency questions CQ-01–04.
 - **Outputs:** Authoring artifacts, draft package, deterministic IR/SDK and
   focused example/validation evidence; final package identity selected here.
 - **Acceptance Criteria:**
-  - Generic Entity actors, event records, interpretations, role bindings and
+  - Complete: Generic Entity actors, event records, interpretations, role bindings and
     finite state/Delta vocabulary retain the proposal's boundaries.
-  - Existing `ontologyc check`/`compile` and focused compiler gates pass; current
+  - Complete: Existing `ontologyc check`/`compile` and focused compiler gates pass; current
     foundation kinds remain compatible and package approval stays draft.
-  - Examples include an abstract actor, a natural event and alternative role
+  - Complete: Examples include an abstract actor, a natural event and alternative role
     interpretations, with unimplemented semantic guarantees labelled explicitly.
+
+- **Validation:** Local draft/check/compile, deterministic IR/SDK, TypeScript
+  checks and 116 existing Swift tests pass; all policies remain manual.
 
 #### ONT-043: Instance Graph Contract And Validation
 - **Description:** Specify a minimal versioned concrete graph envelope and add

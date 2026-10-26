@@ -1,7 +1,7 @@
 # ONT-042: Draft Event Core Package
 
 **Date:** 2026-10-27
-**Status:** PRD Ready
+**Status:** Complete — draft implementation; PR review/CI pending
 **Priority:** P1
 **Phase:** Event and Responsibility Core
 **Reasoning Effort:** high
@@ -72,3 +72,7 @@ models, production changes or NormLab edits are in scope.
 Link the package from README, record completed ONT-042 acceptance in Workplan,
 then archive this PRD/report and its self-review. Point next.md to the next
 candidate without automatically implementing ONT-043/044.
+
+---
+**Archived:** 2026-10-27
+**Verdict:** PASS — local draft/compiler checks; hosted CI and independent PR review pending

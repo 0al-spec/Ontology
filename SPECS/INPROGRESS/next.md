@@ -1,24 +1,25 @@
-# Next Task: ONT-042 — Draft Event Core Package
+# Next Candidate: ONT-043 — Instance Graph Contract And Validation
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
-**Dependencies:** ONT-041 (merged PR #65)
-**Status:** Selected
+**Dependencies:** ONT-042 PR review/CI
+**Status:** Not selected; awaiting event-core draft review
 
 ## Description
 
-Author a small draft event/state/interpretation package using the existing
-compiler and staged authoring workflow. See
-[workplan](../Workplan.md#ont-042-draft-event-core-package) and
-[proposal](../ontology/event-responsibility-core-proposal.md).
+Choose the concrete InstanceGraph wire contract and implement the bounded
+identity/reference/observation-availability checks from the
+[workplan](../Workplan.md#ont-043-instance-graph-contract-and-validation).
+The [event core package](../ontology/packages/events-core/README.md) provides
+vocabulary and structural SDK artifacts; its semantic policies remain manual.
 
 ## Next Step
 
-PLAN the draft event vocabulary, staged authoring artifacts and structural
-compiler checks. InstanceGraph validation and responsibility profiles remain
-separate ONT-043/044 tasks.
+Review and merge ONT-042, then SELECT/PLAN ONT-043. Do not infer a checked graph
+from a successful draft package compilation. ONT-044 remains a separate profile
+package that can follow the accepted event vocabulary independently.
 
 ## Recently Archived
 
-- ONT-041: documentation proposal and validation, 2026-10-26.
-- ONT-040: merged PR #61 artifacts, 2026-10-26; original evidence retained.
+- ONT-042: draft event package, local compiler/quality evidence, 2026-10-27.
+- ONT-041: proposal, merged PR #65 with unknown-observation clarification.
