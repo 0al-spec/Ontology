@@ -1,0 +1,30 @@
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: DraftCritique
+status: approved_for_yaml
+summary: Ready for draft YAML assembly only; observation availability and candidate boundaries are explicit, while instance validation remains ONT-043 work.
+scores:
+  domainFraming: 4
+  conceptCoverage: 4
+  behavioralModeling: 3
+  policyModeling: 4
+  trustAndEvidence: 4
+  uncertaintyHandling: 4
+  implementationLeakage: 5
+  relationQuality: 4
+  competencyQuestions: 4
+  yamlReadiness: 4
+issues:
+  - id: instance-validation-deferred
+    severity: medium
+    message: Current object schemas cannot enforce instance graph references, availability enum values, exact Delta or semantic support.
+    affects: [StateObservation, RecordedEvent, Delta, SourceAssertion]
+    suggestedFix: Keep package draft and policies manual; implement the accepted concrete graph contract in ONT-043.
+questions:
+  - id: instance-wire-format
+    question: Which concrete wire/profile schema will ONT-043 validate without inventing absent states?
+    blocksApproval: false
+provenance:
+  - source: SPECS/ontology/packages/events-core/authoring/intent.md
+    note: Single-agent critique before YAML assembly; scores are subjective rubric estimates, not measured accuracy.
+  - source: SPECS/ontology/ontology-quality-rubric.md
+    note: Applied to package vocabulary and explicit trust/uncertainty boundaries.

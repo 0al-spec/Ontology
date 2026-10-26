@@ -1,0 +1,82 @@
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: ProductOntologyDraft
+metadata:
+  status: candidate
+  sourceIntentId: event-responsibility-core-proposal
+  producedBy: CodexRootStagedAuthoring
+  confidence: 0.8
+  provenance:
+    - source: SPECS/ontology/event-responsibility-core-proposal.md
+      note: Curated staged authoring from reviewed proposal; no external inference or independent authoring agents.
+  uncertainties:
+    - id: instance-wire-format
+      question: Which versioned wire format will ONT-043 use for concrete graph validation?
+spec:
+  namespaceCandidate: eventcore
+  governingConcept:
+    id: RecordedEvent
+    rationale: A scoped record anchors supplied observations while candidates and interpretations remain separate.
+  classes:
+    - {id: Entity, category: domainEntity}
+    - {id: Episode, category: domainEntity}
+    - {id: ActionKind, category: valueObject}
+    - {id: RecordedEvent, category: event}
+    - {id: EventCandidate, category: domainEntity}
+    - {id: Interpretation, category: domainEntity}
+    - {id: InterpretationCandidate, category: domainEntity}
+    - {id: RoleBinding, category: valueObject}
+    - {id: RelationInstance, category: domainEntity}
+    - {id: StateObservation, category: domainEntity}
+    - {id: StateSnapshot, category: valueObject}
+    - {id: Fact, category: valueObject}
+    - {id: Delta, category: valueObject}
+    - {id: SourceAssertion, category: evidence}
+    - {id: CausalHypothesis, category: domainEntity}
+    - {id: ReviewInterpretation, category: command}
+    - {id: RejectInterpretation, category: command}
+  relations:
+    - {id: recordInEpisode, domain: RecordedEvent, range: Episode}
+    - {id: recordOfActionKind, domain: RecordedEvent, range: ActionKind}
+    - {id: recordBeforeObservation, domain: RecordedEvent, range: StateObservation}
+    - {id: recordAfterObservation, domain: RecordedEvent, range: StateObservation}
+    - {id: observationSnapshot, domain: StateObservation, range: StateSnapshot}
+    - {id: snapshotContainsFact, domain: StateSnapshot, range: Fact}
+    - {id: recordDelta, domain: RecordedEvent, range: Delta}
+    - {id: deltaBeforeSnapshot, domain: Delta, range: StateSnapshot}
+    - {id: deltaAfterSnapshot, domain: Delta, range: StateSnapshot}
+    - {id: deltaAddsFact, domain: Delta, range: Fact}
+    - {id: deltaRemovesFact, domain: Delta, range: Fact}
+    - {id: interpretsRecord, domain: Interpretation, range: RecordedEvent}
+    - {id: interpretationBindsRole, domain: Interpretation, range: RoleBinding}
+    - {id: roleBoundEntity, domain: RoleBinding, range: Entity}
+    - {id: candidateInEpisode, domain: EventCandidate, range: Episode}
+    - {id: candidateBeforeObservation, domain: EventCandidate, range: StateObservation}
+    - {id: candidateAfterObservation, domain: EventCandidate, range: StateObservation}
+    - {id: describesCandidateEvent, domain: InterpretationCandidate, range: EventCandidate}
+    - {id: candidateBindsRole, domain: InterpretationCandidate, range: RoleBinding}
+    - {id: candidateCitesAssertion, domain: InterpretationCandidate, range: SourceAssertion}
+    - {id: candidateEnrichedByRecord, domain: EventCandidate, range: RecordedEvent}
+    - {id: candidateResolvedAsInterpretation, domain: InterpretationCandidate, range: Interpretation}
+    - {id: recordCitesAssertion, domain: RecordedEvent, range: SourceAssertion}
+    - {id: relationBindsRole, domain: RelationInstance, range: RoleBinding}
+    - {id: relationOriginRecord, domain: RelationInstance, range: RecordedEvent}
+    - {id: hypothesisCause, domain: CausalHypothesis, range: RecordedEvent}
+    - {id: hypothesisEffect, domain: CausalHypothesis, range: RecordedEvent}
+    - {id: hypothesisCitesAssertion, domain: CausalHypothesis, range: SourceAssertion}
+  protocols: []
+  policies:
+    - {id: PreserveRecordedObservations, enforceability: manual}
+    - {id: KnownStatesForExactDelta, enforceability: manual}
+    - {id: ScopedSourceAttribution, enforceability: manual}
+    - {id: CandidateAuthorityBoundary, enforceability: manual}
+    - {id: BoundedCausalHypothesis, enforceability: manual}
+  stateMachines:
+    - id: InterpretationCandidateReview
+      appliesTo: InterpretationCandidate
+  assumptions:
+    - Instance graphs and semantic checks are not implemented by this package.
+    - Arbitrary Entity actors do not establish human attribution or responsibility.
+    - Unknown observations cannot be encoded as known empty snapshots.
+  validationNotes:
+    - Current scalar string fields do not enforce enums or typed instance references.
+    - Policy text and relation cardinalities are review data until ONT-043 implements checks.

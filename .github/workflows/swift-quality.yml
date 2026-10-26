@@ -58,6 +58,17 @@ jobs:
       - name: Run TypeScript SDK smoke gate
         run: bash ./tools/typescript-smoke.sh
 
+      - name: Validate event core draft and generated baseline
+        run: |
+          set -euo pipefail
+          event_package="SPECS/ontology/packages/events-core"
+          compiler=".build/ci-quality/debug/ontologyc"
+          cmp "$event_package/authoring/domain-ontology-package-draft.yaml" "$event_package/domain-ontology-package.yaml"
+          "$compiler" validate-draft "$event_package/authoring" --out "$RUNNER_TEMP/events-core-draft-report.yaml"
+          "$compiler" check "$event_package/domain-ontology-package.yaml"
+          "$compiler" compile "$event_package/domain-ontology-package.yaml" --target typescript --out "$RUNNER_TEMP/events-core-generated"
+          diff -ru "$event_package/generated" "$RUNNER_TEMP/events-core-generated"
+
       - name: Build SpecSpace ontology viewer sample archive
         run: |
           set -euo pipefail

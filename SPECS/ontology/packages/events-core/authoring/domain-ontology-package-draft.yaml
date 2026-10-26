@@ -1,0 +1,305 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: org.0al.events.core
+  namespace: eventcore
+  version: 0.1.0
+  publisher: OntologyService
+  source: SPECS/ontology/packages/events-core/authoring/intent.md
+  approvalStatus: draft
+spec:
+  imports:
+    - id: specgraph.foundation
+      namespace: sg
+      version: 0.1.0
+  classes:
+    Entity:
+      extends: sg:DomainEntity
+      layer: mechanics
+      description: Any scoped entity, including an abstract community, machine, AI or natural phenomenon; actor is a role, not a human-only type.
+      fields:
+        label: {type: string, required: false}
+    Episode:
+      extends: sg:DomainEntity
+      description: Scope grouping records and interpretations without asserting that all reports describe one true incident.
+      fields:
+        scopeKey: {type: string, required: true}
+    ActionKind:
+      extends: sg:ValueObject
+      description: Declared kind of occurrence or contribution; omission and action interpretation require separate explicit grounds.
+      fields:
+        actionKey: {type: string, required: true}
+    RecordedEvent:
+      extends: sg:Event
+      layer: mechanics
+      central: true
+      description: Immutable scoped event with supplied known comparable before/after observations; candidate records with missing data remain separate.
+      fields:
+        recordKey: {type: string, required: true}
+        intervalStart: {type: integer, required: true}
+        intervalFinish: {type: integer, required: true}
+        clockKey: {type: string, required: true}
+    EventCandidate:
+      extends: sg:DomainEntity
+      description: Source-backed occurrence description that may lack interval, state or other data needed for a checked record.
+      fields:
+        candidateKey: {type: string, required: true}
+        description: {type: string, required: false}
+    Interpretation:
+      extends: sg:DomainEntity
+      description: Role reading of a registered RecordedEvent; it supplies no replacement event states and establishes no legal responsibility.
+      fields:
+        interpretationKey: {type: string, required: true}
+    InterpretationCandidate:
+      extends: sg:DomainEntity
+      lifecycle: InterpretationCandidateReview
+      description: Source/role proposal with unresolved observations or bindings; review does not turn it into a checked Interpretation.
+      fields:
+        candidateKey: {type: string, required: true}
+    RoleBinding:
+      extends: sg:ValueObject
+      description: Role occupied by an Entity in a particular interpretation or relation; actor, target and instrument are contextual roles.
+      fields:
+        roleName: {type: string, required: true}
+    RelationInstance:
+      extends: sg:DomainEntity
+      description: Contextual relation occurrence whose participant roles and origin can be recorded independently of its continuation.
+      fields:
+        relationType: {type: string, required: true}
+    StateObservation:
+      extends: sg:DomainEntity
+      description: Availability of one state observation, separately from fact contents; intended values known, unknown or partial are not enum-enforced yet.
+      fields:
+        availability: {type: string, required: true}
+    StateSnapshot:
+      extends: sg:ValueObject
+      layer: mechanics
+      description: Supplied finite fact set in a declared schema/scope/projection; an explicitly complete empty snapshot differs from unavailable observations.
+      fields:
+        schemaKey: {type: string, required: true}
+        scopeKey: {type: string, required: true}
+        projectionKey: {type: string, required: true}
+        complete: {type: boolean, required: true}
+    Fact:
+      extends: sg:ValueObject
+      description: Scoped proposition with independent polarity support; proposition key, polarity and argument interpretation need an ONT-043 profile.
+      fields:
+        propositionKey: {type: string, required: true}
+        polarity: {type: string, required: true}
+    Delta:
+      extends: sg:ValueObject
+      layer: mechanics
+      description: Authored exact Added/Removed change description between known comparable snapshots; the package does not compute or verify it.
+      fields:
+        projectionKey: {type: string, required: true}
+    SourceAssertion:
+      extends: sg:Evidence
+      description: Source/revision/digest/quote provenance for an assertion; speaker is source-scoped and may remain unknown.
+      fields:
+        sourceRef: {type: string, required: true}
+        revisionKey: {type: string, required: true}
+        sourceDigest: {type: string, required: true}
+        quote: {type: string, required: true}
+        startOffset: {type: integer, required: true}
+        endOffset: {type: integer, required: true}
+        speakerKey: {type: string, required: false}
+    CausalHypothesis:
+      extends: sg:DomainEntity
+      description: Proposed link between recorded causes/effects under an explicit bounded temporal profile; neither time order nor review proves physical causation.
+      fields:
+        profileRef: {type: string, required: true}
+        reviewStatus: {type: string, required: true}
+    ReviewInterpretation:
+      extends: sg:Command
+      description: Record review of a candidate without promoting it into an event record or asserting factual truth.
+    RejectInterpretation:
+      extends: sg:Command
+      description: Record rejection of a candidate while preserving its source and history.
+  protocols: {}
+  relations:
+    recordInEpisode:
+      domain: RecordedEvent
+      range: Episode
+      cardinality: {min: 1, max: 1}
+      description: A record belongs to one explicit episode.
+    recordOfActionKind:
+      domain: RecordedEvent
+      range: ActionKind
+      cardinality: {min: 1, max: 1}
+      description: A record declares its kind without determining actor or human contribution.
+    recordBeforeObservation:
+      domain: RecordedEvent
+      range: StateObservation
+      cardinality: {min: 1, max: 1}
+      description: The record references its supplied before observation.
+    recordAfterObservation:
+      domain: RecordedEvent
+      range: StateObservation
+      cardinality: {min: 1, max: 1}
+      description: The record references its supplied after observation.
+    observationSnapshot:
+      domain: StateObservation
+      range: StateSnapshot
+      cardinality: {min: 0, max: 1}
+      description: A known observation requires a complete snapshot; unknown has none and partial cannot support exact Delta. These conditional rules are manual here.
+    snapshotContainsFact:
+      domain: StateSnapshot
+      range: Fact
+      cardinality: {min: 0, max: "*"}
+      description: Supplied finite fact membership; absence of an observation is not an empty membership list.
+    recordDelta:
+      domain: RecordedEvent
+      range: Delta
+      cardinality: {min: 0, max: 1}
+      description: Optional authored consequence; present only after known comparable observations support exact comparison.
+    deltaBeforeSnapshot:
+      domain: Delta
+      range: StateSnapshot
+      cardinality: {min: 1, max: 1}
+      description: Delta refers to its compared before snapshot.
+    deltaAfterSnapshot:
+      domain: Delta
+      range: StateSnapshot
+      cardinality: {min: 1, max: 1}
+      description: Delta refers to its compared after snapshot.
+    deltaAddsFact:
+      domain: Delta
+      range: Fact
+      cardinality: {min: 0, max: "*"}
+      description: Facts present only after; exact set difference requires a separate checker.
+    deltaRemovesFact:
+      domain: Delta
+      range: Fact
+      cardinality: {min: 0, max: "*"}
+      description: Facts present only before; removal does not create opposite support.
+    interpretsRecord:
+      domain: Interpretation
+      range: RecordedEvent
+      cardinality: {min: 1, max: 1}
+      description: Every checked interpretation refers to one immutable registered record.
+    interpretationBindsRole:
+      domain: Interpretation
+      range: RoleBinding
+      cardinality: {min: 0, max: "*"}
+      description: Role assignments are owned by an interpretation and do not replace event observations.
+    roleBoundEntity:
+      domain: RoleBinding
+      range: Entity
+      cardinality: {min: 1, max: 1}
+      description: A resolved role binds any Entity; missing participants remain unresolved candidates.
+    candidateInEpisode:
+      domain: EventCandidate
+      range: Episode
+      cardinality: {min: 1, max: 1}
+      description: Candidate descriptions retain their episode scope.
+    candidateBeforeObservation:
+      domain: EventCandidate
+      range: StateObservation
+      cardinality: {min: 0, max: 1}
+      description: Candidate before observation may be absent, unknown or partial without inventing a snapshot.
+    candidateAfterObservation:
+      domain: EventCandidate
+      range: StateObservation
+      cardinality: {min: 0, max: 1}
+      description: Candidate after observation may be absent, unknown or partial without inventing a snapshot.
+    describesCandidateEvent:
+      domain: InterpretationCandidate
+      range: EventCandidate
+      cardinality: {min: 1, max: 1}
+      description: A source-level role candidate can describe an event candidate before a checked record exists.
+    candidateBindsRole:
+      domain: InterpretationCandidate
+      range: RoleBinding
+      cardinality: {min: 0, max: "*"}
+      description: Candidate role assignments remain proposals even when reviewed.
+    candidateCitesAssertion:
+      domain: InterpretationCandidate
+      range: SourceAssertion
+      cardinality: {min: 0, max: "*"}
+      description: Preserve exact source/speaker provenance when available; uncited assertions require explicit review labeling.
+    recordCitesAssertion:
+      domain: RecordedEvent
+      range: SourceAssertion
+      cardinality: {min: 0, max: "*"}
+      description: Supplied source assertions support a record without proving narrative truth.
+    candidateEnrichedByRecord:
+      domain: EventCandidate
+      range: RecordedEvent
+      cardinality: {min: 0, max: "*"}
+      description: Explicit enrichment provenance to a new record after required observations are supplied; the original candidate remains unchanged.
+    candidateResolvedAsInterpretation:
+      domain: InterpretationCandidate
+      range: Interpretation
+      cardinality: {min: 0, max: "*"}
+      description: Explicit provenance to a separately checked interpretation; candidate review alone never creates this link or establishes its validity.
+    relationBindsRole:
+      domain: RelationInstance
+      range: RoleBinding
+      cardinality: {min: 0, max: "*"}
+      description: A relation can retain multiple contextual participant roles.
+    relationOriginRecord:
+      domain: RelationInstance
+      range: RecordedEvent
+      cardinality: {min: 0, max: 1}
+      description: An optional supplied origin record does not prescribe the relation's persistence or termination.
+    hypothesisCause:
+      domain: CausalHypothesis
+      range: RecordedEvent
+      cardinality: {min: 1, max: 1}
+      description: The hypothesized cause must be registered in the same snapshot under the selected profile.
+    hypothesisEffect:
+      domain: CausalHypothesis
+      range: RecordedEvent
+      cardinality: {min: 1, max: 1}
+      description: The hypothesized effect remains distinct from the cause; temporal checks are deferred.
+    hypothesisCitesAssertion:
+      domain: CausalHypothesis
+      range: SourceAssertion
+      cardinality: {min: 0, max: "*"}
+      description: Hypothesis grounds retain their source; citations alone do not establish causation.
+  policies:
+    PreserveRecordedObservations:
+      extends: sg:Policy
+      enforceability: manual
+      appliesTo: [RecordedEvent, Interpretation]
+      text: Keep event records immutable and scoped by unique snapshot/record identities. Reinterpreting roles never replaces supplied observations; enrichment creates a linked new record.
+    KnownStatesForExactDelta:
+      extends: sg:Policy
+      enforceability: manual
+      appliesTo: [StateObservation, StateSnapshot, Delta, EventCandidate]
+      text: Compute exact Delta only from known complete snapshots with matching schema/scope/projection. Unknown or partial observations yield unavailable Delta; never substitute empty snapshots or the operator's review states. Known equal empty snapshots allow a genuine empty Delta.
+    ScopedSourceAttribution:
+      extends: sg:Policy
+      enforceability: manual
+      appliesTo: [SourceAssertion, InterpretationCandidate]
+      text: Preserve source/revision/digest/quote/speaker identity and episode scope. I in a letter refers to the source author, not automatically the narrator; absent speaker remains unknown. Structural citations do not prove semantic relevance.
+    CandidateAuthorityBoundary:
+      extends: sg:Policy
+      enforceability: manual
+      appliesTo: [EventCandidate, InterpretationCandidate, Interpretation]
+      text: Candidate review is not event registration, factual truth, human attribution or responsibility. Package validation and generated schemas establish structure only; instance/reference/enum checks require ONT-043 and normative profiles require ONT-044.
+    BoundedCausalHypothesis:
+      extends: sg:Policy
+      enforceability: manual
+      appliesTo: [CausalHypothesis]
+      text: The bounded R3 profile requires distinct registered endpoints, valid intervals and cause start no later than effect start; overlap is allowed. This text does not execute temporal checks, prove physical causation or transfer responsibility.
+  stateMachines:
+    InterpretationCandidateReview:
+      states: [proposed, reviewed, rejected]
+      transitions:
+        - {from: proposed, to: reviewed, command: ReviewInterpretation}
+        - {from: proposed, to: rejected, command: RejectInterpretation}
+  modelApplicability:
+    appliesTo:
+      domains: [general_event_modeling]
+      contexts: [draft_vocabulary_review, offline_consumer_contract_design]
+    excludes:
+      contexts: [automatic_liability_assignment, trusted_physical_causation, runtime_graph_enforcement]
+    assumptions:
+      - id: manual_semantic_review
+        text: Relation cardinality, source relevance, enum values and whole-graph invariants require explicit manual review until ONT-043.
+      - id: observation_availability
+        text: Unknown or partial observations remain distinct from supplied complete empty snapshots.
+    invalidationTriggers:
+      - id: instance_contract_changed
+        text: Re-review package vocabulary and mappings when the ONT-043 InstanceGraph/profile contract is chosen.

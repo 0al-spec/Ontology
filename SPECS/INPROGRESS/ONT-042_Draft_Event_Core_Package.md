@@ -25,6 +25,11 @@ not implement whole-graph validation, exact diff execution or new Lean proofs.
 | D4 | Package README and conceptual examples | Hurricane, abstract community, car actor/instrument readings and source-only unknown observations are shown with explicit structural/semantic limits. |
 | D5 | Validation and self-review | Draft/check/compile results, generated TypeScript checks and existing compiler quality gates recorded with actual outcomes. |
 
+CI will also validate this package through the existing CLI, compare freshly
+generated output to the committed baseline, and include its generated TypeScript
+in the existing typecheck. This is a narrow artifact-drift check, not a new test
+framework or instance semantic validator.
+
 ## Design constraints
 
 - Use ordinary classes/relations/policies/state machines. Do not expand existing

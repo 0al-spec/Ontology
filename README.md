@@ -368,6 +368,9 @@ Examples:
 
 ## Key Specs
 
+- [Event core draft package](SPECS/ontology/packages/events-core/README.md)
+  — compiler-backed event/state/interpretation vocabulary with conceptual examples;
+  instance graph validation remains planned in ONT-043.
 - [Event and Responsibility Core proposal](SPECS/ontology/event-responsibility-core-proposal.md)
   — proposed reusable event/state/interpretation vocabulary, responsibility
   profile boundaries, and a bounded NormLab parking pilot. This is a roadmap,
