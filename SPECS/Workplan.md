@@ -833,19 +833,19 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-040
 - **Parallelizable:** no
-- **Status:** INPROGRESS
+- **Status:** Complete — documentation delivered; proposal review pending
 - **Origin:** Author's NormLab discussion, 2026-10-24 through 2026-10-26, and
   explicit request to prepare the Ontology proposal.
-- **PRD:** `SPECS/INPROGRESS/ONT-041_Event_And_Responsibility_Core_Proposal.md`
+- **PRD:** `SPECS/ARCHIVE/ONT-041_Event_And_Responsibility_Core_Proposal/ONT-041_Event_And_Responsibility_Core_Proposal.md`
 - **Proposal:** [Event and Responsibility Core](ontology/event-responsibility-core-proposal.md)
 - **Acceptance Criteria:**
-  - Distinguish recorded events, role interpretations, state differences,
+  - Complete: Distinguish recorded events, role interpretations, state differences,
     causal hypotheses, and normative conclusions.
-  - Preserve arbitrary Entity actors, explicit omission grounds, source
+  - Complete: Preserve arbitrary Entity actors, explicit omission grounds, source
     provenance, uncertainty, and the existing foundation compatibility boundary.
-  - Identify implemented NormLab contracts separately from proposed Ontology
+  - Complete: Identify implemented NormLab contracts separately from proposed Ontology
     contracts and express pilot acceptance without new compiler/runtime claims.
-  - Record a small dependency-aware roadmap and documentation validation.
+  - Complete: Record a small dependency-aware roadmap and documentation validation.
 
 #### ONT-042: Draft Event Core Package
 - **Description:** Follow the existing staged authoring workflow to materialize

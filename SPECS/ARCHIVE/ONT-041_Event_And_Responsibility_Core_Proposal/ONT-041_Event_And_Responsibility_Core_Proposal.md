@@ -1,6 +1,6 @@
 # ONT-041: Event And Responsibility Core Proposal
 
-**Status:** PRD Ready
+**Status:** Complete — documentation delivered; proposal review pending
 **Priority:** P1
 **Phase:** Event and Responsibility Core
 **Reasoning Effort:** high
@@ -76,3 +76,10 @@ roadmap entry point. Archive this PRD and its validation/self-review artifacts
 when the documentation deliverables are complete. Archive ONT-040 first while
 retaining historical validation provenance; leave unrelated ONT-038/039 cleanup
 unchanged.
+
+---
+**Archived:** 2026-10-26
+**Verdict:** PASS — documentation only
+
+The proposal remains a proposed design. Implementation and pilot tasks are
+separate ONT-042–045 work; archive completion does not execute those tasks.

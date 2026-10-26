@@ -2,8 +2,8 @@
 
 **Date:** 2026-10-26
 **Verdict:** PASS — documentation deliverables only
-**Input:** `SPECS/INPROGRESS/ONT-041_Event_And_Responsibility_Core_Proposal.md`
-**Proposal:** [Event and Responsibility Core](../ontology/event-responsibility-core-proposal.md)
+**Input:** `SPECS/ARCHIVE/ONT-041_Event_And_Responsibility_Core_Proposal/ONT-041_Event_And_Responsibility_Core_Proposal.md`
+**Proposal:** [Event and Responsibility Core](../../ontology/event-responsibility-core-proposal.md)
 
 ## Delivered scope
 

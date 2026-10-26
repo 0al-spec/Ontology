@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-041 | [ONT-041_Event_And_Responsibility_Core_Proposal/](ONT-041_Event_And_Responsibility_Core_Proposal/) | 2026-10-26 | PASS (documentation only) |
 | ONT-040 | [ONT-040_Model_Applicability_And_Structural_Change_Classification/](ONT-040_Model_Applicability_And_Structural_Change_Classification/) | 2026-10-26 | PASS (historical report) |
 | ONT-037 | [ONT-037_SpecGraph_Owner_Decision_Report_Export/](ONT-037_SpecGraph_Owner_Decision_Report_Export/) | 2026-06-14 | PASS |
 | ONT-036 | [ONT-036_ontologyc_Adapter_Report_Artifact/](ONT-036_ontologyc_Adapter_Report_Artifact/) | 2026-06-12 | PASS |
@@ -49,6 +50,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-26 | ONT-041 | Archived event/responsibility proposal PRD/report (documentation PASS) |
 | 2026-10-26 | ONT-040 | Archived merged PR #61 PRD/report; historical validation retained |
 | 2026-06-14 | ONT-037 | Archived REVIEW_ONT-037 report |
 | 2026-06-14 | ONT-037 | Archived SpecGraph_Owner_Decision_Report_Export (PASS) |
