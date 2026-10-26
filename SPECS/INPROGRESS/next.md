@@ -1,18 +1,6 @@
-# Next Task: ONT-040 — Model Applicability And Structural Change Classification
+# Next Task
 
-**Priority:** P1
-**Phase:** Layered Ontology Stack
-**Effort:** Complete
-**Dependencies:** ONT-039
-**Status:** Complete; merged in PR #61
-
-## Description
-
-Define the compiler-owned `ModelApplicabilityProfile` and review-only structural
-change classification contract used by downstream consumers.
-
-## Next Step
-
-Archive ONT-040 through the Flow archive step before SELECT chooses another
-Ontology implementation task. Cross-repo consumer sequencing is tracked in
+ONT-040 was archived on 2026-10-26 after verifying merged PR #61.
+Select ONT-041, the user-requested event and responsibility core proposal.
+The applicability consumer roadmap remains tracked separately in
 `SPECS/ontology/model-applicability-consumer-roadmap.md`.

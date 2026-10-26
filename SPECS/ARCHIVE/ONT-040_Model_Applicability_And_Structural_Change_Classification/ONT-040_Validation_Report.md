@@ -2,7 +2,7 @@
 
 **Task:** `ONT-040`  
 **Ontology:** `DomainOntologyPackage` compiler contract  
-**Input:** `SPECS/INPROGRESS/ONT-040_Model_Applicability_And_Structural_Change_Classification.md`  
+**Input:** `SPECS/ARCHIVE/ONT-040_Model_Applicability_And_Structural_Change_Classification/ONT-040_Model_Applicability_And_Structural_Change_Classification.md`
 **Verdict:** `PASS`
 
 ## Summary
@@ -63,3 +63,8 @@ git diff --check
 
 - SpecGraph should import `modelApplicability` and `changeClassification` into package index / gap-diff review artifacts.
 - SpecSpace should expose applicability assumptions and invalidation triggers in the Ontology Workbench after SpecGraph publishes the artifacts.
+
+## Archive provenance — 2026-10-26
+
+The PASS and commands above are the original implementation evidence, not new
+runs. PR #61 merge identity was rechecked; this move changes documentation only.

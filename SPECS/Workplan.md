@@ -801,11 +801,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Dependencies:** ONT-039
 - **Parallelizable:** yes
 - **Status:** Complete
-- **PRD:** `SPECS/INPROGRESS/ONT-040_Model_Applicability_And_Structural_Change_Classification.md`
+- **PRD:** `SPECS/ARCHIVE/ONT-040_Model_Applicability_And_Structural_Change_Classification/ONT-040_Model_Applicability_And_Structural_Change_Classification.md`
 - **Origin:** Follow-up to the layered ontology stack discussion.
 - **Implementation Note:** Implemented as an additive compiler contract. `modelApplicability`
   is optional package-level review data, normalized IR preserves it, and compatibility
   reports now include review-only structural, annotation, and applicability buckets.
+  Merged in PR #61 on 2026-06-20; PRD/report archived on 2026-10-26.
 - **Acceptance Criteria:**
   - Complete: A minimal `ModelApplicabilityProfile` shape is specified for
     downstream SpecGraph consumption.
