@@ -93,7 +93,7 @@ spec:
       fields:
         projectionKey: {type: string, required: true}
     SourceAssertion:
-      extends: sg:Evidence
+      extends: sg:DomainEntity
       description: Source/revision/digest/quote provenance for an assertion; speaker is source-scoped and may remain unknown.
       fields:
         sourceRef: {type: string, required: true}

@@ -146,7 +146,7 @@ export const classes = {
   "SourceAssertion" : {
     "alias" : "eventcore:SourceAssertion",
     "concept" : "SourceAssertion",
-    "kindOfConcept" : "Evidence",
+    "kindOfConcept" : "DomainEntity",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
     "uri" : "ontology://org.0al.events.core/0.1.0/classes/SourceAssertion",
@@ -923,7 +923,7 @@ export const allRefs = {
   "eventcore:SourceAssertion" : {
     "alias" : "eventcore:SourceAssertion",
     "concept" : "SourceAssertion",
-    "kindOfConcept" : "Evidence",
+    "kindOfConcept" : "DomainEntity",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
     "uri" : "ontology://org.0al.events.core/0.1.0/classes/SourceAssertion",

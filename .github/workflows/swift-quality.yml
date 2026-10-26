@@ -61,6 +61,7 @@ jobs:
       - name: Validate event core draft and generated baseline
         run: |
           set -euo pipefail
+          export LLVM_PROFILE_FILE="$RUNNER_TEMP/events-core-%p.profraw"
           event_package="SPECS/ontology/packages/events-core"
           compiler=".build/ci-quality/debug/ontologyc"
           cmp "$event_package/authoring/domain-ontology-package-draft.yaml" "$event_package/domain-ontology-package.yaml"

@@ -4,7 +4,7 @@
 **Verdict:** PASS — draft vocabulary and structural compiler evidence
 **Input:** `SPECS/INPROGRESS/ONT-042_Draft_Event_Core_Package.md`
 **Package:** `org.0al.events.core@0.1.0` (`eventcore`), approval status draft
-**Source digest:** `sha256:37ba6802ed7c2d4d05c1b7b18a233398988c0857b8608954b6e5ecec76261aec`
+**Source digest:** `sha256:7e914e9bc22142ce888d8d92ed48713c3e3a2b31dea635daf9c5417dc4bf8181`
 
 ## Results
 
@@ -40,8 +40,13 @@ npm run smoke
 git diff --check
 ```
 
-The actual compiler binary, Swift scratch/cache, temporary test files, module
-cache and evidence logs were on TB5. A local ignored `.build` symlink points to
+The compiler binary, Swift scratch/cache, temporary test files, module
+cache and evidence logs were on TB5. A coverage-instrumented CLI subsequently
+wrote one 143,480-byte `default.profraw` into the checkout during final compilation.
+It was copied byte-for-byte to TB5 and removed from the checkout; subsequent CLI
+calls route LLVM profiles explicitly. The ordinary CLI was rebuilt without
+coverage and rechecked. The CI package check also routes its LLVM profile into
+runner temporary storage. A local ignored `.build` symlink points to
 the same per-checkout scratch directory because existing CLI tests look there.
 A process-local Swift shim adds the verified cache path and the native build
 system needed by this coverage gate; the installed toolchain reports native
@@ -55,7 +60,8 @@ The authoring critique keeps instance/enum/graph validation unresolved. During
 self-inspection, explicit candidate-to-new-record and candidate-to-checked-
 interpretation provenance relations were added. Final draft/check/compile and
 TypeScript typecheck were repeated after that vocabulary change; all 10 output
-files match the two final compilations. The unchanged compiler regression suite
+files match the two final compilations. SourceAssertion also uses the documented DomainEntity foundation instead of
+assuming an undeclared Evidence foundation type. The unchanged compiler regression suite
 did not require a second run for two additional declared relation definitions.
 
 The examples describe a hurricane, abstract community, alternative car roles,
