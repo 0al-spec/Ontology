@@ -50,6 +50,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-26 | ONT-041 | Archived REVIEW_ONT-041 self-review; FOLLOW-UP skipped (no new findings) |
 | 2026-10-26 | ONT-041 | Archived event/responsibility proposal PRD/report (documentation PASS) |
 | 2026-10-26 | ONT-040 | Archived merged PR #61 PRD/report; historical validation retained |
 | 2026-06-14 | ONT-037 | Archived REVIEW_ONT-037 report |

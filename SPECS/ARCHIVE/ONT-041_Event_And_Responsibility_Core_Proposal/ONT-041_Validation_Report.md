@@ -19,7 +19,7 @@ ontology package, compiler behavior, graph validator or Lean adapter was built.
 | Baseline | PASS | Clean `main` fast-forwarded to fetched origin/main `3d0c977c61fb4f725cbc4261fa8c6efad412f12b`; PR #61 confirmed merged as `999c636655ae4d853c93e654a2501866dcd964eb`. |
 | Configured documentation gates | PASS | `rtk proxy test -f README.md`; `rtk proxy test -f SPECS/Workplan.md`. |
 | Whitespace | PASS | `rtk proxy git diff --check`; staged checks also run before commits. |
-| Relative file/heading links | PASS | One-off read-only Python check resolved links/anchors across README, Workplan, next pointer, PRD and proposal (28 at execution). Archive-relative links must be rechecked after moves. |
+| Relative file/heading links | PASS | One-off read-only Python check resolved links/anchors across README, Workplan, next pointer, PRD and proposal (28 at execution). Archive-relative links were rechecked after moves (64 references across the changed docs). |
 | Dependency graph | PASS | One-off read-only Python check found ONT-041–045 dependencies present and acyclic. ONT-043 and ONT-044 may follow ONT-042 independently. |
 | Pinned references | PASS | `git cat-file -e <commit>:<path>` verified all 13 unique linked baseline source files exist in the local Git object databases. This is not a fresh proof execution. |
 | Diagrams | PASS (source only) | Two Mermaid source blocks inspected for package/runtime separation and event/interpretation separation. No rendered diagram/browser verification was performed. |
@@ -51,3 +51,10 @@ or package dependencies were produced by the checks above.
 Review the proposal PR. After review, select ONT-042 and run the existing staged
 package-authoring workflow. This report's PASS does not approve draft packages,
 authorize implementation of all follow-ups, or prove legal/factual conclusions.
+
+## Final archival check
+
+ONT-040 and ONT-041 PRD/report paths exist under their archive folders. The
+archive log header separator remains intact, next.md points to an unselected
+ONT-042 pending proposal review, and the self-review is archived beside this
+report. FOLLOW-UP was skipped because no new actionable findings were identified.
