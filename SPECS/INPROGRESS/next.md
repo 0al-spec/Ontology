@@ -1,6 +1,16 @@
-# Next Task
+# Next Task: ONT-041 — Event And Responsibility Core Proposal
 
-ONT-040 was archived on 2026-10-26 after verifying merged PR #61.
-Select ONT-041, the user-requested event and responsibility core proposal.
-The applicability consumer roadmap remains tracked separately in
-`SPECS/ontology/model-applicability-consumer-roadmap.md`.
+**Priority:** P1
+**Phase:** Event and Responsibility Core
+**Effort:** Documentation only; reasoning effort high
+**Dependencies:** ONT-040 (complete and archived)
+**Status:** Selected
+
+## Description
+
+Prepare the reusable event/responsibility core proposal and map it to the
+implemented NormLab model. See [workplan](../Workplan.md#ont-041-event-and-responsibility-core-proposal).
+
+## Next Step
+
+Create the proposal PRD, then deliver documentation and a bounded roadmap.

@@ -819,6 +819,34 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+## Phase 14: Event and Responsibility Core
+
+> Capture the author's entity/action/relation/state model as a reusable proposal,
+> with the existing NormLab parking PoC as the first consumer. The compiler owns
+> portable contracts and example packages; product rules and case data remain
+> consumer-owned. Proposal completion does not imply a new runtime or proof.
+
+#### ONT-041: Event And Responsibility Core Proposal
+- **Description:** Define package boundaries, vocabulary, a source-grounded
+  mapping to NormLab, competency questions, and bounded delivery stages for the
+  event and responsibility model.
+- **Priority:** P1
+- **Dependencies:** ONT-040
+- **Parallelizable:** no
+- **Status:** INPROGRESS
+- **Origin:** Author's NormLab discussion, 2026-10-24 through 2026-10-26, and
+  explicit request to prepare the Ontology proposal.
+- **Acceptance Criteria:**
+  - Distinguish recorded events, role interpretations, state differences,
+    causal hypotheses, and normative conclusions.
+  - Preserve arbitrary Entity actors, explicit omission grounds, source
+    provenance, uncertainty, and the existing foundation compatibility boundary.
+  - Identify implemented NormLab contracts separately from proposed Ontology
+    contracts and express pilot acceptance without new compiler/runtime claims.
+  - Record a small dependency-aware roadmap and documentation validation.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
