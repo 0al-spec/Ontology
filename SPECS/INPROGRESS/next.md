@@ -1,9 +1,9 @@
-# Next Candidate: ONT-042 — Draft Event Core Package
+# Next Task: ONT-042 — Draft Event Core Package
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
-**Dependencies:** ONT-041 proposal review
-**Status:** Not selected; awaiting proposal review
+**Dependencies:** ONT-041 (merged PR #65)
+**Status:** Selected
 
 ## Description
 
@@ -14,8 +14,9 @@ compiler and staged authoring workflow. See
 
 ## Next Step
 
-Review the ONT-041 proposal PR, then SELECT/PLAN ONT-042. Do not start the
-compiler/runtime follow-ups as part of proposal delivery.
+PLAN the draft event vocabulary, staged authoring artifacts and structural
+compiler checks. InstanceGraph validation and responsibility profiles remain
+separate ONT-043/044 tasks.
 
 ## Recently Archived
 

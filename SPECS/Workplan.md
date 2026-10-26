@@ -833,7 +833,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-040
 - **Parallelizable:** no
-- **Status:** Complete — documentation delivered; proposal review pending
+- **Status:** Complete — merged in PR #65; reviewed clarification included
 - **Origin:** Author's NormLab discussion, 2026-10-24 through 2026-10-26, and
   explicit request to prepare the Ontology proposal.
 - **PRD:** `SPECS/ARCHIVE/ONT-041_Event_And_Responsibility_Core_Proposal/ONT-041_Event_And_Responsibility_Core_Proposal.md`
@@ -854,7 +854,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-041; proposal review
 - **Parallelizable:** no
-- **Status:** Not Started
+- **Status:** INPROGRESS
+- **PRD:** `SPECS/INPROGRESS/ONT-042_Draft_Event_Core_Package.md`
 - **Origin:** ONT-041 proposal, stages 1 and competency questions CQ-01–04.
 - **Outputs:** Authoring artifacts, draft package, deterministic IR/SDK and
   focused example/validation evidence; final package identity selected here.
