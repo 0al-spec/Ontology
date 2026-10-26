@@ -1,6 +1,6 @@
 # ONT-040: Model Applicability And Structural Change Classification PRD
 
-**Status:** PRD Ready
+**Status:** Complete; merged in PR #61
 **Priority:** P1
 **Phase:** Layered Ontology Stack
 **Reasoning Effort:** high
@@ -174,3 +174,13 @@ Definitions for this slice:
 - SpecSpace Workbench support for applicability/invalidation review.
 - Agent Passport behavioral policy extension once the runtime declaration
   format is ready.
+
+---
+**Archived:** 2026-10-26
+**Verdict:** PASS (existing implementation report)
+
+Archival only: implementation merged in [PR #61](https://github.com/0al-spec/Ontology/pull/61)
+as `999c636655ae4d853c93e654a2501866dcd964eb` on 2026-06-20. The original
+validation report is retained; its Swift/test commands were not rerun for this
+documentation-only archival operation. Paths in Deliverables describe the
+original implementation plan.

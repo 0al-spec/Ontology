@@ -801,11 +801,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Dependencies:** ONT-039
 - **Parallelizable:** yes
 - **Status:** Complete
-- **PRD:** `SPECS/INPROGRESS/ONT-040_Model_Applicability_And_Structural_Change_Classification.md`
+- **PRD:** `SPECS/ARCHIVE/ONT-040_Model_Applicability_And_Structural_Change_Classification/ONT-040_Model_Applicability_And_Structural_Change_Classification.md`
 - **Origin:** Follow-up to the layered ontology stack discussion.
 - **Implementation Note:** Implemented as an additive compiler contract. `modelApplicability`
   is optional package-level review data, normalized IR preserves it, and compatibility
   reports now include review-only structural, annotation, and applicability buckets.
+  Merged in PR #61 on 2026-06-20; PRD/report archived on 2026-10-26.
 - **Acceptance Criteria:**
   - Complete: A minimal `ModelApplicabilityProfile` shape is specified for
     downstream SpecGraph consumption.
@@ -815,6 +816,124 @@ This workplan tracks the specification work for the Ontology repository. The ini
     inert review data, not runtime enforcement.
   - Complete: tests cover annotation-only/layer change, structural change, and
     applicability-profile mismatch / invalidation trigger drift.
+
+---
+
+## Phase 14: Event and Responsibility Core
+
+> Capture the author's entity/action/relation/state model as a reusable proposal,
+> with the existing NormLab parking PoC as the first consumer. The compiler owns
+> portable contracts and example packages; product rules and case data remain
+> consumer-owned. Proposal completion does not imply a new runtime or proof.
+
+#### ONT-041: Event And Responsibility Core Proposal
+- **Description:** Define package boundaries, vocabulary, a source-grounded
+  mapping to NormLab, competency questions, and bounded delivery stages for the
+  event and responsibility model.
+- **Priority:** P1
+- **Dependencies:** ONT-040
+- **Parallelizable:** no
+- **Status:** Complete — documentation delivered; proposal review pending
+- **Origin:** Author's NormLab discussion, 2026-10-24 through 2026-10-26, and
+  explicit request to prepare the Ontology proposal.
+- **PRD:** `SPECS/ARCHIVE/ONT-041_Event_And_Responsibility_Core_Proposal/ONT-041_Event_And_Responsibility_Core_Proposal.md`
+- **Proposal:** [Event and Responsibility Core](ontology/event-responsibility-core-proposal.md)
+- **Acceptance Criteria:**
+  - Complete: Distinguish recorded events, role interpretations, state differences,
+    causal hypotheses, and normative conclusions.
+  - Complete: Preserve arbitrary Entity actors, explicit omission grounds, source
+    provenance, uncertainty, and the existing foundation compatibility boundary.
+  - Complete: Identify implemented NormLab contracts separately from proposed Ontology
+    contracts and express pilot acceptance without new compiler/runtime claims.
+  - Complete: Record a small dependency-aware roadmap and documentation validation.
+
+#### ONT-042: Draft Event Core Package
+- **Description:** Follow the existing staged authoring workflow to materialize
+  the reviewed event/state/interpretation vocabulary as a reusable draft package
+  using the current compiler contract.
+- **Priority:** P1
+- **Dependencies:** ONT-041; proposal review
+- **Parallelizable:** no
+- **Status:** Not Started
+- **Origin:** ONT-041 proposal, stages 1 and competency questions CQ-01–04.
+- **Outputs:** Authoring artifacts, draft package, deterministic IR/SDK and
+  focused example/validation evidence; final package identity selected here.
+- **Acceptance Criteria:**
+  - Generic Entity actors, event records, interpretations, role bindings and
+    finite state/Delta vocabulary retain the proposal's boundaries.
+  - Existing `ontologyc check`/`compile` and focused compiler gates pass; current
+    foundation kinds remain compatible and package approval stays draft.
+  - Examples include an abstract actor, a natural event and alternative role
+    interpretations, with unimplemented semantic guarantees labelled explicitly.
+
+#### ONT-043: Instance Graph Contract And Validation
+- **Description:** Specify a minimal versioned concrete graph envelope and add
+  static identity, reference, interval and scope checks appropriate to that
+  contract, retaining a separate semantic verifier boundary.
+- **Priority:** P1
+- **Dependencies:** ONT-042
+- **Parallelizable:** yes, with ONT-044 after ONT-042
+- **Status:** Not Started
+- **Origin:** ONT-041 proposal, stage 2 and CQ-02/04/07/08/09/11/12/13/14.
+- **Outputs:** InstanceGraph wire/schema/diagnostic contract, validator surface,
+  deterministic positive/negative fixtures and generated consumer contracts.
+- **Acceptance Criteria:**
+  - Define typed instance references and finite collections without arbitrary
+    executable expressions; reject duplicates, missing/wrong-snapshot references,
+    wrong episode/scope and invalid temporal inputs for the selected profile.
+  - Distinguish observation, evidence/review and normative state projections;
+    preserve speaker, partial candidates and uncited operator assertions.
+  - Represent unavailable/partial observations separately from known empty
+    snapshots. Exact Delta is unavailable unless both states are known and
+    comparable; reject coercing source-only candidates into checked events by
+    inventing empty states or reusing the operator's review-state snapshots.
+  - Check both missing-state rejection and the positive control of known,
+    complete, comparable equal states producing an empty Delta.
+  - Focused checks show role edits cannot replace event states; record exactly
+    which guarantees come from static validation versus a proof profile.
+
+#### ONT-044: Draft Responsibility Profile Package
+- **Description:** Author the generic duty/condition/omission/response vocabulary
+  and its explicit mapping to existing NormLab attribution profiles.
+- **Priority:** P1
+- **Dependencies:** ONT-042
+- **Parallelizable:** yes, with ONT-043 after ONT-042
+- **Status:** Not Started
+- **Origin:** ONT-041 proposal, stage 3 and CQ-03/05/06/10/11.
+- **Outputs:** Draft package, bounded profile/mapping contract and validation
+  evidence; parking predicates and sanctions remain outside the generic package.
+- **Acceptance Criteria:**
+  - Separate actor, duty bearer and human anchor; define explicit scope,
+    capability, performance, deadline, exception and attribution grounds.
+  - Preserve unknown/opposed support and distinguish source review from truth;
+    specify condition/predicate/polarity mapping before claiming relevance checks.
+  - Compiler validation passes and profile examples cover missing/conflicting
+    grounds and support deletion; no automatic liability or new theorem backend
+    is claimed by package acceptance.
+
+#### ONT-045: NormLab Offline Event Graph Pilot
+- **Description:** Agree the consumer export contract and record evidence from a
+  NormLab-owned offline mapping of one saved parking episode. Create/link the
+  NormLab canonical Issue before its implementation; no cross-repo edit is implied
+  by this Ontology planning task.
+- **Priority:** P1
+- **Dependencies:** ONT-043, ONT-044
+- **Parallelizable:** no
+- **Status:** Not Started
+- **Origin:** ONT-041 proposal, stage 4 and first pilot acceptance.
+- **Outputs:** Linked consumer task/PR and private or sanitized export/replay
+  evidence identifying exact package versions/digests and verifier profile.
+- **Acceptance Criteria:**
+  - Read-only export preserves source identity, speaker, episode, all selected
+    findings including unknown/conflict, and explicit uncited assertions.
+  - Operator review event and fabula actor interpretation remain distinct; the
+    original norm result and historical receipt are unchanged.
+  - Role changes preserve observations and Delta availability/value; wrong-scope
+    references are rejected. Fabula candidates with unavailable physical states
+    remain source-only, without an invented physical Delta. Any claimed replay
+    agreement uses the pinned profile and actual replay evidence.
+  - No paid inference or production migration is required. Stop after one
+    complete offline episode rather than broadening into a new framework phase.
 
 ---
 

@@ -1,18 +1,23 @@
-# Next Task: ONT-040 — Model Applicability And Structural Change Classification
+# Next Candidate: ONT-042 — Draft Event Core Package
 
 **Priority:** P1
-**Phase:** Layered Ontology Stack
-**Effort:** Complete
-**Dependencies:** ONT-039
-**Status:** Complete; merged in PR #61
+**Phase:** Event and Responsibility Core
+**Dependencies:** ONT-041 proposal review
+**Status:** Not selected; awaiting proposal review
 
 ## Description
 
-Define the compiler-owned `ModelApplicabilityProfile` and review-only structural
-change classification contract used by downstream consumers.
+Author a small draft event/state/interpretation package using the existing
+compiler and staged authoring workflow. See
+[workplan](../Workplan.md#ont-042-draft-event-core-package) and
+[proposal](../ontology/event-responsibility-core-proposal.md).
 
 ## Next Step
 
-Archive ONT-040 through the Flow archive step before SELECT chooses another
-Ontology implementation task. Cross-repo consumer sequencing is tracked in
-`SPECS/ontology/model-applicability-consumer-roadmap.md`.
+Review the ONT-041 proposal PR, then SELECT/PLAN ONT-042. Do not start the
+compiler/runtime follow-ups as part of proposal delivery.
+
+## Recently Archived
+
+- ONT-041: documentation proposal and validation, 2026-10-26.
+- ONT-040: merged PR #61 artifacts, 2026-10-26; original evidence retained.

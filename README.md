@@ -368,6 +368,10 @@ Examples:
 
 ## Key Specs
 
+- [Event and Responsibility Core proposal](SPECS/ontology/event-responsibility-core-proposal.md)
+  — proposed reusable event/state/interpretation vocabulary, responsibility
+  profile boundaries, and a bounded NormLab parking pilot. This is a roadmap,
+  not an implemented ontology package or new proof backend.
 - [Glossary](SPECS/ontology/glossary.md)
 - [Core contracts](SPECS/ontology/core-contracts.md)
 - [`ontologyc` compiler contract](SPECS/ontology/ontologyc.md)
