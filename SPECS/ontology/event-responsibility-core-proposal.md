@@ -81,9 +81,10 @@ it does not execute them or turn a draft package into trusted law.
 |---|---|
 | Entity | Scoped stable identity; it need not be a person, group, organization, or physical object. |
 | Action | A kind of occurrence interpreted as an entity's action; its occurrence is represented by a recorded event. |
-| RecordedEvent | Immutable record identity, episode, interval, before/after state references and provenance. A record is supplied evidence, not proof that an incident happened. |
+| RecordedEvent | Immutable record identity, episode, interval, known comparable before/after state references and provenance. A record is supplied evidence, not proof that an incident happened. |
+| Event / interpretation candidate | Source-backed description or role proposal whose required observations or bindings may be unavailable. It is not a checked RecordedEvent or bound Interpretation. |
 | State | Finite set of base facts under an explicit schema, scope and projection. Facts may describe observations, evidence/review state, or normative annotations; these domains stay distinguishable. |
-| Delta / Consequence | Exact Added and Removed sets for comparable before/after states. Derived closure is not silently mixed into this diff. |
+| Delta / Consequence | Exact Added and Removed sets for known comparable before/after states. If either state is unavailable or partial in the selected projection, exact Delta is unavailable. Derived closure is not silently mixed into this diff. |
 | Interpretation | A reading of one recorded event; carries role assignments and grounds, not replacement observations. Multiple readings may coexist. |
 | RoleBinding | Interpretation + role + Entity. Actor, target and instrument are roles; membership never implies legal responsibility. |
 | RelationInstance | A contextual relation occurrence with participants, interval/scope and grounds. It can persist beyond its originating action. |
@@ -97,9 +98,12 @@ Core invariants proposed for later executable validation:
 1. Record IDs are unique inside one snapshot. A reference includes snapshot
    identity; two records under the same ID cannot silently overwrite one another.
    Separate reports of the same incident may remain separate records.
-2. Interpretations reference a registered event. Changing roles preserves its
-   before/after observations and exact consequence. Unknown participants remain
-   unresolved candidates; no fictitious Entity is created to satisfy a slot.
+2. Checked interpretations reference a registered event. Changing roles preserves
+   its before/after observations and exact consequence. Source-level candidates
+   retain their assertion references while required states or bindings remain
+   unresolved; they cannot be passed as checked interpretations. Unknown
+   participants remain unresolved candidates; no fictitious Entity is created
+   to satisfy a slot.
 3. Generic records require no human actor. A profile that requires a known actor
    or human anchor checks that requirement explicitly. The current NormLab
    `RoleView` has one actor/target and optional instrument; multiple/partial role
@@ -108,14 +112,40 @@ Core invariants proposed for later executable validation:
    Added = after minus before; Removed = before minus after. Order and duplicate
    serialization do not change set meaning. Reapplying the exact Delta restores
    after; exactness also excludes unrelated additions/removals.
-5. Empty observed diff is allowed, including omission or prevention. It does not
-   prove lack of effect in another projection or in a counterfactual situation.
+5. Empty observed diff is allowed only when both snapshots are known and equal
+   within their declared projection, including omission or prevention. Missing
+   observations cannot be replaced by empty fact sets to manufacture an empty
+   Delta. A known empty diff does not prove lack of effect in another projection
+   or in a counterfactual situation.
 6. A minimal causal profile rejects self-links, reversed intervals, and a cause
    starting after its consequence. Overlap is allowed. This is the bounded R3
    profile; global acyclicity and physical causation are not claimed.
 7. Duties, capability, elapsed deadline, attribution, exceptions and performance
    require explicit scoped grounds. Ownership or launching an AI agent alone
    cannot supply the human-attribution conclusion.
+
+### Observation availability is separate from State contents
+
+An unavailable snapshot and a supplied snapshot containing zero facts are
+different inputs. Availability is explicit metadata about a state observation;
+it is separate from unknown/conflicting propositions inside a supplied State.
+"Known" here means that the snapshot is supplied and complete for its declared
+projection, not that the real-world narrative has been proven true. A partial
+snapshot does not support an exact diff for that full projection.
+
+| Before / after observations | Exact Delta |
+|---|---|
+| Both known, comparable and equal, including two known empty snapshots | Available; Added and Removed are empty. |
+| Both known and comparable, with different contents | Available; exact Added and Removed are computed. |
+| Either missing, explicitly unknown or partial in the selected projection | Unavailable; no computed Delta value, empty or otherwise. |
+| Both supplied but with incompatible schema/scope/projection | Reject comparison until an explicit mapping is provided. |
+
+This availability contract is proposed for InstanceGraph. The existing Lean
+`RecordedEvent` still requires concrete before/after states. An exporter must
+retain a source-only event/interpretation candidate when those states are
+unavailable; it must not insert two empty states or copy the operator's review
+states to construct a physical-event record. Later enrichment creates an
+explicitly linked new record rather than rewriting the source-only candidate.
 
 ## 4. Evidence, uncertainty and interpretation
 
@@ -178,8 +208,12 @@ All links in this table are pinned to the NormLab baseline above.
 | Source-level actor proposals | [parking-fabula.ts](https://github.com/SoundBlaster/NormLab/blob/e8041c937f28d3644d4df3680db5d81f0cff8ace/server/parking-fabula.ts) | Versioned source/speaker candidates and immutable human decisions. These sidecar decisions do not change the Lean receipt. |
 
 The pilot must export the operator event and source-level fabula interpretation
-as distinguishable records. It must not relabel the existing operator proof as a
-proof of who parked, why a car moved, or who owes a sanction.
+candidate separately. The operator event has supplied review-state snapshots;
+the current fabula sidecar supplies source/role evidence without physical
+before/after states. The latter therefore retains unavailable observations and
+no computed physical Delta. It must not be coerced into a checked RecordedEvent
+or relabel the existing operator proof as a proof of who parked, why a car moved,
+or who owes a sanction.
 
 ## 6. Compiler fit and missing contracts
 
@@ -198,7 +232,8 @@ Propose a versioned `InstanceGraph` envelope alongside the package definition:
 
 - package/version/digest bindings, graph/snapshot identity and declared profile;
 - entity, record, interpretation, assertion and relation-instance collections;
-- typed references, state projections, interval representation and role bindings;
+- typed references, state projections, explicit observation availability,
+  interval representation and role bindings;
 - deterministic diagnostics for identity, scope and reference errors.
 
 This is a proposed envelope, not accepted YAML syntax or a new CLI command.
@@ -218,7 +253,7 @@ These are acceptance scenarios, not tests run in ONT-041.
 | ID | Question / input | Required observation |
 |---|---|---|
 | CQ-01 | Can a hurricane or abstract community occupy actor role? | Yes in a generic interpretation, without invented human attribution. |
-| CQ-02 | Can two readings call the car actor versus instrument? | Both reference the same immutable record and identical observed Delta. |
+| CQ-02 | Can two readings call the car actor versus instrument? | Both preserve the same observations and Delta availability; when a Delta is available, its value is identical. |
 | CQ-03 | Can an existing relation persist while its originator does nothing? | Yes; origin, continuation and termination grounds remain distinct. |
 | CQ-04 | Can duplicate record IDs carry changed states? | Reject within the same snapshot; no last-write-wins. |
 | CQ-05 | Does no payment statement establish nonpayment? | Unknown; omission requires explicit scoped performance and duty grounds. |
@@ -229,6 +264,8 @@ These are acceptance scenarios, not tests run in ONT-041.
 | CQ-10 | Does deleting an unused support invalidate every conclusion? | Unaffected certified support may survive; a used-support deletion requires revalidation or another certificate. |
 | CQ-11 | Can a source-free operator finding count as cited evidence? | No; it remains an explicit uncited assertion. |
 | CQ-12 | Can a different schema/scope be diffed as the same state? | Reject comparison or require an explicit versioned migration/projection. |
+| CQ-13 | Can missing or partial physical states be exported as two empty snapshots? | Reject that conversion; retain a source candidate with unavailable exact Delta. |
+| CQ-14 | Can two known, complete, comparable empty snapshots produce an empty Delta? | Yes, within the declared projection; availability must distinguish this control from CQ-13. |
 
 Implementation tasks must add focused positive/negative checks before changing
 their executable contracts. These scenarios do not require a paid model or a
@@ -258,15 +295,20 @@ decisions, exact quote references and uncited findings. Preserve the recorded no
 result and pinned verifier/profile identity; export must not recalculate or
 rewrite historical receipts with today's policy.
 
-Demonstrate that role reinterpretation leaves observations/Delta unchanged and
-that wrong event/snapshot references are rejected. Keep unknown/conflict states;
-do not equate legalFinding states with source truth. An offline replay under the
-same explicitly pinned profile may establish result agreement; export alone
-establishes only data/identity preservation. No paid inference is needed.
+Demonstrate that role reinterpretation preserves observations and Delta
+availability/value, and that wrong event/snapshot references are rejected.
+Export the current fabula sidecar as a source-only candidate when physical
+states are unavailable; do not manufacture an empty physical Delta. Include the
+positive control of known, complete, comparable equal states producing an empty
+Delta. Keep unknown/conflict states; do not equate legalFinding states with
+source truth. An offline replay under the same explicitly pinned profile may
+establish result agreement; export alone establishes only data/identity
+preservation. No paid inference is needed.
 
 Before implementing InstanceGraph, settle the wire representation of finite
-facts/references, partial-role candidates, profile/cardinality requirements and
-time normalization. Before claiming semantic evidence validation, specify the
+facts/references, unavailable observations versus known empty states, partial-role
+candidates, profile/cardinality requirements and time normalization. Before
+claiming semantic evidence validation, specify the
 accepted condition-to-predicate/polarity mapping. These decisions are tracked by
 ONT-043/044, not silently answered by a generic string field.
 

@@ -58,3 +58,17 @@ ONT-040 and ONT-041 PRD/report paths exist under their archive folders. The
 archive log header separator remains intact, next.md points to an unselected
 ONT-042 pending proposal review, and the self-review is archived beside this
 report. FOLLOW-UP was skipped because no new actionable findings were identified.
+
+## Accepted review clarification — 2026-10-26
+
+The author accepted Astra Medium's P3 on baseline `c945d81`. The proposal now
+distinguishes unavailable/partial observations from known empty snapshots and
+allows exact Delta computation only for known comparable states. Source-only
+fabula candidates cannot be converted into physical-event records with invented
+empty states or the operator's review snapshots. CQ-13/14 and ONT-043/045 record
+the corresponding negative scenario and known-equal-state positive control.
+
+This follow-up changes documentation only. Its checks cover relative links and
+headings, task references/dependencies, unique CQ-01–14 IDs, whitespace and the
+Markdown-only change boundary. No new runtime/Lean test result is claimed; prior
+CI results belong to the baseline revision and do not verify the new commit.

@@ -49,3 +49,17 @@ as source; rendering was not verified. No compiler or Lean tests were rerun.
 No new actionable defect or duplicate implementation task was found. FOLLOW-UP
 is skipped under FLOW; the planned ONT-042–045 roadmap already records future
 work. Archive this self-review and publish the proposal PR for external review.
+
+## Independent review follow-up — 2026-10-26
+
+Astra Medium reviewed `c945d814035ef65faeda3becd359fe4332f21b4d` read-only and
+recommended merging the documentation proposal, with no P0–P2 findings. Its P3
+clarification was accepted by the author: unavailable physical before/after
+observations must not be encoded as two empty states yielding an empty Delta.
+
+The follow-up documents explicit observation availability, keeps source-only
+event/interpretation candidates separate from checked records, and adds
+CQ-13/14 plus ONT-043/045 acceptance. Unknown/partial observations yield no exact
+Delta; known comparable equal snapshots still allow a genuine empty Delta.
+These are future contract checks, not executed runtime tests. Astra's verdict
+applies to the reviewed baseline; it has not independently reviewed this edit.

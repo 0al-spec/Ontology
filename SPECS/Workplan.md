@@ -874,7 +874,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Dependencies:** ONT-042
 - **Parallelizable:** yes, with ONT-044 after ONT-042
 - **Status:** Not Started
-- **Origin:** ONT-041 proposal, stage 2 and CQ-02/04/07/08/09/11/12.
+- **Origin:** ONT-041 proposal, stage 2 and CQ-02/04/07/08/09/11/12/13/14.
 - **Outputs:** InstanceGraph wire/schema/diagnostic contract, validator surface,
   deterministic positive/negative fixtures and generated consumer contracts.
 - **Acceptance Criteria:**
@@ -883,6 +883,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
     wrong episode/scope and invalid temporal inputs for the selected profile.
   - Distinguish observation, evidence/review and normative state projections;
     preserve speaker, partial candidates and uncited operator assertions.
+  - Represent unavailable/partial observations separately from known empty
+    snapshots. Exact Delta is unavailable unless both states are known and
+    comparable; reject coercing source-only candidates into checked events by
+    inventing empty states or reusing the operator's review-state snapshots.
+  - Check both missing-state rejection and the positive control of known,
+    complete, comparable equal states producing an empty Delta.
   - Focused checks show role edits cannot replace event states; record exactly
     which guarantees come from static validation versus a proof profile.
 
@@ -922,8 +928,10 @@ This workplan tracks the specification work for the Ontology repository. The ini
     findings including unknown/conflict, and explicit uncited assertions.
   - Operator review event and fabula actor interpretation remain distinct; the
     original norm result and historical receipt are unchanged.
-  - Role changes preserve observations/Delta; wrong-scope references are rejected.
-    Any claimed replay agreement uses the pinned profile and actual replay evidence.
+  - Role changes preserve observations and Delta availability/value; wrong-scope
+    references are rejected. Fabula candidates with unavailable physical states
+    remain source-only, without an invented physical Delta. Any claimed replay
+    agreement uses the pinned profile and actual replay evidence.
   - No paid inference or production migration is required. Stop after one
     complete offline episode rather than broadening into a new framework phase.
 
