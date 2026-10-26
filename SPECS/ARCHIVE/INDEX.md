@@ -51,6 +51,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-27 | ONT-042 | Archived REVIEW_ONT-042; FOLLOW-UP skipped (already tracked in ONT-043/044) |
 | 2026-10-27 | ONT-042 | Archived draft event core package PRD/report (local PASS) |
 | 2026-10-26 | ONT-041 | Archived REVIEW_ONT-041 self-review; FOLLOW-UP skipped (no new findings) |
 | 2026-10-26 | ONT-041 | Archived event/responsibility proposal PRD/report (documentation PASS) |

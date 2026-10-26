@@ -20,7 +20,7 @@
 | TypeScript | PASS | Existing `npm run typecheck` now includes event-core generated TS. Existing `npm run smoke` passed its examcalc runtime fixture; it is not a new event-graph semantic test. |
 | Swift quality | PASS | `tools/swift-quality.sh`, with coverage, passed Node24 action checks, SwiftFormat, SwiftLint, build/import checking and all 116 existing tests. |
 | Coverage | Reported | Existing llvm-cov TOTAL line coverage 89.00%; region coverage 76.39%. This configured report includes dependency/vendor code and is not package semantics coverage. |
-| Docs | PASS | 35 relative file/heading links resolved at execution, whitespace checks pass. Archive-relative links must be rechecked after moving the task files. |
+| Docs | PASS | 35 relative file/heading links resolved at execution, whitespace checks pass. Post-archive checking resolved 70 relative file/heading references across changed docs. |
 | CI integration | Added | Workflow now checks draft/package consistency, validates/compiles the package and compares its generated baseline. Hosted execution remains pending publication. |
 
 ## Executed commands and routing
@@ -76,3 +76,9 @@ registry publication, NormLab edits or deployment occurred. ONT-043 must impleme
 graph identity, references, availability/enum checks and the chosen wire contract;
 ONT-044 owns responsibility profiles. Independent PR review and hosted CI must
 be assessed on the published head, not inferred from these local results.
+
+## Archive completion
+
+PRD/report and self-review are archived together. The archive index and next
+candidate pointer are updated; ONT-043/044 are not started by this task. Hosted
+CI/review remain separate from local completion evidence.
