@@ -1,7 +1,7 @@
 # ONT-044: Draft Responsibility Profile Package
 
 **Date:** 2026-10-27
-**Status:** Planned
+**Status:** Complete — draft package/mapping delivered; hosted CI and independent review pending
 **Priority:** P1
 **Reasoning Effort:** high
 **Branch:** `codex/ont-044-responsibility-core`

@@ -1,0 +1,40 @@
+apiVersion: "ontology-induction.specgraph.io/v1alpha1"
+kind: "DraftCritique"
+status: "approved_for_yaml"
+summary: "Ready for draft assembly; scope binding, support independence and source/proof boundaries are explicit. Cross-node/profile execution is not implemented."
+scores:
+  domainFraming: 4
+  conceptCoverage: 4
+  behavioralModeling: 3
+  policyModeling: 4
+  trustAndEvidence: 4
+  uncertaintyHandling: 4
+  implementationLeakage: 5
+  relationQuality: 4
+  competencyQuestions: 4
+  yamlReadiness: 4
+issues:
+  - id: "consumer-validation-deferred"
+    severity: "medium"
+    message: "Object shapes do not check cross-node identity, polarity relevance, deadline comparability, Human proof or response authority."
+    affects:
+      - "AttributionContext"
+      - "GroundAssessment"
+      - "ResponseCandidate"
+    suggestedFix: "Keep manual policies/draft approval; require a reviewed consumer adapter before runtime admission."
+  - id: "duty-mapping-gap"
+    severity: "medium"
+    message: "NormLab R3 scope has no independent duty bearer, duty identifier or response rule slot."
+    affects:
+      - "ResponsibleRelation"
+      - "ProfileDefinition"
+    suggestedFix: "Document the gap and explicit alignment assumptions; never claim the R3 marker proves generic duty applicability or sanction."
+questions:
+  - id: "consumer-profile"
+    question: "Which future versioned contract validates responsibility instances without extending eventcore-v1 implicitly?"
+    blocksApproval: false
+provenance:
+  - source: "SPECS/ontology/packages/responsibility-core/authoring/intent.md"
+    note: "Single-author critique; rubric scores are subjective, not measured legal or model accuracy."
+  - source: "https://github.com/SoundBlaster/NormLab/tree/e8041c937f28d3644d4df3680db5d81f0cff8ace/lean"
+    note: "Actual main source read; no Lean execution, cross-repo edits or paid calls."

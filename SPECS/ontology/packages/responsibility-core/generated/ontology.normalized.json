@@ -1,0 +1,1083 @@
+{
+  "classes" : [
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "A duty requiring an action kind, independently of whether it was performed.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "requirementKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:ActionRequirement",
+      "id" : "ActionRequirement",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/ActionRequirement"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Context derives registered event, roles, episode, action and interval through one event-core Interpretation. A selected human anchor is a candidate until the adapter constructs a Human proof.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "contextKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:AttributionContext",
+      "id" : "AttributionContext",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/AttributionContext"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Reference to an external certificate artifact, not an executed or verified proof. Source-support provenance and mapped Lean literals are separate layers.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "artifactDigest",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "artifactRef",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "certificateKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:CertificateReference",
+      "id" : "CertificateReference",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/CertificateReference"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "A cited support record with exact SourceAssertion provenance. Citation structure alone does not prove condition relevance or polarity.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "supportKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:CitedSupport",
+      "id" : "CitedSupport",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/CitedSupport"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Opaque condition identity and reviewed semantic reference. Its truth is not stored here or inferred from its label.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "conditionKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "meaningRef",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:Condition",
+      "id" : "Condition",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/Condition"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Supplied clock and due instant. This does not establish deadlineElapsed; comparable scoped support remains required.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "clockKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "deadlineKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "dueAt",
+          "required" : true,
+          "type" : "integer"
+        }
+      ],
+      "fqid" : "respcore:Deadline",
+      "id" : "Deadline",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/Deadline"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Declared duty content and applicability. Required action/state, deadline and applicability need scoped grounds, not defaults.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "dutyKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:DutySpecification",
+      "id" : "DutySpecification",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/DutySpecification"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "One condition in one owning assessment. Its positive/negative supports determine unknown, positive, negative or conflict under a selected consumer mapping; no duplicate truth-status field.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "groundKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:GroundAssessment",
+      "id" : "GroundAssessment",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/GroundAssessment"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Explicit uncited operator assertion. Author and rationale remain distinct from a source citation and cannot be silently relabelled as cited evidence.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "rationale",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "supportKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:OperatorSupport",
+      "id" : "OperatorSupport",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/OperatorSupport"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Proposed profile-specific marker, such as relationActive or breachRecorded. It is not duty applicability, an imposed sanction, or proof of physical consequence.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "consequenceKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "symbolRef",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:ProfileConsequenceCandidate",
+      "id" : "ProfileConsequenceCandidate",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/ProfileConsequenceCandidate"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Versioned external profile/mapping descriptor pinned to source. Referencing it does not execute authored rules or verify an assessment.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "mappingRef",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "profileKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "sourceRevision",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:ProfileDefinition",
+      "id" : "ProfileDefinition",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/ProfileDefinition"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Reject an assessment proposal while preserving supports and provenance.",
+      "extends" : "sg:Command",
+      "fqid" : "respcore:RejectAssessment",
+      "id" : "RejectAssessment",
+      "implements" : [
+
+      ],
+      "kind" : "Command",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/RejectAssessment"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Proposed response under a separate rule and assessment; unresolved responder/recipient remain missing, never invented. It is not an imposed sanction.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "responseKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:ResponseCandidate",
+      "id" : "ResponseCandidate",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/ResponseCandidate"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Declared conditional response template with a trigger and action. It is inert and contains no parking sanction or automatic enforcement.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "meaningRef",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "ruleKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:ResponseRule",
+      "id" : "ResponseRule",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/ResponseRule"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Scoped action/omission assessment proposal. Workflow review is separate from support polarity, backend admission and legal responsibility.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "assessmentKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "mode",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:ResponsibilityAssessment",
+      "id" : "ResponsibilityAssessment",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "lifecycle" : "AssessmentReview",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/ResponsibilityAssessment"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : true,
+      "description" : "Claimed conditional duty relation. Actor, duty bearer, counterpart and human anchor are independent; package presence does not establish applicability or liability.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "relationKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:ResponsibleRelation",
+      "id" : "ResponsibleRelation",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/ResponsibleRelation"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Record workflow review of an assessment without asserting truth, backend acceptance or responsibility.",
+      "extends" : "sg:Command",
+      "fqid" : "respcore:ReviewAssessment",
+      "id" : "ReviewAssessment",
+      "implements" : [
+
+      ],
+      "kind" : "Command",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/ReviewAssessment"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "A duty requiring a condition on a declared state or history; no expression is executed.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "requirementKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "respcore:StateRequirement",
+      "id" : "StateRequirement",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/classes/StateRequirement"
+    }
+  ],
+  "diagnostics" : [
+
+  ],
+  "id" : "org.0al.responsibility.core",
+  "imports" : [
+    {
+      "id" : "org.0al.events.core",
+      "namespace" : "eventcore",
+      "version" : "0.1.0"
+    },
+    {
+      "id" : "specgraph.foundation",
+      "namespace" : "sg",
+      "version" : "0.1.0"
+    }
+  ],
+  "modelApplicability" : {
+    "appliesTo" : {
+      "contexts" : [
+        "draft_vocabulary_review",
+        "offline_profile_mapping_design"
+      ],
+      "domains" : [
+        "general_responsibility_modeling"
+      ]
+    },
+    "assumptions" : [
+      {
+        "id" : "manual_mapping_review",
+        "text" : "Cross-node support, role, clock, identity, source relevance and mapping checks remain consumer-owned; scalar fields do not enforce enum strings."
+      },
+      {
+        "id" : "source_and_proof_boundary",
+        "text" : "Pinned Lean source reading establishes a mapping boundary only; no adapter, source-truth verifier or new theorem backend is implemented."
+      }
+    ],
+    "excludes" : {
+      "contexts" : [
+        "automatic_liability_assignment",
+        "runtime_responsibility_graph_enforcement",
+        "trusted_legal_advice"
+      ]
+    },
+    "invalidationTriggers" : [
+      {
+        "id" : "profile_source_changed",
+        "text" : "Re-review the condition/polarity/context mapping when NormLab profile source or imported event vocabulary changes."
+      }
+    ]
+  },
+  "namespace" : "respcore",
+  "policies" : [
+    {
+      "appliesTo" : [
+        "respcore:Condition",
+        "respcore:ResponsibleRelation"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "respcore:ConditionalRelationPersistence",
+      "id" : "ConditionalRelationPersistence",
+      "text" : "Origin, continuation and termination are distinct declared conditions. A relation can persist without a current action by its originator. Observed Delta or the R3 relationActive marker alone does not establish the legal applicability or persistence of this ResponsibleRelation."
+    },
+    {
+      "appliesTo" : [
+        "respcore:AttributionContext",
+        "respcore:ResponsibleRelation"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "respcore:DistinctResponsibilityRoles",
+      "id" : "DistinctResponsibilityRoles",
+      "text" : "Actor, duty bearer, counterpart, human anchor, responder and recipient are independent roles. The current human-contribution profile has no separate dutyBearer, duty or responseRule scope slots; do not present its result as certification of those metadata fields. Any chosen alignment must be explicit and separately reviewed."
+    },
+    {
+      "appliesTo" : [
+        "respcore:Deadline",
+        "respcore:DutySpecification",
+        "respcore:GroundAssessment"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "respcore:ExplicitOmissionGrounds",
+      "id" : "ExplicitOmissionGrounds",
+      "text" : "The mapped omission profile requires attributed+, required+, deadlineElapsed+, capable+, exception- and performed- in the same scope. Missing performance evidence is not nonperformance. Deadline metadata alone does not supply elapsed support; external duty applicability is not silently proved by R3."
+    },
+    {
+      "appliesTo" : [
+        "respcore:Condition",
+        "respcore:GroundAssessment",
+        "respcore:ResponsibilityAssessment"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "respcore:IndependentGroundSupport",
+      "id" : "IndependentGroundSupport",
+      "text" : "No support means unknown; positive-only, negative-only and both polarities remain distinct. Preserve opposing supports. Condition labels and assessment review do not establish truth. The selected NormLab profile requires each requested literal and absence of its opposite, not a full Belnap calculus."
+    },
+    {
+      "appliesTo" : [
+        "respcore:AttributionContext",
+        "respcore:CertificateReference",
+        "respcore:GroundAssessment",
+        "respcore:ProfileDefinition",
+        "respcore:ResponsibilityAssessment"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "respcore:ScopedBoundMapping",
+      "id" : "ScopedBoundMapping",
+      "text" : "Use one derived registered event/interpretation context and explicit injective ID mapping. Missing roles, Human proof or registry binding cannot be invented. A ground and certificate derive the same owner context/profile. The eventcore-v1 validator does not admit respcore nodes; this draft adds no responsibility graph checker."
+    },
+    {
+      "appliesTo" : [
+        "respcore:ProfileConsequenceCandidate",
+        "respcore:ResponseCandidate",
+        "respcore:ResponseRule"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "respcore:SeparateConditionalResponse",
+      "id" : "SeparateConditionalResponse",
+      "text" : "An omission-grounded breachRecorded marker is not an imposed sanction. A response needs its own rule, scoped trigger, authority and recipient. Package approval, workflow review, source truth, profile acceptance and legal responsibility are distinct. This package neither executes response rules nor inserts a physical or normative Delta."
+    },
+    {
+      "appliesTo" : [
+        "respcore:CitedSupport",
+        "respcore:OperatorSupport"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "respcore:SourceAndOperatorBoundary",
+      "id" : "SourceAndOperatorBoundary",
+      "text" : "Cited support retains the exact SourceAssertion and speaker. Uncited operator support retains author and rationale and must stay labelled uncited. Citation identity does not establish condition relevance, polarity, human status or factual truth."
+    },
+    {
+      "appliesTo" : [
+        "respcore:CertificateReference",
+        "respcore:ProfileConsequenceCandidate"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "respcore:SupportSensitiveRevalidation",
+      "id" : "SupportSensitiveRevalidation",
+      "text" : "Deleting unused mapped facts/rules can preserve a selected Tree under the pinned theorem conditions. Deleting used support requires mapping revalidation; an alternate source may preserve the same literal value. Profile.check must be rechecked after updates: adding opposed grounds or negative effect can reject a still-valid Tree. Never identify source support IDs with Lean literal values."
+    }
+  ],
+  "protocols" : [
+
+  ],
+  "relations" : [
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Identifies the required action without asserting performance.",
+      "domain" : "respcore:ActionRequirement",
+      "fqid" : "respcore:actionRequirementKind",
+      "id" : "actionRequirementKind",
+      "range" : "eventcore:ActionKind",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/actionRequirementKind"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "One interpretation context scopes every mapped ground and consequence.",
+      "domain" : "respcore:ResponsibilityAssessment",
+      "fqid" : "respcore:assessmentContext",
+      "id" : "assessmentContext",
+      "range" : "respcore:AttributionContext",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/assessmentContext"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Select a pinned mapping and backend; no profile is chosen from labels.",
+      "domain" : "respcore:ResponsibilityAssessment",
+      "fqid" : "respcore:assessmentProfile",
+      "id" : "assessmentProfile",
+      "range" : "respcore:ProfileDefinition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/assessmentProfile"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Optional claimed duty metadata. Current NormLab R3 has no independent duty-bearer, duty or response-rule identifier in Scope; these fields are not certified by it.",
+      "domain" : "respcore:ResponsibilityAssessment",
+      "fqid" : "respcore:assessmentRelation",
+      "id" : "assessmentRelation",
+      "range" : "respcore:ResponsibleRelation",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/assessmentRelation"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "The referenced certificate must target this exact context/profile; no cross-event substitution.",
+      "domain" : "respcore:CertificateReference",
+      "fqid" : "respcore:certificateAssessment",
+      "id" : "certificateAssessment",
+      "range" : "respcore:ResponsibilityAssessment",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/certificateAssessment"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "External mapping provenance: used ground nodes must belong to the same assessment. This is not the Lean Tree.usedFacts list itself.",
+      "domain" : "respcore:CertificateReference",
+      "fqid" : "respcore:certificateUsedGround",
+      "id" : "certificateUsedGround",
+      "range" : "respcore:GroundAssessment",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/certificateUsedGround"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "External selected support IDs for replay. Lean tracks literal/rule values; citation deletion needs mapping/provenance revalidation separately.",
+      "domain" : "respcore:CertificateReference",
+      "fqid" : "respcore:certificateUsedSupport",
+      "id" : "certificateUsedSupport",
+      "range" : {
+        "oneOf" : [
+          "respcore:CitedSupport",
+          "respcore:OperatorSupport"
+        ]
+      },
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/certificateUsedSupport"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Preserve source, revision, digest, quote offsets and speaker via the imported assertion.",
+      "domain" : "respcore:CitedSupport",
+      "fqid" : "respcore:citedSupportAssertion",
+      "id" : "citedSupportAssertion",
+      "range" : "eventcore:SourceAssertion",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/citedSupportAssertion"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Proposed marker belongs to the selected assessment and its derived event context.",
+      "domain" : "respcore:ProfileConsequenceCandidate",
+      "fqid" : "respcore:consequenceAssessment",
+      "id" : "consequenceAssessment",
+      "range" : "respcore:ResponsibilityAssessment",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/consequenceAssessment"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Optional external certificate reference is not a verification verdict.",
+      "domain" : "respcore:ProfileConsequenceCandidate",
+      "fqid" : "respcore:consequenceCertificate",
+      "id" : "consequenceCertificate",
+      "range" : "respcore:CertificateReference",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/consequenceCertificate"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Candidate human anchor. A bound HumanContext additionally requires an explicit IsHuman proof in the selected universe.",
+      "domain" : "respcore:AttributionContext",
+      "fqid" : "respcore:contextHumanAnchor",
+      "id" : "contextHumanAnchor",
+      "range" : "eventcore:Entity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/contextHumanAnchor"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Derive the event and its exact registry/episode/action/interval from interpretsRecord; never copy conflicting event identifiers here.",
+      "domain" : "respcore:AttributionContext",
+      "fqid" : "respcore:contextInterpretation",
+      "id" : "contextInterpretation",
+      "range" : "eventcore:Interpretation",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/contextInterpretation"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Applicability is an explicit condition; absence of support never means true.",
+      "domain" : "respcore:DutySpecification",
+      "fqid" : "respcore:dutyApplicability",
+      "id" : "dutyApplicability",
+      "range" : "respcore:Condition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/dutyApplicability"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Missing deadline remains unresolved; no deadlineElapsed support is manufactured.",
+      "domain" : "respcore:DutySpecification",
+      "fqid" : "respcore:dutyDeadline",
+      "id" : "dutyDeadline",
+      "range" : "respcore:Deadline",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/dutyDeadline"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Exactly one typed action/state requirement; no free-form executable expression.",
+      "domain" : "respcore:DutySpecification",
+      "fqid" : "respcore:dutyRequirement",
+      "id" : "dutyRequirement",
+      "range" : {
+        "oneOf" : [
+          "respcore:ActionRequirement",
+          "respcore:StateRequirement"
+        ]
+      },
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/dutyRequirement"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "The sole owner determines context/profile; duplicate scope fields are not supplied on a ground.",
+      "domain" : "respcore:GroundAssessment",
+      "fqid" : "respcore:groundAssessmentOwner",
+      "id" : "groundAssessmentOwner",
+      "range" : "respcore:ResponsibilityAssessment",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/groundAssessmentOwner"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Selected condition must have an accepted profile predicate/polarity mapping.",
+      "domain" : "respcore:GroundAssessment",
+      "fqid" : "respcore:groundCondition",
+      "id" : "groundCondition",
+      "range" : "respcore:Condition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/groundCondition"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Explicit support against the condition; absence of positive support does not create this link.",
+      "domain" : "respcore:GroundAssessment",
+      "fqid" : "respcore:groundNegativeSupport",
+      "id" : "groundNegativeSupport",
+      "range" : {
+        "oneOf" : [
+          "respcore:CitedSupport",
+          "respcore:OperatorSupport"
+        ]
+      },
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/groundNegativeSupport"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Independent support for the condition; not a workflow status.",
+      "domain" : "respcore:GroundAssessment",
+      "fqid" : "respcore:groundPositiveSupport",
+      "id" : "groundPositiveSupport",
+      "range" : {
+        "oneOf" : [
+          "respcore:CitedSupport",
+          "respcore:OperatorSupport"
+        ]
+      },
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/groundPositiveSupport"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Explicit author of an uncited claim; rationale remains required.",
+      "domain" : "respcore:OperatorSupport",
+      "fqid" : "respcore:operatorSupportAuthor",
+      "id" : "operatorSupportAuthor",
+      "range" : "eventcore:Entity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/operatorSupportAuthor"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Declare the set of condition identities covered by the reviewed external mapping; semantic validation remains consumer-owned.",
+      "domain" : "respcore:ProfileDefinition",
+      "fqid" : "respcore:profileMapsCondition",
+      "id" : "profileMapsCondition",
+      "range" : "respcore:Condition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/profileMapsCondition"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Declared continuation condition is distinct from other phases; its identity does not establish that it holds.",
+      "domain" : "respcore:ResponsibleRelation",
+      "fqid" : "respcore:relationContinuationCondition",
+      "id" : "relationContinuationCondition",
+      "range" : "respcore:Condition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/relationContinuationCondition"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Counterpart is a separate model entity; this does not establish legal personality.",
+      "domain" : "respcore:ResponsibleRelation",
+      "fqid" : "respcore:relationCounterpart",
+      "id" : "relationCounterpart",
+      "range" : "eventcore:Entity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/relationCounterpart"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "One declared duty specification belongs to the claimed relation.",
+      "domain" : "respcore:ResponsibleRelation",
+      "fqid" : "respcore:relationDuty",
+      "id" : "relationDuty",
+      "range" : "respcore:DutySpecification",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/relationDuty"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Duty bearer is explicit and is not derived from actor, ownership or human anchor.",
+      "domain" : "respcore:ResponsibleRelation",
+      "fqid" : "respcore:relationDutyBearer",
+      "id" : "relationDutyBearer",
+      "range" : "eventcore:Entity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/relationDutyBearer"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Declared origin condition is distinct from other phases; its identity does not establish that it holds.",
+      "domain" : "respcore:ResponsibleRelation",
+      "fqid" : "respcore:relationOriginCondition",
+      "id" : "relationOriginCondition",
+      "range" : "respcore:Condition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/relationOriginCondition"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Optional explicit action/omission interpretation proposed as origin; continuation is a separate question.",
+      "domain" : "respcore:ResponsibleRelation",
+      "fqid" : "respcore:relationOriginContext",
+      "id" : "relationOriginContext",
+      "range" : "respcore:AttributionContext",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/relationOriginContext"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Possible response templates require their own trigger, authority and applicability; none is inferred by default.",
+      "domain" : "respcore:ResponsibleRelation",
+      "fqid" : "respcore:relationResponseRule",
+      "id" : "relationResponseRule",
+      "range" : "respcore:ResponseRule",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/relationResponseRule"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Declared termination condition is distinct from other phases; its identity does not establish that it holds.",
+      "domain" : "respcore:ResponsibleRelation",
+      "fqid" : "respcore:relationTerminationCondition",
+      "id" : "relationTerminationCondition",
+      "range" : "respcore:Condition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/relationTerminationCondition"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Retain the assessment context rather than transferring a breach from another event.",
+      "domain" : "respcore:ResponseCandidate",
+      "fqid" : "respcore:responseCandidateAssessment",
+      "id" : "responseCandidateAssessment",
+      "range" : "respcore:ResponsibilityAssessment",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/responseCandidateAssessment"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Unresolved response recipient remains absent; actor is not automatically the recipient.",
+      "domain" : "respcore:ResponseCandidate",
+      "fqid" : "respcore:responseCandidateRecipient",
+      "id" : "responseCandidateRecipient",
+      "range" : "eventcore:Entity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/responseCandidateRecipient"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Unresolved responder remains absent; no authority is inferred from counterpart.",
+      "domain" : "respcore:ResponseCandidate",
+      "fqid" : "respcore:responseCandidateResponder",
+      "id" : "responseCandidateResponder",
+      "range" : "eventcore:Entity",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/responseCandidateResponder"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Candidate response retains its separate response-rule origin.",
+      "domain" : "respcore:ResponseCandidate",
+      "fqid" : "respcore:responseCandidateRule",
+      "id" : "responseCandidateRule",
+      "range" : "respcore:ResponseRule",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/responseCandidateRule"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Proposed response action kind, not a performed enforcement event.",
+      "domain" : "respcore:ResponseRule",
+      "fqid" : "respcore:responseRuleAction",
+      "id" : "responseRuleAction",
+      "range" : "eventcore:ActionKind",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/responseRuleAction"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Authority is a distinct explicit condition, not inferred from the trigger, counterpart or selected responder.",
+      "domain" : "respcore:ResponseRule",
+      "fqid" : "respcore:responseRuleAuthorityCondition",
+      "id" : "responseRuleAuthorityCondition",
+      "range" : "respcore:Condition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/responseRuleAuthorityCondition"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Trigger condition needs its own scoped support before any response is proposed.",
+      "domain" : "respcore:ResponseRule",
+      "fqid" : "respcore:responseRuleTrigger",
+      "id" : "responseRuleTrigger",
+      "range" : "respcore:Condition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/responseRuleTrigger"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Identifies the state/history condition required by the duty.",
+      "domain" : "respcore:StateRequirement",
+      "fqid" : "respcore:stateRequirementCondition",
+      "id" : "stateRequirementCondition",
+      "range" : "respcore:Condition",
+      "uri" : "ontology://org.0al.responsibility.core/0.1.0/relations/stateRequirementCondition"
+    }
+  ],
+  "sourceDigest" : "sha256:f1540b9d7362677910ab02bc1844edc73bc956306059965ba168bf865a3a39c8",
+  "stateMachines" : [
+    {
+      "fqid" : "respcore:AssessmentReview",
+      "id" : "AssessmentReview",
+      "states" : [
+        "rejected",
+        "reviewed",
+        "unreviewed"
+      ],
+      "transitions" : [
+        {
+          "command" : "respcore:RejectAssessment",
+          "from" : "unreviewed",
+          "to" : "rejected"
+        },
+        {
+          "command" : "respcore:ReviewAssessment",
+          "from" : "unreviewed",
+          "to" : "reviewed"
+        }
+      ]
+    }
+  ],
+  "version" : "0.1.0"
+}

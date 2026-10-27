@@ -1,0 +1,16 @@
+apiVersion: "ontology-induction.specgraph.io/v1alpha1"
+kind: "IntentClassification"
+intentType: "ArchitectureIntent"
+domain: "GeneralResponsibilityModeling"
+subdomain: "ScopedGroundsAndProfileMapping"
+productType: "ReusableDraftOntologyPackage"
+criticality: "medium"
+primaryConcern: "Separate actor/duty bearer/human anchor, independent support and workflow/proof authority without automatic responsibility."
+requiresExistingOntology: true
+confidence: 0.8
+uncertainties:
+  - id: "consumer-profile"
+    question: "Which future consumer adapter validates cross-node responsibility instances under the chosen mapping?"
+provenance:
+  - source: "SPECS/Workplan.md#ont-044-draft-responsibility-profile-package"
+    note: "User-authorized bounded draft package; confidence is an uncalibrated author estimate."
