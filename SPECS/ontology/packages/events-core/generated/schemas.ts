@@ -13,13 +13,11 @@ export const CausalHypothesisSchema = z.object({
   $type: z.literal("eventcore:CausalHypothesis"),
   id: z.string().optional(),
   profileRef: z.string(),
-  reviewStatus: z.string(),
 });
 
 export const DeltaSchema = z.object({
   $type: z.literal("eventcore:Delta"),
   id: z.string().optional(),
-  projectionKey: z.string(),
 });
 
 export const EntitySchema = z.object({
@@ -39,6 +37,13 @@ export const EventCandidateSchema = z.object({
   id: z.string().optional(),
   candidateKey: z.string(),
   description: z.string().optional(),
+});
+
+export const EventRegistrySchema = z.object({
+  $type: z.literal("eventcore:EventRegistry"),
+  id: z.string().optional(),
+  registryKey: z.string(),
+  revisionKey: z.string(),
 });
 
 export const FactSchema = z.object({
@@ -69,8 +74,8 @@ export const RecordedEventSchema = z.object({
   recordKey: z.string(),
 });
 
-export const RejectInterpretationSchema = z.object({
-  $type: z.literal("eventcore:RejectInterpretation"),
+export const RejectProposalSchema = z.object({
+  $type: z.literal("eventcore:RejectProposal"),
   id: z.string().optional(),
 });
 
@@ -80,8 +85,8 @@ export const RelationInstanceSchema = z.object({
   relationType: z.string(),
 });
 
-export const ReviewInterpretationSchema = z.object({
-  $type: z.literal("eventcore:ReviewInterpretation"),
+export const ReviewProposalSchema = z.object({
+  $type: z.literal("eventcore:ReviewProposal"),
   id: z.string().optional(),
 });
 
@@ -112,7 +117,6 @@ export const StateObservationSchema = z.object({
 export const StateSnapshotSchema = z.object({
   $type: z.literal("eventcore:StateSnapshot"),
   id: z.string().optional(),
-  complete: z.boolean(),
   projectionKey: z.string(),
   schemaKey: z.string(),
   scopeKey: z.string(),
@@ -125,13 +129,14 @@ export const AnyOntologyEntitySchema = z.discriminatedUnion("$type", [
   EntitySchema,
   EpisodeSchema,
   EventCandidateSchema,
+  EventRegistrySchema,
   FactSchema,
   InterpretationSchema,
   InterpretationCandidateSchema,
   RecordedEventSchema,
-  RejectInterpretationSchema,
+  RejectProposalSchema,
   RelationInstanceSchema,
-  ReviewInterpretationSchema,
+  ReviewProposalSchema,
   RoleBindingSchema,
   SourceAssertionSchema,
   StateObservationSchema,

@@ -893,6 +893,19 @@ This workplan tracks the specification work for the Ontology repository. The ini
     inventing empty states or reusing the operator's review-state snapshots.
   - Check both missing-state rejection and the positive control of known,
     complete, comparable equal states producing an empty Delta.
+  - Enforce direct recordBeforeSnapshot/recordAfterSnapshot ranges; StateSnapshot
+    declares a complete supplied state without a separate completeness flag.
+    StateObservation availability is candidate-only. Reject contradictory or
+    legacy wire fields explicitly rather than silently stripping them.
+  - Enforce exactly one recordInRegistry membership and unique recordKey within
+    its EventRegistry revision (registryKey, revisionKey), plus registry/snapshot
+    reference identity. Do not treat recordKey as a global ID.
+  - Derive Delta's two states exclusively through deltaOfRecord and recompute
+    its exact Added/Removed; reject differences authored for unrelated states.
+  - Resolve hypothesisCauseView/hypothesisEffectView through interpretsRecord;
+    require matching registry revision, distinct endpoints and comparable valid
+    intervals under the chosen clock/profile. Validate the shared ProposalReview
+    lifecycle without treating reviewed as causal truth.
   - Focused checks show role edits cannot replace event states; record exactly
     which guarantees come from static validation versus a proof profile.
 
@@ -938,6 +951,28 @@ This workplan tracks the specification work for the Ontology repository. The ini
     agreement uses the pinned profile and actual replay evidence.
   - No paid inference or production migration is required. Stop after one
     complete offline episode rather than broadening into a new framework phase.
+
+---
+
+#### ONT-046: Linux Compiler Portability
+- **Description:** Make the unmodified compiler and CLI build/test on Linux,
+  addressing CryptoKit availability, FoundationNetworking imports and Swift 6
+  stderr concurrency, with Linux CI alongside macOS.
+- **Priority:** P2
+- **Dependencies:** None known; separate from the events-core draft review
+- **Parallelizable:** yes
+- **Status:** Not Started
+- **Origin:** External PR #66 review reported successful generation/tests only
+  after platform-specific patches in a separate Linux worktree; those results
+  do not establish stock-repository Linux support.
+- **Outputs:** Portable imports/dependencies/diagnostics and Linux CI evidence.
+- **Acceptance Criteria:**
+  - A clean Linux checkout builds the CLI and passes draft/check/compile plus
+    existing tests without reviewer-local source patches.
+  - Generated event-core and existing golden artifacts remain byte-identical
+    across supported platforms; document any actual incompatibilities.
+  - Linux/macOS CI validate the same contracts; this task does not change event
+    semantics or block ONT-043 source/design work.
 
 ---
 

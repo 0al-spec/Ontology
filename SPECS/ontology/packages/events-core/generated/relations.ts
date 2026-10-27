@@ -102,24 +102,12 @@ export const relationDefinitions = [
       "max" : 1,
       "min" : 1
     },
-    "description" : "Delta refers to its compared after snapshot.",
+    "description" : "The sole owning record determines both compared snapshots and their projection. ONT-043 must validate exact Added/Removed against those states, not arbitrary independent endpoints.",
     "domain" : "eventcore:Delta",
-    "fqid" : "eventcore:deltaAfterSnapshot",
-    "id" : "deltaAfterSnapshot",
-    "range" : "eventcore:StateSnapshot",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaAfterSnapshot"
-  },
-  {
-    "cardinality" : {
-      "max" : 1,
-      "min" : 1
-    },
-    "description" : "Delta refers to its compared before snapshot.",
-    "domain" : "eventcore:Delta",
-    "fqid" : "eventcore:deltaBeforeSnapshot",
-    "id" : "deltaBeforeSnapshot",
-    "range" : "eventcore:StateSnapshot",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaBeforeSnapshot"
+    "fqid" : "eventcore:deltaOfRecord",
+    "id" : "deltaOfRecord",
+    "range" : "eventcore:RecordedEvent",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaOfRecord"
   },
   {
     "cardinality" : {
@@ -150,12 +138,12 @@ export const relationDefinitions = [
       "max" : 1,
       "min" : 1
     },
-    "description" : "The hypothesized cause must be registered in the same snapshot under the selected profile.",
+    "description" : "Cause interpretation binds participant roles to a record via interpretsRecord; its registered event is derived from that link.",
     "domain" : "eventcore:CausalHypothesis",
-    "fqid" : "eventcore:hypothesisCause",
-    "id" : "hypothesisCause",
-    "range" : "eventcore:RecordedEvent",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCause"
+    "fqid" : "eventcore:hypothesisCauseView",
+    "id" : "hypothesisCauseView",
+    "range" : "eventcore:Interpretation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCauseView"
   },
   {
     "cardinality" : {
@@ -174,12 +162,12 @@ export const relationDefinitions = [
       "max" : 1,
       "min" : 1
     },
-    "description" : "The hypothesized effect remains distinct from the cause; temporal checks are deferred.",
+    "description" : "Effect interpretation supplies its own bound roles and derived record. Both endpoint records must belong to the same registry revision and remain distinct under the selected profile.",
     "domain" : "eventcore:CausalHypothesis",
-    "fqid" : "eventcore:hypothesisEffect",
-    "id" : "hypothesisEffect",
-    "range" : "eventcore:RecordedEvent",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisEffect"
+    "fqid" : "eventcore:hypothesisEffectView",
+    "id" : "hypothesisEffectView",
+    "range" : "eventcore:Interpretation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisEffectView"
   },
   {
     "cardinality" : {
@@ -210,7 +198,7 @@ export const relationDefinitions = [
       "max" : 1,
       "min" : 0
     },
-    "description" : "A known observation requires a complete snapshot; unknown has none and partial cannot support exact Delta. These conditional rules are manual here.",
+    "description" : "A candidate known observation references one StateSnapshot; partial or unknown observations do not. Conditional validation is ONT-043 work and never mediates a RecordedEvent's states.",
     "domain" : "eventcore:StateObservation",
     "fqid" : "eventcore:observationSnapshot",
     "id" : "observationSnapshot",
@@ -219,27 +207,39 @@ export const relationDefinitions = [
   },
   {
     "cardinality" : {
-      "max" : 1,
-      "min" : 1
+      "max" : "*",
+      "min" : 0
     },
-    "description" : "The record references its supplied after observation.",
-    "domain" : "eventcore:RecordedEvent",
-    "fqid" : "eventcore:recordAfterObservation",
-    "id" : "recordAfterObservation",
-    "range" : "eventcore:StateObservation",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordAfterObservation"
+    "description" : "Partial candidate evidence can retain individual facts without declaring a complete snapshot or permitting exact Delta.",
+    "domain" : "eventcore:StateObservation",
+    "fqid" : "eventcore:observationSuppliesFact",
+    "id" : "observationSuppliesFact",
+    "range" : "eventcore:Fact",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/observationSuppliesFact"
   },
   {
     "cardinality" : {
       "max" : 1,
       "min" : 1
     },
-    "description" : "The record references its supplied before observation.",
+    "description" : "A recorded event requires one supplied complete after snapshot directly, comparable to its before snapshot.",
     "domain" : "eventcore:RecordedEvent",
-    "fqid" : "eventcore:recordBeforeObservation",
-    "id" : "recordBeforeObservation",
-    "range" : "eventcore:StateObservation",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordBeforeObservation"
+    "fqid" : "eventcore:recordAfterSnapshot",
+    "id" : "recordAfterSnapshot",
+    "range" : "eventcore:StateSnapshot",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordAfterSnapshot"
+  },
+  {
+    "cardinality" : {
+      "max" : 1,
+      "min" : 1
+    },
+    "description" : "A recorded event requires one supplied complete before snapshot directly; candidate availability is not an alternative range.",
+    "domain" : "eventcore:RecordedEvent",
+    "fqid" : "eventcore:recordBeforeSnapshot",
+    "id" : "recordBeforeSnapshot",
+    "range" : "eventcore:StateSnapshot",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordBeforeSnapshot"
   },
   {
     "cardinality" : {
@@ -256,18 +256,6 @@ export const relationDefinitions = [
   {
     "cardinality" : {
       "max" : 1,
-      "min" : 0
-    },
-    "description" : "Optional authored consequence; present only after known comparable observations support exact comparison.",
-    "domain" : "eventcore:RecordedEvent",
-    "fqid" : "eventcore:recordDelta",
-    "id" : "recordDelta",
-    "range" : "eventcore:Delta",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordDelta"
-  },
-  {
-    "cardinality" : {
-      "max" : 1,
       "min" : 1
     },
     "description" : "A record belongs to one explicit episode.",
@@ -276,6 +264,18 @@ export const relationDefinitions = [
     "id" : "recordInEpisode",
     "range" : "eventcore:Episode",
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordInEpisode"
+  },
+  {
+    "cardinality" : {
+      "max" : 1,
+      "min" : 1
+    },
+    "description" : "A record belongs to one immutable registry revision; its recordKey must be unique in that scope. ONT-043 will enforce membership and uniqueness.",
+    "domain" : "eventcore:RecordedEvent",
+    "fqid" : "eventcore:recordInRegistry",
+    "id" : "recordInRegistry",
+    "range" : "eventcore:EventRegistry",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordInRegistry"
   },
   {
     "cardinality" : {

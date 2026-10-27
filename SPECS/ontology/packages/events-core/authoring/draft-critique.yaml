@@ -1,7 +1,7 @@
 apiVersion: ontology-induction.specgraph.io/v1alpha1
 kind: DraftCritique
 status: approved_for_yaml
-summary: Ready for draft YAML assembly only; observation availability and candidate boundaries are explicit, while instance validation remains ONT-043 work.
+summary: Ready for draft YAML assembly only; records use direct snapshots in an explicit registry, Delta derives its states from its record, and hypothesis endpoints use interpretations. Instance validation remains ONT-043 work.
 scores:
   domainFraming: 4
   conceptCoverage: 4
@@ -17,7 +17,7 @@ issues:
   - id: instance-validation-deferred
     severity: medium
     message: Current object schemas cannot enforce instance graph references, availability enum values, exact Delta or semantic support.
-    affects: [StateObservation, RecordedEvent, Delta, SourceAssertion]
+    affects: [StateObservation, EventRegistry, RecordedEvent, Delta, SourceAssertion, CausalHypothesis]
     suggestedFix: Keep package draft and policies manual; implement the accepted concrete graph contract in ONT-043.
 questions:
   - id: instance-wire-format
@@ -28,3 +28,5 @@ provenance:
     note: Single-agent critique before YAML assembly; scores are subjective rubric estimates, not measured accuracy.
   - source: SPECS/ontology/ontology-quality-rubric.md
     note: Applied to package vocabulary and explicit trust/uncertainty boundaries.
+  - source: PR-66-external-review-2026-10-27
+    note: User-supplied independent review prompted direct record snapshots, registry identity, record-owned Delta, interpretation endpoints and a shared proposal lifecycle. Its separately patched Linux results are not stock-repository portability evidence.

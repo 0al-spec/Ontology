@@ -9,7 +9,7 @@ export const policyDefinitions = [
     "extends" : "sg:Policy",
     "fqid" : "eventcore:BoundedCausalHypothesis",
     "id" : "BoundedCausalHypothesis",
-    "text" : "The bounded R3 profile requires distinct registered endpoints, valid intervals and cause start no later than effect start; overlap is allowed. This text does not execute temporal checks, prove physical causation or transfer responsibility."
+    "text" : "Cause/effect Interpretations derive their endpoint records through interpretsRecord; both records must belong to the same EventRegistry revision and have distinct recordKeys, the same clockKey, valid intervals and cause start no later than effect start. Overlap is allowed. Proposal review does not prove causation; graph/temporal checks are ONT-043 work and no responsibility is transferred."
   },
   {
     "appliesTo" : [
@@ -27,6 +27,7 @@ export const policyDefinitions = [
     "appliesTo" : [
       "eventcore:Delta",
       "eventcore:EventCandidate",
+      "eventcore:RecordedEvent",
       "eventcore:StateObservation",
       "eventcore:StateSnapshot"
     ],
@@ -34,10 +35,11 @@ export const policyDefinitions = [
     "extends" : "sg:Policy",
     "fqid" : "eventcore:KnownStatesForExactDelta",
     "id" : "KnownStatesForExactDelta",
-    "text" : "Compute exact Delta only from known complete snapshots with matching schema/scope/projection. Unknown or partial observations yield unavailable Delta; never substitute empty snapshots or the operator's review states. Known equal empty snapshots allow a genuine empty Delta."
+    "text" : "RecordedEvent directly requires complete StateSnapshots with matching schema/scope/projection, without availability or complete flags on the record path. Delta derives both states through deltaOfRecord and must equal their exact difference. Unknown or partial candidate observations cannot create a record or Delta by substituting empty states or operator review states. Equal supplied empty snapshots allow a genuine empty Delta."
   },
   {
     "appliesTo" : [
+      "eventcore:EventRegistry",
       "eventcore:Interpretation",
       "eventcore:RecordedEvent"
     ],
@@ -45,7 +47,7 @@ export const policyDefinitions = [
     "extends" : "sg:Policy",
     "fqid" : "eventcore:PreserveRecordedObservations",
     "id" : "PreserveRecordedObservations",
-    "text" : "Keep event records immutable and scoped by unique snapshot/record identities. Reinterpreting roles never replaces supplied observations; enrichment creates a linked new record."
+    "text" : "A record belongs to exactly one EventRegistry revision, where recordKey is unique; the registry identity is registryKey plus revisionKey. Reinterpreting roles never replaces supplied snapshots. Enrichment creates a linked new record; this declaration is not an implemented registry service."
   },
   {
     "appliesTo" : [

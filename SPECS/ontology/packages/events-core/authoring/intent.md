@@ -18,14 +18,16 @@ No parking rules, human duty profile, sanction or paid inference belongs here.
 
 ## Domain framing
 
-The governing concept is **RecordedEvent**: it binds supplied snapshots to a
-scoped occurrence. An EventCandidate can exist before this record is available.
+The governing concept is **RecordedEvent**: it binds supplied snapshots directly
+to an occurrence in one EventRegistry revision, within which recordKey is unique.
+An EventCandidate can exist before this record is available.
 An InterpretationCandidate preserves source/role proposals; a checked
 Interpretation refers to an existing record. Neither candidate review nor a
 new role changes that record's observations.
 
-StateObservation describes availability. StateSnapshot contains supplied facts
-under a declared projection. Two complete comparable equal snapshots can have
+StateObservation describes candidate availability. StateSnapshot declares a
+complete supplied fact set under a projection, without another completeness flag.
+Two complete comparable equal snapshots can have
 an empty Delta. Missing/partial snapshots leave exact Delta unavailable. These
 are authored invariants for the future graph validator, not guarantees of the
 current generated object schemas.
@@ -37,13 +39,15 @@ RecordedEvent and EventCandidate keep complete records apart from descriptions
 with missing data. Interpretation, InterpretationCandidate, RoleBinding and
 RelationInstance separate readings and contextual participation. StateObservation,
 StateSnapshot, Fact and Delta separate availability from contents/change.
-SourceAssertion keeps revision/digest/quote/speaker. CausalHypothesis retains a
-proposed relation between records without establishing its truth.
+Delta obtains its states through one owning record. SourceAssertion keeps
+revision/digest/quote/speaker. CausalHypothesis retains cause/effect Interpretations,
+each bound to its endpoint record, without establishing causal truth.
 
 ## Behavior and policy extraction
 
-ReviewInterpretation and RejectInterpretation record review of a candidate.
-The lifecycle is proposed → reviewed or rejected. Reviewed does not mean
+ReviewProposal and RejectProposal record review of interpretation candidates or
+causal hypotheses. Their shared lifecycle is proposed → reviewed or rejected.
+Reviewed does not mean
 promotion to RecordedEvent or proof of factual truth. Event records and source
 assertions remain immutable; enrichment is explicitly linked as a new record.
 

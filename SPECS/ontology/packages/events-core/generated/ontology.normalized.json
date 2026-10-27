@@ -27,16 +27,11 @@
 
       ],
       "central" : false,
-      "description" : "Proposed link between recorded causes/effects under an explicit bounded temporal profile; neither time order nor review proves physical causation.",
+      "description" : "Proposed link between cause/effect Interpretations, each bound to its RecordedEvent; endpoint records derive from the views. Time order and review do not prove physical causation.",
       "extends" : "sg:DomainEntity",
       "fields" : [
         {
           "id" : "profileRef",
-          "required" : true,
-          "type" : "string"
-        },
-        {
-          "id" : "reviewStatus",
           "required" : true,
           "type" : "string"
         }
@@ -47,6 +42,7 @@
 
       ],
       "kind" : "DomainEntity",
+      "lifecycle" : "ProposalReview",
       "uri" : "ontology://org.0al.events.core/0.1.0/classes/CausalHypothesis"
     },
     {
@@ -54,15 +50,8 @@
 
       ],
       "central" : false,
-      "description" : "Authored exact Added/Removed change description between known comparable snapshots; the package does not compute or verify it.",
+      "description" : "Authored exact Added/Removed difference owned by one RecordedEvent; before/after/projection derive exclusively from that record, with no independent snapshot references. Execution is deferred to ONT-043.",
       "extends" : "sg:ValueObject",
-      "fields" : [
-        {
-          "id" : "projectionKey",
-          "required" : true,
-          "type" : "string"
-        }
-      ],
       "fqid" : "eventcore:Delta",
       "id" : "Delta",
       "implements" : [
@@ -149,6 +138,33 @@
 
       ],
       "central" : false,
+      "description" : "One immutable local registry revision containing recorded events; recordKey is unique within this registry revision, not globally.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "registryKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "revisionKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:EventRegistry",
+      "id" : "EventRegistry",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.events.core/0.1.0/classes/EventRegistry"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
       "description" : "Scoped proposition with independent polarity support; proposition key, polarity and argument interpretation need an ONT-043 profile.",
       "extends" : "sg:ValueObject",
       "fields" : [
@@ -213,7 +229,7 @@
 
       ],
       "kind" : "DomainEntity",
-      "lifecycle" : "InterpretationCandidateReview",
+      "lifecycle" : "ProposalReview",
       "uri" : "ontology://org.0al.events.core/0.1.0/classes/InterpretationCandidate"
     },
     {
@@ -221,7 +237,7 @@
 
       ],
       "central" : true,
-      "description" : "Immutable scoped event with supplied known comparable before/after observations; candidate records with missing data remain separate.",
+      "description" : "Immutable scoped event with direct supplied comparable before/after StateSnapshots; descriptions with missing data remain candidates.",
       "extends" : "sg:Event",
       "fields" : [
         {
@@ -259,15 +275,15 @@
 
       ],
       "central" : false,
-      "description" : "Record rejection of a candidate while preserving its source and history.",
+      "description" : "Record rejection of a proposal while preserving its source and history.",
       "extends" : "sg:Command",
-      "fqid" : "eventcore:RejectInterpretation",
-      "id" : "RejectInterpretation",
+      "fqid" : "eventcore:RejectProposal",
+      "id" : "RejectProposal",
       "implements" : [
 
       ],
       "kind" : "Command",
-      "uri" : "ontology://org.0al.events.core/0.1.0/classes/RejectInterpretation"
+      "uri" : "ontology://org.0al.events.core/0.1.0/classes/RejectProposal"
     },
     {
       "aliases" : [
@@ -296,15 +312,15 @@
 
       ],
       "central" : false,
-      "description" : "Record review of a candidate without promoting it into an event record or asserting factual truth.",
+      "description" : "Record review of an interpretation candidate or causal hypothesis without promotion, factual truth or established physical causation.",
       "extends" : "sg:Command",
-      "fqid" : "eventcore:ReviewInterpretation",
-      "id" : "ReviewInterpretation",
+      "fqid" : "eventcore:ReviewProposal",
+      "id" : "ReviewProposal",
       "implements" : [
 
       ],
       "kind" : "Command",
-      "uri" : "ontology://org.0al.events.core/0.1.0/classes/ReviewInterpretation"
+      "uri" : "ontology://org.0al.events.core/0.1.0/classes/ReviewProposal"
     },
     {
       "aliases" : [
@@ -385,7 +401,7 @@
 
       ],
       "central" : false,
-      "description" : "Availability of one state observation, separately from fact contents; intended values known, unknown or partial are not enum-enforced yet.",
+      "description" : "Candidate-only observation availability; known references one StateSnapshot, partial may supply individual facts, and unknown supplies no state. Values are not enum-enforced yet.",
       "extends" : "sg:DomainEntity",
       "fields" : [
         {
@@ -407,14 +423,9 @@
 
       ],
       "central" : false,
-      "description" : "Supplied finite fact set in a declared schema/scope/projection; an explicitly complete empty snapshot differs from unavailable observations.",
+      "description" : "A supplied complete finite fact set in its declared schema/scope/projection. Completeness is the declaration made by this type, not a second flag; unavailable or partial observations are not StateSnapshot values.",
       "extends" : "sg:ValueObject",
       "fields" : [
-        {
-          "id" : "complete",
-          "required" : true,
-          "type" : "boolean"
-        },
         {
           "id" : "projectionKey",
           "required" : true,
@@ -469,7 +480,7 @@
       },
       {
         "id" : "observation_availability",
-        "text" : "Unknown or partial observations remain distinct from supplied complete empty snapshots."
+        "text" : "Only candidates use StateObservation availability. StateSnapshot declares a complete supplied state; unknown/partial observations never become empty snapshots or a record's direct states."
       }
     ],
     "excludes" : {
@@ -496,7 +507,7 @@
       "extends" : "sg:Policy",
       "fqid" : "eventcore:BoundedCausalHypothesis",
       "id" : "BoundedCausalHypothesis",
-      "text" : "The bounded R3 profile requires distinct registered endpoints, valid intervals and cause start no later than effect start; overlap is allowed. This text does not execute temporal checks, prove physical causation or transfer responsibility."
+      "text" : "Cause/effect Interpretations derive their endpoint records through interpretsRecord; both records must belong to the same EventRegistry revision and have distinct recordKeys, the same clockKey, valid intervals and cause start no later than effect start. Overlap is allowed. Proposal review does not prove causation; graph/temporal checks are ONT-043 work and no responsibility is transferred."
     },
     {
       "appliesTo" : [
@@ -514,6 +525,7 @@
       "appliesTo" : [
         "eventcore:Delta",
         "eventcore:EventCandidate",
+        "eventcore:RecordedEvent",
         "eventcore:StateObservation",
         "eventcore:StateSnapshot"
       ],
@@ -521,10 +533,11 @@
       "extends" : "sg:Policy",
       "fqid" : "eventcore:KnownStatesForExactDelta",
       "id" : "KnownStatesForExactDelta",
-      "text" : "Compute exact Delta only from known complete snapshots with matching schema/scope/projection. Unknown or partial observations yield unavailable Delta; never substitute empty snapshots or the operator's review states. Known equal empty snapshots allow a genuine empty Delta."
+      "text" : "RecordedEvent directly requires complete StateSnapshots with matching schema/scope/projection, without availability or complete flags on the record path. Delta derives both states through deltaOfRecord and must equal their exact difference. Unknown or partial candidate observations cannot create a record or Delta by substituting empty states or operator review states. Equal supplied empty snapshots allow a genuine empty Delta."
     },
     {
       "appliesTo" : [
+        "eventcore:EventRegistry",
         "eventcore:Interpretation",
         "eventcore:RecordedEvent"
       ],
@@ -532,7 +545,7 @@
       "extends" : "sg:Policy",
       "fqid" : "eventcore:PreserveRecordedObservations",
       "id" : "PreserveRecordedObservations",
-      "text" : "Keep event records immutable and scoped by unique snapshot/record identities. Reinterpreting roles never replaces supplied observations; enrichment creates a linked new record."
+      "text" : "A record belongs to exactly one EventRegistry revision, where recordKey is unique; the registry identity is registryKey plus revisionKey. Reinterpreting roles never replaces supplied snapshots. Enrichment creates a linked new record; this declaration is not an implemented registry service."
     },
     {
       "appliesTo" : [
@@ -651,24 +664,12 @@
         "max" : 1,
         "min" : 1
       },
-      "description" : "Delta refers to its compared after snapshot.",
+      "description" : "The sole owning record determines both compared snapshots and their projection. ONT-043 must validate exact Added/Removed against those states, not arbitrary independent endpoints.",
       "domain" : "eventcore:Delta",
-      "fqid" : "eventcore:deltaAfterSnapshot",
-      "id" : "deltaAfterSnapshot",
-      "range" : "eventcore:StateSnapshot",
-      "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaAfterSnapshot"
-    },
-    {
-      "cardinality" : {
-        "max" : 1,
-        "min" : 1
-      },
-      "description" : "Delta refers to its compared before snapshot.",
-      "domain" : "eventcore:Delta",
-      "fqid" : "eventcore:deltaBeforeSnapshot",
-      "id" : "deltaBeforeSnapshot",
-      "range" : "eventcore:StateSnapshot",
-      "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaBeforeSnapshot"
+      "fqid" : "eventcore:deltaOfRecord",
+      "id" : "deltaOfRecord",
+      "range" : "eventcore:RecordedEvent",
+      "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaOfRecord"
     },
     {
       "cardinality" : {
@@ -699,12 +700,12 @@
         "max" : 1,
         "min" : 1
       },
-      "description" : "The hypothesized cause must be registered in the same snapshot under the selected profile.",
+      "description" : "Cause interpretation binds participant roles to a record via interpretsRecord; its registered event is derived from that link.",
       "domain" : "eventcore:CausalHypothesis",
-      "fqid" : "eventcore:hypothesisCause",
-      "id" : "hypothesisCause",
-      "range" : "eventcore:RecordedEvent",
-      "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCause"
+      "fqid" : "eventcore:hypothesisCauseView",
+      "id" : "hypothesisCauseView",
+      "range" : "eventcore:Interpretation",
+      "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCauseView"
     },
     {
       "cardinality" : {
@@ -723,12 +724,12 @@
         "max" : 1,
         "min" : 1
       },
-      "description" : "The hypothesized effect remains distinct from the cause; temporal checks are deferred.",
+      "description" : "Effect interpretation supplies its own bound roles and derived record. Both endpoint records must belong to the same registry revision and remain distinct under the selected profile.",
       "domain" : "eventcore:CausalHypothesis",
-      "fqid" : "eventcore:hypothesisEffect",
-      "id" : "hypothesisEffect",
-      "range" : "eventcore:RecordedEvent",
-      "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisEffect"
+      "fqid" : "eventcore:hypothesisEffectView",
+      "id" : "hypothesisEffectView",
+      "range" : "eventcore:Interpretation",
+      "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisEffectView"
     },
     {
       "cardinality" : {
@@ -759,7 +760,7 @@
         "max" : 1,
         "min" : 0
       },
-      "description" : "A known observation requires a complete snapshot; unknown has none and partial cannot support exact Delta. These conditional rules are manual here.",
+      "description" : "A candidate known observation references one StateSnapshot; partial or unknown observations do not. Conditional validation is ONT-043 work and never mediates a RecordedEvent's states.",
       "domain" : "eventcore:StateObservation",
       "fqid" : "eventcore:observationSnapshot",
       "id" : "observationSnapshot",
@@ -768,27 +769,39 @@
     },
     {
       "cardinality" : {
-        "max" : 1,
-        "min" : 1
+        "max" : "*",
+        "min" : 0
       },
-      "description" : "The record references its supplied after observation.",
-      "domain" : "eventcore:RecordedEvent",
-      "fqid" : "eventcore:recordAfterObservation",
-      "id" : "recordAfterObservation",
-      "range" : "eventcore:StateObservation",
-      "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordAfterObservation"
+      "description" : "Partial candidate evidence can retain individual facts without declaring a complete snapshot or permitting exact Delta.",
+      "domain" : "eventcore:StateObservation",
+      "fqid" : "eventcore:observationSuppliesFact",
+      "id" : "observationSuppliesFact",
+      "range" : "eventcore:Fact",
+      "uri" : "ontology://org.0al.events.core/0.1.0/relations/observationSuppliesFact"
     },
     {
       "cardinality" : {
         "max" : 1,
         "min" : 1
       },
-      "description" : "The record references its supplied before observation.",
+      "description" : "A recorded event requires one supplied complete after snapshot directly, comparable to its before snapshot.",
       "domain" : "eventcore:RecordedEvent",
-      "fqid" : "eventcore:recordBeforeObservation",
-      "id" : "recordBeforeObservation",
-      "range" : "eventcore:StateObservation",
-      "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordBeforeObservation"
+      "fqid" : "eventcore:recordAfterSnapshot",
+      "id" : "recordAfterSnapshot",
+      "range" : "eventcore:StateSnapshot",
+      "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordAfterSnapshot"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "A recorded event requires one supplied complete before snapshot directly; candidate availability is not an alternative range.",
+      "domain" : "eventcore:RecordedEvent",
+      "fqid" : "eventcore:recordBeforeSnapshot",
+      "id" : "recordBeforeSnapshot",
+      "range" : "eventcore:StateSnapshot",
+      "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordBeforeSnapshot"
     },
     {
       "cardinality" : {
@@ -805,18 +818,6 @@
     {
       "cardinality" : {
         "max" : 1,
-        "min" : 0
-      },
-      "description" : "Optional authored consequence; present only after known comparable observations support exact comparison.",
-      "domain" : "eventcore:RecordedEvent",
-      "fqid" : "eventcore:recordDelta",
-      "id" : "recordDelta",
-      "range" : "eventcore:Delta",
-      "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordDelta"
-    },
-    {
-      "cardinality" : {
-        "max" : 1,
         "min" : 1
       },
       "description" : "A record belongs to one explicit episode.",
@@ -825,6 +826,18 @@
       "id" : "recordInEpisode",
       "range" : "eventcore:Episode",
       "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordInEpisode"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "A record belongs to one immutable registry revision; its recordKey must be unique in that scope. ONT-043 will enforce membership and uniqueness.",
+      "domain" : "eventcore:RecordedEvent",
+      "fqid" : "eventcore:recordInRegistry",
+      "id" : "recordInRegistry",
+      "range" : "eventcore:EventRegistry",
+      "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordInRegistry"
     },
     {
       "cardinality" : {
@@ -887,11 +900,11 @@
       "uri" : "ontology://org.0al.events.core/0.1.0/relations/snapshotContainsFact"
     }
   ],
-  "sourceDigest" : "sha256:7e914e9bc22142ce888d8d92ed48713c3e3a2b31dea635daf9c5417dc4bf8181",
+  "sourceDigest" : "sha256:be771a8caa40e1ac23cb11fdb2f12a6ef7f8e166b12ef46f9d7d022a23944424",
   "stateMachines" : [
     {
-      "fqid" : "eventcore:InterpretationCandidateReview",
-      "id" : "InterpretationCandidateReview",
+      "fqid" : "eventcore:ProposalReview",
+      "id" : "ProposalReview",
       "states" : [
         "proposed",
         "rejected",
@@ -899,12 +912,12 @@
       ],
       "transitions" : [
         {
-          "command" : "eventcore:RejectInterpretation",
+          "command" : "eventcore:RejectProposal",
           "from" : "proposed",
           "to" : "rejected"
         },
         {
-          "command" : "eventcore:ReviewInterpretation",
+          "command" : "eventcore:ReviewProposal",
           "from" : "proposed",
           "to" : "reviewed"
         }

@@ -30,6 +30,11 @@ generated output to the committed baseline, and include its generated TypeScript
 in the existing typecheck. This is a narrow artifact-drift check, not a new test
 framework or instance semantic validator.
 
+PR #66 review follow-up also executes events-core object schemas in runtime
+smoke, alongside examcalc. Direct record snapshots, an explicit registry revision,
+record-owned Delta and causal endpoint Interpretations clarify the contract for
+ONT-043; their graph invariants are not executed by this package.
+
 ## Design constraints
 
 - Use ordinary classes/relations/policies/state machines. Do not expand existing

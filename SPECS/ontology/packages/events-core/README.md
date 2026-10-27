@@ -10,14 +10,36 @@ and state changes. It remains `approvalStatus: draft`.
 The governing concept is RecordedEvent. Entity is independent of human status;
 actor, target and instrument are contextual RoleBindings. Checked Interpretations
 refer to a record; EventCandidate and InterpretationCandidate retain incomplete
-source-level descriptions. StateObservation describes availability while
-StateSnapshot describes supplied contents. Delta names an exact change under a
-chosen projection; the package does not calculate it.
+source-level descriptions. RecordedEvent links directly to its before/after
+StateSnapshots. StateObservation describes availability only for candidates.
+StateSnapshot itself declares a supplied complete finite state; there is no
+additional `complete` flag.
 
 The package also defines Episode, ActionKind, Fact, SourceAssertion,
-RelationInstance and CausalHypothesis. Candidate review is a declared lifecycle
-with proposed → reviewed/rejected commands. Reviewed never promotes a candidate
-into a checked event or establishes factual truth.
+RelationInstance, EventRegistry and CausalHypothesis. Interpretation candidates
+and causal hypotheses share the declared ProposalReview lifecycle with
+proposed → reviewed/rejected commands. Reviewed never promotes a candidate into
+a checked event or establishes factual truth or physical causation.
+
+## Record, Delta and hypothesis identity
+
+- `recordInRegistry` binds each record to one EventRegistry revision. Its
+  `(registryKey, revisionKey)` identifies the local registry snapshot;
+  `recordKey` is unique within that snapshot, not globally. InstanceGraph in
+  ONT-043 will validate this membership and uniqueness; the class is not a
+  running registry service.
+- `recordBeforeSnapshot` and `recordAfterSnapshot` point directly to supplied
+  StateSnapshots. Missing/partial observations stay on EventCandidate; they
+  cannot be an alternative type of a record's states.
+- `deltaOfRecord` gives Delta one owning record. Both compared states and their
+  projection derive from that record; Delta has no separate state endpoints or
+  projection key. ONT-043 must recompute/validate its Added/Removed sets from
+  those states.
+- `hypothesisCauseView` and `hypothesisEffectView` reference Interpretations.
+  Their endpoint records derive through `interpretsRecord`, preserving the
+  participants/roles at both ends. Both records must be in the same registry
+  revision under the chosen profile. CausalHypothesis uses lifecycle metadata,
+  not a separate free-form `reviewStatus` field.
 
 ## Authoring and provenance
 
@@ -45,8 +67,11 @@ Generated IR/SDK files live under [generated/](generated/).
 | Schema, scope or projection differs | Comparison needs an explicit mapping first. |
 
 Known means supplied and complete for the declared projection; it does not prove
-the narrative true. A proposition with unknown/conflicting support inside a
-supplied snapshot is different from the snapshot itself being unavailable.
+the narrative true. Candidate observations use availability known/unknown/partial:
+known references a StateSnapshot, unknown has no snapshot, and partial may retain
+individual facts through `observationSuppliesFact` without declaring a complete
+state. A proposition with unknown/conflicting support inside a supplied snapshot
+is different from the snapshot itself being unavailable.
 
 ## Structural versus semantic validation
 
@@ -77,6 +102,7 @@ ontologyc compile SPECS/ontology/packages/events-core/domain-ontology-package.ya
 ```
 
 Compilation outputs are checked against a second independent output directory
-before committing the generated baseline. Local Swift builds/tests for this
-checkout follow the user's TB5 policy; these commands do not authorize publishing
-the package to a trusted registry or changing NormLab runtime data.
+before committing the generated baseline. The runtime TypeScript smoke gate
+invokes event-core object schemas with valid examples and invalid field shapes;
+it does not validate whole-graph invariants. These commands do not authorize
+publishing the package to a trusted registry or changing NormLab runtime data.

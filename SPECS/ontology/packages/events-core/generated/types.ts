@@ -12,13 +12,11 @@ export interface CausalHypothesis {
   readonly $type: "eventcore:CausalHypothesis";
   readonly id?: string;
   readonly profileRef: string;
-  readonly reviewStatus: string;
 }
 
 export interface Delta {
   readonly $type: "eventcore:Delta";
   readonly id?: string;
-  readonly projectionKey: string;
 }
 
 export interface Entity {
@@ -38,6 +36,13 @@ export interface EventCandidate {
   readonly id?: string;
   readonly candidateKey: string;
   readonly description?: string;
+}
+
+export interface EventRegistry {
+  readonly $type: "eventcore:EventRegistry";
+  readonly id?: string;
+  readonly registryKey: string;
+  readonly revisionKey: string;
 }
 
 export interface Fact {
@@ -68,8 +73,8 @@ export interface RecordedEvent {
   readonly recordKey: string;
 }
 
-export interface RejectInterpretation {
-  readonly $type: "eventcore:RejectInterpretation";
+export interface RejectProposal {
+  readonly $type: "eventcore:RejectProposal";
   readonly id?: string;
 }
 
@@ -79,8 +84,8 @@ export interface RelationInstance {
   readonly relationType: string;
 }
 
-export interface ReviewInterpretation {
-  readonly $type: "eventcore:ReviewInterpretation";
+export interface ReviewProposal {
+  readonly $type: "eventcore:ReviewProposal";
   readonly id?: string;
 }
 
@@ -111,7 +116,6 @@ export interface StateObservation {
 export interface StateSnapshot {
   readonly $type: "eventcore:StateSnapshot";
   readonly id?: string;
-  readonly complete: boolean;
   readonly projectionKey: string;
   readonly schemaKey: string;
   readonly scopeKey: string;

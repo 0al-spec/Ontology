@@ -9,7 +9,7 @@ import { protocolDefinitions } from "./protocols";
 export const ontologyMetadata = {
   "id" : "org.0al.events.core",
   "namespace" : "eventcore",
-  "sourceDigest" : "sha256:7e914e9bc22142ce888d8d92ed48713c3e3a2b31dea635daf9c5417dc4bf8181",
+  "sourceDigest" : "sha256:be771a8caa40e1ac23cb11fdb2f12a6ef7f8e166b12ef46f9d7d022a23944424",
   "version" : "0.1.0"
 } as const;
 

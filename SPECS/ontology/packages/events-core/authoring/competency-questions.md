@@ -13,3 +13,6 @@ semantic checks. Compiler validation establishes vocabulary/reference structure.
 | Does I in a letter identify the narrator? | No; SourceAssertion retains the statement's speakerKey or keeps it absent. | Identity/quote relevance checking is not implemented here. |
 | Does reviewed candidate mean a checked event? | No; candidate review lifecycle never promotes it into RecordedEvent. | The declared lifecycle contains no promotion transition; object-graph integrity is deferred. |
 | Does a causal hypothesis establish physical causation? | No; profileRef and manual review retain its hypothetical status. | Temporal profile checks are deferred; responsibility is outside events-core. |
+| Where is recordKey unique? | Within the EventRegistry revision reached by recordInRegistry; not across unrelated revisions. | InstanceGraph membership/uniqueness checks are ONT-043 work. |
+| Can Delta choose different states from its record? | It has only deltaOfRecord; both states derive from that record. | Exact Added/Removed validation is ONT-043 work. |
+| Whose roles apply at each causal endpoint? | hypothesisCauseView/effectView preserve each Interpretation; records derive through interpretsRecord. | Endpoint registry/profile consistency is ONT-043 work. |

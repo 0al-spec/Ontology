@@ -29,11 +29,17 @@ spec:
       description: Declared kind of occurrence or contribution; omission and action interpretation require separate explicit grounds.
       fields:
         actionKey: {type: string, required: true}
+    EventRegistry:
+      extends: sg:DomainEntity
+      description: One immutable local registry revision containing recorded events; recordKey is unique within this registry revision, not globally.
+      fields:
+        registryKey: {type: string, required: true}
+        revisionKey: {type: string, required: true}
     RecordedEvent:
       extends: sg:Event
       layer: mechanics
       central: true
-      description: Immutable scoped event with supplied known comparable before/after observations; candidate records with missing data remain separate.
+      description: Immutable scoped event with direct supplied comparable before/after StateSnapshots; descriptions with missing data remain candidates.
       fields:
         recordKey: {type: string, required: true}
         intervalStart: {type: integer, required: true}
@@ -52,7 +58,7 @@ spec:
         interpretationKey: {type: string, required: true}
     InterpretationCandidate:
       extends: sg:DomainEntity
-      lifecycle: InterpretationCandidateReview
+      lifecycle: ProposalReview
       description: Source/role proposal with unresolved observations or bindings; review does not turn it into a checked Interpretation.
       fields:
         candidateKey: {type: string, required: true}
@@ -68,18 +74,17 @@ spec:
         relationType: {type: string, required: true}
     StateObservation:
       extends: sg:DomainEntity
-      description: Availability of one state observation, separately from fact contents; intended values known, unknown or partial are not enum-enforced yet.
+      description: Candidate-only observation availability; known references one StateSnapshot, partial may supply individual facts, and unknown supplies no state. Values are not enum-enforced yet.
       fields:
         availability: {type: string, required: true}
     StateSnapshot:
       extends: sg:ValueObject
       layer: mechanics
-      description: Supplied finite fact set in a declared schema/scope/projection; an explicitly complete empty snapshot differs from unavailable observations.
+      description: A supplied complete finite fact set in its declared schema/scope/projection. Completeness is the declaration made by this type, not a second flag; unavailable or partial observations are not StateSnapshot values.
       fields:
         schemaKey: {type: string, required: true}
         scopeKey: {type: string, required: true}
         projectionKey: {type: string, required: true}
-        complete: {type: boolean, required: true}
     Fact:
       extends: sg:ValueObject
       description: Scoped proposition with independent polarity support; proposition key, polarity and argument interpretation need an ONT-043 profile.
@@ -89,9 +94,7 @@ spec:
     Delta:
       extends: sg:ValueObject
       layer: mechanics
-      description: Authored exact Added/Removed change description between known comparable snapshots; the package does not compute or verify it.
-      fields:
-        projectionKey: {type: string, required: true}
+      description: Authored exact Added/Removed difference owned by one RecordedEvent; before/after/projection derive exclusively from that record, with no independent snapshot references. Execution is deferred to ONT-043.
     SourceAssertion:
       extends: sg:DomainEntity
       description: Source/revision/digest/quote provenance for an assertion; speaker is source-scoped and may remain unknown.
@@ -105,16 +108,16 @@ spec:
         speakerKey: {type: string, required: false}
     CausalHypothesis:
       extends: sg:DomainEntity
-      description: Proposed link between recorded causes/effects under an explicit bounded temporal profile; neither time order nor review proves physical causation.
+      lifecycle: ProposalReview
+      description: Proposed link between cause/effect Interpretations, each bound to its RecordedEvent; endpoint records derive from the views. Time order and review do not prove physical causation.
       fields:
         profileRef: {type: string, required: true}
-        reviewStatus: {type: string, required: true}
-    ReviewInterpretation:
+    ReviewProposal:
       extends: sg:Command
-      description: Record review of a candidate without promoting it into an event record or asserting factual truth.
-    RejectInterpretation:
+      description: Record review of an interpretation candidate or causal hypothesis without promotion, factual truth or established physical causation.
+    RejectProposal:
       extends: sg:Command
-      description: Record rejection of a candidate while preserving its source and history.
+      description: Record rejection of a proposal while preserving its source and history.
   protocols: {}
   relations:
     recordInEpisode:
@@ -127,41 +130,41 @@ spec:
       range: ActionKind
       cardinality: {min: 1, max: 1}
       description: A record declares its kind without determining actor or human contribution.
-    recordBeforeObservation:
+    recordInRegistry:
       domain: RecordedEvent
-      range: StateObservation
+      range: EventRegistry
       cardinality: {min: 1, max: 1}
-      description: The record references its supplied before observation.
-    recordAfterObservation:
+      description: A record belongs to one immutable registry revision; its recordKey must be unique in that scope. ONT-043 will enforce membership and uniqueness.
+    recordBeforeSnapshot:
       domain: RecordedEvent
-      range: StateObservation
+      range: StateSnapshot
       cardinality: {min: 1, max: 1}
-      description: The record references its supplied after observation.
+      description: A recorded event requires one supplied complete before snapshot directly; candidate availability is not an alternative range.
+    recordAfterSnapshot:
+      domain: RecordedEvent
+      range: StateSnapshot
+      cardinality: {min: 1, max: 1}
+      description: A recorded event requires one supplied complete after snapshot directly, comparable to its before snapshot.
     observationSnapshot:
       domain: StateObservation
       range: StateSnapshot
       cardinality: {min: 0, max: 1}
-      description: A known observation requires a complete snapshot; unknown has none and partial cannot support exact Delta. These conditional rules are manual here.
+      description: A candidate known observation references one StateSnapshot; partial or unknown observations do not. Conditional validation is ONT-043 work and never mediates a RecordedEvent's states.
+    observationSuppliesFact:
+      domain: StateObservation
+      range: Fact
+      cardinality: {min: 0, max: "*"}
+      description: Partial candidate evidence can retain individual facts without declaring a complete snapshot or permitting exact Delta.
     snapshotContainsFact:
       domain: StateSnapshot
       range: Fact
       cardinality: {min: 0, max: "*"}
       description: Supplied finite fact membership; absence of an observation is not an empty membership list.
-    recordDelta:
-      domain: RecordedEvent
-      range: Delta
-      cardinality: {min: 0, max: 1}
-      description: Optional authored consequence; present only after known comparable observations support exact comparison.
-    deltaBeforeSnapshot:
+    deltaOfRecord:
       domain: Delta
-      range: StateSnapshot
+      range: RecordedEvent
       cardinality: {min: 1, max: 1}
-      description: Delta refers to its compared before snapshot.
-    deltaAfterSnapshot:
-      domain: Delta
-      range: StateSnapshot
-      cardinality: {min: 1, max: 1}
-      description: Delta refers to its compared after snapshot.
+      description: The sole owning record determines both compared snapshots and their projection. ONT-043 must validate exact Added/Removed against those states, not arbitrary independent endpoints.
     deltaAddsFact:
       domain: Delta
       range: Fact
@@ -242,16 +245,16 @@ spec:
       range: RecordedEvent
       cardinality: {min: 0, max: 1}
       description: An optional supplied origin record does not prescribe the relation's persistence or termination.
-    hypothesisCause:
+    hypothesisCauseView:
       domain: CausalHypothesis
-      range: RecordedEvent
+      range: Interpretation
       cardinality: {min: 1, max: 1}
-      description: The hypothesized cause must be registered in the same snapshot under the selected profile.
-    hypothesisEffect:
+      description: Cause interpretation binds participant roles to a record via interpretsRecord; its registered event is derived from that link.
+    hypothesisEffectView:
       domain: CausalHypothesis
-      range: RecordedEvent
+      range: Interpretation
       cardinality: {min: 1, max: 1}
-      description: The hypothesized effect remains distinct from the cause; temporal checks are deferred.
+      description: Effect interpretation supplies its own bound roles and derived record. Both endpoint records must belong to the same registry revision and remain distinct under the selected profile.
     hypothesisCitesAssertion:
       domain: CausalHypothesis
       range: SourceAssertion
@@ -261,13 +264,13 @@ spec:
     PreserveRecordedObservations:
       extends: sg:Policy
       enforceability: manual
-      appliesTo: [RecordedEvent, Interpretation]
-      text: Keep event records immutable and scoped by unique snapshot/record identities. Reinterpreting roles never replaces supplied observations; enrichment creates a linked new record.
+      appliesTo: [EventRegistry, RecordedEvent, Interpretation]
+      text: A record belongs to exactly one EventRegistry revision, where recordKey is unique; the registry identity is registryKey plus revisionKey. Reinterpreting roles never replaces supplied snapshots. Enrichment creates a linked new record; this declaration is not an implemented registry service.
     KnownStatesForExactDelta:
       extends: sg:Policy
       enforceability: manual
-      appliesTo: [StateObservation, StateSnapshot, Delta, EventCandidate]
-      text: Compute exact Delta only from known complete snapshots with matching schema/scope/projection. Unknown or partial observations yield unavailable Delta; never substitute empty snapshots or the operator's review states. Known equal empty snapshots allow a genuine empty Delta.
+      appliesTo: [StateObservation, StateSnapshot, RecordedEvent, Delta, EventCandidate]
+      text: RecordedEvent directly requires complete StateSnapshots with matching schema/scope/projection, without availability or complete flags on the record path. Delta derives both states through deltaOfRecord and must equal their exact difference. Unknown or partial candidate observations cannot create a record or Delta by substituting empty states or operator review states. Equal supplied empty snapshots allow a genuine empty Delta.
     ScopedSourceAttribution:
       extends: sg:Policy
       enforceability: manual
@@ -282,13 +285,13 @@ spec:
       extends: sg:Policy
       enforceability: manual
       appliesTo: [CausalHypothesis]
-      text: The bounded R3 profile requires distinct registered endpoints, valid intervals and cause start no later than effect start; overlap is allowed. This text does not execute temporal checks, prove physical causation or transfer responsibility.
+      text: Cause/effect Interpretations derive their endpoint records through interpretsRecord; both records must belong to the same EventRegistry revision and have distinct recordKeys, the same clockKey, valid intervals and cause start no later than effect start. Overlap is allowed. Proposal review does not prove causation; graph/temporal checks are ONT-043 work and no responsibility is transferred.
   stateMachines:
-    InterpretationCandidateReview:
+    ProposalReview:
       states: [proposed, reviewed, rejected]
       transitions:
-        - {from: proposed, to: reviewed, command: ReviewInterpretation}
-        - {from: proposed, to: rejected, command: RejectInterpretation}
+        - {from: proposed, to: reviewed, command: ReviewProposal}
+        - {from: proposed, to: rejected, command: RejectProposal}
   modelApplicability:
     appliesTo:
       domains: [general_event_modeling]
@@ -299,7 +302,7 @@ spec:
       - id: manual_semantic_review
         text: Relation cardinality, source relevance, enum values and whole-graph invariants require explicit manual review until ONT-043.
       - id: observation_availability
-        text: Unknown or partial observations remain distinct from supplied complete empty snapshots.
+        text: Only candidates use StateObservation availability. StateSnapshot declares a complete supplied state; unknown/partial observations never become empty snapshots or a record's direct states.
     invalidationTriggers:
       - id: instance_contract_changed
         text: Re-review package vocabulary and mappings when the ONT-043 InstanceGraph/profile contract is chosen.

@@ -70,6 +70,15 @@ export const classes = {
     "uri" : "ontology://org.0al.events.core/0.1.0/classes/EventCandidate",
     "version" : "0.1.0"
   },
+  "EventRegistry" : {
+    "alias" : "eventcore:EventRegistry",
+    "concept" : "EventRegistry",
+    "kindOfConcept" : "DomainEntity",
+    "namespace" : "eventcore",
+    "ontology" : "org.0al.events.core",
+    "uri" : "ontology://org.0al.events.core/0.1.0/classes/EventRegistry",
+    "version" : "0.1.0"
+  },
   "Fact" : {
     "alias" : "eventcore:Fact",
     "concept" : "Fact",
@@ -107,13 +116,13 @@ export const classes = {
     "uri" : "ontology://org.0al.events.core/0.1.0/classes/RecordedEvent",
     "version" : "0.1.0"
   },
-  "RejectInterpretation" : {
-    "alias" : "eventcore:RejectInterpretation",
-    "concept" : "RejectInterpretation",
+  "RejectProposal" : {
+    "alias" : "eventcore:RejectProposal",
+    "concept" : "RejectProposal",
     "kindOfConcept" : "Command",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/classes/RejectInterpretation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/classes/RejectProposal",
     "version" : "0.1.0"
   },
   "RelationInstance" : {
@@ -125,13 +134,13 @@ export const classes = {
     "uri" : "ontology://org.0al.events.core/0.1.0/classes/RelationInstance",
     "version" : "0.1.0"
   },
-  "ReviewInterpretation" : {
-    "alias" : "eventcore:ReviewInterpretation",
-    "concept" : "ReviewInterpretation",
+  "ReviewProposal" : {
+    "alias" : "eventcore:ReviewProposal",
+    "concept" : "ReviewProposal",
     "kindOfConcept" : "Command",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/classes/ReviewInterpretation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/classes/ReviewProposal",
     "version" : "0.1.0"
   },
   "RoleBinding" : {
@@ -245,22 +254,13 @@ export const relations = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaAddsFact",
     "version" : "0.1.0"
   },
-  "deltaAfterSnapshot" : {
-    "alias" : "eventcore:deltaAfterSnapshot",
-    "concept" : "deltaAfterSnapshot",
+  "deltaOfRecord" : {
+    "alias" : "eventcore:deltaOfRecord",
+    "concept" : "deltaOfRecord",
     "kindOfConcept" : "Relation",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaAfterSnapshot",
-    "version" : "0.1.0"
-  },
-  "deltaBeforeSnapshot" : {
-    "alias" : "eventcore:deltaBeforeSnapshot",
-    "concept" : "deltaBeforeSnapshot",
-    "kindOfConcept" : "Relation",
-    "namespace" : "eventcore",
-    "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaBeforeSnapshot",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaOfRecord",
     "version" : "0.1.0"
   },
   "deltaRemovesFact" : {
@@ -281,13 +281,13 @@ export const relations = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/describesCandidateEvent",
     "version" : "0.1.0"
   },
-  "hypothesisCause" : {
-    "alias" : "eventcore:hypothesisCause",
-    "concept" : "hypothesisCause",
+  "hypothesisCauseView" : {
+    "alias" : "eventcore:hypothesisCauseView",
+    "concept" : "hypothesisCauseView",
     "kindOfConcept" : "Relation",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCause",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCauseView",
     "version" : "0.1.0"
   },
   "hypothesisCitesAssertion" : {
@@ -299,13 +299,13 @@ export const relations = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCitesAssertion",
     "version" : "0.1.0"
   },
-  "hypothesisEffect" : {
-    "alias" : "eventcore:hypothesisEffect",
-    "concept" : "hypothesisEffect",
+  "hypothesisEffectView" : {
+    "alias" : "eventcore:hypothesisEffectView",
+    "concept" : "hypothesisEffectView",
     "kindOfConcept" : "Relation",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisEffect",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisEffectView",
     "version" : "0.1.0"
   },
   "interpretationBindsRole" : {
@@ -335,22 +335,31 @@ export const relations = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/observationSnapshot",
     "version" : "0.1.0"
   },
-  "recordAfterObservation" : {
-    "alias" : "eventcore:recordAfterObservation",
-    "concept" : "recordAfterObservation",
+  "observationSuppliesFact" : {
+    "alias" : "eventcore:observationSuppliesFact",
+    "concept" : "observationSuppliesFact",
     "kindOfConcept" : "Relation",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordAfterObservation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/observationSuppliesFact",
     "version" : "0.1.0"
   },
-  "recordBeforeObservation" : {
-    "alias" : "eventcore:recordBeforeObservation",
-    "concept" : "recordBeforeObservation",
+  "recordAfterSnapshot" : {
+    "alias" : "eventcore:recordAfterSnapshot",
+    "concept" : "recordAfterSnapshot",
     "kindOfConcept" : "Relation",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordBeforeObservation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordAfterSnapshot",
+    "version" : "0.1.0"
+  },
+  "recordBeforeSnapshot" : {
+    "alias" : "eventcore:recordBeforeSnapshot",
+    "concept" : "recordBeforeSnapshot",
+    "kindOfConcept" : "Relation",
+    "namespace" : "eventcore",
+    "ontology" : "org.0al.events.core",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordBeforeSnapshot",
     "version" : "0.1.0"
   },
   "recordCitesAssertion" : {
@@ -362,15 +371,6 @@ export const relations = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordCitesAssertion",
     "version" : "0.1.0"
   },
-  "recordDelta" : {
-    "alias" : "eventcore:recordDelta",
-    "concept" : "recordDelta",
-    "kindOfConcept" : "Relation",
-    "namespace" : "eventcore",
-    "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordDelta",
-    "version" : "0.1.0"
-  },
   "recordInEpisode" : {
     "alias" : "eventcore:recordInEpisode",
     "concept" : "recordInEpisode",
@@ -378,6 +378,15 @@ export const relations = {
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordInEpisode",
+    "version" : "0.1.0"
+  },
+  "recordInRegistry" : {
+    "alias" : "eventcore:recordInRegistry",
+    "concept" : "recordInRegistry",
+    "kindOfConcept" : "Relation",
+    "namespace" : "eventcore",
+    "ontology" : "org.0al.events.core",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordInRegistry",
     "version" : "0.1.0"
   },
   "recordOfActionKind" : {
@@ -474,13 +483,13 @@ export const policies = {
   }
 } as const;
 export const stateMachines = {
-  "InterpretationCandidateReview" : {
-    "alias" : "eventcore:InterpretationCandidateReview",
-    "concept" : "InterpretationCandidateReview",
+  "ProposalReview" : {
+    "alias" : "eventcore:ProposalReview",
+    "concept" : "ProposalReview",
     "kindOfConcept" : "StateMachine",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/InterpretationCandidateReview",
+    "uri" : "ontology://org.0al.events.core/0.1.0/ProposalReview",
     "version" : "0.1.0"
   }
 } as const;
@@ -603,22 +612,13 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaAddsFact",
     "version" : "0.1.0"
   },
-  "eventcore:deltaAfterSnapshot" : {
-    "alias" : "eventcore:deltaAfterSnapshot",
-    "concept" : "deltaAfterSnapshot",
+  "eventcore:deltaOfRecord" : {
+    "alias" : "eventcore:deltaOfRecord",
+    "concept" : "deltaOfRecord",
     "kindOfConcept" : "Relation",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaAfterSnapshot",
-    "version" : "0.1.0"
-  },
-  "eventcore:deltaBeforeSnapshot" : {
-    "alias" : "eventcore:deltaBeforeSnapshot",
-    "concept" : "deltaBeforeSnapshot",
-    "kindOfConcept" : "Relation",
-    "namespace" : "eventcore",
-    "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaBeforeSnapshot",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/deltaOfRecord",
     "version" : "0.1.0"
   },
   "eventcore:deltaRemovesFact" : {
@@ -667,6 +667,15 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/classes/EventCandidate",
     "version" : "0.1.0"
   },
+  "eventcore:EventRegistry" : {
+    "alias" : "eventcore:EventRegistry",
+    "concept" : "EventRegistry",
+    "kindOfConcept" : "DomainEntity",
+    "namespace" : "eventcore",
+    "ontology" : "org.0al.events.core",
+    "uri" : "ontology://org.0al.events.core/0.1.0/classes/EventRegistry",
+    "version" : "0.1.0"
+  },
   "eventcore:Fact" : {
     "alias" : "eventcore:Fact",
     "concept" : "Fact",
@@ -676,13 +685,13 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/classes/Fact",
     "version" : "0.1.0"
   },
-  "eventcore:hypothesisCause" : {
-    "alias" : "eventcore:hypothesisCause",
-    "concept" : "hypothesisCause",
+  "eventcore:hypothesisCauseView" : {
+    "alias" : "eventcore:hypothesisCauseView",
+    "concept" : "hypothesisCauseView",
     "kindOfConcept" : "Relation",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCause",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCauseView",
     "version" : "0.1.0"
   },
   "eventcore:hypothesisCitesAssertion" : {
@@ -694,13 +703,13 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisCitesAssertion",
     "version" : "0.1.0"
   },
-  "eventcore:hypothesisEffect" : {
-    "alias" : "eventcore:hypothesisEffect",
-    "concept" : "hypothesisEffect",
+  "eventcore:hypothesisEffectView" : {
+    "alias" : "eventcore:hypothesisEffectView",
+    "concept" : "hypothesisEffectView",
     "kindOfConcept" : "Relation",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisEffect",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/hypothesisEffectView",
     "version" : "0.1.0"
   },
   "eventcore:Interpretation" : {
@@ -730,15 +739,6 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/classes/InterpretationCandidate",
     "version" : "0.1.0"
   },
-  "eventcore:InterpretationCandidateReview" : {
-    "alias" : "eventcore:InterpretationCandidateReview",
-    "concept" : "InterpretationCandidateReview",
-    "kindOfConcept" : "StateMachine",
-    "namespace" : "eventcore",
-    "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/InterpretationCandidateReview",
-    "version" : "0.1.0"
-  },
   "eventcore:interpretsRecord" : {
     "alias" : "eventcore:interpretsRecord",
     "concept" : "interpretsRecord",
@@ -766,6 +766,15 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/observationSnapshot",
     "version" : "0.1.0"
   },
+  "eventcore:observationSuppliesFact" : {
+    "alias" : "eventcore:observationSuppliesFact",
+    "concept" : "observationSuppliesFact",
+    "kindOfConcept" : "Relation",
+    "namespace" : "eventcore",
+    "ontology" : "org.0al.events.core",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/observationSuppliesFact",
+    "version" : "0.1.0"
+  },
   "eventcore:PreserveRecordedObservations" : {
     "alias" : "eventcore:PreserveRecordedObservations",
     "concept" : "PreserveRecordedObservations",
@@ -775,22 +784,31 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/PreserveRecordedObservations",
     "version" : "0.1.0"
   },
-  "eventcore:recordAfterObservation" : {
-    "alias" : "eventcore:recordAfterObservation",
-    "concept" : "recordAfterObservation",
-    "kindOfConcept" : "Relation",
+  "eventcore:ProposalReview" : {
+    "alias" : "eventcore:ProposalReview",
+    "concept" : "ProposalReview",
+    "kindOfConcept" : "StateMachine",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordAfterObservation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/ProposalReview",
     "version" : "0.1.0"
   },
-  "eventcore:recordBeforeObservation" : {
-    "alias" : "eventcore:recordBeforeObservation",
-    "concept" : "recordBeforeObservation",
+  "eventcore:recordAfterSnapshot" : {
+    "alias" : "eventcore:recordAfterSnapshot",
+    "concept" : "recordAfterSnapshot",
     "kindOfConcept" : "Relation",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordBeforeObservation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordAfterSnapshot",
+    "version" : "0.1.0"
+  },
+  "eventcore:recordBeforeSnapshot" : {
+    "alias" : "eventcore:recordBeforeSnapshot",
+    "concept" : "recordBeforeSnapshot",
+    "kindOfConcept" : "Relation",
+    "namespace" : "eventcore",
+    "ontology" : "org.0al.events.core",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordBeforeSnapshot",
     "version" : "0.1.0"
   },
   "eventcore:recordCitesAssertion" : {
@@ -800,15 +818,6 @@ export const allRefs = {
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordCitesAssertion",
-    "version" : "0.1.0"
-  },
-  "eventcore:recordDelta" : {
-    "alias" : "eventcore:recordDelta",
-    "concept" : "recordDelta",
-    "kindOfConcept" : "Relation",
-    "namespace" : "eventcore",
-    "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordDelta",
     "version" : "0.1.0"
   },
   "eventcore:RecordedEvent" : {
@@ -830,6 +839,15 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordInEpisode",
     "version" : "0.1.0"
   },
+  "eventcore:recordInRegistry" : {
+    "alias" : "eventcore:recordInRegistry",
+    "concept" : "recordInRegistry",
+    "kindOfConcept" : "Relation",
+    "namespace" : "eventcore",
+    "ontology" : "org.0al.events.core",
+    "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordInRegistry",
+    "version" : "0.1.0"
+  },
   "eventcore:recordOfActionKind" : {
     "alias" : "eventcore:recordOfActionKind",
     "concept" : "recordOfActionKind",
@@ -839,13 +857,13 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/recordOfActionKind",
     "version" : "0.1.0"
   },
-  "eventcore:RejectInterpretation" : {
-    "alias" : "eventcore:RejectInterpretation",
-    "concept" : "RejectInterpretation",
+  "eventcore:RejectProposal" : {
+    "alias" : "eventcore:RejectProposal",
+    "concept" : "RejectProposal",
     "kindOfConcept" : "Command",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/classes/RejectInterpretation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/classes/RejectProposal",
     "version" : "0.1.0"
   },
   "eventcore:relationBindsRole" : {
@@ -875,13 +893,13 @@ export const allRefs = {
     "uri" : "ontology://org.0al.events.core/0.1.0/relations/relationOriginRecord",
     "version" : "0.1.0"
   },
-  "eventcore:ReviewInterpretation" : {
-    "alias" : "eventcore:ReviewInterpretation",
-    "concept" : "ReviewInterpretation",
+  "eventcore:ReviewProposal" : {
+    "alias" : "eventcore:ReviewProposal",
+    "concept" : "ReviewProposal",
     "kindOfConcept" : "Command",
     "namespace" : "eventcore",
     "ontology" : "org.0al.events.core",
-    "uri" : "ontology://org.0al.events.core/0.1.0/classes/ReviewInterpretation",
+    "uri" : "ontology://org.0al.events.core/0.1.0/classes/ReviewProposal",
     "version" : "0.1.0"
   },
   "eventcore:RoleBinding" : {

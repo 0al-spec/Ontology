@@ -12,6 +12,9 @@ identity/reference/observation-availability checks from the
 [workplan](../Workplan.md#ont-043-instance-graph-contract-and-validation).
 The [event core package](../ontology/packages/events-core/README.md) provides
 vocabulary and structural SDK artifacts; its semantic policies remain manual.
+PR #66 review fixes make registry membership, direct snapshots, record-owned
+Delta and causal endpoint Interpretations explicit in ONT-043 acceptance.
+ONT-046 tracks Linux compiler portability independently.
 
 ## Next Step
 

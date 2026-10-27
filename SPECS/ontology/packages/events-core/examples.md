@@ -12,6 +12,10 @@ validation does not verify the relationships or conclusions below.
 - The proposed exact Delta removes `roofIntact+` and adds `roofDamaged+`.
 - An Interpretation of the RecordedEvent binds storm as actor and shed as target.
 
+The record belongs to one EventRegistry revision and links directly to its two
+StateSnapshots. A Delta links to this record through deltaOfRecord and obtains
+the compared states from it, rather than declaring independent state endpoints.
+
 This reading requires no humanAnchor. It does not identify a legally responsible
 person. A CausalHypothesis remains an explicitly reviewed hypothesis; the two
 snapshots or role labels do not prove that the storm caused the change.
@@ -42,6 +46,13 @@ establish action or omission. A separate omission record would need its own
 explicit scope, duty, capability, performance, exception and deadline grounds
 under a responsibility profile. This package does not supply those grounds.
 
+For a proposed omission → movement chain, the cause view interprets the separate
+omission record and binds the owner; the effect view interprets the movement
+record and may bind the car. CausalHypothesis references those two views through
+hypothesisCauseView/hypothesisEffectView. Their records derive from interpretsRecord
+and must share one EventRegistry revision. Reviewing this hypothesis does not
+establish its physical truth or transfer breach/ownership between the records.
+
 ## A letter without physical state observations
 
 Synthetic SourceAssertion: source `letter`, speakerKey `letter_1`, quote
@@ -62,8 +73,10 @@ Two supplied complete known snapshots with zero facts under the same declared
 schema/scope/projection permit an exact empty Delta. This is a positive control
 for the contract, not proof that nothing happened outside that projection.
 
-One partial snapshot and one complete snapshot leave exact Delta unavailable
-for the full declared projection. A narrower explicit projection could later
+One partial candidate observation and one complete snapshot leave exact Delta
+unavailable for the full declared projection. Partial observations can retain
+individual facts; they are not declared as StateSnapshots with a false flag.
+A narrower explicit projection could later
 be compared if it is known complete on both sides; the exporter cannot silently
 choose that projection or call missing facts false.
 

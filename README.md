@@ -110,7 +110,7 @@ into SpecSpace `/ontology` for cross-repo smoke checks.
 ## Requirements
 
 - Swift 6.0+
-- macOS 13+ or Linux for normal SwiftPM builds
+- macOS 13+ (current build/CI platform); Linux portability is tracked in ONT-046
 - `swiftformat` and `swiftlint` for the local quality gate
 
 Install quality tools on macOS:

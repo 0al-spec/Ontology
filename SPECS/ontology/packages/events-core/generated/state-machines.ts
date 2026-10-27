@@ -2,8 +2,8 @@
 
 export const stateMachineDefinitions = [
   {
-    "fqid" : "eventcore:InterpretationCandidateReview",
-    "id" : "InterpretationCandidateReview",
+    "fqid" : "eventcore:ProposalReview",
+    "id" : "ProposalReview",
     "states" : [
       "proposed",
       "rejected",
@@ -11,12 +11,12 @@ export const stateMachineDefinitions = [
     ],
     "transitions" : [
       {
-        "command" : "eventcore:RejectInterpretation",
+        "command" : "eventcore:RejectProposal",
         "from" : "proposed",
         "to" : "rejected"
       },
       {
-        "command" : "eventcore:ReviewInterpretation",
+        "command" : "eventcore:ReviewProposal",
         "from" : "proposed",
         "to" : "reviewed"
       }
