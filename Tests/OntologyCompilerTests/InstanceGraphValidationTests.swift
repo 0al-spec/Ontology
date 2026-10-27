@@ -39,6 +39,26 @@ final class InstanceGraphValidationTests: XCTestCase {
         XCTAssertTrue(result.diagnostics.first?.message.contains("instanceGraph.ir.pin") == true)
     }
 
+    func testReportBindsInputBytesRatherThanOnlyClaimedRevision() throws {
+        let graph = try temporary().appendingPathComponent("graph.json")
+        let compiler = OntologyCompiler()
+        let original = try Data(contentsOf: fixture("synthetic-car").url)
+        try original.write(to: graph)
+        let first = try compiler.validateInstanceGraph(graphPath: .init(url: graph), ontologyIRPath: ir)
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: original) as? [String: Any])
+        var nodes = try XCTUnwrap(object["nodes"] as? [[String: Any]])
+        let offset = try XCTUnwrap(nodes.firstIndex { $0["id"] as? String == "car" })
+        nodes[offset]["fields"] = ["label": "Changed entity label"]
+        object["nodes"] = nodes
+        try JSONSerialization.data(withJSONObject: object, options: .sortedKeys).write(to: graph)
+        let second = try compiler.validateInstanceGraph(graphPath: .init(url: graph), ontologyIRPath: ir)
+        XCTAssertTrue(first.passed && second.passed)
+        XCTAssertEqual(first.report["revisionKey"] as? String, second.report["revisionKey"] as? String)
+        let digest = try XCTUnwrap(first.report["graphSHA256"] as? String)
+        XCTAssertEqual(digest.count, 64)
+        XCTAssertNotEqual(digest, second.report["graphSHA256"] as? String)
+    }
+
     func testMalformedNullAndDuplicateJSONKeysFailClosed() throws {
         let output = try temporary().appendingPathComponent("graph.json")
         let originals = ["not json", "null", "[]", "{\"profile\":1,\"profile\":2}", "{\"profile\":1,\"profi\\u006ce\":2}"]

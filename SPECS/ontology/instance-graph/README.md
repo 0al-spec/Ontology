@@ -106,6 +106,9 @@ identity, sorted error code/path/message entries and explicit false flags for
 source truth, causation and responsibility verification. IO failure messages can
 contain local filesystem context. Invalid shapes stop before reference checks;
 invalid references stop before profile checks, avoiding secondary guesses.
+graphSHA256 binds the report to exact input bytes, even if an exporter reuses
+the same claimed graph/revision identity. It is empty when the graph could not
+be read (including an earlier IR pin failure); it is not a signature or storage lock.
 
 The compiler checks exact IR integrity before invoking package-internal rule
 specifications. External callers use OntologyCompiler.validateInstanceGraph or

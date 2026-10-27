@@ -918,7 +918,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
     which guarantees come from static validation versus a proof profile.
 
 - **Validation:** eventcore-v1 contract, CLI/report, deterministic consumer export,
-  fixture smoke and 20 new tests delivered. Full quality passes 136 tests,
+  fixture smoke and 21 new tests delivered. Full quality passes 137 tests,
   line coverage 89.48%; source truth/causation/responsibility remain unverified.
 
 #### ONT-044: Draft Responsibility Profile Package

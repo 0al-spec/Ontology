@@ -17,10 +17,13 @@ extension OntologyCompiler {
         outPath: OntologyOutputPath? = nil
     ) throws -> InstanceGraphValidationResult {
         var graph = JSONObject()
+        var graphSHA256 = ""
         var found = [Diagnostic]()
         do {
             let ir = try pinnedEventCoreIR(at: ontologyIRPath)
-            graph = try boundedJSONObject(at: graphPath)
+            let graphData = try boundedJSONData(at: graphPath)
+            graphSHA256 = instanceSHA256(graphData)
+            graph = try jsonObject(graphData)
             let context = InstanceGraphValidationContext(graph: graph, ontologyIR: ir)
             guard let issues = InstanceGraphValidationSpec().decide(context) else {
                 throw OntologyCompilerError.invalidArgument("instanceGraph.decision.unavailable: validation could not decide")
@@ -34,6 +37,7 @@ extension OntologyCompiler {
             "apiVersion": EventCoreInstanceProfile.apiVersion, "kind": "InstanceGraphValidationReport",
             "profile": EventCoreInstanceProfile.name, "status": passed ? "passed" : "failed",
             "graphKey": graphTextValue(graph, "graphKey"), "revisionKey": graphTextValue(graph, "revisionKey"),
+            "graphSHA256": graphSHA256,
             "ontology": EventCoreInstanceProfile.ontology, "irSHA256": EventCoreInstanceProfile.irSHA256,
             "authority": ["structuralOnly": true, "sourceTruthVerified": false, "causationVerified": false, "responsibilityVerified": false],
             "diagnostics": found.map { ["code": $0.code, "path": $0.path, "message": $0.message, "severity": $0.severity] }
@@ -44,16 +48,14 @@ extension OntologyCompiler {
 
     func pinnedEventCoreIR(at path: OntologySourcePath) throws -> JSONObject {
         let data = try boundedJSONData(at: path)
-        let digest = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        let digest = instanceSHA256(data)
         guard digest == EventCoreInstanceProfile.irSHA256 else {
             throw OntologyCompilerError.invalidArgument("instanceGraph.ir.pin: expected the exact reviewed eventcore-v1 normalized artifact")
         }
         return try jsonObject(data)
     }
 
-    func boundedJSONObject(at path: OntologySourcePath) throws -> JSONObject {
-        try jsonObject(boundedJSONData(at: path))
-    }
+    private func instanceSHA256(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
 
     private func boundedJSONData(at path: OntologySourcePath) throws -> Data {
         let handle = try FileHandle(forReadingFrom: path.url)

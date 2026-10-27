@@ -11,13 +11,14 @@
 | Check | Result and evidence |
 |---|---|
 | Dependency | Live PR #66 head `2b1facd`, green quality/DocC, zero review threads, independent no-blocker review read before expected-head merge. Local main fast-forwarded safely. |
-| Red/green | Initial 9 test groups produced 16 expected assertion failures before reference/profile checks. After implementation and expanded cases, all 20 new tests pass. |
-| Full quality | Actual `RUN_COVERAGE=1 bash tools/swift-quality.sh` passed Node24 workflow check, SwiftFormat, SwiftLint, explicit import build and 136 tests (116 existing + 20 new). |
-| Coverage | Configured llvm-cov TOTAL line 89.48%, region 78.19%. Includes dependency/vendor code; not legal-model or semantic completeness evidence. |
+| Red/green | Initial 9 test groups produced 16 expected assertion failures before reference/profile checks. After implementation and expanded cases, all 21 new tests pass. |
+| Full quality | Actual `RUN_COVERAGE=1 bash tools/swift-quality.sh` passed Node24 workflow check, SwiftFormat, SwiftLint, explicit import build and 137 tests (116 existing + 21 new). |
+| Coverage | Configured llvm-cov TOTAL line 89.48%, region 78.18%. Includes dependency/vendor code; not legal-model or semantic completeness evidence. |
 | CLI | Real compiled binary accepts populated overlap-chain and source-only candidate fixtures, returns 1 and writes diagnostics for missing interval; exported consumer files match baseline. |
 | Pinned IR | Tampered IR with unchanged metadata fails the raw artifact hash check. Low-level unchecked rule context is package-internal. |
 | Wire | Tests cover unknown/legacy/null/duplicate JSON fields, identifiers, collection shape, duplicate node/edge identity, bad/wrong-revision/typed references and required cardinality. |
 | Event profile | Positive/negative controls cover registry uniqueness, direct observation snapshots, candidate alternatives/scope, self/future/different-clock hypothesis endpoints, lifecycle membership, exact/empty/wrong-owner/duplicate Delta and opposed support. |
+| Exact input binding | graphSHA256 binds the report to exact graph bytes; a test reusing the same claimed revision with changed data produces a different hash. |
 | Source | UTF-16 quote length/offset structure checked; speaker retained. Source bytes, authenticity and citation relevance unverified. |
 | Consumer contracts | Two fresh exported TypeScript/JSON Schema pairs are byte-identical and match committed generated baseline. TypeScript typecheck passes, including expected errors for missing intervalStart and wrong direct snapshot type. |
 | Regression | Existing examcalc/events-core runtime smoke passes; existing package YAML/IR/SDK baseline is unchanged. |

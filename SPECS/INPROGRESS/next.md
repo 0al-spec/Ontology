@@ -23,6 +23,6 @@ ONT-045 remains the separate offline NormLab pilot; ONT-046 tracks Linux support
 
 ## Recently Archived
 
-- ONT-043: structural instance graph validation, 136-test quality gate, 2026-10-27.
+- ONT-043: structural instance graph validation, 137-test quality gate, 2026-10-27.
 - ONT-042: draft event package, merged PR #66, 2026-10-27.
 - ONT-041: proposal, merged PR #65 with unknown-observation clarification.
