@@ -1,11 +1,12 @@
 # Tasks Archive
 
-**Last Updated:** 2026-10-26
+**Last Updated:** 2026-10-27
 
 ## Archived Tasks
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-042 | [ONT-042_Draft_Event_Core_Package/](ONT-042_Draft_Event_Core_Package/) | 2026-10-27 | PASS (local draft/compiler checks) |
 | ONT-041 | [ONT-041_Event_And_Responsibility_Core_Proposal/](ONT-041_Event_And_Responsibility_Core_Proposal/) | 2026-10-26 | PASS (documentation only) |
 | ONT-040 | [ONT-040_Model_Applicability_And_Structural_Change_Classification/](ONT-040_Model_Applicability_And_Structural_Change_Classification/) | 2026-10-26 | PASS (historical report) |
 | ONT-037 | [ONT-037_SpecGraph_Owner_Decision_Report_Export/](ONT-037_SpecGraph_Owner_Decision_Report_Export/) | 2026-06-14 | PASS |
@@ -50,6 +51,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-27 | ONT-042 | Archived REVIEW_ONT-042; FOLLOW-UP skipped (already tracked in ONT-043/044) |
+| 2026-10-27 | ONT-042 | Archived draft event core package PRD/report (local PASS) |
 | 2026-10-26 | ONT-041 | Archived REVIEW_ONT-041 self-review; FOLLOW-UP skipped (no new findings) |
 | 2026-10-26 | ONT-041 | Archived event/responsibility proposal PRD/report (documentation PASS) |
 | 2026-10-26 | ONT-040 | Archived merged PR #61 PRD/report; historical validation retained |

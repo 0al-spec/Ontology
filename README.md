@@ -110,7 +110,7 @@ into SpecSpace `/ontology` for cross-repo smoke checks.
 ## Requirements
 
 - Swift 6.0+
-- macOS 13+ or Linux for normal SwiftPM builds
+- macOS 13+ (current build/CI platform); Linux portability is tracked in ONT-046
 - `swiftformat` and `swiftlint` for the local quality gate
 
 Install quality tools on macOS:
@@ -368,6 +368,9 @@ Examples:
 
 ## Key Specs
 
+- [Event core draft package](SPECS/ontology/packages/events-core/README.md)
+  — compiler-backed event/state/interpretation vocabulary with conceptual examples;
+  instance graph validation remains planned in ONT-043.
 - [Event and Responsibility Core proposal](SPECS/ontology/event-responsibility-core-proposal.md)
   — proposed reusable event/state/interpretation vocabulary, responsibility
   profile boundaries, and a bounded NormLab parking pilot. This is a roadmap,

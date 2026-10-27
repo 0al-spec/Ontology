@@ -1,0 +1,16 @@
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: IntentClassification
+intentType: ArchitectureIntent
+domain: GeneralEventModeling
+subdomain: EvidenceAndInterpretation
+productType: ReusableDraftOntologyPackage
+criticality: medium
+primaryConcern: Preserve event identity, role interpretation and explicit observation availability without inventing causal or legal conclusions.
+requiresExistingOntology: true
+confidence: 0.8
+uncertainties:
+  - id: instance-wire-format
+    question: Which versioned wire format will ONT-043 use for references, partial observations and scoped facts?
+provenance:
+  - source: SPECS/ontology/event-responsibility-core-proposal.md
+    note: Reviewed author intent from merged PR 65; confidence is an uncalibrated authoring estimate.

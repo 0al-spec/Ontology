@@ -10,6 +10,8 @@
   },
   "include": [
     "examcalc-schemas.ts",
-    "../packages/examcalc/generated/**/*.ts"
+    "events-core-schemas.ts",
+    "../packages/examcalc/generated/**/*.ts",
+    "../packages/events-core/generated/**/*.ts"
   ]
 }
