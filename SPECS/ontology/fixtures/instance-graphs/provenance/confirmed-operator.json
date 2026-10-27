@@ -1,0 +1,398 @@
+{
+  "apiVersion": "ontology.specgraph.io/instance-graph/v1alpha1",
+  "edges": [
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateInEpisode",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "episode",
+        "revisionKey": "r1",
+        "type": "eventcore:Episode"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateBeforeObservation",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "unknown-before",
+        "revisionKey": "r1",
+        "type": "eventcore:StateObservation"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateAfterObservation",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "unknown-after",
+        "revisionKey": "r1",
+        "type": "eventcore:StateObservation"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "letter-view",
+        "revisionKey": "r1",
+        "type": "eventcore:InterpretationCandidate"
+      },
+      "relation": "eventcore:describesCandidateEvent",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "letter-view",
+        "revisionKey": "r1",
+        "type": "eventcore:InterpretationCandidate"
+      },
+      "relation": "eventcore:candidateCitesAssertion",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "letter",
+        "revisionKey": "r1",
+        "type": "eventcore:SourceAssertion"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "letter-view",
+        "revisionKey": "r1",
+        "type": "eventcore:InterpretationCandidate"
+      },
+      "relation": "eventcore:candidateBindsRole",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "letter-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "letter-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      },
+      "relation": "eventcore:roleBoundEntity",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "letter-author",
+        "revisionKey": "r1",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-record",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordInRegistry",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-registry",
+        "revisionKey": "r1",
+        "type": "eventcore:EventRegistry"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-record",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordInEpisode",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "episode",
+        "revisionKey": "r1",
+        "type": "eventcore:Episode"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-record",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordOfActionKind",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-kind",
+        "revisionKey": "r1",
+        "type": "eventcore:ActionKind"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-record",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordBeforeSnapshot",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-before",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-record",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordAfterSnapshot",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-after",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-empty-delta",
+        "revisionKey": "r1",
+        "type": "eventcore:Delta"
+      },
+      "relation": "eventcore:deltaOfRecord",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-record",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateEnrichedByRecord",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-record",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-before",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      },
+      "relation": "eventcore:snapshotOperatorOrigin",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-before-origin",
+        "revisionKey": "r1",
+        "type": "eventcore:OperatorSnapshotOrigin"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-after",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      },
+      "relation": "eventcore:snapshotOperatorOrigin",
+      "to": {
+        "graphKey": "unproven-empty-enrichment",
+        "nodeId": "claimed-after-origin",
+        "revisionKey": "r1",
+        "type": "eventcore:OperatorSnapshotOrigin"
+      }
+    }
+  ],
+  "graphKey": "unproven-empty-enrichment",
+  "kind": "InstanceGraph",
+  "nodes": [
+    {
+      "fields": {
+        "scopeKey": "episode-1"
+      },
+      "id": "episode",
+      "type": "eventcore:Episode"
+    },
+    {
+      "fields": {
+        "label": "letter-author"
+      },
+      "id": "letter-author",
+      "type": "eventcore:Entity"
+    },
+    {
+      "fields": {
+        "endOffset": 9,
+        "quote": "I parked.",
+        "revisionKey": "letter-r1",
+        "sourceDigest": "sha256:83265d272fa175c740066d9dfb449b7f6090fcc0c5a3c4930f0c7002cbbec707",
+        "sourceRef": "synthetic-letter",
+        "speakerKey": "letter_1",
+        "startOffset": 0
+      },
+      "id": "letter",
+      "type": "eventcore:SourceAssertion"
+    },
+    {
+      "fields": {
+        "candidateKey": "reported-parking"
+      },
+      "id": "reported",
+      "type": "eventcore:EventCandidate"
+    },
+    {
+      "fields": {
+        "availability": "unknown"
+      },
+      "id": "unknown-before",
+      "type": "eventcore:StateObservation"
+    },
+    {
+      "fields": {
+        "availability": "unknown"
+      },
+      "id": "unknown-after",
+      "type": "eventcore:StateObservation"
+    },
+    {
+      "fields": {
+        "candidateKey": "letter-view"
+      },
+      "id": "letter-view",
+      "state": "proposed",
+      "type": "eventcore:InterpretationCandidate"
+    },
+    {
+      "fields": {
+        "roleName": "actor"
+      },
+      "id": "letter-role",
+      "type": "eventcore:RoleBinding"
+    },
+    {
+      "fields": {
+        "registryKey": "claimed",
+        "revisionKey": "r1"
+      },
+      "id": "claimed-registry",
+      "type": "eventcore:EventRegistry"
+    },
+    {
+      "fields": {
+        "actionKey": "claimed-parking"
+      },
+      "id": "claimed-kind",
+      "type": "eventcore:ActionKind"
+    },
+    {
+      "fields": {
+        "projectionKey": "claimed-physical",
+        "schemaKey": "claimed-v1",
+        "scopeKey": "episode-1"
+      },
+      "id": "claimed-before",
+      "type": "eventcore:StateSnapshot"
+    },
+    {
+      "fields": {
+        "projectionKey": "claimed-physical",
+        "schemaKey": "claimed-v1",
+        "scopeKey": "episode-1"
+      },
+      "id": "claimed-after",
+      "type": "eventcore:StateSnapshot"
+    },
+    {
+      "fields": {
+        "clockKey": "ticks",
+        "intervalFinish": 1,
+        "intervalStart": 0,
+        "recordKey": "claimed"
+      },
+      "id": "claimed-record",
+      "type": "eventcore:RecordedEvent"
+    },
+    {
+      "fields": {},
+      "id": "claimed-empty-delta",
+      "type": "eventcore:Delta"
+    },
+    {
+      "fields": {
+        "operatorKey": "fixture-operator",
+        "originKey": "claimed-before-origin",
+        "rationale": "Explicit synthetic complete empty state supplied by the operator."
+      },
+      "id": "claimed-before-origin",
+      "type": "eventcore:OperatorSnapshotOrigin"
+    },
+    {
+      "fields": {
+        "operatorKey": "fixture-operator",
+        "originKey": "claimed-after-origin",
+        "rationale": "Explicit synthetic complete empty state supplied by the operator."
+      },
+      "id": "claimed-after-origin",
+      "type": "eventcore:OperatorSnapshotOrigin"
+    }
+  ],
+  "ontology": {
+    "id": "org.0al.events.core",
+    "namespace": "eventcore",
+    "sourceDigest": "sha256:92a3245fc9acd15748fd1fa3cfb8e4fdc8fda429a5fd6cffd7a97bc13f2f359e",
+    "version": "0.2.0"
+  },
+  "profile": "eventcore-provenance-v1",
+  "profilePin": {
+    "definitionSHA256": "240d518666905c320df299b5d4d9e08e7c2564b0ca97ca2ab15d0a275dbe2551",
+    "id": "eventcore-provenance-v1",
+    "version": "1.0.0"
+  },
+  "projections": [
+    {
+      "domain": "observation",
+      "projectionKey": "claimed-physical",
+      "schemaKey": "claimed-v1"
+    }
+  ],
+  "revisionKey": "r1"
+}

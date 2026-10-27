@@ -1,0 +1,16 @@
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: IntentClassification
+intentType: ArchitectureIntent
+domain: GeneralEventModeling
+subdomain: SnapshotProvenance
+productType: ReusableDraftOntologyPackage
+criticality: medium
+primaryConcern: Separate source presence, trusted provenance admission and factual truth while preserving source-only candidates.
+requiresExistingOntology: true
+confidence: 0.8
+uncertainties:
+  - id: authority-trust-boundary
+    question: Which trusted caller selects and protects the external authority input?
+provenance:
+  - source: SPECS/ontology/event-responsibility-core-proposal.md
+    note: Reviewed author intent from merged PR 65; confidence is an uncalibrated authoring estimate.

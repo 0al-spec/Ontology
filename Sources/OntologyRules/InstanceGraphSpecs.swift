@@ -30,10 +30,20 @@ package struct InstanceGraphIssue: Equatable, Sendable {
 package struct InstanceGraphValidationContext {
     package let graph: InstanceGraphObject
     package let ontologyIR: InstanceGraphObject
+    package let profile: EventCoreProfileSelection
+    package let graphSHA256: String
+    package let provenanceAuthority: InstanceGraphObject?
 
-    package init(graph: InstanceGraphObject, ontologyIR: InstanceGraphObject) {
+    package init(
+        graph: InstanceGraphObject, ontologyIR: InstanceGraphObject,
+        profile: EventCoreProfileSelection = .legacy, graphSHA256: String = "",
+        provenanceAuthority: InstanceGraphObject? = nil
+    ) {
         self.graph = graph
         self.ontologyIR = ontologyIR
+        self.profile = profile
+        self.graphSHA256 = graphSHA256
+        self.provenanceAuthority = provenanceAuthority
     }
 }
 
@@ -51,7 +61,11 @@ package struct InstanceGraphValidationSpec: DecisionSpec {
         guard links.issues.isEmpty else { return sorted(links.issues) }
         var profile = EventCoreGraphCheck(index: index)
         profile.validate()
-        return sorted(profile.issues)
+        guard profile.issues.isEmpty else { return sorted(profile.issues) }
+        if context.profile == .provenance {
+            return sorted(SnapshotProvenanceSpec().decide(context) ?? [graphIssue("provenance.unavailable", "graph", "Provenance admission could not decide.")])
+        }
+        return []
     }
 
     private func sorted(_ issues: [InstanceGraphIssue]) -> [InstanceGraphIssue] {
@@ -81,6 +95,7 @@ func graphIssue(_ code: String, _ path: String, _ message: String) -> InstanceGr
 struct InstanceGraphIndex {
     let graph: GraphObject
     let ontologyIR: GraphObject
+    let profile: EventCoreProfileSelection
     let nodes: [GraphObject]
     let edges: [GraphObject]
     let byID: [String: GraphObject]
@@ -89,6 +104,7 @@ struct InstanceGraphIndex {
     init(context: InstanceGraphValidationContext) {
         graph = context.graph
         ontologyIR = context.ontologyIR
+        profile = context.profile
         nodes = graph["nodes"] as? [GraphObject] ?? []
         edges = graph["edges"] as? [GraphObject] ?? []
         byID = Dictionary(uniqueKeysWithValues: nodes.map { (graphText($0, "id"), $0) })

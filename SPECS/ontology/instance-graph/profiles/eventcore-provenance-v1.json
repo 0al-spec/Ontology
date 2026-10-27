@@ -1,0 +1,37 @@
+{
+  "apiVersion": "ontology.specgraph.io/instance-graph/v1alpha1",
+  "authorityAPIVersion": "ontology.specgraph.io/snapshot-authority/v1alpha1",
+  "authorityKind": "SnapshotProvenanceAuthority",
+  "binding": "SHA-256 of exact graph bytes; caller-selected authority input",
+  "capabilities": [
+    "confirm-source",
+    "confirm-observation",
+    "supply-operator-state",
+    "enrich-candidate"
+  ],
+  "id": "eventcore-provenance-v1",
+  "identityAuthenticationVerified": false,
+  "irSHA256": "e6c932ad8c492d168b63dbe112335c270d88ff758e016f3502031aefe9dea916",
+  "ontology": {
+    "id": "org.0al.events.core",
+    "namespace": "eventcore",
+    "sourceDigest": "sha256:92a3245fc9acd15748fd1fa3cfb8e4fdc8fda429a5fd6cffd7a97bc13f2f359e",
+    "version": "0.2.0"
+  },
+  "originAlternatives": [
+    "SourceSnapshotOrigin",
+    "DirectObservationOrigin",
+    "OperatorSnapshotOrigin"
+  ],
+  "rules": [
+    "all snapshots have exactly one uniquely owned typed origin",
+    "each snapshot has exactly one external scoped capability confirmation",
+    "direct record observations match record boundary time and clock",
+    "enrichment needs an explicit candidate-record confirmation",
+    "interpretation resolution uses explicitly admitted candidate-record enrichment",
+    "old eventcore-v1 never auto-upgrades",
+    "enrichment preserves known snapshot identity and all partial proposition/polarity facts"
+  ],
+  "sourceTruthVerified": false,
+  "version": "1.0.0"
+}

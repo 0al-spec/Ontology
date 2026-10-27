@@ -1,0 +1,128 @@
+[
+  {
+    "authority": "source-only-authority.json",
+    "code": null,
+    "graph": "source-only.json",
+    "name": "source-only",
+    "status": "passed"
+  },
+  {
+    "authority": "confirmed-source-authority.json",
+    "code": null,
+    "graph": "confirmed-source.json",
+    "name": "confirmed-source",
+    "status": "passed"
+  },
+  {
+    "authority": "confirmed-direct-authority.json",
+    "code": null,
+    "graph": "confirmed-direct.json",
+    "name": "confirmed-direct",
+    "status": "passed"
+  },
+  {
+    "authority": "confirmed-operator-authority.json",
+    "code": null,
+    "graph": "confirmed-operator.json",
+    "name": "confirmed-operator",
+    "status": "passed"
+  },
+  {
+    "authority": "unproven-empty-enrichment-authority.json",
+    "code": "provenance.origin.required",
+    "graph": "unproven-empty-enrichment.json",
+    "name": "unproven-empty-enrichment",
+    "status": "failed"
+  },
+  {
+    "authority": "citation-without-confirmation-authority.json",
+    "code": "provenance.confirmation.required",
+    "graph": "citation-without-confirmation.json",
+    "name": "citation-without-confirmation",
+    "status": "failed"
+  },
+  {
+    "authority": "source-without-citation-authority.json",
+    "code": "relation.cardinality",
+    "graph": "source-without-citation.json",
+    "name": "source-without-citation",
+    "status": "failed"
+  },
+  {
+    "authority": "operator-with-wrong-capability-authority.json",
+    "code": "provenance.confirmation.authority",
+    "graph": "operator-with-wrong-capability.json",
+    "name": "operator-with-wrong-capability",
+    "status": "failed"
+  },
+  {
+    "authority": "wrong-scope-authority.json",
+    "code": "provenance.confirmation.authority",
+    "graph": "wrong-scope.json",
+    "name": "wrong-scope",
+    "status": "failed"
+  },
+  {
+    "authority": "unadmitted-enrichment-authority.json",
+    "code": "provenance.enrichment.required",
+    "graph": "unadmitted-enrichment.json",
+    "name": "unadmitted-enrichment",
+    "status": "failed"
+  },
+  {
+    "authority": "wrong-enrichment-capability-authority.json",
+    "code": "provenance.enrichment.authority",
+    "graph": "wrong-enrichment-capability.json",
+    "name": "wrong-enrichment-capability",
+    "status": "failed"
+  },
+  {
+    "authority": "operator-identity-authority.json",
+    "code": "provenance.operator.identity",
+    "graph": "operator-identity.json",
+    "name": "operator-identity",
+    "status": "failed"
+  },
+  {
+    "authority": "capture-boundary-authority.json",
+    "code": "provenance.capture.boundary",
+    "graph": "capture-boundary.json",
+    "name": "capture-boundary",
+    "status": "failed"
+  },
+  {
+    "authority": "ambiguous-origin-authority.json",
+    "code": "provenance.origin.required",
+    "graph": "ambiguous-origin.json",
+    "name": "ambiguous-origin",
+    "status": "failed"
+  },
+  {
+    "authority": "resolution-bypass-authority.json",
+    "code": "provenance.resolution.enrichment",
+    "graph": "resolution-bypass.json",
+    "name": "resolution-bypass",
+    "status": "failed"
+  },
+  {
+    "authority": "wrong-origin-receipt-authority.json",
+    "code": "provenance.confirmation.target",
+    "graph": "wrong-origin-receipt.json",
+    "name": "wrong-origin-receipt",
+    "status": "failed"
+  },
+  {
+    "authority": "duplicate-confirmation-authority.json",
+    "code": "provenance.authority.duplicate",
+    "graph": "duplicate-confirmation.json",
+    "name": "duplicate-confirmation",
+    "status": "failed"
+  },
+  {
+    "authority": "stale-graph-authority.json",
+    "code": "provenance.authority.binding",
+    "graph": "stale-graph.json",
+    "name": "stale-graph",
+    "status": "failed"
+  }
+]

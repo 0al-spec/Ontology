@@ -75,6 +75,11 @@ jobs:
           TMPDIR: ${{ runner.temp }}
         run: bash tools/instance-graph-smoke.sh
 
+      - name: Validate snapshot provenance profile and negative fixtures
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: bash tools/snapshot-provenance-smoke.sh
+
       - name: Build SpecSpace ontology viewer sample archive
         run: |
           set -euo pipefail

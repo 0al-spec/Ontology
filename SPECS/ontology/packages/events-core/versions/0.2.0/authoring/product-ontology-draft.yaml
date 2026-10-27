@@ -1,0 +1,94 @@
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: ProductOntologyDraft
+metadata:
+  status: candidate
+  sourceIntentId: event-responsibility-core-proposal
+  producedBy: CodexRootStagedAuthoring
+  confidence: 0.8
+  provenance:
+    - source: SPECS/ontology/event-responsibility-core-proposal.md
+      note: Curated staged authoring from reviewed proposal; no external inference or independent authoring agents.
+  uncertainties:
+    - id: authority-trust-boundary
+      question: Which trusted caller selects and protects the external authority input?
+spec:
+  namespaceCandidate: eventcore
+  governingConcept:
+    id: RecordedEvent
+    rationale: A scoped record anchors supplied observations while candidates and interpretations remain separate.
+  classes:
+    - {id: Entity, category: domainEntity}
+    - {id: Episode, category: domainEntity}
+    - {id: ActionKind, category: valueObject}
+    - {id: EventRegistry, category: domainEntity}
+    - {id: RecordedEvent, category: event}
+    - {id: EventCandidate, category: domainEntity}
+    - {id: Interpretation, category: domainEntity}
+    - {id: InterpretationCandidate, category: domainEntity}
+    - {id: RoleBinding, category: valueObject}
+    - {id: RelationInstance, category: domainEntity}
+    - {id: StateObservation, category: domainEntity}
+    - {id: StateSnapshot, category: valueObject}
+    - {id: Fact, category: valueObject}
+    - {id: Delta, category: valueObject}
+    - {id: SourceAssertion, category: evidence}
+    - {id: CausalHypothesis, category: domainEntity}
+    - {id: ReviewProposal, category: command}
+    - {id: RejectProposal, category: command}
+    - {id: SourceSnapshotOrigin, category: valueObject}
+    - {id: DirectObservationOrigin, category: valueObject}
+    - {id: OperatorSnapshotOrigin, category: valueObject}
+  relations:
+    - {id: snapshotSourceOrigin, domain: StateSnapshot, range: SourceSnapshotOrigin}
+    - {id: snapshotDirectOrigin, domain: StateSnapshot, range: DirectObservationOrigin}
+    - {id: snapshotOperatorOrigin, domain: StateSnapshot, range: OperatorSnapshotOrigin}
+    - {id: originCitesAssertion, domain: SourceSnapshotOrigin, range: SourceAssertion}
+    - {id: recordInRegistry, domain: RecordedEvent, range: EventRegistry}
+    - {id: recordInEpisode, domain: RecordedEvent, range: Episode}
+    - {id: recordOfActionKind, domain: RecordedEvent, range: ActionKind}
+    - {id: recordBeforeSnapshot, domain: RecordedEvent, range: StateSnapshot}
+    - {id: recordAfterSnapshot, domain: RecordedEvent, range: StateSnapshot}
+    - {id: observationSnapshot, domain: StateObservation, range: StateSnapshot}
+    - {id: observationSuppliesFact, domain: StateObservation, range: Fact}
+    - {id: snapshotContainsFact, domain: StateSnapshot, range: Fact}
+    - {id: deltaOfRecord, domain: Delta, range: RecordedEvent}
+    - {id: deltaAddsFact, domain: Delta, range: Fact}
+    - {id: deltaRemovesFact, domain: Delta, range: Fact}
+    - {id: interpretsRecord, domain: Interpretation, range: RecordedEvent}
+    - {id: interpretationBindsRole, domain: Interpretation, range: RoleBinding}
+    - {id: roleBoundEntity, domain: RoleBinding, range: Entity}
+    - {id: candidateInEpisode, domain: EventCandidate, range: Episode}
+    - {id: candidateBeforeObservation, domain: EventCandidate, range: StateObservation}
+    - {id: candidateAfterObservation, domain: EventCandidate, range: StateObservation}
+    - {id: describesCandidateEvent, domain: InterpretationCandidate, range: EventCandidate}
+    - {id: candidateBindsRole, domain: InterpretationCandidate, range: RoleBinding}
+    - {id: candidateCitesAssertion, domain: InterpretationCandidate, range: SourceAssertion}
+    - {id: candidateEnrichedByRecord, domain: EventCandidate, range: RecordedEvent}
+    - {id: candidateResolvedAsInterpretation, domain: InterpretationCandidate, range: Interpretation}
+    - {id: recordCitesAssertion, domain: RecordedEvent, range: SourceAssertion}
+    - {id: relationBindsRole, domain: RelationInstance, range: RoleBinding}
+    - {id: relationOriginRecord, domain: RelationInstance, range: RecordedEvent}
+    - {id: hypothesisCauseView, domain: CausalHypothesis, range: Interpretation}
+    - {id: hypothesisEffectView, domain: CausalHypothesis, range: Interpretation}
+    - {id: hypothesisCitesAssertion, domain: CausalHypothesis, range: SourceAssertion}
+  protocols: []
+  policies:
+    - {id: PreserveRecordedObservations, enforceability: manual}
+    - {id: KnownStatesForExactDelta, enforceability: manual}
+    - {id: ScopedSourceAttribution, enforceability: manual}
+    - {id: CandidateAuthorityBoundary, enforceability: manual}
+    - {id: BoundedCausalHypothesis, enforceability: manual}
+    - {id: SnapshotOriginAdmission, enforceability: manual}
+    - {id: ExplicitEnrichmentAdmission, enforceability: manual}
+  stateMachines:
+    - id: ProposalReview
+      appliesTo: [InterpretationCandidate, CausalHypothesis]
+  assumptions:
+    - The separately selected eventcore-provenance-v1 validator enforces declared provenance admission, not source truth.
+    - Arbitrary Entity actors do not establish human attribution or responsibility.
+    - Unknown observations cannot be encoded as known empty snapshots.
+    - Record keys are unique within one EventRegistry revision; hypothesis records derive from their endpoint interpretations.
+    - Exact Delta states derive from its sole owning record.
+  validationNotes:
+    - Generated object schemas alone do not enforce cross-node provenance; use the pinned instance profile and trusted authority input.
+    - Policy text remains inert; the profile explicitly implements bounded structural rules and requires separate origin/enrichment authority.

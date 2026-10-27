@@ -145,3 +145,9 @@ missing intervalStart and a StateObservation used as a record snapshot.
 `tools/instance-graph-smoke.sh` replays fixtures and compares fresh consumer
 contracts to the committed baseline in CI. ONT-044 adds responsibility vocabulary;
 ONT-045 owns a separate offline NormLab export/replay pilot.
+
+## Explicit provenance successor
+
+ONT-047 adds the separately selected [eventcore-provenance-v1 profile](provenance/README.md)
+for events-core 0.2.0. This eventcore-v1 document and its expected-pass limitation
+remain the historical contract; none of their reports is automatically upgraded.
