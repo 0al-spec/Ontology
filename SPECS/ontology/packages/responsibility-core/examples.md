@@ -33,6 +33,7 @@ negative support are independent; cited/operator support provenance is retained.
 | Exception supported | exception+ opposes the required exception- | Definite omission admission fails; no support is erased. |
 | Deadline merely described | A Deadline node exists, but no deadlineElapsed+ | Metadata is not elapsed support; required premise remains missing. |
 | Different context | A required literal belongs to another event/interpretation/anchor | It cannot satisfy this context's premise. |
+| Different declared duty action | Duty requires pay, while context describes movement | R3 does not compare the external DutySpecification; a generic duty claim needs explicit action alignment. |
 | Only operator support | Explicit OperatorSupport with author/rationale for performed- | May be selected as an uncited assertion under a reviewed mapping; never masquerades as a quoted source. |
 
 The current R3 scope has no distinct generic duty-bearer field. If the proposed

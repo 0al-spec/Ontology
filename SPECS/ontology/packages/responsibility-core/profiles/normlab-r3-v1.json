@@ -202,6 +202,8 @@
     "Deadline.dueAt does not compute deadlineElapsed; elapsed is an explicit supplied ground.",
     "clockKey and source-citation identifiers are not Lean literal arguments.",
     "If claiming a generic duty result, explicitly review any duty-bearer/human-anchor alignment and applicability outside R3; never infer equality from actor.",
-    "Source quote relevance, factual truth and snapshot origin remain unverified."
+    "Source quote relevance, factual truth and snapshot origin remain unverified.",
+    "ActionRequirement.actionRequirementKind is not compared with the context action by R3; a generic duty claim needs an explicit matching decision outside the profile.",
+    "StateRequirement has no direct R3 state-condition slot; operationalizing it as an action needs a separate reviewed mapping and is not proved by performed alone."
   ]
 }

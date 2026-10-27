@@ -92,6 +92,12 @@ these are not extra guarantees hidden inside required+. In particular actor may
 be a car/community while anchor is a person. Duty bearer is not defaulted to either.
 ResponseCandidate requires its own rule, trigger, authority and recipient policy.
 
+R3 also does not compare ActionRequirement.actionRequirementKind to the context's
+action. For a generic duty claim, that matching decision is explicit and separate.
+StateRequirement has no direct state-condition slot in this action/omission
+profile; interpreting a required state as an action needs another reviewed mapping.
+Performed alone does not prove that an arbitrary required StateRequirement holds.
+
 The existing
 [ParkingRuntime recordReviewedFindings](https://github.com/SoundBlaster/NormLab/blob/e8041c937f28d3644d4df3680db5d81f0cff8ace/lean/ParkingRuntime.lean)
 records an operator's review event. Its actor/anchor is the operator; it does not
@@ -99,6 +105,9 @@ prove the driver's parking act. Source-only fabula candidates lack physical
 before/after states and must not be coerced into a registered physical record.
 The eventcore-v1 provenance limitation remains; ONT-047 and the ONT-045 exporter
 requirements are not discharged by this mapping document.
+When only a source-level InterpretationCandidate exists, retain it as a candidate
+outside the bound assessment path. Do not invent an AttributionContext/event to
+fit ResponsibilityAssessment's required interpretation link.
 
 ## Support updates and certificates
 

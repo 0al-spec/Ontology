@@ -61,6 +61,9 @@ clockKey argument. Explicit external identity/time/alignment/applicability
 decisions are not certified merely by mapping required+ or another predicate.
 Human status requires a typed IsHuman proof; the public bound API requires a
 registered event/interpretation, not a free serialized Scope.
+R3 does not compare the external ActionRequirement to context.action and has no
+direct StateRequirement condition slot; both need explicit separate mappings.
+Source-only InterpretationCandidates stay outside the bound assessment path.
 
 Source support IDs and Lean literal values are different. Preserving a Tree
 under deletion does not by itself preserve Profile.check after additions of
