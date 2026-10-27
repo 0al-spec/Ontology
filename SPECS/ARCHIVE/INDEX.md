@@ -53,6 +53,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-27 | ONT-047 | Archived REVIEW_ONT-047; FOLLOW-UP skipped (no new actionable findings) |
 | 2026-10-27 | ONT-047 | Archived Snapshot_Provenance_And_Enrichment_Profile (PASS); independent PR review pending |
 | 2026-10-27 | ONT-043 | Archived REVIEW_ONT-043; FOLLOW-UP skipped (no new actionable findings) |
 | 2026-10-27 | ONT-043 | Archived instance graph PRD/report (local PASS; hosted review pending) |
