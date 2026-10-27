@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-044 | [ONT-044_Draft_Responsibility_Profile_Package/](ONT-044_Draft_Responsibility_Profile_Package/) | 2026-10-27 | PASS (draft vocabulary/source mapping) |
 | ONT-043 | [ONT-043_Instance_Graph_Contract_And_Validation/](ONT-043_Instance_Graph_Contract_And_Validation/) | 2026-10-27 | PASS (bounded structural profile) |
 | ONT-042 | [ONT-042_Draft_Event_Core_Package/](ONT-042_Draft_Event_Core_Package/) | 2026-10-27 | PASS (local draft/compiler checks) |
 | ONT-041 | [ONT-041_Event_And_Responsibility_Core_Proposal/](ONT-041_Event_And_Responsibility_Core_Proposal/) | 2026-10-26 | PASS (documentation only) |
@@ -52,6 +53,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-27 | ONT-044 | Archived responsibility package PRD/report (local PASS; hosted review pending) |
 | 2026-10-27 | ONT-043 | Archived REVIEW_ONT-043; FOLLOW-UP skipped (no new actionable findings) |
 | 2026-10-27 | ONT-043 | Archived instance graph PRD/report (local PASS; hosted review pending) |
 | 2026-10-27 | ONT-042 | Archived REVIEW_ONT-042; FOLLOW-UP skipped (already tracked in ONT-043/044) |

@@ -63,3 +63,7 @@ or cross-repo implementation is authorized by this package task. Source reading
 and exact pinned references establish the mapping, not an executed adapter.
 No paid inference, law corpus, legal review workflow, deployment or new proof
 backend. ONT-045 owns the offline consumer pilot, ONT-047 snapshot provenance.
+
+---
+**Archived:** 2026-10-27
+**Verdict:** PASS — draft vocabulary/source mapping; hosted CI and independent review pending
