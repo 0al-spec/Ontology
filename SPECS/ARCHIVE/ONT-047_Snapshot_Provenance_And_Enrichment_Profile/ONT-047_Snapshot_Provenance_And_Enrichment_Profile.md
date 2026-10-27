@@ -1,7 +1,7 @@
 # ONT-047 — Snapshot Provenance And Enrichment Profile
 
 **Date:** 2026-10-27
-**Status:** PRD Ready
+**Status:** Implementation complete; hosted CI/independent review pending
 **Base:** main / merged ONT-043 PR #67; independent of ONT-044 PR #68
 
 ## Problem
@@ -63,3 +63,7 @@ can use an empty authority input and contain no physical record or Delta.
 
 Plan and pin semantics; implement package/profile and admission; run negative and
 compatibility gates; archive evidence/self-review and publish an independent PR.
+
+---
+**Archived:** 2026-10-27
+**Verdict:** PASS (local contract/admission/regression checks)

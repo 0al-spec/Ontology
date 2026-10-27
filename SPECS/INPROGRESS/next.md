@@ -1,24 +1,24 @@
-# Selected: ONT-047 — Snapshot Provenance And Enrichment Profile
+# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
-**Priority:** P2 (explicit user selection)
-**Dependencies:** ONT-043, merged PR #67 (`0b69253`)
-**Status:** Selected; independent of ONT-044 PR #68
-
-## Goal
-
-Add a separately pinned event-core revision and provenance-aware instance profile.
-Keep source presence, trusted origin confirmation and factual truth distinct.
-Old eventcore-v1 reports and its expected-pass limitation fixture remain unchanged.
+**Priority:** P1
+**Dependencies:** ONT-043 and ONT-044; ONT-047 is available for explicit provenance admission
+**Status:** Not selected; ONT-044 PR #68 and ONT-047 hosted review/CI remain pending
 
 ## Next Step
 
-Plan ONT-047, implement typed snapshot origins and explicit authority-bound
-candidate enrichment, then run compiler, runtime, negative and compatibility gates.
-NormLab physical candidates may stay source-only without StateSnapshot or Delta.
-No NormLab edits, deployment or historical migration are part of this task.
+Review the independently based ONT-047 change and ONT-044 PR #68 before selecting
+integration work. Agree the consumer wire contract and create/link the canonical
+NormLab Issue before any cross-repo implementation.
+
+A source-only pilot may preserve missing physical states without record/Delta.
+If a consumer deliberately selects events-core 0.2.0/eventcore-provenance-v1, it
+must supply a separately trusted graph-bound authority input and test its own
+export/admission boundary. Source presence and admitted origin do not prove truth.
+No automatic upgrade of eventcore-v1 exports or historical receipts is implied.
+ONT-046 remains the separate Linux portability task.
 
 ## Recently Archived
 
-- ONT-043: merged PR #67, structural validation with an explicit provenance limitation.
-- ONT-042: merged PR #66, draft event vocabulary.
-- ONT-041: merged PR #65, proposal and unknown-observation clarification.
+- ONT-047: typed snapshot origins and scoped enrichment admission, 158 tests and 18 static cases locally pass; independent review pending, 2026-10-27.
+- ONT-043: merged PR #67, frozen structural v1 contract and explicit limitation.
+- ONT-042: merged PR #66, draft 0.1.0 event vocabulary.
