@@ -1,9 +1,9 @@
-# Next Candidate: ONT-043 — Instance Graph Contract And Validation
+# Current Task: ONT-043 — Instance Graph Contract And Validation
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
-**Dependencies:** ONT-042 PR review/CI
-**Status:** Not selected; awaiting event-core draft review
+**Dependencies:** ONT-042, merged PR #66 (`a2e1af3`)
+**Status:** Selected; planning bounded eventcore-v1 validation
 
 ## Description
 
@@ -18,9 +18,9 @@ ONT-046 tracks Linux compiler portability independently.
 
 ## Next Step
 
-Review and merge ONT-042, then SELECT/PLAN ONT-043. Do not infer a checked graph
-from a successful draft package compilation. ONT-044 remains a separate profile
-package that can follow the accepted event vocabulary independently.
+PLAN/EXECUTE ONT-043 using the existing compiler and rule layer. Keep structural
+graph validation distinct from source truth, causal proof and responsibility.
+ONT-044 remains a separate responsibility-profile package.
 
 ## Recently Archived
 

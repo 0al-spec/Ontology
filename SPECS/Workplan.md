@@ -877,7 +877,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-042
 - **Parallelizable:** yes, with ONT-044 after ONT-042
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **Origin:** ONT-041 proposal, stage 2 and CQ-02/04/07/08/09/11/12/13/14.
 - **Outputs:** InstanceGraph wire/schema/diagnostic contract, validator surface,
   deterministic positive/negative fixtures and generated consumer contracts.
