@@ -932,7 +932,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-042
 - **Parallelizable:** yes, with ONT-043 after ONT-042
-- **Status:** Not Started
+- **Status:** INPROGRESS
 - **Origin:** ONT-041 proposal, stage 3 and CQ-03/05/06/10/11.
 - **Outputs:** Draft package, bounded profile/mapping contract and validation
   evidence; parking predicates and sanctions remain outside the generic package.

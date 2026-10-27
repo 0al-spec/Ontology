@@ -1,9 +1,9 @@
-# Next Candidate: ONT-044 — Draft Responsibility Profile Package
+# Current Task: ONT-044 — Draft Responsibility Profile Package
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
 **Dependencies:** ONT-042, merged PR #66 (`a2e1af3`)
-**Status:** Not selected; ONT-043 is awaiting hosted CI and independent review
+**Status:** Selected; ONT-043 merged in PR #67 (`0b69253`)
 
 ## Description
 
@@ -15,8 +15,9 @@ and automatic legal responsibility do not belong to the generic event profile.
 
 ## Next Step
 
-Review the archived [ONT-043 implementation and evidence](../ARCHIVE/ONT-043_Instance_Graph_Contract_And_Validation/ONT-043_Validation_Report.md)
-on its published head before merging or selecting the next sequential task.
+PLAN/EXECUTE ONT-044 from the merged event vocabulary and pinned NormLab main
+`e8041c937f28d3644d4df3680db5d81f0cff8ace`. Only read NormLab sources; its
+runtime, sources and ledger are not changed by this Ontology package task.
 The [InstanceGraph validator](../ontology/instance-graph/README.md) establishes
 bounded structural consistency, not source truth or physical causation.
 ONT-045 remains the separate offline NormLab pilot; ONT-046 tracks Linux support.
