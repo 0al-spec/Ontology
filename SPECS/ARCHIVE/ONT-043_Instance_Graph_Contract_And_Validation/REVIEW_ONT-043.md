@@ -27,7 +27,8 @@ profile. FOLLOW-UP is skipped; ONT-044/045/046 already track the next boundaries
   and domain labels remain exporter declarations, not inferred factual truth.
 - Delta compares finite propositionKey/polarity sets from its owning record;
   duplicate nodes/values, unrelated differences and nonempty changes for equal
-  snapshots fail. Unknown observations are not coerced into empty snapshots.
+  snapshots fail. The validator does not itself coerce unknown observations into
+  empty snapshots; external unsupported enrichment remains a provenance gap.
 - Hypotheses preserve both endpoint Interpretations, registry/episode/clock and
   bounded interval ordering. Overlap and opposed support are positive controls;
   review state never establishes causal truth or transfers responsibility.
@@ -63,3 +64,17 @@ gate so the CLI integration uses that gate's checkout/scratch binary.
 
 Archive this review and publish the ONT-043 PR. Read hosted CI and independent
 review on its actual head before merge; ONT-044 remains the next sequential task.
+
+## Independent review correction — 2026-10-27
+
+The original self-review missed the BOM/UTF-16 scanner bypass and overstated the
+missing-state acceptance criterion. Independent review found both. Review fixes
+restrict input to unmarked UTF-8, require complete scanning, enforce unique
+Episode.scopeKey and gate temporal order on valid comparable intervals.
+
+The acceptance claim is narrowed rather than changing the vocabulary/pin in
+this PR. A limitation fixture intentionally passes unknown-candidate enrichment
+with unsupported empty snapshots; snapshot provenance is unimplemented and
+tracked in ONT-047. ONT-045 must test that its exporter preserves source-only
+parking data and does not manufacture states. The selected structural slice is
+complete; provenance and factual origin checks are not.

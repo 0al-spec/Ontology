@@ -1,7 +1,7 @@
 # ONT-043: Instance Graph Contract And Validation
 
 **Date:** 2026-10-27
-**Status:** Complete — local implementation and validation; hosted PR review pending
+**Status:** Complete — bounded structural slice; snapshot provenance is ONT-047; PR re-review pending
 **Priority:** P1
 **Reasoning Effort:** high
 **Dependencies:** ONT-042, merged PR #66 (`a2e1af3`)
@@ -57,8 +57,12 @@ and Linux portability remain separate tasks. No hosted inference or NormLab edit
 Use verified TB5 scratch/cache/temp/profile routing for all local artifacts.
 Run the test-first red/green loop, then the existing quality gate with coverage.
 The new command returns 0 only for a valid graph and 1 with sorted diagnostics
-for invalid data. Missing/unknown states cannot yield invented empty Delta;
-supplied equal complete snapshots can. Mutating roles cannot replace a record's
+for invalid data. Missing direct state references and declared review projections
+are rejected. The validator never supplies snapshots itself, but cannot detect
+externally invented empty snapshots linked from unknown candidates without
+snapshot provenance. An expected-pass limitation fixture records this v1 gap;
+ONT-047 tracks a stronger profile and ONT-045 must test the exporter itself.
+Supplied equal complete snapshots can have empty Delta. Mutating roles cannot replace a record's
 states or create a second record with the same registry-local identity.
 
 Generated contracts pin the same profile/IR as the validator. TypeScript checks

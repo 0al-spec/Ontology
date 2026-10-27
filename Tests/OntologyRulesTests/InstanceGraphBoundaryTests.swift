@@ -2,6 +2,26 @@ import Foundation
 import XCTest
 
 extension InstanceGraphRulesTests {
+    func testEpisodeScopeIdentityMustBeUniqueInGraphRevision() throws {
+        var graph = try fixture()
+        var nodes = try XCTUnwrap(graph["nodes"] as? [Object])
+        nodes.append(["id": "episode-alias", "type": "eventcore:Episode", "fields": ["scopeKey": "episode-1"]])
+        graph["nodes"] = nodes
+        try assertCode(graph, "episode.duplicate")
+    }
+
+    func testInvalidOrIncomparableIntervalsDoNotProduceOrderDiagnostics() throws {
+        var graph = try fixture()
+        try field(&graph, node: "movement", key: "intervalStart", value: -1)
+        var codes = try issues(graph).map(\.code)
+        XCTAssertEqual(codes, ["instanceGraph.record.interval"])
+        graph = try fixture()
+        try field(&graph, node: "omission", key: "intervalStart", value: 10)
+        try field(&graph, node: "omission", key: "clockKey", value: "other-clock")
+        codes = try issues(graph).map(\.code)
+        XCTAssertEqual(codes, ["instanceGraph.hypothesis.clock"])
+    }
+
     func testIdentityProjectionAndCollectionShapeFailures() throws {
         var graph = try fixture()
         graph["nodes"] = NSNull()

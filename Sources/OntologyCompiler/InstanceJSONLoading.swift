@@ -6,7 +6,17 @@ struct InstanceJSONKeyCheck {
     let bytes: [UInt8]
     var offset = 0
 
-    mutating func validate() throws { try value(depth: 0) }
+    mutating func validate() throws {
+        whitespace()
+        guard offset < bytes.count, bytes[offset] == 123 else {
+            throw OntologyCompilerError.invalidArgument("instanceGraph.input.object: expected a UTF-8 JSON object")
+        }
+        try value(depth: 0)
+        whitespace()
+        guard offset == bytes.count else {
+            throw OntologyCompilerError.invalidArgument("instanceGraph.input.trailing: scanner did not consume the entire document")
+        }
+    }
 
     mutating func value(depth: Int) throws {
         guard depth < 64 else { throw OntologyCompilerError.invalidArgument("instanceGraph.input.depth: maximum JSON depth is 64") }
@@ -47,6 +57,9 @@ struct InstanceJSONKeyCheck {
     }
 
     mutating func string() throws -> String {
+        guard offset < bytes.count, bytes[offset] == 34 else {
+            throw OntologyCompilerError.invalidArgument("instanceGraph.input.string: expected a quoted JSON key or value")
+        }
         let start = offset
         offset += 1
         while offset < bytes.count {

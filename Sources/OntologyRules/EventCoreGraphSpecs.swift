@@ -3,6 +3,7 @@ struct EventCoreGraphCheck {
     var issues = [InstanceGraphIssue]()
 
     mutating func validate() {
+        validateEpisodeIdentity()
         validateRegistriesAndRecords()
         validateSnapshots()
         validateObservations()
@@ -15,6 +16,19 @@ struct EventCoreGraphCheck {
 
     mutating func require(_ condition: Bool, _ code: String, _ node: GraphObject, _ message: String) {
         if !condition { issues.append(graphIssue(code, index.path(node), message)) }
+    }
+
+    mutating func validateEpisodeIdentity() {
+        var scopes = Set<String>()
+        for episode in index.nodes(of: "Episode") {
+            require(scopes.insert(graphText(graphFields(episode), "scopeKey")).inserted,
+                    "episode.duplicate", episode, "Episode scopeKey must be unique within this graph revision.")
+        }
+    }
+
+    func validInterval(_ fields: GraphObject) -> Bool {
+        guard let start = graphInteger(fields["intervalStart"]), let finish = graphInteger(fields["intervalFinish"]) else { return false }
+        return start >= 0 && start <= finish
     }
 
     mutating func validateRegistriesAndRecords() {
@@ -30,9 +44,7 @@ struct EventCoreGraphCheck {
             let registry = index.target(record, "recordInRegistry")
             require(records.insert([graphText(registry, "id"), graphText(fields, "recordKey")]).inserted,
                     "record.duplicate", record, "recordKey is duplicated within its registry revision.")
-            let start = graphInteger(fields["intervalStart"]) ?? -1
-            let finish = graphInteger(fields["intervalFinish"]) ?? -1
-            require(start >= 0 && start <= finish, "record.interval", record, "Expected 0 <= intervalStart <= intervalFinish.")
+            require(validInterval(fields), "record.interval", record, "Expected 0 <= intervalStart <= intervalFinish.")
             let before = index.target(record, "recordBeforeSnapshot")
             let after = index.target(record, "recordAfterSnapshot")
             let episode = index.target(record, "recordInEpisode")
@@ -123,10 +135,13 @@ struct EventCoreGraphCheck {
                 require(graphText(index.target(cause, relation), "id") == graphText(index.target(effect, relation), "id"),
                         "hypothesis.scope", hypothesis, "Hypothesis endpoints must share a registry revision and episode.")
             }
-            require(graphText(causeFields, "clockKey") == graphText(effectFields, "clockKey"),
+            let sameClock = graphText(causeFields, "clockKey") == graphText(effectFields, "clockKey")
+            require(sameClock,
                     "hypothesis.clock", hypothesis, "Endpoint clocks must match before comparing times.")
-            require((graphInteger(causeFields["intervalStart"]) ?? 0) <= (graphInteger(effectFields["intervalStart"]) ?? 0),
-                    "hypothesis.order", hypothesis, "Cause must start no later than effect; overlap is allowed.")
+            if sameClock && validInterval(causeFields) && validInterval(effectFields) {
+                require((graphInteger(causeFields["intervalStart"]) ?? 0) <= (graphInteger(effectFields["intervalStart"]) ?? 0),
+                        "hypothesis.order", hypothesis, "Cause must start no later than effect; overlap is allowed.")
+            }
         }
     }
 }

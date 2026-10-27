@@ -12,6 +12,9 @@ fixtures="SPECS/ontology/fixtures/instance-graphs"
 diff -ru SPECS/ontology/instance-graph/generated "$output/generated"
 "$compiler" validate-instances "$fixtures/synthetic-car.json" --ontology-ir "$ir" --out "$output/car-report.json"
 "$compiler" validate-instances "$fixtures/source-only.json" --ontology-ir "$ir" --out "$output/source-report.json"
+# Known limitation: authored empty states with no snapshot provenance still pass
+# structurally. The NormLab exporter must not synthesize these from unknown data.
+"$compiler" validate-instances "$fixtures/limitation-unproven-empty-enrichment.json" --ontology-ir "$ir" --out "$output/limitation-report.json"
 if "$compiler" validate-instances "$fixtures/missing-interval.json" --ontology-ir "$ir" --out "$output/invalid-report.json"; then
     echo "error: invalid instance fixture was accepted" >&2
     exit 1

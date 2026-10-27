@@ -20,9 +20,11 @@ on its published head before merging or selecting the next sequential task.
 The [InstanceGraph validator](../ontology/instance-graph/README.md) establishes
 bounded structural consistency, not source truth or physical causation.
 ONT-045 remains the separate offline NormLab pilot; ONT-046 tracks Linux support.
+ONT-047 tracks snapshot provenance; the pilot must keep missing physical states
+source-only and test its exporter rather than relying on structural validation.
 
 ## Recently Archived
 
-- ONT-043: structural instance graph validation, 137-test quality gate, 2026-10-27.
+- ONT-043: bounded structural validation, 143-test quality gate, provenance gap explicitly tracked, 2026-10-27.
 - ONT-042: draft event package, merged PR #66, 2026-10-27.
 - ONT-041: proposal, merged PR #65 with unknown-observation clarification.

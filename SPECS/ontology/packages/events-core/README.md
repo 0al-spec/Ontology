@@ -8,8 +8,10 @@ and state changes. It remains `approvalStatus: draft`.
 The [InstanceGraph eventcore-v1 validator](../../instance-graph/README.md) implements
 the selected ONT-043 structural checks separately from package compilation. The
 YAML policy text stays inert/manual; validation uses an explicitly pinned profile,
-not interpretation or execution of that text. The future-check descriptions below
-are the vocabulary contract realized by that bounded profile.
+not interpretation or execution of that text. The descriptions below retain the
+vocabulary intent; v1 does not enforce snapshot provenance or detect externally
+invented empty states during enrichment. Its documented limitation fixture and
+ONT-047 separate that gap from the checks already implemented.
 
 ## What is in the package
 

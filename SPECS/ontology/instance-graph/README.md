@@ -13,6 +13,10 @@ revisionKey, ontology, projections, nodes and edges. See the
 [JSON Schema](generated/instance-graph.schema.json) and
 [complete synthetic example](../fixtures/instance-graphs/synthetic-car.json).
 
+Input must be UTF-8 without a BOM. UTF-16/UTF-32, their BOMs, malformed UTF-8
+and raw NUL bytes are rejected before Foundation parsing; ordinary JSON
+whitespace is allowed. The key scanner must consume the complete document.
+
 - apiVersion is `ontology.specgraph.io/instance-graph/v1alpha1`, kind is
   `InstanceGraph`, profile is `eventcore-v1`.
 - ontology pins id/namespace/version/sourceDigest. The CLI additionally verifies
@@ -49,6 +53,16 @@ it cannot detect dishonest relabeling of review data as observations or prove
 that physical observations are accurate. It does not compare this input against
 an earlier revision or guarantee external storage immutability.
 
+In particular, the profile **cannot detect invented empty snapshots** attached
+to a source-only candidate through candidateEnrichedByRecord. StateSnapshot has
+no provenance link, so externally authored empty snapshots can be structurally
+valid even while the candidate's observations remain unknown. The explicit
+[limitation fixture](../fixtures/instance-graphs/limitation-unproven-empty-enrichment.json)
+is expected to return passed with sourceTruthVerified false. It is a regression
+test of this limitation, not a valid way to obtain physical observations.
+ONT-047 tracks a future provenance-aware vocabulary/profile. Until then, the
+ONT-045 exporter must preserve source-only candidates and never synthesize states.
+
 | Candidate availability | observationSnapshot | Direct observationSuppliesFact |
 |---|---|---|
 | known | Exactly one | None. |
@@ -64,6 +78,8 @@ Each record belongs to one EventRegistry revision. Registry identity is
 (registryKey, revisionKey); recordKey is unique within it. Two interpretation
 nodes may use different roles for that single record. They cannot supply their
 own before/after state edges or introduce another record with the same local key.
+Episode.scopeKey is unique within the graph revision, so one scope cannot alias
+two Episode nodes. References and snapshot scopes use that same episode identity.
 
 Delta derives both snapshots through one deltaOfRecord owner. There is at most
 one Delta node per record, including identical duplicates. Its Added/Removed
@@ -79,6 +95,8 @@ Hypotheses link cause/effect Interpretations, each bound to a registered record.
 Records must be distinct and share a registry revision, episode and clockKey.
 Cause start must be no later than effect start. Overlapping intervals are allowed
 for an omission continuing while the car begins to move.
+Order checks run only when both intervals are valid and the clocks match;
+invalid intervals or incomparable clocks do not produce secondary order errors.
 
 The synthetic example binds the owner to the omission interpretation and the
 car to the movement interpretation. General actors are any Entity. No human

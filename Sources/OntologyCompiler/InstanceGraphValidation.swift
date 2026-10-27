@@ -67,6 +67,10 @@ extension OntologyCompiler {
     }
 
     private func jsonObject(_ data: Data) throws -> JSONObject {
+        guard String(data: data, encoding: .utf8) != nil,
+              !data.starts(with: [0xEF, 0xBB, 0xBF]), !data.contains(0) else {
+            throw OntologyCompilerError.invalidArgument("instanceGraph.input.encoding: only UTF-8 without BOM is supported")
+        }
         guard let object = try JSONSerialization.jsonObject(with: data) as? JSONObject else {
             throw OntologyCompilerError.invalidArgument("instanceGraph.input.object: input must be a JSON object")
         }
