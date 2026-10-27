@@ -52,6 +52,27 @@ extension SnapshotProvenanceTests {
         }
     }
 
+    func testDigestFormatRequiresTheEntireUnmodifiedString() throws {
+        let suffixes = ["\n", "\r", "\r\n", "\u{0085}", "\u{2028}", "\u{2029}", "x"]
+        for (kind, node, key, code) in [
+            ("source", "letter", "sourceDigest", "provenance.origin.sourceDigest"),
+            ("direct", "claimed-before-origin", "artifactDigest", "provenance.origin.capture")
+        ] {
+            let valid = try fixture("confirmed-\(kind)")
+            let nodes = try XCTUnwrap(valid["nodes"] as? [Object])
+            let fields = try XCTUnwrap(nodes.first { $0["id"] as? String == node }?["fields"] as? Object)
+            let original = try XCTUnwrap(fields[key] as? String)
+            for malformed in suffixes.map({ original + $0 }) + ["\n" + original, String(original.dropLast())] {
+                var graph = valid
+                try field(&graph, node, key, malformed)
+                // Resupply the trusted graph binding to isolate digest validation.
+                let result = try evaluate(graph, authority: fixture("confirmed-\(kind)-authority"))
+                assertCode(result, code)
+                XCTAssertEqual((result.report["provenance"] as? Object)?["confirmationStatus"] as? String, "not-confirmed")
+            }
+        }
+    }
+
     func testUnreferencedSnapshotAndOrphanOriginCannotAvoidAdmission() throws {
         var graph = try fixture("confirmed-source")
         var nodes = try XCTUnwrap(graph["nodes"] as? [Object])

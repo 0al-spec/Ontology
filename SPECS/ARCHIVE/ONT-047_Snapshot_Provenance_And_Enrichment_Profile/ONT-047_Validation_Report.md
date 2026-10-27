@@ -84,3 +84,23 @@ Tracked generated IR/SDK/consumer files are intentional source deliverables.
 Publish the independent ONT-047 PR and obtain hosted CI plus independent review
 on the actual head. ONT-045 may keep the source-only export path while a consumer
 explicitly selects and implements any provenance-aware admission contract.
+
+
+## 2026-10-28 — Independent Astra high review correction
+
+Astra reviewed f62b5d3002d84f53624128d5d55ff5448e2dfa15 and found one P2
+format defect: ICU `$` accepted a final line terminator in sourceDigest and
+artifactDigest. Its 30 CLI probes had six unexpected passes for this defect;
+scoped authority/enrichment controls behaved as expected. The historical report
+is preserved in [INDEPENDENT_REVIEW_ASTRA_ONT-047.md](INDEPENDENT_REVIEW_ASTRA_ONT-047.md).
+
+The fix replaces `^...$` with absolute `\A...\z` matching, without trimming or
+normalizing original values. One new regression method covers 18 malformed
+values across both fields (LF, CR, CRLF, NEL, U+2028, U+2029, ordinary suffix,
+leading newline and short digest). Before the fix it failed with 36 assertions
+for the twelve line-terminator cases; after the fix the full quality gate passes
+159 tests (143 existing + 16 ONT-047), with line coverage 89.87%, region 79.32%.
+The profile meaning, descriptor/IR pins, fixtures and legacy semantics are unchanged.
+Full log: /Volumes/TB5/Developer/Builds/GitHub/Ontology-881ba79a220bd2df/ont-047-digest-fix-quality.log.
+
+Independent re-review and hosted CI of the correction head remain pending.

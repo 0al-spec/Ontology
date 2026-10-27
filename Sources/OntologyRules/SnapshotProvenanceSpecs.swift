@@ -175,6 +175,6 @@ struct SnapshotProvenanceCheck {
     }
 
     func validDigest(_ value: String) -> Bool {
-        value.range(of: "^sha256:[a-f0-9]{64}$", options: .regularExpression) != nil
+        value.range(of: #"\Asha256:[a-f0-9]{64}\z"#, options: .regularExpression) != nil
     }
 }
