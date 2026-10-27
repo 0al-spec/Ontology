@@ -5,6 +5,12 @@ package from the [event/responsibility proposal](../../event-responsibility-core
 It describes events, candidate descriptions, interpretations, source provenance
 and state changes. It remains `approvalStatus: draft`.
 
+The [InstanceGraph eventcore-v1 validator](../../instance-graph/README.md) implements
+the selected ONT-043 structural checks separately from package compilation. The
+YAML policy text stays inert/manual; validation uses an explicitly pinned profile,
+not interpretation or execution of that text. The future-check descriptions below
+are the vocabulary contract realized by that bounded profile.
+
 ## What is in the package
 
 The governing concept is RecordedEvent. Entity is independent of human status;

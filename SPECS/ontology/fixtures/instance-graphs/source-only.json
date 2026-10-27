@@ -1,0 +1,186 @@
+{
+  "apiVersion": "ontology.specgraph.io/instance-graph/v1alpha1",
+  "edges": [
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateInEpisode",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "episode",
+        "revisionKey": "r1",
+        "type": "eventcore:Episode"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateBeforeObservation",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "unknown-before",
+        "revisionKey": "r1",
+        "type": "eventcore:StateObservation"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateAfterObservation",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "unknown-after",
+        "revisionKey": "r1",
+        "type": "eventcore:StateObservation"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-view",
+        "revisionKey": "r1",
+        "type": "eventcore:InterpretationCandidate"
+      },
+      "relation": "eventcore:describesCandidateEvent",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-view",
+        "revisionKey": "r1",
+        "type": "eventcore:InterpretationCandidate"
+      },
+      "relation": "eventcore:candidateCitesAssertion",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter",
+        "revisionKey": "r1",
+        "type": "eventcore:SourceAssertion"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-view",
+        "revisionKey": "r1",
+        "type": "eventcore:InterpretationCandidate"
+      },
+      "relation": "eventcore:candidateBindsRole",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      },
+      "relation": "eventcore:roleBoundEntity",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-author",
+        "revisionKey": "r1",
+        "type": "eventcore:Entity"
+      }
+    }
+  ],
+  "graphKey": "synthetic-car",
+  "kind": "InstanceGraph",
+  "nodes": [
+    {
+      "fields": {
+        "scopeKey": "episode-1"
+      },
+      "id": "episode",
+      "type": "eventcore:Episode"
+    },
+    {
+      "fields": {
+        "label": "letter-author"
+      },
+      "id": "letter-author",
+      "type": "eventcore:Entity"
+    },
+    {
+      "fields": {
+        "endOffset": 9,
+        "quote": "I parked.",
+        "revisionKey": "letter-r1",
+        "sourceDigest": "synthetic-only",
+        "sourceRef": "synthetic-letter",
+        "speakerKey": "letter_1",
+        "startOffset": 0
+      },
+      "id": "letter",
+      "type": "eventcore:SourceAssertion"
+    },
+    {
+      "fields": {
+        "candidateKey": "reported-parking"
+      },
+      "id": "reported",
+      "type": "eventcore:EventCandidate"
+    },
+    {
+      "fields": {
+        "availability": "unknown"
+      },
+      "id": "unknown-before",
+      "type": "eventcore:StateObservation"
+    },
+    {
+      "fields": {
+        "availability": "unknown"
+      },
+      "id": "unknown-after",
+      "type": "eventcore:StateObservation"
+    },
+    {
+      "fields": {
+        "candidateKey": "letter-view"
+      },
+      "id": "letter-view",
+      "state": "proposed",
+      "type": "eventcore:InterpretationCandidate"
+    },
+    {
+      "fields": {
+        "roleName": "actor"
+      },
+      "id": "letter-role",
+      "type": "eventcore:RoleBinding"
+    }
+  ],
+  "ontology": {
+    "id": "org.0al.events.core",
+    "namespace": "eventcore",
+    "sourceDigest": "sha256:be771a8caa40e1ac23cb11fdb2f12a6ef7f8e166b12ef46f9d7d022a23944424",
+    "version": "0.1.0"
+  },
+  "profile": "eventcore-v1",
+  "projections": [],
+  "revisionKey": "r1"
+}

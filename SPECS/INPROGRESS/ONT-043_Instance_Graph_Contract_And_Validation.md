@@ -1,7 +1,7 @@
 # ONT-043: Instance Graph Contract And Validation
 
 **Date:** 2026-10-27
-**Status:** Planned
+**Status:** Complete — local implementation and validation; hosted PR review pending
 **Priority:** P1
 **Reasoning Effort:** high
 **Dependencies:** ONT-042, merged PR #66 (`a2e1af3`)

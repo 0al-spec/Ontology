@@ -10,6 +10,9 @@ Commands:
   check               Validate a package YAML.
   compile             Compile a package YAML to TypeScript artifacts.
   validate-specgraph  Validate SpecGraph semantic bindings against ontology IR.
+  validate-instances Validate a bounded eventcore-v1 InstanceGraph JSON file.
+  export-instance-contract
+                      Export pinned instance graph TypeScript and JSON Schema.
   diff                Compare two package YAML files for compatibility.
   publish             Publish compiled ontology IR to a registry.
   pull                Download published ontology IR from a registry.
@@ -32,6 +35,8 @@ let commandUsage: [String: String] = [
     "check": "Usage:\n  ontologyc check <package.yaml>",
     "compile": "Usage:\n  ontologyc compile <package.yaml> --target typescript --out <directory>",
     "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory> [--source-uri <uri>] [--source-ref <ref>]",
+    "validate-instances": "Usage:\n  ontologyc validate-instances <graph.json> --ontology-ir <ontology.normalized.json> [--out <report.json>]",
+    "export-instance-contract": "Usage:\n  ontologyc export-instance-contract --ontology-ir <ontology.normalized.json> --out <directory>",
     "diff": "Usage:\n  ontologyc diff --from <old-package.yaml> --to <new-package.yaml> --out <report.yaml>",
     "publish": "Usage:\n  ontologyc publish <package.yaml> --registry <url|file-url> [--token <token>] [--channel candidate|trusted] [--decision <decision.yaml>] [--golden-report <report.yaml>]",
     "pull": "Usage:\n  ontologyc pull <id>@<version> --registry <url|file-url> --out <directory> [--token <token>]",

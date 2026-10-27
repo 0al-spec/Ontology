@@ -368,6 +368,7 @@ Examples:
 
 ## Key Specs
 
+- [InstanceGraph contract and bounded structural validator](SPECS/ontology/instance-graph/README.md)
 - [Event core draft package](SPECS/ontology/packages/events-core/README.md)
   — compiler-backed event/state/interpretation vocabulary with conceptual examples;
   instance graph validation remains planned in ONT-043.

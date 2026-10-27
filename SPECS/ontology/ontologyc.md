@@ -310,6 +310,12 @@ swift run ontologyc validate-specgraph \
 
 ## Current Swift Implementation
 
+ONT-043 adds `validate-instances <graph.json> --ontology-ir <ir.json> [--out <report.json>]`
+and `export-instance-contract --ontology-ir <ir.json> --out <directory>`.
+The [InstanceGraph contract](instance-graph/README.md) documents the pinned
+eventcore-v1 profile, diagnostic/report boundary and generated consumer shapes.
+Existing package compilation and its ten generated artifacts remain unchanged.
+
 The ONT-006..ONT-010 refactor keeps the public executable name and command behavior stable while splitting implementation ownership across SwiftPM targets:
 
 | Target | Ownership |
@@ -352,6 +358,8 @@ This keeps the compiler aligned with the same specification pattern used by Hype
 | `ReferenceDecisionSpecs.swift` | Local, imported, unresolved, or invalid concept-ref classification. |
 | `SpecGraphDecisionSpecs.swift` | Resolved-vs-gap semantic ref classification. |
 | `CompatibilityDecisionSpecs.swift` | Compatible-vs-breaking compatibility change classification. |
+| `InstanceGraph*Specs.swift` | Package-internal graph shape, identity, reference and cardinality checks after exact IR pin validation. |
+| `EventCore*Specs.swift` | Bounded observation, registry, scope, causal endpoint, fact and exact Delta checks; no source truth or responsibility inference. |
 
 ## Behavior-Preserving Refactor Policy
 

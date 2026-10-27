@@ -23,6 +23,9 @@ if commandArgs.contains("--help") || commandArgs.contains("-h") {
 let compiler = OntologyCompiler()
 
 switch command {
+case "validate-instances", "export-instance-contract":
+    runInstanceGraphCommand(command, arguments: commandArgs, compiler: compiler)
+
 case "check":
     let parsed = parseArguments(commandArgs, allowedOptions: [], command: command)
     requirePositionals(1, in: parsed, command: command)

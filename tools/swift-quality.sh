@@ -68,6 +68,7 @@ fi
 # Run the build gate inside the scratch path too, so it does not write to
 # the repo's default .build/ and all gate artifacts stay contained.
 swift build --explicit-target-dependency-import-check error --scratch-path "$scratch"
+export ONTOLOGYC_TEST_BINARY_PATH="$scratch/debug/ontologyc"
 
 if [[ "${RUN_COVERAGE:-0}" == "1" ]]; then
     run_coverage "$scratch"

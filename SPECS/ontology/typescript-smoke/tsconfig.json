@@ -11,6 +11,8 @@
   "include": [
     "examcalc-schemas.ts",
     "events-core-schemas.ts",
+    "instance-graph-contract.ts",
+    "../instance-graph/generated/**/*.ts",
     "../packages/examcalc/generated/**/*.ts",
     "../packages/events-core/generated/**/*.ts"
   ]
