@@ -34,7 +34,10 @@ a checked event or establishes factual truth or physical causation.
 - `deltaOfRecord` gives Delta one owning record. Both compared states and their
   projection derive from that record; Delta has no separate state endpoints or
   projection key. ONT-043 must recompute/validate its Added/Removed sets from
-  those states.
+  those states and enforce zero or one Delta per registered record, rejecting
+  duplicate Delta nodes even when their contents match. An absent Delta does
+  not assert an empty difference. The current relation declaration constrains
+  only the Delta-to-record direction.
 - `hypothesisCauseView` and `hypothesisEffectView` reference Interpretations.
   Their endpoint records derive through `interpretsRecord`, preserving the
   participants/roles at both ends. Both records must be in the same registry
@@ -72,6 +75,16 @@ known references a StateSnapshot, unknown has no snapshot, and partial may retai
 individual facts through `observationSuppliesFact` without declaring a complete
 state. A proposition with unknown/conflicting support inside a supplied snapshot
 is different from the snapshot itself being unavailable.
+
+ONT-043 will validate these mutually exclusive candidate observation shapes:
+
+| availability | observationSnapshot | Direct observationSuppliesFact links |
+|---|---|---|
+| known | Exactly one | None; contents belong to the snapshot. |
+| unknown | None | None. |
+| partial | None | At least one. |
+
+The current generated scalar schema does not execute these relation checks.
 
 ## Structural versus semantic validation
 

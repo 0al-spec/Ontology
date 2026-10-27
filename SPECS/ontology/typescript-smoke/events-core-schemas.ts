@@ -48,6 +48,12 @@ const record = RecordedEventSchema.parse({
 });
 rejects(RecordedEventSchema, { ...record, intervalStart: "zero" },
   "RecordedEvent intervalStart must reject a string.");
+rejects(RecordedEventSchema, {
+  $type: "eventcore:RecordedEvent",
+  recordKey: "movement",
+  intervalFinish: 5,
+  clockKey: "ticks",
+}, "RecordedEvent intervalStart must be required.");
 
 const snapshot = StateSnapshotSchema.parse({
   $type: "eventcore:StateSnapshot",

@@ -897,11 +897,19 @@ This workplan tracks the specification work for the Ontology repository. The ini
     declares a complete supplied state without a separate completeness flag.
     StateObservation availability is candidate-only. Reject contradictory or
     legacy wire fields explicitly rather than silently stripping them.
+  - Validate candidate StateObservation alternatives explicitly: known has
+    exactly one observationSnapshot and no direct observationSuppliesFact links;
+    unknown has neither a snapshot nor direct facts; partial has at least one
+    direct fact and no snapshot. Reject unknown availability values and test
+    each valid alternative plus contradictory combinations.
   - Enforce exactly one recordInRegistry membership and unique recordKey within
     its EventRegistry revision (registryKey, revisionKey), plus registry/snapshot
     reference identity. Do not treat recordKey as a global ID.
   - Derive Delta's two states exclusively through deltaOfRecord and recompute
     its exact Added/Removed; reject differences authored for unrelated states.
+    Allow zero or one Delta per registered record (registryKey, revisionKey,
+    recordKey); reject a second Delta node even when its contents are identical.
+    Absence of a Delta is not an assertion of an empty difference.
   - Resolve hypothesisCauseView/hypothesisEffectView through interpretsRecord;
     require matching registry revision, distinct endpoints and comparable valid
     intervals under the chosen clock/profile. Validate the shared ProposalReview

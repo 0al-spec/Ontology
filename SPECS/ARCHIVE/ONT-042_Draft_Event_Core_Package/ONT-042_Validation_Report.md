@@ -21,7 +21,7 @@
 | Swift quality | Baseline PASS | Before review, `tools/swift-quality.sh`, with coverage, passed Node24 action checks, SwiftFormat, SwiftLint, build/import checking and all 116 existing tests. Compiler sources are unchanged by the review fixes; this broad gate was not repeated. |
 | Coverage | Reported | Existing llvm-cov TOTAL line coverage 89.00%; region coverage 76.39%. This configured report includes dependency/vendor code and is not package semantics coverage. |
 | Docs | PASS | 35 relative file/heading links resolved at execution, whitespace checks pass. Post-archive checking resolved 70 relative file/heading references across changed docs. |
-| CI integration | Added | Workflow now checks draft/package consistency, validates/compiles the package and compares its generated baseline. Hosted execution remains pending publication. |
+| CI integration | PASS on `76ec3b2` | Hosted quality and DocC jobs succeeded; Pages deployment was skipped for the PR. Later heads require their own CI results. |
 
 ## Executed commands and routing
 
@@ -102,6 +102,32 @@ The reviewer's Linux build required platform patches in a separate copy. Those
 results were not repeated here and do not establish stock Linux support. ONT-046
 tracks portability and Linux CI separately; root README now names macOS as the
 current build/CI platform.
+
+## Independent re-review and small follow-ups — 2026-10-27
+
+The user supplied a second review of `76ec3b2` in chat: no blocking issues
+remained. Hosted CI was read directly on that head: quality and DocC succeeded,
+and PR Pages deployment was skipped. The reviewer's patched Linux results remain
+external evidence rather than a local stock-Linux validation.
+
+Three nonblocking follow-ups were addressed:
+
+- Runtime smoke now rejects an actually omitted intervalStart. Typecheck and
+  the full examcalc/events-core smoke pass. In an isolated external test copy,
+  the unmodified schema passed; making intervalStart optional caused the smoke
+  to fail specifically at the new missing-field assertion. The tracked generated
+  schema was not edited by the mutation test.
+- ONT-043 will enforce zero or one Delta per registered record and reject a
+  second Delta node even if its contents match. Missing Delta does not mean
+  an empty difference.
+- ONT-043 now lists candidate observation alternatives explicitly: known has
+  exactly one snapshot and no direct facts; unknown has neither; partial has
+  at least one direct fact and no snapshot. Positive and contradictory cases
+  must be tested. These graph checks remain future acceptance criteria.
+
+Only smoke code, documentation and the workplan changed in this follow-up.
+The package YAML, generated files and source digest are unchanged; compiler
+regeneration and the full Swift suite were not repeated for it.
 
 ## Remaining boundary
 
