@@ -53,6 +53,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-27 | ONT-044 | Archived REVIEW_ONT-044; FOLLOW-UP skipped (consumer/provenance already tracked) |
 | 2026-10-27 | ONT-044 | Archived responsibility package PRD/report (local PASS; hosted review pending) |
 | 2026-10-27 | ONT-043 | Archived REVIEW_ONT-043; FOLLOW-UP skipped (no new actionable findings) |
 | 2026-10-27 | ONT-043 | Archived instance graph PRD/report (local PASS; hosted review pending) |
