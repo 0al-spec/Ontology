@@ -128,7 +128,9 @@ struct EventCoreGraphCheck {
             let causeFields = graphFields(cause)
             let effectFields = graphFields(effect)
             require(graphText(graphFields(hypothesis), "profileRef") == index.profile.rawValue,
-                    "hypothesis.profile", hypothesis, "Hypothesis must name the explicitly selected pinned profile.")
+                    "hypothesis.profile", hypothesis, index.profile == .legacy
+                        ? "Only the bounded eventcore-v1 profile is supported."
+                        : "Hypothesis must name the explicitly selected pinned profile.")
             require(graphText(cause, "id") != graphText(effect, "id"),
                     "hypothesis.distinct", hypothesis, "Cause and effect must be distinct registered records.")
             for relation in ["recordInRegistry", "recordInEpisode"] {

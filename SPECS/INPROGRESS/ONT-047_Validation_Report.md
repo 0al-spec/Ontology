@@ -16,7 +16,7 @@
   strict input shape and deterministic reports/consumer contracts.
 - Known-snapshot identity and partial proposition/polarity preservation. Candidates
   with unavailable physical states may remain source-only without a record/Delta.
-- Old eventcore-v1 remains the explicit default and retains its limitation/report
+- Old eventcore-v1 remains the explicit default and retains its CLI/diagnostic text and limitation/report
   contract. No migration, replay reinterpretation or background state generation.
 
 ## Executed checks
@@ -33,7 +33,7 @@
 | Existing tools/instance-graph-smoke.sh | PASS, unchanged v1 export; limitation still passed, missing interval failed |
 | Relative Markdown links before archive | 49/49 resolve |
 
-Configured llvm-cov TOTAL line coverage is 89.87%, region 79.37%; this configured
+Configured llvm-cov TOTAL line coverage is 89.87%, region 79.32%; this configured
 report includes dependency/vendor code. Coverage is not provenance or factual
 accuracy evidence. The native Swift build-system deprecation warning is unchanged;
 there are no source compiler errors or lint/format failures.
@@ -76,7 +76,7 @@ cryptographic identity implementation or responsibility calculation is included.
 
 TB5 UUID preflight passed. Swift build/test/module caches, temporary reports and
 LLVM profiles were routed outside the checkout. Full quality evidence is at
-/Volumes/TB5/Developer/Builds/GitHub/Ontology-881ba79a220bd2df/ont-047-quality.log.
+/Volumes/TB5/Developer/Builds/GitHub/Ontology-881ba79a220bd2df/ont-047-quality-final.log.
 Tracked generated IR/SDK/consumer files are intentional source deliverables.
 
 ## Next step

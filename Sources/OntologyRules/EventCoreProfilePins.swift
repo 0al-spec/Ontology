@@ -23,6 +23,7 @@ package enum EventCoreProfileSelection: String {
     }
 
     package var definitionPin: [String: String] {
-        ["id": rawValue, "version": "1.0.0", "definitionSHA256": "240d518666905c320df299b5d4d9e08e7c2564b0ca97ca2ab15d0a275dbe2551"]
+        guard self == .provenance else { return [:] }
+        return ["id": rawValue, "version": "1.0.0", "definitionSHA256": "240d518666905c320df299b5d4d9e08e7c2564b0ca97ca2ab15d0a275dbe2551"]
     }
 }
