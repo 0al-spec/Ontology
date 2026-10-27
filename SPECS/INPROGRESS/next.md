@@ -1,28 +1,28 @@
-# Current Task: ONT-043 — Instance Graph Contract And Validation
+# Next Candidate: ONT-044 — Draft Responsibility Profile Package
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
 **Dependencies:** ONT-042, merged PR #66 (`a2e1af3`)
-**Status:** Selected; planning bounded eventcore-v1 validation
+**Status:** Not selected; ONT-043 is awaiting hosted CI and independent review
 
 ## Description
 
-Choose the concrete InstanceGraph wire contract and implement the bounded
-identity/reference/observation-availability checks from the
-[workplan](../Workplan.md#ont-043-instance-graph-contract-and-validation).
-The [event core package](../ontology/packages/events-core/README.md) provides
-vocabulary and structural SDK artifacts; its semantic policies remain manual.
-PR #66 review fixes make registry membership, direct snapshots, record-owned
-Delta and causal endpoint Interpretations explicit in ONT-043 acceptance.
-ONT-046 tracks Linux compiler portability independently.
+Author the generic duty/condition/omission/response vocabulary and its bounded
+mapping to the existing NormLab attribution profiles, following the
+[workplan](../Workplan.md#ont-044-draft-responsibility-profile-package).
+Actor, duty bearer and human anchor remain distinct. Parking predicates/sanctions
+and automatic legal responsibility do not belong to the generic event profile.
 
 ## Next Step
 
-PLAN/EXECUTE ONT-043 using the existing compiler and rule layer. Keep structural
-graph validation distinct from source truth, causal proof and responsibility.
-ONT-044 remains a separate responsibility-profile package.
+Review the archived [ONT-043 implementation and evidence](../ARCHIVE/ONT-043_Instance_Graph_Contract_And_Validation/ONT-043_Validation_Report.md)
+on its published head before merging or selecting the next sequential task.
+The [InstanceGraph validator](../ontology/instance-graph/README.md) establishes
+bounded structural consistency, not source truth or physical causation.
+ONT-045 remains the separate offline NormLab pilot; ONT-046 tracks Linux support.
 
 ## Recently Archived
 
-- ONT-042: draft event package, local compiler/quality evidence, 2026-10-27.
+- ONT-043: structural instance graph validation, 136-test quality gate, 2026-10-27.
+- ONT-042: draft event package, merged PR #66, 2026-10-27.
 - ONT-041: proposal, merged PR #65 with unknown-observation clarification.
