@@ -1005,7 +1005,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-043
 - **Parallelizable:** yes, independently of ONT-044 and source-only ONT-045 export
-- **Status:** Not Started
+- **Status:** INPROGRESS — explicitly selected; independent of ONT-044 PR #68
 - **Origin:** PR #67 independent review of unknown candidates enriched with
   unsupported empty StateSnapshots, accepted structurally on `853a5fc`.
 - **Outputs:** Versioned provenance vocabulary, typed source/operator origin

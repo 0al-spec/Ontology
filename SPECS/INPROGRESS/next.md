@@ -1,30 +1,24 @@
-# Next Candidate: ONT-044 — Draft Responsibility Profile Package
+# Selected: ONT-047 — Snapshot Provenance And Enrichment Profile
 
-**Priority:** P1
-**Phase:** Event and Responsibility Core
-**Dependencies:** ONT-042, merged PR #66 (`a2e1af3`)
-**Status:** Not selected; ONT-043 is awaiting hosted CI and independent review
+**Priority:** P2 (explicit user selection)
+**Dependencies:** ONT-043, merged PR #67 (`0b69253`)
+**Status:** Selected; independent of ONT-044 PR #68
 
-## Description
+## Goal
 
-Author the generic duty/condition/omission/response vocabulary and its bounded
-mapping to the existing NormLab attribution profiles, following the
-[workplan](../Workplan.md#ont-044-draft-responsibility-profile-package).
-Actor, duty bearer and human anchor remain distinct. Parking predicates/sanctions
-and automatic legal responsibility do not belong to the generic event profile.
+Add a separately pinned event-core revision and provenance-aware instance profile.
+Keep source presence, trusted origin confirmation and factual truth distinct.
+Old eventcore-v1 reports and its expected-pass limitation fixture remain unchanged.
 
 ## Next Step
 
-Review the archived [ONT-043 implementation and evidence](../ARCHIVE/ONT-043_Instance_Graph_Contract_And_Validation/ONT-043_Validation_Report.md)
-on its published head before merging or selecting the next sequential task.
-The [InstanceGraph validator](../ontology/instance-graph/README.md) establishes
-bounded structural consistency, not source truth or physical causation.
-ONT-045 remains the separate offline NormLab pilot; ONT-046 tracks Linux support.
-ONT-047 tracks snapshot provenance; the pilot must keep missing physical states
-source-only and test its exporter rather than relying on structural validation.
+Plan ONT-047, implement typed snapshot origins and explicit authority-bound
+candidate enrichment, then run compiler, runtime, negative and compatibility gates.
+NormLab physical candidates may stay source-only without StateSnapshot or Delta.
+No NormLab edits, deployment or historical migration are part of this task.
 
 ## Recently Archived
 
-- ONT-043: bounded structural validation, 143-test quality gate, provenance gap explicitly tracked, 2026-10-27.
-- ONT-042: draft event package, merged PR #66, 2026-10-27.
-- ONT-041: proposal, merged PR #65 with unknown-observation clarification.
+- ONT-043: merged PR #67, structural validation with an explicit provenance limitation.
+- ONT-042: merged PR #66, draft event vocabulary.
+- ONT-041: merged PR #65, proposal and unknown-observation clarification.
