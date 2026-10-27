@@ -1,0 +1,743 @@
+{
+  "apiVersion": "ontology.specgraph.io/instance-graph/v1alpha1",
+  "edges": [
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "unsecured",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      },
+      "relation": "eventcore:snapshotContainsFact",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "brake",
+        "revisionKey": "r1",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "before",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      },
+      "relation": "eventcore:snapshotContainsFact",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "road",
+        "revisionKey": "r1",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "after",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      },
+      "relation": "eventcore:snapshotContainsFact",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "parking",
+        "revisionKey": "r1",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordInRegistry",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "registry",
+        "revisionKey": "r1",
+        "type": "eventcore:EventRegistry"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordInEpisode",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "episode",
+        "revisionKey": "r1",
+        "type": "eventcore:Episode"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordOfActionKind",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission-kind",
+        "revisionKey": "r1",
+        "type": "eventcore:ActionKind"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordBeforeSnapshot",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "unsecured",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordAfterSnapshot",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "unsecured",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission-view",
+        "revisionKey": "r1",
+        "type": "eventcore:Interpretation"
+      },
+      "relation": "eventcore:interpretsRecord",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordInRegistry",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "registry",
+        "revisionKey": "r1",
+        "type": "eventcore:EventRegistry"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordInEpisode",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "episode",
+        "revisionKey": "r1",
+        "type": "eventcore:Episode"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordOfActionKind",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement-kind",
+        "revisionKey": "r1",
+        "type": "eventcore:ActionKind"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordBeforeSnapshot",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "before",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "relation": "eventcore:recordAfterSnapshot",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "after",
+        "revisionKey": "r1",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement-view",
+        "revisionKey": "r1",
+        "type": "eventcore:Interpretation"
+      },
+      "relation": "eventcore:interpretsRecord",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "owner-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      },
+      "relation": "eventcore:roleBoundEntity",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "owner",
+        "revisionKey": "r1",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission-view",
+        "revisionKey": "r1",
+        "type": "eventcore:Interpretation"
+      },
+      "relation": "eventcore:interpretationBindsRole",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "owner-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "car-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      },
+      "relation": "eventcore:roleBoundEntity",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "car",
+        "revisionKey": "r1",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement-view",
+        "revisionKey": "r1",
+        "type": "eventcore:Interpretation"
+      },
+      "relation": "eventcore:interpretationBindsRole",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "car-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "place-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      },
+      "relation": "eventcore:roleBoundEntity",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "place",
+        "revisionKey": "r1",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement-view",
+        "revisionKey": "r1",
+        "type": "eventcore:Interpretation"
+      },
+      "relation": "eventcore:interpretationBindsRole",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "place-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement-delta",
+        "revisionKey": "r1",
+        "type": "eventcore:Delta"
+      },
+      "relation": "eventcore:deltaOfRecord",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement",
+        "revisionKey": "r1",
+        "type": "eventcore:RecordedEvent"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement-delta",
+        "revisionKey": "r1",
+        "type": "eventcore:Delta"
+      },
+      "relation": "eventcore:deltaAddsFact",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "parking",
+        "revisionKey": "r1",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement-delta",
+        "revisionKey": "r1",
+        "type": "eventcore:Delta"
+      },
+      "relation": "eventcore:deltaRemovesFact",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "road",
+        "revisionKey": "r1",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "causal-link",
+        "revisionKey": "r1",
+        "type": "eventcore:CausalHypothesis"
+      },
+      "relation": "eventcore:hypothesisCauseView",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "omission-view",
+        "revisionKey": "r1",
+        "type": "eventcore:Interpretation"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "causal-link",
+        "revisionKey": "r1",
+        "type": "eventcore:CausalHypothesis"
+      },
+      "relation": "eventcore:hypothesisEffectView",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "movement-view",
+        "revisionKey": "r1",
+        "type": "eventcore:Interpretation"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateInEpisode",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "episode",
+        "revisionKey": "r1",
+        "type": "eventcore:Episode"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateBeforeObservation",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "unknown-before",
+        "revisionKey": "r1",
+        "type": "eventcore:StateObservation"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      },
+      "relation": "eventcore:candidateAfterObservation",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "unknown-after",
+        "revisionKey": "r1",
+        "type": "eventcore:StateObservation"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-view",
+        "revisionKey": "r1",
+        "type": "eventcore:InterpretationCandidate"
+      },
+      "relation": "eventcore:describesCandidateEvent",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "reported",
+        "revisionKey": "r1",
+        "type": "eventcore:EventCandidate"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-view",
+        "revisionKey": "r1",
+        "type": "eventcore:InterpretationCandidate"
+      },
+      "relation": "eventcore:candidateCitesAssertion",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter",
+        "revisionKey": "r1",
+        "type": "eventcore:SourceAssertion"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-view",
+        "revisionKey": "r1",
+        "type": "eventcore:InterpretationCandidate"
+      },
+      "relation": "eventcore:candidateBindsRole",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "from": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-role",
+        "revisionKey": "r1",
+        "type": "eventcore:RoleBinding"
+      },
+      "relation": "eventcore:roleBoundEntity",
+      "to": {
+        "graphKey": "synthetic-car",
+        "nodeId": "letter-author",
+        "revisionKey": "r1",
+        "type": "eventcore:Entity"
+      }
+    }
+  ],
+  "graphKey": "synthetic-car",
+  "kind": "InstanceGraph",
+  "nodes": [
+    {
+      "fields": {
+        "registryKey": "synthetic",
+        "revisionKey": "events-r1"
+      },
+      "id": "registry",
+      "type": "eventcore:EventRegistry"
+    },
+    {
+      "fields": {
+        "scopeKey": "episode-1"
+      },
+      "id": "episode",
+      "type": "eventcore:Episode"
+    },
+    {
+      "fields": {
+        "label": "owner"
+      },
+      "id": "owner",
+      "type": "eventcore:Entity"
+    },
+    {
+      "fields": {
+        "label": "car"
+      },
+      "id": "car",
+      "type": "eventcore:Entity"
+    },
+    {
+      "fields": {
+        "label": "place"
+      },
+      "id": "place",
+      "type": "eventcore:Entity"
+    },
+    {
+      "fields": {
+        "label": "letter-author"
+      },
+      "id": "letter-author",
+      "type": "eventcore:Entity"
+    },
+    {
+      "fields": {
+        "actionKey": "omission"
+      },
+      "id": "omission-kind",
+      "type": "eventcore:ActionKind"
+    },
+    {
+      "fields": {
+        "actionKey": "movement"
+      },
+      "id": "movement-kind",
+      "type": "eventcore:ActionKind"
+    },
+    {
+      "fields": {
+        "polarity": "positive",
+        "propositionKey": "brake"
+      },
+      "id": "brake",
+      "type": "eventcore:Fact"
+    },
+    {
+      "fields": {
+        "polarity": "positive",
+        "propositionKey": "road"
+      },
+      "id": "road",
+      "type": "eventcore:Fact"
+    },
+    {
+      "fields": {
+        "polarity": "positive",
+        "propositionKey": "parking"
+      },
+      "id": "parking",
+      "type": "eventcore:Fact"
+    },
+    {
+      "fields": {
+        "projectionKey": "location",
+        "schemaKey": "location-v1",
+        "scopeKey": "episode-1"
+      },
+      "id": "unsecured",
+      "type": "eventcore:StateSnapshot"
+    },
+    {
+      "fields": {
+        "projectionKey": "location",
+        "schemaKey": "location-v1",
+        "scopeKey": "episode-1"
+      },
+      "id": "before",
+      "type": "eventcore:StateSnapshot"
+    },
+    {
+      "fields": {
+        "projectionKey": "location",
+        "schemaKey": "location-v1",
+        "scopeKey": "episode-1"
+      },
+      "id": "after",
+      "type": "eventcore:StateSnapshot"
+    },
+    {
+      "fields": {
+        "clockKey": "ticks",
+        "intervalFinish": 10,
+        "intervalStart": 0,
+        "recordKey": "omission"
+      },
+      "id": "omission",
+      "type": "eventcore:RecordedEvent"
+    },
+    {
+      "fields": {
+        "interpretationKey": "omission-view"
+      },
+      "id": "omission-view",
+      "type": "eventcore:Interpretation"
+    },
+    {
+      "fields": {
+        "clockKey": "ticks",
+        "intervalFinish": 10,
+        "recordKey": "movement"
+      },
+      "id": "movement",
+      "type": "eventcore:RecordedEvent"
+    },
+    {
+      "fields": {
+        "interpretationKey": "movement-view"
+      },
+      "id": "movement-view",
+      "type": "eventcore:Interpretation"
+    },
+    {
+      "fields": {
+        "roleName": "actor"
+      },
+      "id": "owner-role",
+      "type": "eventcore:RoleBinding"
+    },
+    {
+      "fields": {
+        "roleName": "actor"
+      },
+      "id": "car-role",
+      "type": "eventcore:RoleBinding"
+    },
+    {
+      "fields": {
+        "roleName": "target"
+      },
+      "id": "place-role",
+      "type": "eventcore:RoleBinding"
+    },
+    {
+      "fields": {},
+      "id": "movement-delta",
+      "type": "eventcore:Delta"
+    },
+    {
+      "fields": {
+        "profileRef": "eventcore-v1"
+      },
+      "id": "causal-link",
+      "state": "proposed",
+      "type": "eventcore:CausalHypothesis"
+    },
+    {
+      "fields": {
+        "endOffset": 9,
+        "quote": "I parked.",
+        "revisionKey": "letter-r1",
+        "sourceDigest": "synthetic-only",
+        "sourceRef": "synthetic-letter",
+        "speakerKey": "letter_1",
+        "startOffset": 0
+      },
+      "id": "letter",
+      "type": "eventcore:SourceAssertion"
+    },
+    {
+      "fields": {
+        "candidateKey": "reported-parking"
+      },
+      "id": "reported",
+      "type": "eventcore:EventCandidate"
+    },
+    {
+      "fields": {
+        "availability": "unknown"
+      },
+      "id": "unknown-before",
+      "type": "eventcore:StateObservation"
+    },
+    {
+      "fields": {
+        "availability": "unknown"
+      },
+      "id": "unknown-after",
+      "type": "eventcore:StateObservation"
+    },
+    {
+      "fields": {
+        "candidateKey": "letter-view"
+      },
+      "id": "letter-view",
+      "state": "proposed",
+      "type": "eventcore:InterpretationCandidate"
+    },
+    {
+      "fields": {
+        "roleName": "actor"
+      },
+      "id": "letter-role",
+      "type": "eventcore:RoleBinding"
+    }
+  ],
+  "ontology": {
+    "id": "org.0al.events.core",
+    "namespace": "eventcore",
+    "sourceDigest": "sha256:be771a8caa40e1ac23cb11fdb2f12a6ef7f8e166b12ef46f9d7d022a23944424",
+    "version": "0.1.0"
+  },
+  "profile": "eventcore-v1",
+  "projections": [
+    {
+      "domain": "observation",
+      "projectionKey": "location",
+      "schemaKey": "location-v1"
+    }
+  ],
+  "revisionKey": "r1"
+}

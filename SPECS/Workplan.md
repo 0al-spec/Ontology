@@ -877,7 +877,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-042
 - **Parallelizable:** yes, with ONT-044 after ONT-042
-- **Status:** Not Started
+- **Status:** Complete — bounded structural slice; snapshot provenance remains ONT-047; hosted PR re-review pending
 - **Origin:** ONT-041 proposal, stage 2 and CQ-02/04/07/08/09/11/12/13/14.
 - **Outputs:** InstanceGraph wire/schema/diagnostic contract, validator surface,
   deterministic positive/negative fixtures and generated consumer contracts.
@@ -889,8 +889,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
     preserve speaker, partial candidates and uncited operator assertions.
   - Represent unavailable/partial observations separately from known empty
     snapshots. Exact Delta is unavailable unless both states are known and
-    comparable; reject coercing source-only candidates into checked events by
-    inventing empty states or reusing the operator's review-state snapshots.
+    comparable. Reject missing direct record states and reuse of declared
+    review/normative projections; do not automatically create snapshots from
+    unknown candidates. Externally invented empty snapshots linked through
+    candidateEnrichedByRecord cannot be detected without snapshot provenance:
+    retain an explicit expected-pass limitation fixture. ONT-047 owns the future
+    provenance-aware contract; ONT-043 does not claim factual origin checks.
   - Check both missing-state rejection and the positive control of known,
     complete, comparable equal states producing an empty Delta.
   - Enforce direct recordBeforeSnapshot/recordAfterSnapshot ranges; StateSnapshot
@@ -904,7 +908,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
     each valid alternative plus contradictory combinations.
   - Enforce exactly one recordInRegistry membership and unique recordKey within
     its EventRegistry revision (registryKey, revisionKey), plus registry/snapshot
-    reference identity. Do not treat recordKey as a global ID.
+    reference identity. Do not treat recordKey as a global ID. Enforce unique
+    Episode.scopeKey within the graph revision to prevent episode aliases.
   - Derive Delta's two states exclusively through deltaOfRecord and recompute
     its exact Added/Removed; reject differences authored for unrelated states.
     Allow zero or one Delta per registered record (registryKey, revisionKey,
@@ -916,6 +921,10 @@ This workplan tracks the specification work for the Ontology repository. The ini
     lifecycle without treating reviewed as causal truth.
   - Focused checks show role edits cannot replace event states; record exactly
     which guarantees come from static validation versus a proof profile.
+
+- **Validation:** eventcore-v1 contract, CLI/report, deterministic consumer export,
+  fixture smoke and 27 new tests delivered. Full quality passes 143 tests,
+  line coverage 89.58%; source truth/causation/responsibility remain unverified.
 
 #### ONT-044: Draft Responsibility Profile Package
 - **Description:** Author the generic duty/condition/omission/response vocabulary
@@ -957,6 +966,10 @@ This workplan tracks the specification work for the Ontology repository. The ini
     references are rejected. Fabula candidates with unavailable physical states
     remain source-only, without an invented physical Delta. Any claimed replay
     agreement uses the pinned profile and actual replay evidence.
+  - Test the exporter itself: it must not generate empty StateSnapshots or a
+    candidateEnrichedByRecord link to fabricated physical states for source-only
+    parking data. The ONT-043 structural validator alone cannot enforce this
+    provenance requirement; future promotion needs the ONT-047 contract.
   - No paid inference or production migration is required. Stop after one
     complete offline episode rather than broadening into a new framework phase.
 
@@ -981,6 +994,31 @@ This workplan tracks the specification work for the Ontology repository. The ini
     across supported platforms; document any actual incompatibilities.
   - Linux/macOS CI validate the same contracts; this task does not change event
     semantics or block ONT-043 source/design work.
+
+---
+
+#### ONT-047: Snapshot Provenance And Enrichment Profile
+- **Description:** Design a reviewed event-core revision and a new pinned profile
+  that records snapshot origin and controls candidate-to-record enrichment.
+  The current eventcore-v1 profile cannot distinguish supplied from invented
+  empty snapshots; adding a source link alone does not prove factual truth.
+- **Priority:** P2
+- **Dependencies:** ONT-043
+- **Parallelizable:** yes, independently of ONT-044 and source-only ONT-045 export
+- **Status:** Not Started
+- **Origin:** PR #67 independent review of unknown candidates enriched with
+  unsupported empty StateSnapshots, accepted structurally on `853a5fc`.
+- **Outputs:** Versioned provenance vocabulary, typed source/operator origin
+  decisions, enrichment policy, new IR/profile pin and positive/negative fixtures.
+- **Acceptance Criteria:**
+  - Define explicit snapshot origin, including source-backed and deliberate
+    operator-supplied observations, without equating citations with factual truth.
+  - Reject candidate enrichment lacking the required origin/authority under the
+    new profile; preserve unknown candidates rather than inventing observations.
+  - Preserve the v1 limitation fixture and compatibility boundary; no silent
+    reinterpretation of old reports or automatic migration to a stronger claim.
+  - Keep absent physical states source-only in the NormLab pilot until a producer
+    explicitly supplies provenance supported by the chosen reviewed contract.
 
 ---
 

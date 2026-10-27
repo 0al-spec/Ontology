@@ -70,6 +70,11 @@ jobs:
           "$compiler" compile "$event_package/domain-ontology-package.yaml" --target typescript --out "$RUNNER_TEMP/events-core-generated"
           diff -ru "$event_package/generated" "$RUNNER_TEMP/events-core-generated"
 
+      - name: Validate instance graph fixtures and consumer contract
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: bash tools/instance-graph-smoke.sh
+
       - name: Build SpecSpace ontology viewer sample archive
         run: |
           set -euo pipefail
