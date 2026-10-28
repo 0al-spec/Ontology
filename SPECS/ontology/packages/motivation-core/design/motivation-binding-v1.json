@@ -1,0 +1,93 @@
+{
+  "id": "motivation-binding-design-v1",
+  "version": "0.1.1",
+  "kind": "MotivationBindingDesign",
+  "status": "draft",
+  "executable": false,
+  "eventVocabulary": {
+    "id": "org.0al.events.core",
+    "namespace": "eventcore",
+    "version": "0.2.0",
+    "sourceDigest": "sha256:92a3245fc9acd15748fd1fa3cfb8e4fdc8fda429a5fd6cffd7a97bc13f2f359e",
+    "irSHA256": "e6c932ad8c492d168b63dbe112335c270d88ff758e016f3502031aefe9dea916"
+  },
+  "motiveMeaning": "A reason prompting any Entity actor toward action or omission; conscious intention is not required.",
+  "consciousIntentionRequired": false,
+  "actorModel": "any eventcore:Entity through an actor RoleBinding reached by an outgoing edge from the selected view, or unresolved",
+  "scopeViewAlternatives": [
+    "eventcore:Interpretation",
+    "eventcore:InterpretationCandidate"
+  ],
+  "contributionKinds": [
+    "action",
+    "omission"
+  ],
+  "supportPresence": {
+    "neither": "unknown",
+    "positiveOnly": "supported",
+    "negativeOnly": "opposed",
+    "both": "contested"
+  },
+  "authority": {
+    "instanceValidatorImplemented": false,
+    "sourceRelevanceChecked": false,
+    "motivationTruthVerified": false,
+    "causationVerified": false,
+    "responsibilityVerified": false,
+    "leanAdapterImplemented": false,
+    "automaticNormEffect": false,
+    "selectedViewRoleEdgeChecked": false
+  },
+  "existingProfileAdmission": {
+    "eventcore-v1": false,
+    "eventcore-provenance-v1": false
+  },
+  "consequence": {
+    "origin": "Distinguish own record change from hypothesized downstream effect change; each exact Delta belongs only to its own record.",
+    "ownChange": {
+      "viewRelation": "motivcore:hypothesisView",
+      "recordRelation": "eventcore:interpretsRecord",
+      "deltaRecordRelation": "eventcore:deltaOfRecord"
+    },
+    "hypothesizedDownstream": {
+      "causalType": "eventcore:CausalHypothesis",
+      "causeViewRelation": "eventcore:hypothesisCauseView",
+      "effectViewRelation": "eventcore:hypothesisEffectView",
+      "effectRecordRelation": "eventcore:interpretsRecord",
+      "deltaRecordRelation": "eventcore:deltaOfRecord",
+      "matchCauseView": "exact selected hypothesisView reference",
+      "attribution": "hypothesized",
+      "preserveCausalHypothesisIdentityAndState": true,
+      "workflowStateProvesCausation": false,
+      "automaticTransitivity": false,
+      "mergeRecordDeltas": false
+    },
+    "pilotOmissionRepresentation": "separate-omission-record-and-causal-hypothesis",
+    "emptyOwnDiffMeansNoDownstreamConsequences": false,
+    "sourceOnlyAvailable": true,
+    "unknownChangesAreEmptyDiff": false,
+    "desiredOutcomeIsActualConsequence": false
+  },
+  "constraints": [
+    "One motive and one selected view per hypothesis.",
+    "Selected actor role, when present, is reached by interpretationBindsRole or candidateBindsRole from the selected hypothesisView and named actor; derive Entity through roleBoundEntity. Other views may reference the same RoleBinding.",
+    "Episode/action/registered record states derive through the selected view; do not duplicate or overwrite them.",
+    "Source speaker, support author and motivated actor are distinct roles.",
+    "Keep positive and negative declared support independent; absent links do not assert absence of motive.",
+    "Known prompting and target records must be distinct, with explicit scope/time/clock alignment for an ordered causal claim.",
+    "A motive does not establish action performance, omission duty/capability/deadline/exception, consciousness, fault or sanction.",
+    "Review is proposal workflow only; future consumers must explicitly validate cross-node bindings.",
+    "For downstream consequences match the exact selected cause view, retain each CausalHypothesis identity/state and follow its effect view to the separate effect record; a shared record or actor is not the same cause view.",
+    "For the pilot omission scope use its own record plus a CausalHypothesis; do not select the movement record simply to obtain a nonempty own Delta.",
+    "An effect change can be structurally checked while attribution to the omission remains hypothesized; an empty own Delta does not deny downstream effects."
+  ],
+  "actorRoleBinding": {
+    "byViewType": {
+      "eventcore:Interpretation": "eventcore:interpretationBindsRole",
+      "eventcore:InterpretationCandidate": "eventcore:candidateBindsRole"
+    },
+    "roleName": "actor",
+    "entityRelation": "eventcore:roleBoundEntity",
+    "exclusiveOwnershipRequired": false
+  }
+}

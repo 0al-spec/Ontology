@@ -19,6 +19,8 @@
     "../packages/events-core/generated/**/*.ts",
     "snapshot-provenance.ts",
     "../packages/events-core/versions/0.2.0/generated/**/*.ts",
-    "../instance-graph/provenance/generated/**/*.ts"
+    "../instance-graph/provenance/generated/**/*.ts",
+    "motivation-core-schemas.ts",
+    "../packages/motivation-core/generated/**/*.ts"
   ]
 }

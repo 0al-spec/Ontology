@@ -1033,6 +1033,40 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+#### ONT-048: Draft Motivation Core Package
+- **Description:** Add actor-scoped prompting reasons for action or omission,
+  for any Entity without requiring conscious intention, as a separate draft layer.
+- **Priority:** P1 (explicit user selection)
+- **Dependencies:** ONT-042, ONT-047; uses events-core 0.2.0 without changing its pins
+- **Parallelizable:** yes, independently of ONT-045
+- **Status:** Complete — draft vocabulary/IR/SDK delivered; hosted PR review pending
+- **Origin:** User request 2026-10-28; motive is a reason prompting an actor's
+  action/omission leading to a consequence. User explicitly includes nonhuman actors.
+- **Outputs:** Staged motivation vocabulary, compiled IR/SDK, examples, pinned
+  dependency/semantic design contract and structural/type/runtime-object smoke.
+- **Acceptance Criteria:**
+  - Separate motive content from its actor/view-scoped attribution; preserve
+    unknown actors, competing motives, opposite support and source speaker identity.
+  - Accept any Entity as actor. Intention, consciousness, goals, choice and legal
+    responsibility are not inferred from a motivating reason.
+  - Support source-only InterpretationCandidates without inventing records,
+    snapshots or Delta. Own change belongs to the contribution record; a
+    hypothesized downstream consequence retains the explicit causal hypothesis
+    and separate effect record/Delta. Empty own change does not deny downstream
+    effects. Pilot omission uses a separate omission record plus causal hypothesis.
+  - Actor role is reached by interpretationBindsRole/candidateBindsRole from the
+    selected view; other views may reference the same RoleBinding.
+  - Compiler/generated-object checks are honest about unimplemented cross-node,
+    source relevance, timing and motivation-truth checks. Existing profiles and
+    saved reports remain unchanged; no new Lean/runtime adapter is implied.
+
+- **Validation:** Five classes, nine relations, six manual policies; staged/check,
+  two fresh generation baselines, exact event pin/import refs and TypeScript
+  object/runtime/type checks pass. Full quality retains 159 existing tests.
+  No motivation instance admission, motive truth or new Lean proof is claimed.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

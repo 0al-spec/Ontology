@@ -1,0 +1,16 @@
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: IntentClassification
+intentType: ArchitectureIntent
+domain: GeneralEventModeling
+subdomain: ActorScopedMotivation
+productType: ReusableDraftOntologyPackage
+criticality: medium
+primaryConcern: Preserve broad prompting reasons and uncertain attribution without inventing intention, physical states or responsibility.
+requiresExistingOntology: true
+confidence: 0.8
+uncertainties:
+  - id: future-consumer-profile
+    question: Which future consumer contract will validate cross-node motivation bindings without changing the frozen event profiles?
+provenance:
+  - source: user-request-2026-10-28
+    note: User explicitly confirms that any Entity may be motivated and conscious intention is not required; confidence is an authoring estimate.

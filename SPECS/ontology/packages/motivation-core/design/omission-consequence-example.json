@@ -1,0 +1,47 @@
+{
+  "kind": "MotivationDesignExample",
+  "status": "synthetic-unsupported-proposal",
+  "executableMotivationProfile": false,
+  "eventGraph": "SPECS/ontology/fixtures/instance-graphs/synthetic-car.json",
+  "motivation": {
+    "hypothesisKey": "owner-omission-distraction",
+    "contributionKind": "omission",
+    "hypothesisView": "omission-view",
+    "hypothesisActorRole": "owner-role",
+    "motive": {
+      "motiveKey": "attention-elsewhere",
+      "description": "Attention elsewhere is a hypothetical prompting reason, not supplied evidence."
+    },
+    "state": "proposed",
+    "positiveSupport": [],
+    "negativeSupport": []
+  },
+  "expected": {
+    "actorEntity": "owner",
+    "ownRecord": "omission",
+    "ownChange": {
+      "beforeSnapshot": "unsecured",
+      "afterSnapshot": "unsecured",
+      "addedFacts": [],
+      "removedFacts": [],
+      "storedDelta": null
+    },
+    "causalHypothesis": "causal-link",
+    "causalState": "proposed",
+    "effectView": "movement-view",
+    "effectRecord": "movement",
+    "effectDelta": "movement-delta",
+    "effectChange": {
+      "addedFacts": [
+        "parking"
+      ],
+      "removedFacts": [
+        "road"
+      ]
+    },
+    "consequenceAttribution": "hypothesized",
+    "causationVerified": false,
+    "motivationTruthVerified": false
+  },
+  "note": "The graph is an existing synthetic structural fixture. It contains no evidence for distraction. This example adds no operator authorship, source assertion or factual motive; no motivcore instances are admitted by its eventcore-v1 profile."
+}

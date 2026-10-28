@@ -421,3 +421,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 MIT. See [LICENSE](LICENSE).
 
 - [Snapshot provenance and enrichment profile](SPECS/ontology/instance-graph/provenance/README.md): explicit origin admission with unchanged eventcore-v1 history.
+
+- [Motivation core draft](SPECS/ontology/packages/motivation-core/README.md): broad prompting reasons for any actor, scoped action/omission hypotheses and preserved uncertainty.

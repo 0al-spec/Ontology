@@ -85,6 +85,11 @@ jobs:
           TMPDIR: ${{ runner.temp }}
         run: bash tools/snapshot-provenance-smoke.sh
 
+      - name: Validate motivation draft and generated baseline
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: bash tools/motivation-core-smoke.sh
+
       - name: Build SpecSpace ontology viewer sample archive
         run: |
           set -euo pipefail

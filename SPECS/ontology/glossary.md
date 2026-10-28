@@ -53,3 +53,22 @@ This glossary defines the terms used by the Ontology Layer and the SpecGraph sem
 | Signable | The concept can carry a signature or signer reference. |
 | TimeBound | The concept has validity or activity windows. |
 | Versioned | The concept has version identity and compatibility semantics. |
+
+
+## Event explanation vocabulary (draft package)
+
+The following domain terms belong to the versioned
+[motivation-core draft](packages/motivation-core/README.md); they do not redefine
+Foundation kinds or extend existing instance profiles.
+
+| Term | Definition |
+|---|---|
+| Motive | A reason prompting any Entity actor toward action or omission. Conscious intention is not required; the reason can be internal, an instruction or an external influence. |
+| MotivationHypothesis | A contextual proposal that a particular motive prompted the actor's contribution in one Interpretation or InterpretationCandidate, with independently retained supporting/opposing evidence and possibly unresolved actor. |
+
+Own change is an available Delta of the selected contribution record. A
+hypothesized downstream consequence follows an explicit CausalHypothesis to its
+effect view and that separate record's Delta; an empty own change does not deny
+downstream effects. A motivating account never manufactures physical states or
+implies a desired/legally required outcome. Source presence, proposal review,
+motivation truth and causal attribution remain distinct.

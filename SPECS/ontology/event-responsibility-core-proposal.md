@@ -316,3 +316,24 @@ Success of the first cycle is a reusable contract and one faithful consumer
 mapping. Universal ontology extraction, unrestricted legal coverage, a new graph
 editor, automatic responsibility assignment, and a generic theorem-code generator
 remain outside this pilot.
+
+
+## Motive extension — ONT-048 (2026-10-28)
+
+The user's extension introduces **Motive** as a reason prompting an actor's action
+or omission that may lead to a consequence. The user explicitly includes any
+Entity actor, without requiring consciousness or intention. An instruction to an
+AI or a physical influence on a machine can therefore be interpreted as a motive.
+
+The [motivation-core draft](packages/motivation-core/README.md) separates reason
+content from its actor/view-scoped MotivationHypothesis. It retains source-only
+candidates, unresolved actors and independent positive/negative support. Own
+change derives from the selected contribution record's states and optional exact
+Delta. Hypothesized downstream consequences follow an explicit CausalHypothesis
+from that exact view to the separate effect view/record and its Delta. Empty own
+change does not deny downstream effects. The pilot uses a separate omission
+record plus causal hypothesis, without silently substituting a movement-record
+interpretation as the same motive scope. Motive attribution does not establish
+a causal chain, performance,
+omission grounds, fault, responsibility or sanction. Its policies are manual;
+this does not change the historical ONT-041 proposal or frozen event profiles.
