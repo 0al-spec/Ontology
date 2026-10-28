@@ -984,10 +984,10 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Description:** Make the unmodified compiler and CLI build/test on Linux,
   addressing CryptoKit availability, FoundationNetworking imports and Swift 6
   stderr concurrency, with Linux CI alongside macOS.
-- **Priority:** P2
+- **Priority:** P1 — user-selected SpecGraph Linux publication dependency
 - **Dependencies:** None known; separate from the events-core draft review
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** Complete — Linux source port/local evidence; hosted checks and review tracked in PR
 - **Origin:** External PR #66 review reported successful generation/tests only
   after platform-specific patches in a separate Linux worktree; those results
   do not establish stock-repository Linux support.
@@ -999,6 +999,11 @@ This workplan tracks the specification work for the Ontology repository. The ini
     across supported platforms; document any actual incompatibilities.
   - Linux/macOS CI validate the same contracts; this task does not change event
     semantics or block ONT-043 source/design work.
+
+- **Validation:** Apple Swift 6.4/macOS arm64, Linux aarch64 Swift 6.0.3 and
+  6.3.3 each pass 159 existing tests; all six generated baselines and shared
+  contracts match. Compiler absence fails explicitly. See
+  [validation report](ARCHIVE/ONT-046_Linux_Compiler_Portability/ONT-046_Validation_Report.md).
 
 ---
 

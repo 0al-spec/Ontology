@@ -28,12 +28,14 @@ are optional, broad reasons for any Entity; conscious intention is not required.
 If the pilot includes them, agree an explicit consumer contract: no existing
 instance profile admits motivcore/respcore nodes or automatically validates their
 manual policies. Review, evidence and truth stay distinct; motives do not alter
-the saved norm result or imply physical observations. ONT-046 remains separate
-Linux portability work. No paid inference or deployment is needed for this pilot.
+the saved norm result or imply physical observations. ONT-046 delivers Linux source portability separately; pin a version containing
+that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
 
-- ONT-048: draft motivation vocabulary, IR/SDK and examples; local checks pass, PR review pending.
+- ONT-046: Linux source portability, shared baseline gate and CI matrix; local macOS/Linux checks pass.
+
+- ONT-048: merged PR #70; included in source release 0.1.0. Follow-up: GitHub Issue #71.
 - ONT-044: responsibility draft, merged PR #68.
 - ONT-047: snapshot provenance, merged PR #69.
 - ONT-043: structural event profile, merged PR #67.

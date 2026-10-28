@@ -22,14 +22,14 @@ func runInstanceGraphCommand(_ command: String, arguments: ArraySlice<String>, c
             )
             if !result.passed {
                 compiler.printDiagnostics(result.diagnostics)
-                fputs("ontologyc validate-instances: FAIL\n", stderr)
+                writeDiagnostic("ontologyc validate-instances: FAIL\n")
                 exit(1)
             }
             let scope = profile == "eventcore-v1" ? "structural only" : "bounded profile; source truth unverified"
             print("ontologyc validate-instances: PASS (\(scope))")
         }
     } catch {
-        fputs("ontologyc \(command): FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc \(command): FAIL \(error)\n")
         exit(1)
     }
 }

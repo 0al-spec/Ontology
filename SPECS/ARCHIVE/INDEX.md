@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-046 | [ONT-046_Linux_Compiler_Portability/](ONT-046_Linux_Compiler_Portability/) | 2026-10-28 | PASS (local macOS/Linux portability) |
 | ONT-048 | [ONT-048_Draft_Motivation_Core_Package/](ONT-048_Draft_Motivation_Core_Package/) | 2026-10-28 | PASS (draft vocabulary/generation) |
 | ONT-044 | [ONT-044_Draft_Responsibility_Profile_Package/](ONT-044_Draft_Responsibility_Profile_Package/) | 2026-10-27 | PASS (draft vocabulary/source mapping) |
 | ONT-047 | [ONT-047_Snapshot_Provenance_And_Enrichment_Profile/](ONT-047_Snapshot_Provenance_And_Enrichment_Profile/) | 2026-10-27 | PASS (local provenance admission) |
@@ -55,6 +56,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-28 | ONT-046 | Archived self-review; hosted/independent review remains separate |
+| 2026-10-28 | ONT-046 | Archived Linux compiler source port, local platform checks and CI matrix |
 | 2026-10-28 | ONT-048 | Archived REVIEW_ONT-048; FOLLOW-UP skipped (no new actionable findings) |
 | 2026-10-28 | ONT-048 | Archived Draft_Motivation_Core_Package (local PASS); independent review pending |
 | 2026-10-27 | ONT-044 | Archived REVIEW_ONT-044; FOLLOW-UP skipped (consumer/provenance already tracked) |

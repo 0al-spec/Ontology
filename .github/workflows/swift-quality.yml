@@ -58,37 +58,10 @@ jobs:
       - name: Run TypeScript SDK smoke gate
         run: bash ./tools/typescript-smoke.sh
 
-      - name: Validate event core draft and generated baseline
-        run: |
-          set -euo pipefail
-          export LLVM_PROFILE_FILE="$RUNNER_TEMP/events-core-%p.profraw"
-          event_package="SPECS/ontology/packages/events-core"
-          compiler=".build/ci-quality/debug/ontologyc"
-          cmp "$event_package/authoring/domain-ontology-package-draft.yaml" "$event_package/domain-ontology-package.yaml"
-          "$compiler" validate-draft "$event_package/authoring" --out "$RUNNER_TEMP/events-core-draft-report.yaml"
-          "$compiler" check "$event_package/domain-ontology-package.yaml"
-          "$compiler" compile "$event_package/domain-ontology-package.yaml" --target typescript --out "$RUNNER_TEMP/events-core-generated"
-          diff -ru "$event_package/generated" "$RUNNER_TEMP/events-core-generated"
-
-      - name: Validate instance graph fixtures and consumer contract
+      - name: Validate identical generated output and contracts
         env:
           TMPDIR: ${{ runner.temp }}
-        run: bash tools/instance-graph-smoke.sh
-
-      - name: Validate responsibility draft and generated baseline
-        env:
-          TMPDIR: ${{ runner.temp }}
-        run: bash tools/responsibility-core-smoke.sh
-
-      - name: Validate snapshot provenance profile and negative fixtures
-        env:
-          TMPDIR: ${{ runner.temp }}
-        run: bash tools/snapshot-provenance-smoke.sh
-
-      - name: Validate motivation draft and generated baseline
-        env:
-          TMPDIR: ${{ runner.temp }}
-        run: bash tools/motivation-core-smoke.sh
+        run: bash tools/portable-contract-smoke.sh
 
       - name: Build SpecSpace ontology viewer sample archive
         run: |

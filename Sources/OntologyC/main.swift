@@ -57,7 +57,7 @@ case "compile":
         }
         print("ontologyc compile: PASS \(outDirectory)")
     } catch {
-        fputs("ontologyc compile: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc compile: FAIL \(error)\n")
         exit(1)
     }
 
@@ -81,7 +81,7 @@ case "validate-specgraph":
         )
         print("ontologyc validate-specgraph: PASS \(bindingPath) resolved=\(result.resolved) gaps=\(result.gaps)")
     } catch {
-        fputs("ontologyc validate-specgraph: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc validate-specgraph: FAIL \(error)\n")
         exit(1)
     }
 
@@ -103,7 +103,7 @@ case "diff":
         }
         print("ontologyc diff: PASS \(outPath)")
     } catch {
-        fputs("ontologyc diff: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc diff: FAIL \(error)\n")
         exit(1)
     }
 
@@ -129,10 +129,10 @@ case "publish":
         print("ontologyc publish: PASS \(result.packageRef.rawValue) channel=\(channel.rawValue)")
     } catch let compilerError as OntologyCompilerError {
         if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
-        fputs("ontologyc publish: FAIL \(compilerError)\n", stderr)
+        writeDiagnostic("ontologyc publish: FAIL \(compilerError)\n")
         exit(1)
     } catch {
-        fputs("ontologyc publish: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc publish: FAIL \(error)\n")
         exit(1)
     }
 
@@ -151,7 +151,7 @@ case "pull":
         )
         print("ontologyc pull: PASS \(pullRef)")
     } catch {
-        fputs("ontologyc pull: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc pull: FAIL \(error)\n")
         exit(1)
     }
 
@@ -174,16 +174,16 @@ case "compat-check":
             outPath: parsed.options["--out"].map(OntologyOutputPath.init(path:))
         )
         if !compatible {
-            fputs("ontologyc compat-check: BREAKING CHANGES DETECTED in \(compatPath)\n", stderr)
+            writeDiagnostic("ontologyc compat-check: BREAKING CHANGES DETECTED in \(compatPath)\n")
             exit(1)
         }
         print("ontologyc compat-check: PASS \(compatPath)")
     } catch let compilerError as OntologyCompilerError {
         if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
-        fputs("ontologyc compat-check: FAIL \(compilerError)\n", stderr)
+        writeDiagnostic("ontologyc compat-check: FAIL \(compilerError)\n")
         exit(1)
     } catch {
-        fputs("ontologyc compat-check: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc compat-check: FAIL \(error)\n")
         exit(1)
     }
 
@@ -213,7 +213,7 @@ case "import-hypercode":
         }
         print("ontologyc import-hypercode: PASS \(outPath)")
     } catch {
-        fputs("ontologyc import-hypercode: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc import-hypercode: FAIL \(error)\n")
         exit(1)
     }
 
@@ -229,15 +229,15 @@ case "validate-draft":
         let reportTarget = parsed.options["--out"].map { " report=\($0)" } ?? ""
         if !result.passed {
             compiler.printDiagnostics(result.diagnostics)
-            fputs("ontologyc validate-draft: FAIL \(draftDirectory)\(reportTarget)\n", stderr)
+            writeDiagnostic("ontologyc validate-draft: FAIL \(draftDirectory)\(reportTarget)\n")
             exit(1)
         }
         print("ontologyc validate-draft: PASS \(draftDirectory)\(reportTarget)")
     } catch let compilerError as OntologyCompilerError {
-        fputs("ontologyc validate-draft: FAIL \(compilerError)\n", stderr)
+        writeDiagnostic("ontologyc validate-draft: FAIL \(compilerError)\n")
         exit(1)
     } catch {
-        fputs("ontologyc validate-draft: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc validate-draft: FAIL \(error)\n")
         exit(1)
     }
 
@@ -254,15 +254,15 @@ case "validate-golden-intent":
         )
         let reportTarget = parsed.options["--out"].map { " report=\($0)" } ?? ""
         if !result.passed {
-            fputs("ontologyc validate-golden-intent: FAIL \(candidatePath)\(reportTarget)\n", stderr)
+            writeDiagnostic("ontologyc validate-golden-intent: FAIL \(candidatePath)\(reportTarget)\n")
             exit(1)
         }
         print("ontologyc validate-golden-intent: PASS \(candidatePath)\(reportTarget)")
     } catch let compilerError as OntologyCompilerError {
-        fputs("ontologyc validate-golden-intent: FAIL \(compilerError)\n", stderr)
+        writeDiagnostic("ontologyc validate-golden-intent: FAIL \(compilerError)\n")
         exit(1)
     } catch {
-        fputs("ontologyc validate-golden-intent: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc validate-golden-intent: FAIL \(error)\n")
         exit(1)
     }
 
@@ -280,15 +280,15 @@ case "validate-governance-decision":
         let reportTarget = parsed.options["--out"].map { " report=\($0)" } ?? ""
         if !result.passed {
             compiler.printDiagnostics(result.diagnostics)
-            fputs("ontologyc validate-governance-decision: FAIL \(decisionPath)\(reportTarget)\n", stderr)
+            writeDiagnostic("ontologyc validate-governance-decision: FAIL \(decisionPath)\(reportTarget)\n")
             exit(1)
         }
         print("ontologyc validate-governance-decision: PASS \(decisionPath)\(reportTarget)")
     } catch let compilerError as OntologyCompilerError {
-        fputs("ontologyc validate-governance-decision: FAIL \(compilerError)\n", stderr)
+        writeDiagnostic("ontologyc validate-governance-decision: FAIL \(compilerError)\n")
         exit(1)
     } catch {
-        fputs("ontologyc validate-governance-decision: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc validate-governance-decision: FAIL \(error)\n")
         exit(1)
     }
 
@@ -305,10 +305,10 @@ case "export-specgraph-owner-decisions":
         print("ontologyc export-specgraph-owner-decisions: PASS \(outPath) decisions=\(result.decisionCount)")
     } catch let compilerError as OntologyCompilerError {
         if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
-        fputs("ontologyc export-specgraph-owner-decisions: FAIL \(compilerError)\n", stderr)
+        writeDiagnostic("ontologyc export-specgraph-owner-decisions: FAIL \(compilerError)\n")
         exit(1)
     } catch {
-        fputs("ontologyc export-specgraph-owner-decisions: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc export-specgraph-owner-decisions: FAIL \(error)\n")
         exit(1)
     }
 
@@ -327,10 +327,10 @@ case "export-viewer-archive-manifest":
         print("ontologyc export-viewer-archive-manifest: PASS \(outPath) artifacts=\(result.artifactCount)")
     } catch let compilerError as OntologyCompilerError {
         if case .packageError(let diagnostics) = compilerError { compiler.printDiagnostics(diagnostics) }
-        fputs("ontologyc export-viewer-archive-manifest: FAIL \(compilerError)\n", stderr)
+        writeDiagnostic("ontologyc export-viewer-archive-manifest: FAIL \(compilerError)\n")
         exit(1)
     } catch {
-        fputs("ontologyc export-viewer-archive-manifest: FAIL \(error)\n", stderr)
+        writeDiagnostic("ontologyc export-viewer-archive-manifest: FAIL \(error)\n")
         exit(1)
     }
 

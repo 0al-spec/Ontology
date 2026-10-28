@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 enum RegistryError: Error, CustomStringConvertible {
     case httpError(Int, String)
