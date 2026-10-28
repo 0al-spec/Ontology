@@ -56,6 +56,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-28 | ONT-046 | Archived self-review; hosted/independent review remains separate |
 | 2026-10-28 | ONT-046 | Archived Linux compiler source port, local platform checks and CI matrix |
 | 2026-10-28 | ONT-048 | Archived REVIEW_ONT-048; FOLLOW-UP skipped (no new actionable findings) |
 | 2026-10-28 | ONT-048 | Archived Draft_Motivation_Core_Package (local PASS); independent review pending |
