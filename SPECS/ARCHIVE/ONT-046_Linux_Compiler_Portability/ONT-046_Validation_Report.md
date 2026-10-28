@@ -87,3 +87,5 @@ The immutable 0.1.0 tag, package versions/digests, historical reports, profile
 admission rules and truth/causation boundaries are unchanged. No new release tag,
 merge, deployment, inference or consumer migration is claimed. Hosted CI evidence
 must match the published PR head before merge/release.
+
+Implementation checkpoint: `4d09249`; subsequent FLOW commits update archive/review metadata.

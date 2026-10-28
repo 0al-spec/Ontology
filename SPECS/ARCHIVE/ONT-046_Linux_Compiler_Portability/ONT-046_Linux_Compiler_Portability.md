@@ -44,3 +44,7 @@ dependencies, then build/test native macOS and actual Linux containers. Add and
 run the shared package/fixture gate and TypeScript checks. Run Linux/macOS hosted
 CI on the published PR head. Archive evidence and a self-review through FLOW;
 keep any unsupported platform boundary explicit.
+
+---
+**Archived:** 2026-10-28
+**Verdict:** PASS (local portability/contracts; hosted checks tracked in PR)
