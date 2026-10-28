@@ -1,3 +1,11 @@
+# Current Task: ONT-051 — Intent Preservation Review Pilot
+
+**Status:** Selected. **Review subject:** ONT-051.
+**Base:** ONT-050 `7ec4b0c`, dependent PR layer.
+
+Build a bounded executable consumer example and compact boundary review reports;
+keep Hypercode/Ontology cores and SpecGraph canonical state unchanged.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
