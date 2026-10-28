@@ -1,0 +1,24 @@
+{
+  "apiVersion": "ontology-induction.specgraph.io/v1alpha1",
+  "kind": "IntentClassification",
+  "intentType": "ArchitectureIntent",
+  "domain": "GeneralEventModeling",
+  "subdomain": "ActorRelativeAgency",
+  "productType": "ReusableDraftOntologyPackage",
+  "criticality": "medium",
+  "primaryConcern": "Separate prompting reason, awareness, goals, intention, anticipation and attitudes without inferring actual states or normative classification.",
+  "requiresExistingOntology": true,
+  "confidence": 0.8,
+  "uncertainties": [
+    {
+      "id": "external-domain-mapping",
+      "question": "Which downstream profile will interpret the primitives?"
+    }
+  ],
+  "provenance": [
+    {
+      "source": "user-request-2026-10-28",
+      "note": "Confidence is an authoring estimate, not semantic quality evidence."
+    }
+  ]
+}

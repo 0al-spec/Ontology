@@ -25,7 +25,7 @@ not an extension of the legacy InstanceGraph admission profiles.
   OutcomeAttitude. Each has its own proposed/reviewed/rejected lifecycle and
   independent positive/negative source or operator support. Empty support means
   no supplied grounds; it does not become unawareness or a negative conclusion.
-- Awareness targets exact same-scope MotivationHypothesis or PropositionContent;
+- Awareness targets exact same-view/actor/contribution-kind MotivationHypothesis or PropositionContent;
   values aware / partly_aware / unaware / not_applicable. Inapplicability is an
   explicit attribution, never inferred from entity kind or missing knowledge.
 - Goal targets content with seek / avoid / maintain. Intention means attributed

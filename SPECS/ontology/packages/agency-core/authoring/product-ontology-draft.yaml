@@ -1,0 +1,305 @@
+{
+  "apiVersion": "ontology-induction.specgraph.io/v1alpha1",
+  "kind": "ProductOntologyDraft",
+  "metadata": {
+    "status": "candidate",
+    "sourceIntentId": "agency-user-request-2026-10-28",
+    "producedBy": "CodexRootStagedAuthoring",
+    "confidence": 0.8,
+    "provenance": [
+      {
+        "source": "user-request-2026-10-28",
+        "note": "Domain-neutral primitives requested; no law-specific taxonomy or paid inference."
+      }
+    ],
+    "uncertainties": [
+      {
+        "id": "external-domain-mapping",
+        "question": "Which separately reviewed downstream profile will interpret the primitives?"
+      }
+    ]
+  },
+  "spec": {
+    "namespaceCandidate": "agencycore",
+    "governingConcept": {
+      "id": "PropositionContent",
+      "rationale": "The same unasserted content can be targeted by independent attitudes without becoming an observed consequence."
+    },
+    "classes": [
+      {
+        "id": "PropositionContent",
+        "category": "valueObject"
+      },
+      {
+        "id": "AgencyContext",
+        "category": "valueObject"
+      },
+      {
+        "id": "AwarenessHypothesis",
+        "category": "domainEntity"
+      },
+      {
+        "id": "GoalHypothesis",
+        "category": "domainEntity"
+      },
+      {
+        "id": "IntentionHypothesis",
+        "category": "domainEntity"
+      },
+      {
+        "id": "AnticipationHypothesis",
+        "category": "domainEntity"
+      },
+      {
+        "id": "OutcomeAttitudeHypothesis",
+        "category": "domainEntity"
+      },
+      {
+        "id": "OperatorAgencySupport",
+        "category": "domainEntity"
+      },
+      {
+        "id": "ReviewAgency",
+        "category": "command"
+      },
+      {
+        "id": "RejectAgency",
+        "category": "command"
+      }
+    ],
+    "relations": [
+      {
+        "id": "contextView",
+        "domain": "AgencyContext",
+        "range": {
+          "oneOf": [
+            "eventcore:Interpretation",
+            "eventcore:InterpretationCandidate"
+          ]
+        }
+      },
+      {
+        "id": "contextActorRole",
+        "domain": "AgencyContext",
+        "range": "eventcore:RoleBinding"
+      },
+      {
+        "id": "awarenessContext",
+        "domain": "AwarenessHypothesis",
+        "range": "AgencyContext"
+      },
+      {
+        "id": "awarenessPositiveSupport",
+        "domain": "AwarenessHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "awarenessNegativeSupport",
+        "domain": "AwarenessHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "goalContext",
+        "domain": "GoalHypothesis",
+        "range": "AgencyContext"
+      },
+      {
+        "id": "goalPositiveSupport",
+        "domain": "GoalHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "goalNegativeSupport",
+        "domain": "GoalHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "intentionContext",
+        "domain": "IntentionHypothesis",
+        "range": "AgencyContext"
+      },
+      {
+        "id": "intentionPositiveSupport",
+        "domain": "IntentionHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "intentionNegativeSupport",
+        "domain": "IntentionHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "anticipationContext",
+        "domain": "AnticipationHypothesis",
+        "range": "AgencyContext"
+      },
+      {
+        "id": "anticipationPositiveSupport",
+        "domain": "AnticipationHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "anticipationNegativeSupport",
+        "domain": "AnticipationHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "attitudeContext",
+        "domain": "OutcomeAttitudeHypothesis",
+        "range": "AgencyContext"
+      },
+      {
+        "id": "attitudePositiveSupport",
+        "domain": "OutcomeAttitudeHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "attitudeNegativeSupport",
+        "domain": "OutcomeAttitudeHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        }
+      },
+      {
+        "id": "goalContent",
+        "domain": "GoalHypothesis",
+        "range": "PropositionContent"
+      },
+      {
+        "id": "anticipationContent",
+        "domain": "AnticipationHypothesis",
+        "range": "PropositionContent"
+      },
+      {
+        "id": "attitudeContent",
+        "domain": "OutcomeAttitudeHypothesis",
+        "range": "PropositionContent"
+      },
+      {
+        "id": "awarenessMotivation",
+        "domain": "AwarenessHypothesis",
+        "range": "motivcore:MotivationHypothesis"
+      },
+      {
+        "id": "awarenessContent",
+        "domain": "AwarenessHypothesis",
+        "range": "PropositionContent"
+      },
+      {
+        "id": "intentionGoal",
+        "domain": "IntentionHypothesis",
+        "range": "GoalHypothesis"
+      },
+      {
+        "id": "operatorSupportAuthor",
+        "domain": "OperatorAgencySupport",
+        "range": "eventcore:Entity"
+      }
+    ],
+    "protocols": [],
+    "policies": [
+      {
+        "id": "ActorRelativeScope",
+        "enforceability": "manual"
+      },
+      {
+        "id": "IndependentAgencyClaims",
+        "enforceability": "manual"
+      },
+      {
+        "id": "ContentIsNotObservation",
+        "enforceability": "manual"
+      },
+      {
+        "id": "AwarenessAndKnowledge",
+        "enforceability": "manual"
+      },
+      {
+        "id": "DistinctTimes",
+        "enforceability": "manual"
+      },
+      {
+        "id": "SourceAndReviewBoundary",
+        "enforceability": "manual"
+      },
+      {
+        "id": "ActualConsequencesRemainSeparate",
+        "enforceability": "manual"
+      },
+      {
+        "id": "DomainNeutralExtension",
+        "enforceability": "manual"
+      }
+    ],
+    "stateMachines": [
+      {
+        "id": "AgencyReview",
+        "appliesTo": [
+          "AwarenessHypothesis",
+          "GoalHypothesis",
+          "IntentionHypothesis",
+          "AnticipationHypothesis",
+          "OutcomeAttitudeHypothesis"
+        ]
+      }
+    ],
+    "assumptions": [
+      "Any Entity actor; no mandatory psychology.",
+      "Each claim has separate evidence and review.",
+      "Source-only inputs do not supply physical states.",
+      "Normative categories belong to downstream profiles."
+    ],
+    "validationNotes": [
+      "The reference consumer validates IDs/typed values/scope, not underlying graph validity or factual/mental truth.",
+      "All existing packages, profiles and saved reports remain frozen."
+    ]
+  }
+}

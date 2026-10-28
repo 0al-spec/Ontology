@@ -1,0 +1,101 @@
+{
+  "profile": "agency-source-attribution/v1",
+  "frame": {
+    "graphKey": "parking-story",
+    "revisionKey": "source-only-1",
+    "viewId": "placement-view",
+    "actorRoleId": "driver-role",
+    "contributionKind": "action",
+    "reportTime": {
+      "clockKey": "account-clock",
+      "at": 10
+    }
+  },
+  "contents": [
+    {
+      "id": "near-entrance",
+      "description": "Автомобиль расположен близко ко входу."
+    },
+    {
+      "id": "vehicle-rolls",
+      "description": "Автомобиль смещается с выбранного места."
+    }
+  ],
+  "claims": [
+    {
+      "id": "motive-awareness",
+      "reviewState": "proposed",
+      "positiveSupport": [
+        {
+          "kind": "operator",
+          "authorId": "operator",
+          "rationale": "Сконструированная гипотеза: актор не распознаёт побуждение удобством. Это не психологический диагноз."
+        }
+      ],
+      "negativeSupport": [],
+      "kind": "awareness",
+      "target": {
+        "kind": "motivation",
+        "id": "convenience-motive"
+      },
+      "value": "unaware"
+    },
+    {
+      "id": "desired-location",
+      "reviewState": "proposed",
+      "positiveSupport": [
+        {
+          "kind": "source",
+          "id": "report-placement"
+        }
+      ],
+      "negativeSupport": [],
+      "kind": "goal",
+      "contentId": "near-entrance",
+      "direction": "seek"
+    },
+    {
+      "id": "placement-commitment",
+      "reviewState": "proposed",
+      "positiveSupport": [
+        {
+          "kind": "source",
+          "id": "report-placement"
+        }
+      ],
+      "negativeSupport": [],
+      "kind": "intention",
+      "goalIds": [
+        "desired-location"
+      ]
+    },
+    {
+      "id": "anticipated-roll",
+      "reviewState": "proposed",
+      "positiveSupport": [
+        {
+          "kind": "source",
+          "id": "report-risk"
+        }
+      ],
+      "negativeSupport": [],
+      "kind": "anticipation",
+      "contentId": "vehicle-rolls",
+      "expectation": "possible"
+    },
+    {
+      "id": "undesired-roll",
+      "reviewState": "proposed",
+      "positiveSupport": [
+        {
+          "kind": "source",
+          "id": "report-risk"
+        }
+      ],
+      "negativeSupport": [],
+      "kind": "attitude",
+      "contentId": "vehicle-rolls",
+      "attitude": "opposes"
+    }
+  ]
+}

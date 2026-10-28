@@ -1072,8 +1072,6 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
-## Task Status Legend
-
 #### ONT-049: Generic Agency Core
 - **Description:** Add a domain-neutral basis for motive awareness, goals,
   intention, anticipation and attitudes toward possible outcomes. NormLab may

@@ -1,0 +1,113 @@
+{
+  "profile": "agency-source-attribution/v1",
+  "version": "0.1.0",
+  "package": "org.0al.agency.core@0.1.0",
+  "status": "draft",
+  "executable": "bounded-reference-envelope-only",
+  "dependencies": [
+    {
+      "path": "SPECS/ontology/packages/events-core/versions/0.2.0/generated/ontology.normalized.json",
+      "id": "org.0al.events.core",
+      "namespace": "eventcore",
+      "version": "0.2.0",
+      "sourceDigest": "sha256:92a3245fc9acd15748fd1fa3cfb8e4fdc8fda429a5fd6cffd7a97bc13f2f359e",
+      "irSHA256": "e6c932ad8c492d168b63dbe112335c270d88ff758e016f3502031aefe9dea916"
+    },
+    {
+      "path": "SPECS/ontology/packages/motivation-core/generated/ontology.normalized.json",
+      "id": "org.0al.motivation.core",
+      "namespace": "motivcore",
+      "version": "0.1.0",
+      "sourceDigest": "sha256:3061eca33ddc2296c2c292695d98daf6697e92fb582da544bc1d5107721ae955",
+      "irSHA256": "25da040f4bd0b014014b1ed996250cd4c17a64503355f6f558917bec9ddd1fe9"
+    }
+  ],
+  "contextViewAlternatives": [
+    "eventcore:Interpretation",
+    "eventcore:InterpretationCandidate"
+  ],
+  "actorRoleBinding": {
+    "byViewType": {
+      "eventcore:Interpretation": "eventcore:interpretationBindsRole",
+      "eventcore:InterpretationCandidate": "eventcore:candidateBindsRole"
+    },
+    "roleName": "actor",
+    "entityRelation": "eventcore:roleBoundEntity",
+    "exclusiveOwnershipRequired": false
+  },
+  "claimConcepts": {
+    "awareness": "agencycore:AwarenessHypothesis",
+    "goal": "agencycore:GoalHypothesis",
+    "intention": "agencycore:IntentionHypothesis",
+    "anticipation": "agencycore:AnticipationHypothesis",
+    "attitude": "agencycore:OutcomeAttitudeHypothesis"
+  },
+  "values": {
+    "awareness": [
+      "aware",
+      "partly_aware",
+      "unaware",
+      "not_applicable"
+    ],
+    "goal": [
+      "seek",
+      "avoid",
+      "maintain"
+    ],
+    "anticipation": [
+      "possible",
+      "expected",
+      "certain",
+      "not_anticipated"
+    ],
+    "attitude": [
+      "desires",
+      "accepts",
+      "opposes",
+      "indifferent"
+    ]
+  },
+  "authority": {
+    "sourceTruthVerified": false,
+    "mentalStateTruthVerified": false,
+    "causationVerified": false,
+    "legalClassificationPerformed": false,
+    "physicalEnrichmentPerformed": false
+  },
+  "existingProfileAdmission": {
+    "eventcore-v1": false,
+    "eventcore-provenance-v1": false
+  },
+  "checks": [
+    "bounded strict schema",
+    "exact graph/revision index identity",
+    "typed existing view and selected actor role reachability",
+    "same-view/same-role/same-contribution-kind motivation target",
+    "content/source/operator references",
+    "intention links reference goal claims",
+    "independent support-presence classification"
+  ],
+  "notChecked": [
+    "underlying event graph validity",
+    "graph-byte authentication",
+    "source semantic relevance",
+    "truth of content or mental state",
+    "psychological applicability",
+    "temporal truth or ordering",
+    "actual outcome satisfaction",
+    "normative classification"
+  ],
+  "packageVocabulary": {
+    "id": "org.0al.agency.core",
+    "namespace": "agencycore",
+    "version": "0.1.0",
+    "sourceDigest": "sha256:ee78ef8e4b7d1e72487ad5aed71f5169abd4005b9ade19c7c69bc378020ae571",
+    "irSHA256": "edace0fc7bea8a545591add881110a5752dd27b7647b27cf3ff060e685ce4f7f"
+  },
+  "examples": {
+    "referenceIndex": "examples/reference-index.json",
+    "attribution": "examples/source-only-attribution.json",
+    "constructed": true,
+    "underlyingGraphValidated": false
+  }
+}
