@@ -1104,7 +1104,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
   as a reusable skill, modeling guide and template, with a destructive image-encoding example.
 - **Priority:** P1 — explicit user selection
 - **Dependencies:** ONT-049; documentation layer stacked on its reviewed branch
-- **Status:** INPROGRESS
+- **Status:** Complete — documentation/skill/template scope; hosted PR checks tracked separately
 - **Outputs:** Discoverable skill, reusable model worksheet, transition-goal semantics,
   Gherkin examples and a property-based test design catalogue.
 - **Acceptance Criteria:**

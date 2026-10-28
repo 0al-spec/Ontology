@@ -1,13 +1,3 @@
-# Current Task: ONT-050 — Action Model Template
-
-**Status:** Selected; documentation/skill/template scope.
-**Review subject:** ONT-050.
-**Base:** ONT-049 branch at `a170fce`; dependent PR layer, no change to #73.
-
-Capture transition-based goal evaluation and the image-encoding interpretation,
-then validate reusable guidance and publish a separate PR. No app implementation,
-compiler/profile change, integration, merge or release is included.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -42,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-050: minimal action-model skill, guide, worksheet and image-encoding Gherkin examples; local syntax/skill checks pass. Goal evaluation can inspect the transition/Delta. No app evaluator or PBT suite was implemented.
 
 - ONT-049: generic agency vocabulary and bounded reference consumer; local package/Swift/TypeScript gates pass, PR review/CI separate. This does not start a normative profile or NormLab integration.
 
