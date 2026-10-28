@@ -1,0 +1,49 @@
+{
+  "apiVersion": "ontology.specgraph.io/snapshot-authority/v1alpha1",
+  "confirmations": [
+    {
+      "authorityKey": "fixture-operator",
+      "originId": "claimed-before-origin",
+      "rationale": "Explicit synthetic complete finite-state origin confirmation; not factual truth.",
+      "snapshotId": "claimed-before"
+    },
+    {
+      "authorityKey": "fixture-operator",
+      "originId": "claimed-after-origin",
+      "rationale": "Explicit synthetic complete finite-state origin confirmation; not factual truth.",
+      "snapshotId": "claimed-after"
+    }
+  ],
+  "enrichments": [
+    {
+      "authorityKey": "fixture-operator",
+      "candidateId": "reported",
+      "rationale": "Explicit admission of this synthetic candidate-record link.",
+      "recordId": "claimed-record"
+    }
+  ],
+  "grants": [
+    {
+      "authorityKey": "fixture-operator",
+      "capabilities": [
+        "confirm-source",
+        "enrich-candidate"
+      ],
+      "projectionKeys": [
+        "claimed-physical"
+      ],
+      "scopeKeys": [
+        "episode-1"
+      ]
+    }
+  ],
+  "graphKey": "unproven-empty-enrichment",
+  "graphSHA256": "bca4824714ea8cbbd262c2e71619a07babcf9bb585d6cf3feb35b112f2796d53",
+  "kind": "SnapshotProvenanceAuthority",
+  "profilePin": {
+    "definitionSHA256": "240d518666905c320df299b5d4d9e08e7c2564b0ca97ca2ab15d0a275dbe2551",
+    "id": "eventcore-provenance-v1",
+    "version": "1.0.0"
+  },
+  "revisionKey": "r1"
+}

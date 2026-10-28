@@ -1,0 +1,15 @@
+{
+  "apiVersion": "ontology.specgraph.io/snapshot-authority/v1alpha1",
+  "confirmations": [],
+  "enrichments": [],
+  "grants": [],
+  "graphKey": "synthetic-car",
+  "graphSHA256": "6ec584a07e2d54d736b7ec1c42eb2ea7f810a3915d7e81f58022a3e2ec2d4b9a",
+  "kind": "SnapshotProvenanceAuthority",
+  "profilePin": {
+    "definitionSHA256": "240d518666905c320df299b5d4d9e08e7c2564b0ca97ca2ab15d0a275dbe2551",
+    "id": "eventcore-provenance-v1",
+    "version": "1.0.0"
+  },
+  "revisionKey": "r1"
+}

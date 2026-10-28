@@ -127,3 +127,9 @@ before committing the generated baseline. The runtime TypeScript smoke gate
 invokes event-core object schemas with valid examples and invalid field shapes;
 it does not validate whole-graph invariants. These commands do not authorize
 publishing the package to a trusted registry or changing NormLab runtime data.
+
+## Separate provenance revision
+
+[Version 0.2.0](versions/0.2.0/README.md) adds typed snapshot origins for the
+explicit eventcore-provenance-v1 profile. The 0.1.0 YAML, generated IR/SDK and
+legacy consumer pin in this directory remain unchanged.

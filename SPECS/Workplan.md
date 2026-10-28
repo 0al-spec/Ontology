@@ -1005,7 +1005,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-043
 - **Parallelizable:** yes, independently of ONT-044 and source-only ONT-045 export
-- **Status:** Not Started
+- **Status:** Complete — local provenance implementation/fixtures delivered; hosted PR review pending
 - **Origin:** PR #67 independent review of unknown candidates enriched with
   unsupported empty StateSnapshots, accepted structurally on `853a5fc`.
 - **Outputs:** Versioned provenance vocabulary, typed source/operator origin
@@ -1019,6 +1019,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
     reinterpretation of old reports or automatic migration to a stronger claim.
   - Keep absent physical states source-only in the NormLab pilot until a producer
     explicitly supplies provenance supported by the chosen reviewed contract.
+
+- **Validation:** Separately pinned events-core 0.2.0 and eventcore-provenance-v1
+  add typed source/direct/operator origins, graph-bound caller-selected authority
+  and explicit enrichment admission. Full quality passes 158 tests; 18 static
+  fixture outcomes and old v1 baseline/limitation pass their gates. Origin admission
+  is not identity authentication or factual truth; historical v1 reports are unchanged.
 
 ---
 

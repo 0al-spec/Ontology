@@ -1,0 +1,1107 @@
+{
+  "classes" : [
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Declared kind of occurrence or contribution; omission and action interpretation require separate explicit grounds.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "actionKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:ActionKind",
+      "id" : "ActionKind",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/ActionKind"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Proposed link between cause/effect Interpretations, each bound to its RecordedEvent; endpoint records derive from the views. Time order and review do not prove physical causation.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "profileRef",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:CausalHypothesis",
+      "id" : "CausalHypothesis",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "lifecycle" : "ProposalReview",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/CausalHypothesis"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Authored exact Added/Removed difference owned by one RecordedEvent; before/after/projection derive exclusively from that record, with no independent snapshot references. Exact set validation belongs to the explicitly selected instance profile.",
+      "extends" : "sg:ValueObject",
+      "fqid" : "eventcore:Delta",
+      "id" : "Delta",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "layer" : "mechanics",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/Delta"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Declared direct capture by an observer with an artifact identity and time; authenticity and factual accuracy are not inferred.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "artifactDigest",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "artifactRef",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "clockKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "observedAt",
+          "required" : true,
+          "type" : "integer"
+        },
+        {
+          "id" : "observerKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "originKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:DirectObservationOrigin",
+      "id" : "DirectObservationOrigin",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/DirectObservationOrigin"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Any scoped entity, including an abstract community, machine, AI or natural phenomenon; actor is a role, not a human-only type.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "label",
+          "required" : false,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:Entity",
+      "id" : "Entity",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "layer" : "mechanics",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/Entity"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Scope grouping records and interpretations without asserting that all reports describe one true incident.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "scopeKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:Episode",
+      "id" : "Episode",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/Episode"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Source-backed occurrence description that may lack interval, state or other data needed for a checked record.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "candidateKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "description",
+          "required" : false,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:EventCandidate",
+      "id" : "EventCandidate",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/EventCandidate"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "One immutable local registry revision containing recorded events; recordKey is unique within this registry revision, not globally.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "registryKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "revisionKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:EventRegistry",
+      "id" : "EventRegistry",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/EventRegistry"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Scoped proposition with independent polarity support; the selected profile checks key/polarity sets, while semantic argument interpretation remains external.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "polarity",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "propositionKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:Fact",
+      "id" : "Fact",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/Fact"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Role reading of a registered RecordedEvent; it supplies no replacement event states and establishes no legal responsibility.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "interpretationKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:Interpretation",
+      "id" : "Interpretation",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/Interpretation"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Source/role proposal with unresolved observations or bindings; review does not turn it into a checked Interpretation.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "candidateKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:InterpretationCandidate",
+      "id" : "InterpretationCandidate",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "lifecycle" : "ProposalReview",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/InterpretationCandidate"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Deliberately operator-supplied complete state, explicitly uncited. Admission requires the named operator's scoped supply-operator-state capability and confirmation.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "operatorKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "originKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "rationale",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:OperatorSnapshotOrigin",
+      "id" : "OperatorSnapshotOrigin",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/OperatorSnapshotOrigin"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : true,
+      "description" : "Immutable scoped event with direct supplied comparable before/after StateSnapshots; descriptions with missing data remain candidates.",
+      "extends" : "sg:Event",
+      "fields" : [
+        {
+          "id" : "clockKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "intervalFinish",
+          "required" : true,
+          "type" : "integer"
+        },
+        {
+          "id" : "intervalStart",
+          "required" : true,
+          "type" : "integer"
+        },
+        {
+          "id" : "recordKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:RecordedEvent",
+      "id" : "RecordedEvent",
+      "implements" : [
+
+      ],
+      "kind" : "Event",
+      "layer" : "mechanics",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/RecordedEvent"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Record rejection of a proposal while preserving its source and history.",
+      "extends" : "sg:Command",
+      "fqid" : "eventcore:RejectProposal",
+      "id" : "RejectProposal",
+      "implements" : [
+
+      ],
+      "kind" : "Command",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/RejectProposal"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Contextual relation occurrence whose participant roles and origin can be recorded independently of its continuation.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "relationType",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:RelationInstance",
+      "id" : "RelationInstance",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/RelationInstance"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Record review of an interpretation candidate or causal hypothesis without promotion, factual truth or established physical causation.",
+      "extends" : "sg:Command",
+      "fqid" : "eventcore:ReviewProposal",
+      "id" : "ReviewProposal",
+      "implements" : [
+
+      ],
+      "kind" : "Command",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/ReviewProposal"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Role occupied by an Entity in a particular interpretation or relation; actor, target and instrument are contextual roles.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "roleName",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:RoleBinding",
+      "id" : "RoleBinding",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/RoleBinding"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Source/revision/digest/quote provenance for an assertion; speaker is source-scoped and may remain unknown.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "endOffset",
+          "required" : true,
+          "type" : "integer"
+        },
+        {
+          "id" : "quote",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "revisionKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "sourceDigest",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "sourceRef",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "speakerKey",
+          "required" : false,
+          "type" : "string"
+        },
+        {
+          "id" : "startOffset",
+          "required" : true,
+          "type" : "integer"
+        }
+      ],
+      "fqid" : "eventcore:SourceAssertion",
+      "id" : "SourceAssertion",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/SourceAssertion"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Declared source extraction for a complete snapshot. Citations alone do not confirm origin or factual truth; the pinned provenance profile requires external authority confirmation.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "extractionMethod",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "originKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:SourceSnapshotOrigin",
+      "id" : "SourceSnapshotOrigin",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/SourceSnapshotOrigin"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "Candidate-only observation availability; known references one StateSnapshot, partial may supply individual facts, and unknown supplies no state. Availability is checked by the selected instance profile.",
+      "extends" : "sg:DomainEntity",
+      "fields" : [
+        {
+          "id" : "availability",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:StateObservation",
+      "id" : "StateObservation",
+      "implements" : [
+
+      ],
+      "kind" : "DomainEntity",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/StateObservation"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "A declared complete finite fact set in its schema/scope/projection with exactly one typed origin and explicit external confirmation under the provenance profile. Completeness is the declaration made by this type, not a second flag; unavailable or partial observations are not StateSnapshot values.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "id" : "projectionKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "schemaKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "id" : "scopeKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "eventcore:StateSnapshot",
+      "id" : "StateSnapshot",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "layer" : "mechanics",
+      "uri" : "ontology://org.0al.events.core/0.2.0/classes/StateSnapshot"
+    }
+  ],
+  "diagnostics" : [
+
+  ],
+  "id" : "org.0al.events.core",
+  "imports" : [
+    {
+      "id" : "specgraph.foundation",
+      "namespace" : "sg",
+      "version" : "0.1.0"
+    }
+  ],
+  "modelApplicability" : {
+    "appliesTo" : {
+      "contexts" : [
+        "draft_vocabulary_review",
+        "offline_consumer_contract_design"
+      ],
+      "domains" : [
+        "general_event_modeling"
+      ]
+    },
+    "assumptions" : [
+      {
+        "id" : "manual_semantic_review",
+        "text" : "Selected instance profiles enforce bounded structural/admission rules. Citation relevance, completeness and factual truth require separate trusted review."
+      },
+      {
+        "id" : "observation_availability",
+        "text" : "Only candidates use StateObservation availability. StateSnapshot declares a complete supplied state; unknown/partial observations never become empty snapshots or a record's direct states."
+      }
+    ],
+    "excludes" : {
+      "contexts" : [
+        "automatic_liability_assignment",
+        "trusted_physical_causation",
+        "unselected_runtime_profile"
+      ]
+    },
+    "invalidationTriggers" : [
+      {
+        "id" : "instance_contract_changed",
+        "text" : "Re-review package vocabulary and mappings when the chosen pinned InstanceGraph/profile contract changes."
+      }
+    ]
+  },
+  "namespace" : "eventcore",
+  "policies" : [
+    {
+      "appliesTo" : [
+        "eventcore:CausalHypothesis"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "eventcore:BoundedCausalHypothesis",
+      "id" : "BoundedCausalHypothesis",
+      "text" : "Cause/effect Interpretations derive their endpoint records through interpretsRecord; both records must belong to the same EventRegistry revision and have distinct recordKeys, the same clockKey, valid intervals and cause start no later than effect start. Overlap is allowed. Proposal review does not prove causation; graph/temporal checks belong to the selected instance profile and no responsibility is transferred."
+    },
+    {
+      "appliesTo" : [
+        "eventcore:EventCandidate",
+        "eventcore:Interpretation",
+        "eventcore:InterpretationCandidate"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "eventcore:CandidateAuthorityBoundary",
+      "id" : "CandidateAuthorityBoundary",
+      "text" : "Candidate review is not event registration, factual truth, human attribution or responsibility. Package validation and generated schemas establish structure only; the selected instance profile checks references, state alternatives and explicit origin/enrichment admission; normative responsibility remains external."
+    },
+    {
+      "appliesTo" : [
+        "eventcore:EventCandidate",
+        "eventcore:InterpretationCandidate",
+        "eventcore:RecordedEvent"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "eventcore:ExplicitEnrichmentAdmission",
+      "id" : "ExplicitEnrichmentAdmission",
+      "text" : "Candidate-to-record enrichment requires separate scoped authority admission after snapshot origin confirmation. Interpretation resolution must use an explicitly enriched record. Missing physical states may remain source-only indefinitely, without a record or Delta. Never auto-upgrade old reports or infer a complete empty state from silence."
+    },
+    {
+      "appliesTo" : [
+        "eventcore:Delta",
+        "eventcore:EventCandidate",
+        "eventcore:RecordedEvent",
+        "eventcore:StateObservation",
+        "eventcore:StateSnapshot"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "eventcore:KnownStatesForExactDelta",
+      "id" : "KnownStatesForExactDelta",
+      "text" : "RecordedEvent directly requires complete StateSnapshots with matching schema/scope/projection, without availability or complete flags on the record path. Delta derives both states through deltaOfRecord and must equal their exact difference. Unknown or partial candidate observations cannot create a record or Delta by substituting empty states or operator review states. Equal explicitly supplied and provenance-confirmed empty snapshots allow an exact empty Delta."
+    },
+    {
+      "appliesTo" : [
+        "eventcore:EventRegistry",
+        "eventcore:Interpretation",
+        "eventcore:RecordedEvent"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "eventcore:PreserveRecordedObservations",
+      "id" : "PreserveRecordedObservations",
+      "text" : "A record belongs to exactly one EventRegistry revision, where recordKey is unique; the registry identity is registryKey plus revisionKey. Reinterpreting roles never replaces supplied snapshots. Enrichment preserves known snapshots and all partial facts, and creates a linked new record; this declaration is not an implemented registry service."
+    },
+    {
+      "appliesTo" : [
+        "eventcore:InterpretationCandidate",
+        "eventcore:SourceAssertion"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "eventcore:ScopedSourceAttribution",
+      "id" : "ScopedSourceAttribution",
+      "text" : "Preserve source/revision/digest/quote/speaker identity and episode scope. I in a letter refers to the source author, not automatically the narrator; absent speaker remains unknown. Structural citations do not prove semantic relevance."
+    },
+    {
+      "appliesTo" : [
+        "eventcore:DirectObservationOrigin",
+        "eventcore:OperatorSnapshotOrigin",
+        "eventcore:SourceSnapshotOrigin",
+        "eventcore:StateSnapshot"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "eventcore:SnapshotOriginAdmission",
+      "id" : "SnapshotOriginAdmission",
+      "text" : "The eventcore-provenance-v1 profile requires exactly one typed origin per snapshot and an explicit scoped authority confirmation bound to exact graph bytes. The authority input is selected by the trusted caller, never self-issued by graph review. Source presence, origin confirmation and factual truth are distinct; no cryptographic identity authentication is implemented."
+    }
+  ],
+  "protocols" : [
+
+  ],
+  "relations" : [
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Candidate after observation may be absent, unknown or partial without inventing a snapshot.",
+      "domain" : "eventcore:EventCandidate",
+      "fqid" : "eventcore:candidateAfterObservation",
+      "id" : "candidateAfterObservation",
+      "range" : "eventcore:StateObservation",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/candidateAfterObservation"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Candidate before observation may be absent, unknown or partial without inventing a snapshot.",
+      "domain" : "eventcore:EventCandidate",
+      "fqid" : "eventcore:candidateBeforeObservation",
+      "id" : "candidateBeforeObservation",
+      "range" : "eventcore:StateObservation",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/candidateBeforeObservation"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Candidate role assignments remain proposals even when reviewed.",
+      "domain" : "eventcore:InterpretationCandidate",
+      "fqid" : "eventcore:candidateBindsRole",
+      "id" : "candidateBindsRole",
+      "range" : "eventcore:RoleBinding",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/candidateBindsRole"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Preserve exact source/speaker provenance when available; uncited assertions require explicit review labeling.",
+      "domain" : "eventcore:InterpretationCandidate",
+      "fqid" : "eventcore:candidateCitesAssertion",
+      "id" : "candidateCitesAssertion",
+      "range" : "eventcore:SourceAssertion",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/candidateCitesAssertion"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Explicit enrichment provenance to a new record after required observations are supplied; the original candidate remains unchanged.",
+      "domain" : "eventcore:EventCandidate",
+      "fqid" : "eventcore:candidateEnrichedByRecord",
+      "id" : "candidateEnrichedByRecord",
+      "range" : "eventcore:RecordedEvent",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/candidateEnrichedByRecord"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Candidate descriptions retain their episode scope.",
+      "domain" : "eventcore:EventCandidate",
+      "fqid" : "eventcore:candidateInEpisode",
+      "id" : "candidateInEpisode",
+      "range" : "eventcore:Episode",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/candidateInEpisode"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Explicit provenance to a separately checked interpretation; candidate review alone never creates this link or establishes its validity.",
+      "domain" : "eventcore:InterpretationCandidate",
+      "fqid" : "eventcore:candidateResolvedAsInterpretation",
+      "id" : "candidateResolvedAsInterpretation",
+      "range" : "eventcore:Interpretation",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/candidateResolvedAsInterpretation"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Facts present only after; exact set difference requires a separate checker.",
+      "domain" : "eventcore:Delta",
+      "fqid" : "eventcore:deltaAddsFact",
+      "id" : "deltaAddsFact",
+      "range" : "eventcore:Fact",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/deltaAddsFact"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "The sole owning record determines both compared snapshots and their projection. The selected instance profile validates exact Added/Removed against those states, not arbitrary independent endpoints.",
+      "domain" : "eventcore:Delta",
+      "fqid" : "eventcore:deltaOfRecord",
+      "id" : "deltaOfRecord",
+      "range" : "eventcore:RecordedEvent",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/deltaOfRecord"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Facts present only before; removal does not create opposite support.",
+      "domain" : "eventcore:Delta",
+      "fqid" : "eventcore:deltaRemovesFact",
+      "id" : "deltaRemovesFact",
+      "range" : "eventcore:Fact",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/deltaRemovesFact"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "A source-level role candidate can describe an event candidate before a checked record exists.",
+      "domain" : "eventcore:InterpretationCandidate",
+      "fqid" : "eventcore:describesCandidateEvent",
+      "id" : "describesCandidateEvent",
+      "range" : "eventcore:EventCandidate",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/describesCandidateEvent"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Cause interpretation binds participant roles to a record via interpretsRecord; its registered event is derived from that link.",
+      "domain" : "eventcore:CausalHypothesis",
+      "fqid" : "eventcore:hypothesisCauseView",
+      "id" : "hypothesisCauseView",
+      "range" : "eventcore:Interpretation",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/hypothesisCauseView"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Hypothesis grounds retain their source; citations alone do not establish causation.",
+      "domain" : "eventcore:CausalHypothesis",
+      "fqid" : "eventcore:hypothesisCitesAssertion",
+      "id" : "hypothesisCitesAssertion",
+      "range" : "eventcore:SourceAssertion",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/hypothesisCitesAssertion"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Effect interpretation supplies its own bound roles and derived record. Both endpoint records must belong to the same registry revision and remain distinct under the selected profile.",
+      "domain" : "eventcore:CausalHypothesis",
+      "fqid" : "eventcore:hypothesisEffectView",
+      "id" : "hypothesisEffectView",
+      "range" : "eventcore:Interpretation",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/hypothesisEffectView"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Role assignments are owned by an interpretation and do not replace event observations.",
+      "domain" : "eventcore:Interpretation",
+      "fqid" : "eventcore:interpretationBindsRole",
+      "id" : "interpretationBindsRole",
+      "range" : "eventcore:RoleBinding",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/interpretationBindsRole"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Every checked interpretation refers to one immutable registered record.",
+      "domain" : "eventcore:Interpretation",
+      "fqid" : "eventcore:interpretsRecord",
+      "id" : "interpretsRecord",
+      "range" : "eventcore:RecordedEvent",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/interpretsRecord"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "A candidate known observation references one StateSnapshot; partial or unknown observations do not. Availability is checked by the selected instance profile and never mediates a RecordedEvent's states.",
+      "domain" : "eventcore:StateObservation",
+      "fqid" : "eventcore:observationSnapshot",
+      "id" : "observationSnapshot",
+      "range" : "eventcore:StateSnapshot",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/observationSnapshot"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Partial candidate evidence can retain individual facts without declaring a complete snapshot or permitting exact Delta.",
+      "domain" : "eventcore:StateObservation",
+      "fqid" : "eventcore:observationSuppliesFact",
+      "id" : "observationSuppliesFact",
+      "range" : "eventcore:Fact",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/observationSuppliesFact"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 1
+      },
+      "description" : "Exact extraction citations. Their presence and source offsets do not prove semantic completeness, authenticity or truth.",
+      "domain" : "eventcore:SourceSnapshotOrigin",
+      "fqid" : "eventcore:originCitesAssertion",
+      "id" : "originCitesAssertion",
+      "range" : "eventcore:SourceAssertion",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/originCitesAssertion"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "A recorded event requires one supplied complete after snapshot directly, comparable to its before snapshot.",
+      "domain" : "eventcore:RecordedEvent",
+      "fqid" : "eventcore:recordAfterSnapshot",
+      "id" : "recordAfterSnapshot",
+      "range" : "eventcore:StateSnapshot",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/recordAfterSnapshot"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "A recorded event requires one supplied complete before snapshot directly; candidate availability is not an alternative range.",
+      "domain" : "eventcore:RecordedEvent",
+      "fqid" : "eventcore:recordBeforeSnapshot",
+      "id" : "recordBeforeSnapshot",
+      "range" : "eventcore:StateSnapshot",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/recordBeforeSnapshot"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Supplied source assertions support a record without proving narrative truth.",
+      "domain" : "eventcore:RecordedEvent",
+      "fqid" : "eventcore:recordCitesAssertion",
+      "id" : "recordCitesAssertion",
+      "range" : "eventcore:SourceAssertion",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/recordCitesAssertion"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "A record belongs to one explicit episode.",
+      "domain" : "eventcore:RecordedEvent",
+      "fqid" : "eventcore:recordInEpisode",
+      "id" : "recordInEpisode",
+      "range" : "eventcore:Episode",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/recordInEpisode"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "A record belongs to one immutable registry revision; its recordKey must be unique in that scope. The selected pinned instance profile enforces membership and uniqueness.",
+      "domain" : "eventcore:RecordedEvent",
+      "fqid" : "eventcore:recordInRegistry",
+      "id" : "recordInRegistry",
+      "range" : "eventcore:EventRegistry",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/recordInRegistry"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "A record declares its kind without determining actor or human contribution.",
+      "domain" : "eventcore:RecordedEvent",
+      "fqid" : "eventcore:recordOfActionKind",
+      "id" : "recordOfActionKind",
+      "range" : "eventcore:ActionKind",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/recordOfActionKind"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "A relation can retain multiple contextual participant roles.",
+      "domain" : "eventcore:RelationInstance",
+      "fqid" : "eventcore:relationBindsRole",
+      "id" : "relationBindsRole",
+      "range" : "eventcore:RoleBinding",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/relationBindsRole"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "An optional supplied origin record does not prescribe the relation's persistence or termination.",
+      "domain" : "eventcore:RelationInstance",
+      "fqid" : "eventcore:relationOriginRecord",
+      "id" : "relationOriginRecord",
+      "range" : "eventcore:RecordedEvent",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/relationOriginRecord"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "A resolved role binds any Entity; missing participants remain unresolved candidates.",
+      "domain" : "eventcore:RoleBinding",
+      "fqid" : "eventcore:roleBoundEntity",
+      "id" : "roleBoundEntity",
+      "range" : "eventcore:Entity",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/roleBoundEntity"
+    },
+    {
+      "cardinality" : {
+        "max" : "*",
+        "min" : 0
+      },
+      "description" : "Supplied finite fact membership; absence of an observation is not an empty membership list.",
+      "domain" : "eventcore:StateSnapshot",
+      "fqid" : "eventcore:snapshotContainsFact",
+      "id" : "snapshotContainsFact",
+      "range" : "eventcore:Fact",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/snapshotContainsFact"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Direct observation alternative; absence is not an observation of an empty state.",
+      "domain" : "eventcore:StateSnapshot",
+      "fqid" : "eventcore:snapshotDirectOrigin",
+      "id" : "snapshotDirectOrigin",
+      "range" : "eventcore:DirectObservationOrigin",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/snapshotDirectOrigin"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Explicit operator-supplied alternative, distinct from source citations and direct capture.",
+      "domain" : "eventcore:StateSnapshot",
+      "fqid" : "eventcore:snapshotOperatorOrigin",
+      "id" : "snapshotOperatorOrigin",
+      "range" : "eventcore:OperatorSnapshotOrigin",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/snapshotOperatorOrigin"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "One of exactly three disjoint snapshot origin alternatives under eventcore-provenance-v1.",
+      "domain" : "eventcore:StateSnapshot",
+      "fqid" : "eventcore:snapshotSourceOrigin",
+      "id" : "snapshotSourceOrigin",
+      "range" : "eventcore:SourceSnapshotOrigin",
+      "uri" : "ontology://org.0al.events.core/0.2.0/relations/snapshotSourceOrigin"
+    }
+  ],
+  "sourceDigest" : "sha256:92a3245fc9acd15748fd1fa3cfb8e4fdc8fda429a5fd6cffd7a97bc13f2f359e",
+  "stateMachines" : [
+    {
+      "fqid" : "eventcore:ProposalReview",
+      "id" : "ProposalReview",
+      "states" : [
+        "proposed",
+        "rejected",
+        "reviewed"
+      ],
+      "transitions" : [
+        {
+          "command" : "eventcore:RejectProposal",
+          "from" : "proposed",
+          "to" : "rejected"
+        },
+        {
+          "command" : "eventcore:ReviewProposal",
+          "from" : "proposed",
+          "to" : "reviewed"
+        }
+      ]
+    }
+  ],
+  "version" : "0.2.0"
+}

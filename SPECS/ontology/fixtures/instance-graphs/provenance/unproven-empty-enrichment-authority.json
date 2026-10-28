@@ -1,0 +1,29 @@
+{
+  "apiVersion": "ontology.specgraph.io/snapshot-authority/v1alpha1",
+  "confirmations": [],
+  "enrichments": [],
+  "grants": [
+    {
+      "authorityKey": "fixture-operator",
+      "capabilities": [
+        "confirm-source",
+        "enrich-candidate"
+      ],
+      "projectionKeys": [
+        "claimed-physical"
+      ],
+      "scopeKeys": [
+        "episode-1"
+      ]
+    }
+  ],
+  "graphKey": "unproven-empty-enrichment",
+  "graphSHA256": "17f53b82d064575a47844247319fe8ae161598156df0ea553911340aabd4b9d6",
+  "kind": "SnapshotProvenanceAuthority",
+  "profilePin": {
+    "definitionSHA256": "240d518666905c320df299b5d4d9e08e7c2564b0ca97ca2ab15d0a275dbe2551",
+    "id": "eventcore-provenance-v1",
+    "version": "1.0.0"
+  },
+  "revisionKey": "r1"
+}

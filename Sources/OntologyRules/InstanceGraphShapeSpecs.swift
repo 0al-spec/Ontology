@@ -6,15 +6,22 @@ struct InstanceGraphShapeCheck {
 
     mutating func validate() {
         let graph = context.graph
-        object(graph, keys: ["apiVersion", "kind", "profile", "graphKey", "revisionKey", "ontology", "projections", "nodes", "edges"], path: "graph")
+        var keys: Set<String> = ["apiVersion", "kind", "profile", "graphKey", "revisionKey", "ontology", "projections", "nodes", "edges"]
+        if context.profile == .provenance { keys.insert("profilePin") }
+        object(graph, keys: keys, path: "graph")
+        if context.profile == .provenance {
+            let pin = graph["profilePin"] as? GraphObject ?? [:]
+            object(pin, keys: Set(context.profile.definitionPin.keys), path: "graph.profilePin")
+            for (key, value) in context.profile.definitionPin { equal(pin, key: key, expected: value, path: "graph.profilePin") }
+        }
         equal(graph, key: "apiVersion", expected: EventCoreInstanceProfile.apiVersion, path: "graph")
         equal(graph, key: "kind", expected: "InstanceGraph", path: "graph")
-        equal(graph, key: "profile", expected: EventCoreInstanceProfile.name, path: "graph")
+        equal(graph, key: "profile", expected: context.profile.rawValue, path: "graph")
         identifier(graph["graphKey"], path: "graph.graphKey")
         identifier(graph["revisionKey"], path: "graph.revisionKey")
         let pin = graph["ontology"] as? GraphObject ?? [:]
-        object(pin, keys: Set(EventCoreInstanceProfile.ontology.keys), path: "graph.ontology")
-        for (key, value) in EventCoreInstanceProfile.ontology {
+        object(pin, keys: Set(context.profile.ontology.keys), path: "graph.ontology")
+        for (key, value) in context.profile.ontology {
             equal(pin, key: key, expected: value, path: "graph.ontology")
             equal(context.ontologyIR, key: key, expected: value, path: "ontologyIR")
         }

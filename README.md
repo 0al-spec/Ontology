@@ -418,3 +418,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+- [Snapshot provenance and enrichment profile](SPECS/ontology/instance-graph/provenance/README.md): explicit origin admission with unchanged eventcore-v1 history.
