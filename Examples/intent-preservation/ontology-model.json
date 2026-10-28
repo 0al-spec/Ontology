@@ -1,0 +1,15 @@
+{
+  "profile": "intent-preservation-pilot/v1",
+  "id": "image-reencode-model",
+  "nodes": [
+    {"id": "image", "concept": "imagepilot:ImageDocument", "values": {"entityKey": "image-1"}},
+    {"id": "encoding", "concept": "imagepilot:Reencode", "values": {"actionKind": "jpeg_reencode", "identityMode": "in_place", "dimensions": "preserve"}},
+    {"id": "encoder", "concept": "imagepilot:Encoder", "values": {"quality": 65}},
+    {"id": "goal", "concept": "imagepilot:SizeGoal", "values": {"basis": "reduction", "comparison": "at_least", "targetBytes": 200000, "missingInput": "unknown"}}
+  ],
+  "relations": [
+    {"type": "imagepilot:reencodeTarget", "from": "encoding", "to": "image"},
+    {"type": "imagepilot:reencodeEncoder", "from": "encoding", "to": "encoder"},
+    {"type": "imagepilot:reencodeGoal", "from": "encoding", "to": "goal"}
+  ]
+}

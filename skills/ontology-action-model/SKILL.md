@@ -71,6 +71,20 @@ requested boundary, not a desire to populate every available ontology concept.
 
 ## Check examples and verification claims
 
+When preserving intent through implementation, give each criterion a stable ID
+and origin. Keep expected intent independent from generated interpretations. At
+each boundary (intent → domain ontology → composition → code → observations),
+show a compact diff: preserved, added, removed, modified, unmapped. Compare with
+the original intent as well as the preceding layer; matching downstream mistakes
+must not become success. Name the editable source of a correction and keep earlier
+receipts. Structural validity, matching names or successful tests do not establish
+human approval. Separate structural checks, bounded executions and formal proofs.
+
+The Ontology repository's `Examples/intent-preservation` demonstrates this loop
+for nine image-encoding obligations. It is not a generic semantic comparator or
+mandatory architecture. Do not force one code class per ontology node; document
+the explicit implementation map.
+
 Use BDD to discuss concrete behavior and observable examples. Gherkin is one syntax
 for those examples; syntax validity alone supplies no executable step bindings.
 For PBT, state each rule's domain, preconditions, generated inputs, oracle and

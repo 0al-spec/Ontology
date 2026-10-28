@@ -1,0 +1,17 @@
+{
+  "profile": "intent-preservation-pilot/v1",
+  "id": "image-reencode-intent",
+  "alignment": "needs_human_review",
+  "motive": "Понимать сохранение замысла без чтения всей реализации; для примера — получить более компактное изображение.",
+  "obligations": [
+    {"id": "selected_entity", "value": "image-1", "origin": "example_assumption", "source": "One selected synthetic image"},
+    {"id": "action", "value": "jpeg_reencode", "origin": "example_assumption", "source": "User requested raster encoding; JPEG narrows the experiment"},
+    {"id": "identity", "value": "in_place", "origin": "user_direction", "source": "The same image entity remains after destructive encoding"},
+    {"id": "dimensions", "value": "preserve", "origin": "example_assumption", "source": "Distinguish re-encoding from resizing in this pilot"},
+    {"id": "goal_basis", "value": "reduction", "origin": "user_direction", "source": "A goal may constrain consequence, e.g. make a file 200 kB smaller"},
+    {"id": "goal_comparison", "value": "at_least", "origin": "example_assumption", "source": "Minimum reduction; exactly is a separate possible criterion"},
+    {"id": "goal_bytes", "value": 200000, "origin": "example_assumption", "source": "200 decimal kB; illustrative target, not a universal requirement"},
+    {"id": "missing_input", "value": "unknown", "origin": "user_direction", "source": "Missing states must not become invented states or empty Delta"},
+    {"id": "quality", "value": 65, "origin": "example_assumption", "source": "One JPEG encoder parameter; no promised visual-quality percentage"}
+  ]
+}

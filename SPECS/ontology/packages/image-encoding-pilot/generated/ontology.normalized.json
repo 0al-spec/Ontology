@@ -1,0 +1,378 @@
+{
+  "classes" : [
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "An encoding participant that may occupy instrument or actor roles under a selected interpretation. Its configuration does not imply a desire, awareness or autonomous goal.",
+      "extends" : "eventcore:Entity",
+      "fields" : [
+        {
+          "description" : "Declared integer codec quality setting. Its supported range and effect are defined by the caller-owned runtime profile.",
+          "id" : "quality",
+          "required" : true,
+          "type" : "integer"
+        }
+      ],
+      "fqid" : "imagepilot:Encoder",
+      "id" : "Encoder",
+      "implements" : [
+
+      ],
+      "kind" : "Entity",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/classes/Encoder"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "The selected image document under an explicit identity rule. entityKey identifies this domain entity; a shared path or filename does not establish identity.",
+      "extends" : "eventcore:Entity",
+      "fields" : [
+        {
+          "description" : "Caller-selected stable identity for the image document in this model.",
+          "id" : "entityKey",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "imagepilot:ImageDocument",
+      "id" : "ImageDocument",
+      "implements" : [
+
+      ],
+      "kind" : "Entity",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/classes/ImageDocument"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "A declared finite image observation projection at one measurement boundary: identity, byte length, dimensions and content digest. This is not an eventcore:StateSnapshot, a completeness declaration for all physical facts, an exact Delta or authenticated observation.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "description" : "Declared measured byte length; absent observations are not represented by zero.",
+          "id" : "byteLength",
+          "required" : true,
+          "type" : "integer"
+        },
+        {
+          "description" : "Declared SHA-256 digest of the measured content. Format, byte binding and truthful measurement require a separate consumer check.",
+          "id" : "contentSHA256",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "description" : "ImageDocument identity to which these declared measurements refer.",
+          "id" : "entityKey",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "description" : "Declared measured image height in pixels.",
+          "id" : "height",
+          "required" : true,
+          "type" : "integer"
+        },
+        {
+          "description" : "Declared measured image width in pixels.",
+          "id" : "width",
+          "required" : true,
+          "type" : "integer"
+        }
+      ],
+      "fqid" : "imagepilot:ImageState",
+      "id" : "ImageState",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/classes/ImageState"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : true,
+      "description" : "Declared reencoding action and constraints for the selected image. The command describes requested behavior; its presence does not establish execution, completion or goal satisfaction.",
+      "extends" : "sg:Command",
+      "fields" : [
+        {
+          "description" : "Declared action kind. The bounded pilot names jpeg_reencode; the generated primitive schema does not admit or execute an action enum.",
+          "id" : "actionKind",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "description" : "Declared dimensions constraint: preserve or resize. No automatic visual acceptance or preservation proof follows.",
+          "id" : "dimensions",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "description" : "Declared identity mode: in_place preserves the selected entity; copy creates a separately identified result. The selected runtime profile decides supported modes.",
+          "id" : "identityMode",
+          "required" : true,
+          "type" : "string"
+        }
+      ],
+      "fqid" : "imagepilot:Reencode",
+      "id" : "Reencode",
+      "implements" : [
+
+      ],
+      "kind" : "Command",
+      "layer" : "mechanics",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/classes/Reencode"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "central" : false,
+      "description" : "An explicit application criterion over supplied image measurements, not a performed action or an attributed mental stance. Its evaluation belongs to the selected runtime profile.",
+      "extends" : "sg:ValueObject",
+      "fields" : [
+        {
+          "description" : "Declared quantity: reduction is before.byteLength minus after.byteLength; final_size uses after.byteLength.",
+          "id" : "basis",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "description" : "Declared comparison: at_least, exactly or at_most. Each has a distinct meaning; no comparator substitution is permitted.",
+          "id" : "comparison",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "description" : "Declared missing-input behavior: unknown when supplied information cannot decide the criterion. Missing measurements never become zero or an empty Delta.",
+          "id" : "missingInput",
+          "required" : true,
+          "type" : "string"
+        },
+        {
+          "description" : "Declared nonnegative byte quantity used by the selected basis and comparison. Human units must be converted explicitly before supplying bytes.",
+          "id" : "targetBytes",
+          "required" : true,
+          "type" : "integer"
+        }
+      ],
+      "fqid" : "imagepilot:SizeGoal",
+      "id" : "SizeGoal",
+      "implements" : [
+
+      ],
+      "kind" : "ValueObject",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/classes/SizeGoal"
+    }
+  ],
+  "diagnostics" : [
+
+  ],
+  "id" : "org.0al.image.encoding.pilot",
+  "imports" : [
+    {
+      "id" : "org.0al.agency.core",
+      "namespace" : "agencycore",
+      "version" : "0.1.0"
+    },
+    {
+      "id" : "org.0al.events.core",
+      "namespace" : "eventcore",
+      "version" : "0.2.0"
+    },
+    {
+      "id" : "specgraph.foundation",
+      "namespace" : "sg",
+      "version" : "0.1.0"
+    }
+  ],
+  "modelApplicability" : {
+    "appliesTo" : {
+      "contexts" : [
+        "bounded_intent_preservation_pilot",
+        "declared_action_and_size_criterion"
+      ],
+      "domains" : [
+        "raster_image_encoding"
+      ]
+    },
+    "assumptions" : [
+      {
+        "id" : "consumer_profile",
+        "text" : "Examples/intent-preservation defines supported combinations, validates observations and evaluates the criterion. The package alone does not execute these policies."
+      },
+      {
+        "id" : "explicit_projection",
+        "text" : "ImageState supplies only the named image measurement projection; absent values require absent states or source-only descriptions."
+      }
+    ],
+    "excludes" : {
+      "contexts" : [
+        "automatic_formal_correctness",
+        "automatic_mental_state_attribution",
+        "implicit_instance_graph_admission",
+        "universal_codec_equivalence"
+      ]
+    },
+    "invalidationTriggers" : [
+      {
+        "id" : "meaning_changed",
+        "text" : "Review and version the consumer profile and this draft before changing the image identity rule, supported action, quantity basis or comparison semantics."
+      }
+    ]
+  },
+  "namespace" : "imagepilot",
+  "policies" : [
+    {
+      "appliesTo" : [
+        "imagepilot:Encoder",
+        "imagepilot:ImageDocument",
+        "imagepilot:ImageState",
+        "imagepilot:Reencode",
+        "imagepilot:SizeGoal"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "imagepilot:ConsumerOwnedMeaning",
+      "id" : "ConsumerOwnedMeaning",
+      "text" : "Package compilation and generated SDK checks cover declaration consistency and primitive object shapes. String enums, cross-object identity, image dimensions, digest binding, exact observations, goal arithmetic, implementation correspondence and runtime behavior are not enforced by this package. The separately reviewed Examples/intent-preservation consumer owns the bounded executable profile. Existing InstanceGraph profiles do not implicitly admit imagepilot nodes."
+    },
+    {
+      "appliesTo" : [
+        "imagepilot:Encoder",
+        "imagepilot:ImageState",
+        "imagepilot:Reencode"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "imagepilot:DeclaredEncodingConstraints",
+      "id" : "DeclaredEncodingConstraints",
+      "text" : "The bounded action kind is jpeg_reencode. Dimensions preserve requires equal declared before/after width and height; resize is a separate declared mode and must not silently replace preserve. Encoder quality is a configuration input, not measured size, visual acceptance or proof of a desired result. Supported integer quality bounds and actual codec behavior belong to the selected caller profile."
+    },
+    {
+      "appliesTo" : [
+        "imagepilot:ImageState",
+        "imagepilot:SizeGoal"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "imagepilot:ExplicitSizeCriterion",
+      "id" : "ExplicitSizeCriterion",
+      "text" : "For basis reduction compare before.byteLength minus after.byteLength with targetBytes; for final_size compare after.byteLength. Interpret at_least as >=, exactly as equality and at_most as <=. targetBytes is nonnegative and expressed in bytes. Missing data yields unknown only when available observations cannot decide the selected criterion; a known-false conjunct may establish not_satisfied despite unknown other operands. Operation completion and goal evaluation remain separate. No missing measurement becomes zero, a fabricated observation or an empty Delta."
+    },
+    {
+      "appliesTo" : [
+        "imagepilot:ImageState",
+        "imagepilot:Reencode",
+        "imagepilot:SizeGoal"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "imagepilot:ObservationAndAgencyBoundary",
+      "id" : "ObservationAndAgencyBoundary",
+      "text" : "ImageState is an application measurement projection, not an admitted complete physical StateSnapshot or actual event Delta. Source-only descriptions may omit states rather than invent measurements. A desired condition, runtime success message, source quotation or reviewed claim does not establish factual truth, actual change, causation or mental state. Selecting a SizeGoal does not automatically create an agencycore:GoalHypothesis, motive or awareness attribution."
+    },
+    {
+      "appliesTo" : [
+        "imagepilot:ImageDocument",
+        "imagepilot:ImageState",
+        "imagepilot:Reencode"
+      ],
+      "enforceability" : "manual",
+      "extends" : "sg:Policy",
+      "fqid" : "imagepilot:SelectedImageIdentity",
+      "id" : "SelectedImageIdentity",
+      "text" : "The selected action targets the selected ImageDocument. In_place preserves its entity identity across the declared before/after measurements; copy requires a distinct result identity and explicit derivation outside this minimum package. A path, label or hash alone does not select the identity rule. An image measurement must not be rebound to another document to satisfy a goal."
+    }
+  ],
+  "protocols" : [
+
+  ],
+  "relations" : [
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 0
+      },
+      "description" : "Optional actor/view context. Derive a resolved subject through the selected AgencyContext and its existing actor role; absence remains unresolved. Role scope needs separate consumer validation.",
+      "domain" : "imagepilot:Reencode",
+      "fqid" : "imagepilot:reencodeContext",
+      "id" : "reencodeContext",
+      "range" : "agencycore:AgencyContext",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/relations/reencodeContext"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Encoding participant used by this action. Actor versus instrument is determined by the selected interpretation, not by this link alone.",
+      "domain" : "imagepilot:Reencode",
+      "fqid" : "imagepilot:reencodeEncoder",
+      "id" : "reencodeEncoder",
+      "range" : "imagepilot:Encoder",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/relations/reencodeEncoder"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Explicit criterion selected for this bounded action. Its existence does not establish achievement or an operator's psychological goal.",
+      "domain" : "imagepilot:Reencode",
+      "fqid" : "imagepilot:reencodeGoal",
+      "id" : "reencodeGoal",
+      "range" : "imagepilot:SizeGoal",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/relations/reencodeGoal"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "The image selected for this declared action. A codec result for another entity does not fulfill this target binding.",
+      "domain" : "imagepilot:Reencode",
+      "fqid" : "imagepilot:reencodeTarget",
+      "id" : "reencodeTarget",
+      "range" : "imagepilot:ImageDocument",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/relations/reencodeTarget"
+    },
+    {
+      "cardinality" : {
+        "max" : 1,
+        "min" : 1
+      },
+      "description" : "Document to which the observation projection is attributed. entityKey agreement, measurement provenance and before/after placement are consumer obligations.",
+      "domain" : "imagepilot:ImageState",
+      "fqid" : "imagepilot:stateOfDocument",
+      "id" : "stateOfDocument",
+      "range" : "imagepilot:ImageDocument",
+      "uri" : "ontology://org.0al.image.encoding.pilot/0.1.0/relations/stateOfDocument"
+    }
+  ],
+  "sourceDigest" : "sha256:7f67a146d26573624f738bfd003635d10d544e120f0d4b7ebfffa31301437330",
+  "stateMachines" : [
+    {
+      "fqid" : "imagepilot:ReencodeRequest",
+      "id" : "ReencodeRequest",
+      "states" : [
+        "ready",
+        "requested"
+      ],
+      "transitions" : [
+        {
+          "command" : "imagepilot:Reencode",
+          "from" : "ready",
+          "to" : "requested"
+        }
+      ]
+    }
+  ],
+  "version" : "0.1.0"
+}

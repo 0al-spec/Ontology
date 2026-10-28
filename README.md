@@ -299,6 +299,11 @@ The [ontology-action-model skill](skills/ontology-action-model/SKILL.md) package
 this workflow for agents. It distinguishes transition-based goal criteria from
 actual consequences and maps examples to Gherkin and property-based test designs;
 it does not introduce an executable goal profile or application tests.
+The separate [intent-preservation pilot](Examples/intent-preservation/README.md)
+runs a real image example through a draft application ontology, Hypercode and
+Python implementation. It reports compact differences at each boundary, with a
+fixed intent baseline, independent observations and negative controls. Its bounded
+test evidence is separate from human approval and formal proof.
 For personal Codex discovery, copy the complete `skills/ontology-action-model`
 folder into `${CODEX_HOME:-$HOME/.codex}/skills/` (inspect an existing destination
 before replacing it). Its references and templates stay relative to the skill.
