@@ -57,6 +57,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-28 | ONT-049 | Archived REVIEW_ONT-049; corrected independent P2, FOLLOW-UP skipped (no unresolved findings) |
 | 2026-10-28 | ONT-049 | Archived generic agency package/reference-consumer PRD and local validation |
 | 2026-10-28 | ONT-046 | Archived self-review; hosted/independent review remains separate |
 | 2026-10-28 | ONT-046 | Archived Linux compiler source port, local platform checks and CI matrix |
