@@ -30,3 +30,7 @@ No Swift source or generated ontology IR changed. Hosted checks on the final PR 
 ## Next steps
 
 Review the compact common reports and the domain-bound profile claims in the separate PR above #75. Broader semantic adapters or application integration require their own bounded contracts. FOLLOW-UP skipped: no unresolved actionable defect; declared evidence limits are scope, not hidden guarantees.
+
+## PR #76 bot feedback
+
+Closed the two concrete follow-up defects: exporter cached-source mismatch and collapsed rows whose cited evidence does not support their declared success. Regression coverage includes both exporter import orders, all three problematic evidence variants, and a stale renderer module. No unresolved defect remains in this scope.

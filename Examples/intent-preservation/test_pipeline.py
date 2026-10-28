@@ -4,6 +4,7 @@ import copy
 import os
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -18,6 +19,40 @@ import contract_export
 
 
 class ContractTests(unittest.TestCase):
+    def test_cached_export_is_rejected_before_or_after_pipeline_import(self):
+        for import_first in ("export", "pipeline"):
+            with self.subTest(import_first=import_first), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                copied = root / "Examples/intent-preservation"
+                shutil.copytree(HERE, copied, ignore=shutil.ignore_patterns("__pycache__"))
+                shutil.copytree(HERE.parent / "intent_contract", copied.parent / "intent_contract",
+                                ignore=shutil.ignore_patterns("__pycache__"))
+                schema = root / "SPECS/intent-preservation/0.1/receipt.schema.json"
+                schema.parent.mkdir(parents=True)
+                shutil.copyfile(HERE.parents[1] / "SPECS/intent-preservation/0.1/receipt.schema.json", schema)
+                script = '''
+import sys
+from pathlib import Path
+sys.path.insert(0, sys.argv[1])
+if sys.argv[2] == "export":
+    import contract_export
+else:
+    import pipeline
+path = Path(sys.argv[1]) / "contract_export.py"
+path.write_text(path.read_text() + "\\n# newer export bytes\\n")
+import pipeline
+try:
+    pipeline.run(Path(sys.argv[1]), Path("unused-ontologyc"), Path("unused-hypercode"), Path(sys.argv[3]))
+except ValueError as error:
+    assert "loaded export adapter source changed" in str(error), str(error)
+else:
+    raise AssertionError("cached exporter accepted new source bytes")
+'''
+                result = subprocess.run([sys.executable, "-I", "-B", "-c", script, str(copied),
+                                         import_first, str(root / "output")], capture_output=True, text=True, timeout=30)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertFalse((root / "output").exists())
+
     def test_empty_does_not_mean_preserved(self):
         self.assertEqual(boundary({}, {}, {}, "empty")["status"], "unknown")
 

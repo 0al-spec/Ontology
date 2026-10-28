@@ -26,7 +26,7 @@ PACKAGE = ROOT / "SPECS/ontology/packages/image-encoding-pilot"
 INPUTS = ("intent.json", "ontology-model.json", "image.hc", "image.hcs", "implementation.json")
 ADAPTERS = ("contract.py", "pipeline.py", "observe.py", "report.py", "image_app.py", "worker.py", "profile.json", "requirements.txt", "contract_export.py")
 
-LOADED = {name: sha256(HERE / name) for name in ("contract.py", "pipeline.py")}
+LOADED = {name: sha256(HERE / name) for name in ("contract.py", "pipeline.py", "contract_export.py")}
 LOADED_SUPPORT = {name: sha256(path) for name, path in contract_export.support_sources().items()}
 
 def write_json(path: Path, value: dict) -> None:
@@ -130,6 +130,7 @@ def runtime_boundary(implementation: dict, runtime: dict, expected: dict) -> dic
 
 def run(inputs: Path, ontologyc: Path, hypercode: Path, out: Path) -> dict:
     """Produce a new receipt in an empty directory; never amend old evidence."""
+    contract_export.ensure_current()
     if any(sha256(HERE / name) != digest for name, digest in LOADED.items()):
         raise ValueError("loaded comparator source changed; start a fresh Python process")
     if any(sha256(path) != LOADED_SUPPORT[name] for name, path in contract_export.support_sources().items()):

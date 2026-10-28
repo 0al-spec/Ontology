@@ -7,8 +7,13 @@ Callers pass the result of core.check; absent assessment stays explicitly unknow
 from __future__ import annotations
 
 import html
+import hashlib
 import json
 from pathlib import Path
+
+
+_SOURCE = Path(__file__).resolve()
+_LOADED_SOURCE_SHA256 = hashlib.sha256(_SOURCE.read_bytes()).digest()
 
 
 _STATUS = {
@@ -72,9 +77,12 @@ def _object(value: object) -> dict:
     return value if isinstance(value, dict) else {}
 
 
-def _problem(row: dict) -> bool:
+def _problem(row: dict, evidence: dict[str, dict]) -> bool:
+    references = _values(row.get("evidence"))
     return (row.get("change") != "preserved" or row.get("adjacent") != "satisfied"
-            or row.get("baseline") != "satisfied" or not _values(row.get("evidence")))
+            or row.get("baseline") != "satisfied" or not references
+            or any(evidence.get(str(reference), {}).get("verdict") != "satisfied"
+                   for reference in references))
 
 
 def _fields(row: dict, evidence: dict[str, dict]) -> list[tuple[str, object]]:
@@ -116,6 +124,8 @@ def _card(row: dict, labels: dict[str, str], evidence: dict[str, dict]) -> tuple
 
 def render(receipt: dict, directory: Path, *, assessment: dict | None = None) -> None:
     """Write report.md/report.html without fetching links or executing supplied content."""
+    if hashlib.sha256(_SOURCE.read_bytes()).digest() != _LOADED_SOURCE_SHA256:
+        raise ValueError("loaded renderer source changed; start a fresh Python process")
     assessment = assessment if assessment is not None else {
         "status": "unknown", "freshness": "not_checked",
         "diagnostics": ["Оценка контракта не передана; отображение не является проверкой."],
@@ -132,7 +142,7 @@ def render(receipt: dict, directory: Path, *, assessment: dict | None = None) ->
     covered = sum(len(required.intersection(str(r.get("obligationId"))
                                             for r in _objects(b.get("rows")))) for b in boundaries)
     expected = len(obligations) * max(len(declared_stages) - 1, 0)
-    issues = sum(_problem(r) for b in boundaries for r in _objects(b.get("rows")))
+    issues = sum(_problem(r, evidence) for b in boundaries for r in _objects(b.get("rows")))
     summary = [
         ("Контракт", receipt.get("contract")), ("Профиль", receipt.get("profile")),
         ("Проверка", _status(assessment.get("status", "unknown"))),
@@ -172,7 +182,8 @@ def render(receipt: dict, directory: Path, *, assessment: dict | None = None) ->
         markdown.append("## " + _m(title))
         document.append("<section><h2>" + _h(title) + "</h2>")
         rows = _objects(boundary.get("rows"))
-        changed, preserved = [r for r in rows if _problem(r)], [r for r in rows if not _problem(r)]
+        changed = [r for r in rows if _problem(r, evidence)]
+        preserved = [r for r in rows if not _problem(r, evidence)]
         missing = required - {str(r.get("obligationId")) for r in rows}
         notices = _values(boundary.get("unmapped")) + ["Нет записи для обязательства: " + i for i in sorted(missing)]
         if not rows:

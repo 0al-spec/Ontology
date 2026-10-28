@@ -1,6 +1,7 @@
 """Report checks focus on visible evidence boundaries and inert untrusted content."""
 
 import copy
+import importlib.util
 from pathlib import Path
 import sys
 import tempfile
@@ -24,7 +25,8 @@ def receipt():
             "evidence": [{"id": "e1", "kind": "execution", "checker": "cancel-check/1", "scope": "One example",
                           "bindings": ["intent.json", "observation.json"], "verdict": "satisfied"}],
             "bindings": {"intent.json": "a" * 64, "observation.json": "b" * 64},
-            "decision": {"status": "pending", "baselineRevision": "1", "bindings": ["intent.json"], "reason": "Not reviewed"},
+            "decision": {"status": "pending", "baselineRevision": "1", "bindings": ["intent.json"],
+                         "reason": "Not reviewed", "reviewedReceiptSHA256": None},
             "outcomes": [], "gaps": []}
 
 
@@ -34,6 +36,19 @@ class RenderTests(unittest.TestCase):
             render(value, Path(directory), assessment=assessment)
             return ((Path(directory) / "report.html").read_text(),
                     (Path(directory) / "report.md").read_text())
+
+    def test_cached_renderer_refuses_changed_source_without_writing_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "render_snapshot.py"
+            source.write_bytes(Path(__file__).with_name("render.py").read_bytes())
+            spec = importlib.util.spec_from_file_location("render_snapshot", source)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            source.write_bytes(source.read_bytes() + b"\n# changed after import\n")
+            output = Path(directory) / "report"
+            with self.assertRaisesRegex(ValueError, "loaded renderer source changed"):
+                module.render(receipt(), output)
+            self.assertFalse(output.exists())
 
     def test_omitted_assessment_is_unknown_even_for_accepted_positive_rows(self):
         value = receipt()
@@ -97,6 +112,25 @@ class RenderTests(unittest.TestCase):
             self.assertIn("не представлены; соответствие не подтверждено", output)
             self.assertNotIn("Сохранённые сопоставления", output)
             self.assertLess(output.index("Observed cancellation"), output.index("<details>"))
+
+    def test_cited_problem_evidence_expands_falsely_positive_rows(self):
+        for problem in ("missing", "unknown", "violated"):
+            with self.subTest(problem=problem):
+                value = receipt()
+                if problem == "missing":
+                    value["evidence"] = []
+                else:
+                    value["evidence"][0]["verdict"] = problem
+                html, markdown = self.output(value, {
+                    "status": "unknown" if problem != "violated" else "violated",
+                    "freshness": "matched", "diagnostics": ["Cited evidence is not satisfied"],
+                })
+                for output in (html, markdown):
+                    self.assertNotIn("Сохранённые сопоставления", output)
+                    self.assertLess(output.index("editor.py"), output.index("<details>"))
+                    self.assertLess(output.index("Observed cancellation"), output.index("<details>"))
+                self.assertIn("Изменения и вопросы</dt><dd>1</dd>", html)
+                self.assertIn("**Изменения и вопросы:** 1", markdown)
 
     def test_added_criterion_and_missing_evidence_are_visible(self):
         value = receipt()

@@ -22,7 +22,7 @@ python -B -m unittest discover -s Examples/intent-preservation -p "test_*.py"
 python -B -m unittest discover -s Examples/edit-cancellation -p "test_*.py"
 ```
 
-Results: **34 + 59 + 17 = 110 tests passed**, no skipped real-tool integration. Shared tests cover missing/duplicate coverage, reference binding, typed JSON criteria, nonfinite input, unsupported versions, unsubstantiated judgments, stale bytes/imported consumers, human decision transfer, outcomes and escaped renderer content. Image controls include the independent numerical goal not achieved while evaluator conformance remains satisfied. Cancellation controls mutate real isolated source copies for cached modules, decoy restoration and a skipped edit.
+Results: **36 + 60 + 17 = 113 tests passed**, no skipped real-tool integration. Shared tests cover missing/duplicate coverage, reference binding, typed JSON criteria, nonfinite input, unsupported versions, unsubstantiated judgments, stale bytes/imported consumers, human decision transfer, outcomes and escaped renderer content. Image controls include the independent numerical goal not achieved while evaluator conformance remains satisfied. Cancellation controls mutate real isolated source copies for cached modules, decoy restoration and a skipped edit.
 
 Fresh CLI evidence:
 
@@ -45,3 +45,7 @@ An independent agent reproduced two defects in initial working changes: cached e
 ## Limits
 
 Core validates declared correspondence and evidence integrity, not arbitrary semantic truth. Domain adapters supply bounded judgments. Hashes are not signed attestations. Human approval is not inferred from pilot acceptance; outcomes are distinct from conformity. No new Lean proof, general code equivalence, UI application, merge, deployment or external consumer activation is claimed.
+
+## PR review regression follow-up
+
+The initial PR head 12ead7f passed all five hosted jobs. Two subsequent bot findings were addressed before completing delivery: loaded export bytes now have an import-time guard (including export loaded before pipeline import), and preserved-looking rows with missing/unknown/violated cited evidence stay expanded. The renderer has the same import-time source guard for its human projection. Isolated regressions pass; the updated total is 113 local tests. Hosted validation of the follow-up commit is tracked in PR #76. Earlier local receipts remain immutable and become stale against changed adapters as designed.

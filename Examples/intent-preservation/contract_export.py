@@ -20,6 +20,13 @@ from intent_contract.core import check
 from intent_contract.render import render
 
 PROFILE = "image-encoding/1"
+LOADED_SOURCE = sha256(Path(__file__))
+
+
+def ensure_current() -> None:
+    """Reject new source bytes paired with this module's cached implementation."""
+    if sha256(Path(__file__)) != LOADED_SOURCE:
+        raise ValueError("loaded export adapter source changed; start a fresh Python process")
 
 
 def support_sources() -> dict[str, Path]:
@@ -33,6 +40,7 @@ def support_sources() -> dict[str, Path]:
 
 def project(report: dict, bindings: dict[str, str]) -> dict:
     """Adapt the already computed bounded checks; generic core adds no semantics."""
+    ensure_current()
     obligations = [{
         "id": item["id"], "label": item["label"],
         "origin": "assumption" if item["origin"] == "example_assumption" else "user_direction",
@@ -125,6 +133,7 @@ def project(report: dict, bindings: dict[str, str]) -> dict:
 
 def emit(report: dict, directory: Path) -> dict:
     """Only called immediately after a fresh run whose bindings were checked."""
+    ensure_current()
     out = directory / "contract"
     out.mkdir()
     for key, path in support_sources().items():
@@ -147,6 +156,7 @@ def verify(directory: Path, current_bindings: dict[str, str]) -> dict:
     """Assess freshness of the new contract only; never convert a v1 receipt."""
     from contract import load
     try:
+        ensure_current()
         receipt = load(directory / "contract/receipt.json")
         current = dict(current_bindings)
         current["output/legacy-report.json"] = sha256(directory / "report.json")

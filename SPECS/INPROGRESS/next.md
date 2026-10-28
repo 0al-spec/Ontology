@@ -33,7 +33,7 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
-- ONT-052: contract 0.1, separate semantic/evidence/human/outcome axes, image adapter and edit cancellation profile. 110 local tests pass; independent review fixes closed. Next: review the separate PR above #75 and try the compact report against another real change. No consumer integration or merge selected automatically.
+- ONT-052: contract 0.1, separate semantic/evidence/human/outcome axes, image adapter and edit cancellation profile. 113 local tests pass; independent review fixes closed. Next: review the separate PR above #75 and try the compact report against another real change. No consumer integration or merge selected automatically.
 
 - ONT-051: executable image intent-preservation pilot, compact boundary reports,
   real ontology/Hypercode integration and 55 Python checks. Local validation PASS;
