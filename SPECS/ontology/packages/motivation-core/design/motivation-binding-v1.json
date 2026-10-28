@@ -1,0 +1,61 @@
+{
+  "id": "motivation-binding-design-v1",
+  "version": "0.1.0",
+  "kind": "MotivationBindingDesign",
+  "status": "draft",
+  "executable": false,
+  "eventVocabulary": {
+    "id": "org.0al.events.core",
+    "namespace": "eventcore",
+    "version": "0.2.0",
+    "sourceDigest": "sha256:92a3245fc9acd15748fd1fa3cfb8e4fdc8fda429a5fd6cffd7a97bc13f2f359e",
+    "irSHA256": "e6c932ad8c492d168b63dbe112335c270d88ff758e016f3502031aefe9dea916"
+  },
+  "motiveMeaning": "A reason prompting any Entity actor toward action or omission; conscious intention is not required.",
+  "consciousIntentionRequired": false,
+  "actorModel": "any eventcore:Entity through a selected view-owned actor RoleBinding, or unresolved",
+  "scopeViewAlternatives": [
+    "eventcore:Interpretation",
+    "eventcore:InterpretationCandidate"
+  ],
+  "contributionKinds": [
+    "action",
+    "omission"
+  ],
+  "supportPresence": {
+    "neither": "unknown",
+    "positiveOnly": "supported",
+    "negativeOnly": "opposed",
+    "both": "contested"
+  },
+  "authority": {
+    "instanceValidatorImplemented": false,
+    "roleOwnershipChecked": false,
+    "sourceRelevanceChecked": false,
+    "motivationTruthVerified": false,
+    "causationVerified": false,
+    "responsibilityVerified": false,
+    "leanAdapterImplemented": false,
+    "automaticNormEffect": false
+  },
+  "existingProfileAdmission": {
+    "eventcore-v1": false,
+    "eventcore-provenance-v1": false
+  },
+  "consequence": {
+    "origin": "Derived only through an admitted known interpretation and its record-owned optional Delta.",
+    "sourceOnlyAvailable": true,
+    "unknownChangesAreEmptyDiff": false,
+    "desiredOutcomeIsActualConsequence": false
+  },
+  "constraints": [
+    "One motive and one selected view per hypothesis.",
+    "Selected actor role, when present, is owned by the selected view and named actor; derive Entity through roleBoundEntity.",
+    "Episode/action/registered record states derive through the selected view; do not duplicate or overwrite them.",
+    "Source speaker, support author and motivated actor are distinct roles.",
+    "Keep positive and negative declared support independent; absent links do not assert absence of motive.",
+    "Known prompting and target records must be distinct, with explicit scope/time/clock alignment for an ordered causal claim.",
+    "A motive does not establish action performance, omission duty/capability/deadline/exception, consciousness, fault or sanction.",
+    "Review is proposal workflow only; future consumers must explicitly validate cross-node bindings."
+  ]
+}

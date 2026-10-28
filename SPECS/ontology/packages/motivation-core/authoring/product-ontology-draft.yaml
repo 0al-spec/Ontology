@@ -1,0 +1,162 @@
+{
+  "apiVersion": "ontology-induction.specgraph.io/v1alpha1",
+  "kind": "ProductOntologyDraft",
+  "metadata": {
+    "status": "candidate",
+    "sourceIntentId": "motive-user-request-2026-10-28",
+    "producedBy": "CodexRootStagedAuthoring",
+    "confidence": 0.8,
+    "provenance": [
+      {
+        "source": "user-request-2026-10-28",
+        "note": "Broad Entity actors and no required conscious intention explicitly confirmed; no external paid inference."
+      }
+    ],
+    "uncertainties": [
+      {
+        "id": "future-consumer-profile",
+        "question": "Which consumer validates motivation instances?"
+      }
+    ]
+  },
+  "spec": {
+    "namespaceCandidate": "motivcore",
+    "governingConcept": {
+      "id": "Motive",
+      "rationale": "Prompting reason content is reusable, while attribution stays scoped to an actor/view."
+    },
+    "classes": [
+      {
+        "id": "Motive",
+        "category": "domainEntity"
+      },
+      {
+        "id": "MotivationHypothesis",
+        "category": "domainEntity"
+      },
+      {
+        "id": "OperatorMotivationSupport",
+        "category": "domainEntity"
+      },
+      {
+        "id": "ReviewMotivation",
+        "category": "command"
+      },
+      {
+        "id": "RejectMotivation",
+        "category": "command"
+      }
+    ],
+    "relations": [
+      {
+        "id": "hypothesisMotive",
+        "domain": "MotivationHypothesis",
+        "range": "Motive"
+      },
+      {
+        "id": "hypothesisView",
+        "domain": "MotivationHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:Interpretation",
+            "eventcore:InterpretationCandidate"
+          ]
+        }
+      },
+      {
+        "id": "hypothesisActorRole",
+        "domain": "MotivationHypothesis",
+        "range": "eventcore:RoleBinding"
+      },
+      {
+        "id": "hypothesisPromptingEntity",
+        "domain": "MotivationHypothesis",
+        "range": "eventcore:Entity"
+      },
+      {
+        "id": "hypothesisPromptingFact",
+        "domain": "MotivationHypothesis",
+        "range": "eventcore:Fact"
+      },
+      {
+        "id": "hypothesisPromptingView",
+        "domain": "MotivationHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:Interpretation",
+            "eventcore:InterpretationCandidate"
+          ]
+        }
+      },
+      {
+        "id": "hypothesisPositiveSupport",
+        "domain": "MotivationHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorMotivationSupport"
+          ]
+        }
+      },
+      {
+        "id": "hypothesisNegativeSupport",
+        "domain": "MotivationHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorMotivationSupport"
+          ]
+        }
+      },
+      {
+        "id": "operatorSupportAuthor",
+        "domain": "OperatorMotivationSupport",
+        "range": "eventcore:Entity"
+      }
+    ],
+    "protocols": [],
+    "policies": [
+      {
+        "id": "ActorScopedMotivation",
+        "enforceability": "manual"
+      },
+      {
+        "id": "IndependentMotivationSupport",
+        "enforceability": "manual"
+      },
+      {
+        "id": "SourceAndOperatorMotivation",
+        "enforceability": "manual"
+      },
+      {
+        "id": "SeparateContributionAndConsequence",
+        "enforceability": "manual"
+      },
+      {
+        "id": "PromptingReasonBoundary",
+        "enforceability": "manual"
+      },
+      {
+        "id": "ReviewIsNotMotiveTruth",
+        "enforceability": "manual"
+      }
+    ],
+    "stateMachines": [
+      {
+        "id": "MotivationReview",
+        "appliesTo": [
+          "MotivationHypothesis"
+        ]
+      }
+    ],
+    "assumptions": [
+      "Any Entity actor; consciousness/intention not required.",
+      "No motive runtime adapter, instance profile, proof backend or normative effect.",
+      "Source-only motives never supply physical snapshots or an empty Delta."
+    ],
+    "validationNotes": [
+      "Compiler object schemas do not enforce graph scope, cardinality, contribution enums, source relevance or truth.",
+      "Review status and support-presence status remain distinct."
+    ]
+  }
+}

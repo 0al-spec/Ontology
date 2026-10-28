@@ -1,0 +1,33 @@
+apiVersion: ontology-induction.specgraph.io/v1alpha1
+kind: DraftCritique
+status: approved_for_yaml
+summary: Draft assembly preserves broad actors, contextual attribution, independent support and source-only consequences; runtime graph admission remains unimplemented.
+scores:
+  domainFraming: 4
+  conceptCoverage: 4
+  behavioralModeling: 3
+  policyModeling: 4
+  trustAndEvidence: 4
+  uncertaintyHandling: 4
+  implementationLeakage: 5
+  relationQuality: 4
+  competencyQuestions: 4
+  yamlReadiness: 4
+issues:
+  - id: graph-admission-deferred
+    severity: medium
+    message: Object schemas cannot check actor role ownership, contribution enums, scope, timing or evidence relevance.
+    affects: [MotivationHypothesis, OperatorMotivationSupport]
+    suggestedFix: Keep the package draft and policies manual; no runtime admission or motivation-truth claim.
+  - id: broad-cause-interpretation
+    severity: low
+    message: A prompting physical reason need not imply intention; motivation and causal descriptions may refer to the same occurrence.
+    affects: [Motive, MotivationHypothesis]
+    suggestedFix: Define motive as broad actor-relative prompting reason and keep mental/causal/legal claims separate.
+questions:
+  - id: future-consumer-profile
+    question: Which future consumer validates motivation bindings and their supported scope?
+    blocksApproval: false
+provenance:
+  - source: SPECS/ontology/packages/motivation-core/authoring/intent.md
+    note: Single-author critique; subjective rubric scores are not measured model or legal accuracy.
