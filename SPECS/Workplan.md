@@ -1039,7 +1039,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1 (explicit user selection)
 - **Dependencies:** ONT-042, ONT-047; uses events-core 0.2.0 without changing its pins
 - **Parallelizable:** yes, independently of ONT-045
-- **Status:** INPROGRESS
+- **Status:** Complete — draft vocabulary/IR/SDK delivered; hosted PR review pending
 - **Origin:** User request 2026-10-28; motive is a reason prompting an actor's
   action/omission leading to a consequence. User explicitly includes nonhuman actors.
 - **Outputs:** Staged motivation vocabulary, compiled IR/SDK, examples, pinned
@@ -1054,6 +1054,11 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Compiler/generated-object checks are honest about unimplemented cross-node,
     source relevance, timing and motivation-truth checks. Existing profiles and
     saved reports remain unchanged; no new Lean/runtime adapter is implied.
+
+- **Validation:** Five classes, nine relations, six manual policies; staged/check,
+  two fresh generation baselines, exact event pin/import refs and TypeScript
+  object/runtime/type checks pass. Full quality retains 159 existing tests.
+  No motivation instance admission, motive truth or new Lean proof is claimed.
 
 ---
 
