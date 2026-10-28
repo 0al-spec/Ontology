@@ -1,12 +1,3 @@
-# Current Task: ONT-052 — Intent Preservation Contract
-
-**Status:** Selected
-**Base:** feature/ONT-051-intent-preservation-pilot / PR #75
-**Scope:** Versioned common contract, image adapter, edit-cancellation example and regression evidence.
-**Workflow note:** The explicit request for a PR on top overrides FLOW default main base. Lower stack layers stay unchanged.
-
----
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -41,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-052: contract 0.1, separate semantic/evidence/human/outcome axes, image adapter and edit cancellation profile. 110 local tests pass; independent review fixes closed. Next: review the separate PR above #75 and try the compact report against another real change. No consumer integration or merge selected automatically.
 
 - ONT-051: executable image intent-preservation pilot, compact boundary reports,
   real ontology/Hypercode integration and 55 Python checks. Local validation PASS;

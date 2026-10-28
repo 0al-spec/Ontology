@@ -1142,7 +1142,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Description:** Extract a versioned domain-neutral review contract from the accepted image pilot, with explicit coverage, mappings, bounded evidence and human decisions; exercise it on edit cancellation.
 - **Priority:** P1 — explicit user selection
 - **Dependencies:** ONT-051; separate PR immediately above #75 as requested
-- **Status:** INPROGRESS
+- **Status:** Complete — bounded local contract and two profiles PASS; hosted PR checks separate
 - **Acceptance Criteria:**
   - Versioned schema and normative workflow separate intent, semantic change, validation and human acceptance.
   - Every required obligation is accounted for at every declared boundary and checked against original intent as well as the preceding stage.
