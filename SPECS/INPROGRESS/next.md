@@ -1,3 +1,16 @@
+# Selected: ONT-046 — Linux Compiler Portability
+
+**Priority:** P1 — explicit user selection, SpecGraph publication dependency
+**Status:** Selected; prepare portability plan before implementation
+**Dependencies:** None known; preserve Swift 6.0 minimum and frozen artifacts
+
+Make a clean Linux checkout build/test ontologyc without reviewer-local patches.
+Keep compiler absence distinct from a valid ontology result; document the consumer
+boundary without changing SpecGraph or starting deployment. Follow FLOW and
+publish a separate reviewable PR. The first 0.1.0 source release remains immutable.
+
+---
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -33,7 +46,7 @@ Linux portability work. No paid inference or deployment is needed for this pilot
 
 ## Recently Archived
 
-- ONT-048: draft motivation vocabulary, IR/SDK and examples; local checks pass, PR review pending.
+- ONT-048: merged PR #70; included in source release 0.1.0. Follow-up: GitHub Issue #71.
 - ONT-044: responsibility draft, merged PR #68.
 - ONT-047: snapshot provenance, merged PR #69.
 - ONT-043: structural event profile, merged PR #67.

@@ -984,10 +984,10 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Description:** Make the unmodified compiler and CLI build/test on Linux,
   addressing CryptoKit availability, FoundationNetworking imports and Swift 6
   stderr concurrency, with Linux CI alongside macOS.
-- **Priority:** P2
+- **Priority:** P1 — user-selected SpecGraph Linux publication dependency
 - **Dependencies:** None known; separate from the events-core draft review
 - **Parallelizable:** yes
-- **Status:** Not Started
+- **Status:** INPROGRESS — portable dependency/imports, CLI diagnostics and Linux CI
 - **Origin:** External PR #66 review reported successful generation/tests only
   after platform-specific patches in a separate Linux worktree; those results
   do not establish stock-repository Linux support.
