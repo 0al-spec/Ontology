@@ -1,3 +1,13 @@
+# Current Task: ONT-050 — Action Model Template
+
+**Status:** Selected; documentation/skill/template scope.
+**Review subject:** ONT-050.
+**Base:** ONT-049 branch at `a170fce`; dependent PR layer, no change to #73.
+
+Capture transition-based goal evaluation and the image-encoding interpretation,
+then validate reusable guidance and publish a separate PR. No app implementation,
+compiler/profile change, integration, merge or release is included.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1

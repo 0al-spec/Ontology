@@ -1099,6 +1099,24 @@ This workplan tracks the specification work for the Ontology repository. The ini
     Swift quality gates pass; describe exact runtime/reference-check boundaries.
     No legal qualification, universal InstanceGraph admission or new Lean claim.
 
+#### ONT-050: Action Model Template
+- **Description:** Capture the minimal actor/action/entity/state/consequence pattern
+  as a reusable skill, modeling guide and template, with a destructive image-encoding example.
+- **Priority:** P1 — explicit user selection
+- **Dependencies:** ONT-049; documentation layer stacked on its reviewed branch
+- **Status:** INPROGRESS
+- **Outputs:** Discoverable skill, reusable model worksheet, transition-goal semantics,
+  Gherkin examples and a property-based test design catalogue.
+- **Acceptance Criteria:**
+  - Goals may constrain post-state, actual Delta or the whole transition; a separate
+    evaluator compares observations with the criterion and preserves unknown results.
+  - Preserve entity identity, role interpretations and explicit event decomposition;
+    no motive, physical observation or causal edge is invented from implementation detail.
+  - Distinguish BDD discussion, Gherkin specifications, executable bindings and PBT;
+    document preconditions, units, exact/at-least comparisons and counterexamples.
+  - Validate the skill, links and Gherkin syntax, and independently exercise the skill.
+    No new compiler/profile, codec, universal goal evaluator or runtime test claims.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
