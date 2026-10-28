@@ -1,3 +1,14 @@
+# Current Task: ONT-049 — Generic Agency Core
+
+**Priority:** P1 — user-selected
+**Status:** Selected; planning
+**Scope:** domain-neutral motive awareness, goals, intention, anticipation and
+attitude. Preserve unknowns and source-only candidates. No criminal-law types.
+**Next:** write ONT-049 PRD, then implement an additive package and explicit
+reference-envelope checks. NormLab integration and live model calls are separate.
+
+---
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1

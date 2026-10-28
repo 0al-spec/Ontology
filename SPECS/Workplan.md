@@ -1074,6 +1074,35 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## Task Status Legend
 
+#### ONT-049: Generic Agency Core
+- **Description:** Add a domain-neutral basis for motive awareness, goals,
+  intention, anticipation and attitudes toward possible outcomes. NormLab may
+  build separately versioned normative profiles on these primitives.
+- **Priority:** P1 — explicit user selection
+- **Dependencies:** ONT-042, ONT-048; additive imports of events-core 0.2.0 and motivation-core 0.1.0
+- **Parallelizable:** yes, independent semantic review/reference-envelope implementation
+- **Status:** INPROGRESS
+- **Origin:** User request 2026-10-28: implement basic concepts in Ontology rather
+  than encoding criminal-law classifications in the general model.
+- **Outputs:** agency-core draft package, pinned dependencies, deterministic IR/SDK,
+  source-attribution reference consumer, neutral examples and regression controls.
+- **Acceptance Criteria:**
+  - Separate unasserted proposition content from physical state and actual Delta;
+    desired, anticipated and actual outcomes do not imply one another.
+  - Independent actor/view-scoped claims for awareness, goals, intention,
+    anticipation and outcome attitude retain their own support and review.
+  - Actor unawareness, analyst uncertainty and explicit inapplicability differ;
+    any Entity remains eligible as actor without mandatory psychological claims.
+  - Source-only candidates and unresolved actors remain available; foreign roles,
+    motives and missing references are rejected by the explicit reference envelope.
+  - Preserve independent positive/negative support, source speaker vs actor,
+    perspective vs report time and immutable legacy package/profile/report bytes.
+  - Compiler, generated output, TypeScript consumer/mutation probes and existing
+    Swift quality gates pass; describe exact runtime/reference-check boundaries.
+    No legal qualification, universal InstanceGraph admission or new Lean claim.
+
+## Task Status Legend
+
 - **Not Started** — Task defined but not yet begun.
 - **INPROGRESS** — Task currently being planned or executed.
 - **PRD Ready** — Implementation-ready PRD exists in `SPECS/INPROGRESS/`.
