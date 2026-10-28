@@ -1033,6 +1033,30 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ---
 
+#### ONT-048: Draft Motivation Core Package
+- **Description:** Add actor-scoped prompting reasons for action or omission,
+  for any Entity without requiring conscious intention, as a separate draft layer.
+- **Priority:** P1 (explicit user selection)
+- **Dependencies:** ONT-042, ONT-047; uses events-core 0.2.0 without changing its pins
+- **Parallelizable:** yes, independently of ONT-045
+- **Status:** INPROGRESS
+- **Origin:** User request 2026-10-28; motive is a reason prompting an actor's
+  action/omission leading to a consequence. User explicitly includes nonhuman actors.
+- **Outputs:** Staged motivation vocabulary, compiled IR/SDK, examples, pinned
+  dependency/semantic design contract and structural/type/runtime-object smoke.
+- **Acceptance Criteria:**
+  - Separate motive content from its actor/view-scoped attribution; preserve
+    unknown actors, competing motives, opposite support and source speaker identity.
+  - Accept any Entity as actor. Intention, consciousness, goals, choice and legal
+    responsibility are not inferred from a motivating reason.
+  - Support source-only InterpretationCandidates without inventing records,
+    snapshots or Delta. Consequences derive from known recorded event states.
+  - Compiler/generated-object checks are honest about unimplemented cross-node,
+    source relevance, timing and motivation-truth checks. Existing profiles and
+    saved reports remain unchanged; no new Lean/runtime adapter is implied.
+
+---
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
