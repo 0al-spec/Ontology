@@ -58,6 +58,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-28 | ONT-050 | Archived REVIEW_ONT-050 with forward exercises; FOLLOW-UP skipped (no unresolved findings) |
 | 2026-10-28 | ONT-050 | Archived action-model skill/template PRD and bounded validation |
 | 2026-10-28 | ONT-049 | Archived REVIEW_ONT-049; corrected independent P2, FOLLOW-UP skipped (no unresolved findings) |
 | 2026-10-28 | ONT-049 | Archived generic agency package/reference-consumer PRD and local validation |
