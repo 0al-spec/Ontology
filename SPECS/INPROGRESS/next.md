@@ -1,14 +1,3 @@
-# Current Task: ONT-049 — Generic Agency Core
-
-**Priority:** P1 — user-selected
-**Status:** Selected; planning
-**Scope:** domain-neutral motive awareness, goals, intention, anticipation and
-attitude. Preserve unknowns and source-only candidates. No criminal-law types.
-**Next:** write ONT-049 PRD, then implement an additive package and explicit
-reference-envelope checks. NormLab integration and live model calls are separate.
-
----
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -43,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-049: generic agency vocabulary and bounded reference consumer; local package/Swift/TypeScript gates pass, PR review/CI separate. This does not start a normative profile or NormLab integration.
 
 - ONT-046: Linux source portability, shared baseline gate and CI matrix; local macOS/Linux checks pass.
 

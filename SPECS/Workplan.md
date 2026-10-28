@@ -1079,7 +1079,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1 — explicit user selection
 - **Dependencies:** ONT-042, ONT-048; additive imports of events-core 0.2.0 and motivation-core 0.1.0
 - **Parallelizable:** yes, independent semantic review/reference-envelope implementation
-- **Status:** INPROGRESS
+- **Status:** Complete — local vocabulary/reference consumer; hosted PR checks/review tracked separately
 - **Origin:** User request 2026-10-28: implement basic concepts in Ontology rather
   than encoding criminal-law classifications in the general model.
 - **Outputs:** agency-core draft package, pinned dependencies, deterministic IR/SDK,
