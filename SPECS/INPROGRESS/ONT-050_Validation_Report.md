@@ -30,6 +30,12 @@ goal evaluator or new Lean theorem were implemented or run. PBT material is a
 catalogue of proposed properties, assumptions and mutation controls for a consumer.
 Independent skill forward-testing and structured review are recorded separately.
 
+The parent review of the forward exercise found one ambiguous Russian command/team
+reading that had been silently treated as an actor. The skill now explicitly
+separates action/command names from participants and keeps unspecified actors
+unresolved or labeled as assumptions. A clarified follow-up prompt checks that
+boundary; its result is recorded in the structured review.
+
 Only guidance, templates and workflow documentation changed. Existing package
 source/IR/SDK/profile bytes, compiler code and runtime tests are unchanged. The
 unchanged Swift compiler was not rebuilt locally for this documentation-only layer;

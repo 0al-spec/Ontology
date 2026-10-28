@@ -32,7 +32,9 @@ require creating files, implementing an application, or changing ontology packag
    rule. Name the action or omission and record its parameters/configuration at
    that occurrence. Separate supplied observations from modeling assumptions.
 2. Choose an Interpretation and bind participant roles. Any Entity can occupy the
-   actor role. An encoder may be the operator's instrument in one view and an actor
+   actor role. Separate action/command names from participating entities; when an
+   actor is unspecified, keep it unresolved or explicitly label an assumed reading.
+   An encoder may be the operator's instrument in one view and an actor
    in another view of the same observations. A separate request or delegation event
    is decomposition, not merely a role change. Name the domain relation and explain
    how its subject, object and instrument participate through the selected action.
