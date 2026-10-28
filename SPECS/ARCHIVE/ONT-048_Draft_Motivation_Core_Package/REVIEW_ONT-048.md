@@ -4,6 +4,10 @@
 **Scope:** origin/main..cbbe5d5
 **Reviewer:** Codex /root self-review; independent PR review pending
 
+This is the historical self-review of the initial implementation. Independent
+review subsequently found the omission-consequence and shared-role ambiguities
+recorded below; its verdict did not establish those semantic guarantees.
+
 ## Verdict
 
 Approve for independent review as a draft vocabulary and inert design contract.
@@ -74,3 +78,28 @@ its documentation clearly limits these to schema declarations.
 Archive this review and publish a PR. Check hosted CI and independent review on
 the actual head before merge. Keep ONT-045 as a separate bounded consumer decision;
 no further ontology feature or runtime framework is started by this review.
+
+## Independent PR review correction — 2026-10-28
+
+Review of 6c02230 found two actionable issues, now addressed in the package,
+inert design 0.1.1, staged sources and generated IR:
+
+- The selected contribution's own change is distinct from a downstream effect
+  attributed through an explicit CausalHypothesis. Match the exact selected
+  hypothesisView as cause, retain hypothesis identity/state, and use the effect
+  view's separate record/Delta. Empty own change does not imply no downstream
+  consequences. Pilot omission uses a separate record plus causal link; an owner
+  reading of movement is not an interchangeable motivation scope.
+- Bind the actor RoleBinding by an outgoing interpretationBindsRole or
+  candidateBindsRole edge from the selected view. No exclusive ownership is
+  required; shared RoleBinding references are admissible.
+
+The new smoke resolves design navigation against real event IR and walks the
+existing synthetic car fixture. Actual public CLI controls accept empty omission
+Delta and a shared actor-role node, and reject moving movement-delta onto omission
+with instanceGraph.delta.exact. Generic object schemas still do not admit or
+validate motivation instances, evidence truth or causal attribution.
+
+Local package/generation/TypeScript correction checks pass. Existing 159 Swift
+tests are prior quality evidence (compiler Sources/Tests unchanged), not a fresh
+local rerun. Correction-head hosted CI and independent re-review remain separate.

@@ -153,11 +153,11 @@
       },
       {
         "id" : "consequence_availability",
-        "text" : "Known actual consequences derive from event states; narrative motives and partial observations never supply missing physical snapshots."
+        "text" : "Own changes derive from the selected recorded event states; hypothesized downstream effects retain an explicit causal link and the separate effect record Delta. Empty own change does not mean no downstream effects. Narrative motives and partial observations never supply missing physical snapshots."
       },
       {
         "id" : "explicit_consumer_boundary",
-        "text" : "Package/object-shape validation does not enforce role ownership, cross-node scope, contribution enums, temporal coherence or semantic relevance. Manual policies remain declarations."
+        "text" : "Package/object-shape validation does not enforce selected-view role edges, causal traversal, cross-node scope, contribution enums, temporal coherence or semantic relevance. Manual policies remain declarations."
       }
     ],
     "excludes" : {
@@ -185,7 +185,7 @@
       "extends" : "sg:Policy",
       "fqid" : "motivcore:ActorScopedMotivation",
       "id" : "ActorScopedMotivation",
-      "text" : "A Motive is a broad prompting reason applicable to any Entity actor, including communities, AI, machines and natural phenomena; intention and consciousness are optional interpretations, never admission requirements. A hypothesis has one view. A selected actor RoleBinding must be owned by that view and named actor; actor Entity and episode derive from existing links. An unresolved actor remains unresolved, and evidence or motives are never transferred to another participant or episode by label similarity."
+      "text" : "A Motive is a broad prompting reason applicable to any Entity actor, including communities, AI, machines and natural phenomena; intention and consciousness are optional interpretations, never admission requirements. A hypothesis has one view. A selected actor RoleBinding must be reached by interpretationBindsRole or candidateBindsRole from that selected hypothesisView and named actor; exclusive ownership is not required. Actor Entity and episode derive from existing links. An unresolved actor remains unresolved, and evidence or motives are never transferred to another participant or episode by label similarity."
     },
     {
       "appliesTo" : [
@@ -226,7 +226,7 @@
       "extends" : "sg:Policy",
       "fqid" : "motivcore:SeparateContributionAndConsequence",
       "id" : "SeparateContributionAndConsequence",
-      "text" : "contributionKind is action or omission by explicit interpretation. A motive does not prove performance, an omission's duty/deadline/capability/exception grounds, deliberation, intention, fault, responsibility or sanction. Actual consequence is available only through an admitted Interpretation's RecordedEvent and its optional exact Delta. An InterpretationCandidate may remain source-only without states, record or Delta. Unknown changes are not an empty diff; a desired outcome is not an actual consequence, and this draft adds no goal class or outcome inference."
+      "text" : "contributionKind is action or omission by explicit interpretation. A motive does not prove performance, an omission's duty/deadline/capability/exception grounds, deliberation, intention, fault, responsibility or sanction. The selected view's record-owned optional exact Delta describes own change only; an empty local difference does not assert absence of downstream consequences. Hypothesized downstream consequences follow an explicit CausalHypothesis whose hypothesisCauseView is exactly the selected hypothesisView, then hypothesisEffectView and its own RecordedEvent and optional exact Delta. Preserve hypothesis identity and workflow state without promoting causal attribution to fact or merging Deltas. For the pilot use a separate omission record plus CausalHypothesis to the effect record; an owner reading of the movement record is a different motive scope. An InterpretationCandidate may remain source-only without states, record or Delta. Unknown changes are not an empty diff; a desired outcome is not an actual consequence, and this draft adds no goal class or outcome inference."
     },
     {
       "appliesTo" : [
@@ -249,7 +249,7 @@
         "max" : 1,
         "min" : 0
       },
-      "description" : "If resolved, the actor role must belong to the selected view with roleName actor; its Entity derives through roleBoundEntity. Absence preserves an unknown actor and never manufactures one.",
+      "description" : "If resolved, hypothesisActorRole must be the target of interpretationBindsRole or candidateBindsRole from the selected hypothesisView and have roleName actor; derive Entity through roleBoundEntity. Other views may reference the same role. Absence preserves an unknown actor.",
       "domain" : "motivcore:MotivationHypothesis",
       "fqid" : "motivcore:hypothesisActorRole",
       "id" : "hypothesisActorRole",
@@ -373,7 +373,7 @@
       "uri" : "ontology://org.0al.motivation.core/0.1.0/relations/operatorSupportAuthor"
     }
   ],
-  "sourceDigest" : "sha256:bef057acd636164f43c43f70eb5e6d4795ee4c8a112c23906134e1ffd86ff823",
+  "sourceDigest" : "sha256:3061eca33ddc2296c2c292695d98daf6697e92fb582da544bc1d5107721ae955",
   "stateMachines" : [
     {
       "fqid" : "motivcore:MotivationReview",

@@ -66,6 +66,9 @@ Foundation kinds or extend existing instance profiles.
 | Motive | A reason prompting any Entity actor toward action or omission. Conscious intention is not required; the reason can be internal, an instruction or an external influence. |
 | MotivationHypothesis | A contextual proposal that a particular motive prompted the actor's contribution in one Interpretation or InterpretationCandidate, with independently retained supporting/opposing evidence and possibly unresolved actor. |
 
-Actual consequence remains an available record-owned Delta; a motivating account
-never manufactures missing physical states or implies a desired/legally required
-outcome. Source presence, proposal review and motivation truth remain distinct.
+Own change is an available Delta of the selected contribution record. A
+hypothesized downstream consequence follows an explicit CausalHypothesis to its
+effect view and that separate record's Delta; an empty own change does not deny
+downstream effects. A motivating account never manufactures physical states or
+implies a desired/legally required outcome. Source presence, proposal review,
+motivation truth and causal attribution remain distinct.

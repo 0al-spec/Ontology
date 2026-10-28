@@ -9,7 +9,7 @@ import { protocolDefinitions } from "./protocols";
 export const ontologyMetadata = {
   "id" : "org.0al.motivation.core",
   "namespace" : "motivcore",
-  "sourceDigest" : "sha256:bef057acd636164f43c43f70eb5e6d4795ee4c8a112c23906134e1ffd86ff823",
+  "sourceDigest" : "sha256:3061eca33ddc2296c2c292695d98daf6697e92fb582da544bc1d5107721ae955",
   "version" : "0.1.0"
 } as const;
 

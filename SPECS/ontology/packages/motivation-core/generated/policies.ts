@@ -10,7 +10,7 @@ export const policyDefinitions = [
     "extends" : "sg:Policy",
     "fqid" : "motivcore:ActorScopedMotivation",
     "id" : "ActorScopedMotivation",
-    "text" : "A Motive is a broad prompting reason applicable to any Entity actor, including communities, AI, machines and natural phenomena; intention and consciousness are optional interpretations, never admission requirements. A hypothesis has one view. A selected actor RoleBinding must be owned by that view and named actor; actor Entity and episode derive from existing links. An unresolved actor remains unresolved, and evidence or motives are never transferred to another participant or episode by label similarity."
+    "text" : "A Motive is a broad prompting reason applicable to any Entity actor, including communities, AI, machines and natural phenomena; intention and consciousness are optional interpretations, never admission requirements. A hypothesis has one view. A selected actor RoleBinding must be reached by interpretationBindsRole or candidateBindsRole from that selected hypothesisView and named actor; exclusive ownership is not required. Actor Entity and episode derive from existing links. An unresolved actor remains unresolved, and evidence or motives are never transferred to another participant or episode by label similarity."
   },
   {
     "appliesTo" : [
@@ -51,7 +51,7 @@ export const policyDefinitions = [
     "extends" : "sg:Policy",
     "fqid" : "motivcore:SeparateContributionAndConsequence",
     "id" : "SeparateContributionAndConsequence",
-    "text" : "contributionKind is action or omission by explicit interpretation. A motive does not prove performance, an omission's duty/deadline/capability/exception grounds, deliberation, intention, fault, responsibility or sanction. Actual consequence is available only through an admitted Interpretation's RecordedEvent and its optional exact Delta. An InterpretationCandidate may remain source-only without states, record or Delta. Unknown changes are not an empty diff; a desired outcome is not an actual consequence, and this draft adds no goal class or outcome inference."
+    "text" : "contributionKind is action or omission by explicit interpretation. A motive does not prove performance, an omission's duty/deadline/capability/exception grounds, deliberation, intention, fault, responsibility or sanction. The selected view's record-owned optional exact Delta describes own change only; an empty local difference does not assert absence of downstream consequences. Hypothesized downstream consequences follow an explicit CausalHypothesis whose hypothesisCauseView is exactly the selected hypothesisView, then hypothesisEffectView and its own RecordedEvent and optional exact Delta. Preserve hypothesis identity and workflow state without promoting causal attribution to fact or merging Deltas. For the pilot use a separate omission record plus CausalHypothesis to the effect record; an owner reading of the movement record is a different motive scope. An InterpretationCandidate may remain source-only without states, record or Delta. Unknown changes are not an empty diff; a desired outcome is not an actual consequence, and this draft adds no goal class or outcome inference."
   },
   {
     "appliesTo" : [

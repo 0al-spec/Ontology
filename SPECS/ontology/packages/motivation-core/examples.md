@@ -28,6 +28,47 @@ applicable duty nor capacity, deadline, exception, deliberate choice or liabilit
 If payment was actually established elsewhere, motive text does not override that
 selected circumstance or change the saved norm receipt.
 
+## Pilot omission: owner did not secure the car, then the car moved
+
+Use the existing [synthetic car graph](../../fixtures/instance-graphs/synthetic-car.json)
+and [design example](design/omission-consequence-example.json). The motive
+“attention was elsewhere” is an unsupported synthetic proposal, not a fact
+extracted from that graph or a new operator assertion.
+
+1. MotivationHypothesis has contributionKind omission and hypothesisView
+   omission-view. Its selected owner-role is reached by interpretationBindsRole
+   from omission-view; roleBoundEntity resolves to owner.
+2. omission-view interprets the separate omission record. Both snapshots are
+   unsecured: the own location-projection change is empty. The original fixture
+   has no stored omission Delta; a smoke control adds the exact empty one.
+3. causal-link has hypothesisCauseView omission-view and hypothesisEffectView
+   movement-view. Keep its proposed state and identity; the motive does not
+   establish, review or generate this causal link.
+4. movement-view interprets movement. Its movement-delta removes road and adds
+   parking. This is the separate effect record's change, hypothesized as a
+   downstream consequence of the omission through causal-link.
+
+```text
+Motive proposal -> owner / omission-view -> omission (own change = empty)
+                                ^
+                                | hypothesisCauseView
+                            causal-link (proposed)
+                                | hypothesisEffectView
+                                v
+                           movement-view -> movement
+                                            Delta: -road, +parking
+```
+
+The local empty change and downstream nonempty change coexist. Do not copy
+movement-delta onto omission or replace omission-view with an owner reading of
+movement: that changes the scoped contribution. The latter is a different event
+description, not this pilot's canonical omission representation. If only the
+source account exists, keep the candidate without creating either physical record.
+
+An actor role can also be shared: another view referencing owner-role does not
+invalidate this hypothesis. It is invalid for this hypothesis only when the edge
+from the selected omission-view is absent or the selected role is not named actor.
+
 ## Nonhuman and abstract actors
 
 | Actor Entity | Ascribed prompting reason | Interpretation boundary |
@@ -61,7 +102,8 @@ preserves all support and does not add negative evidence automatically.
 
 A future admission implementation must reject or keep unresolved these cases:
 
-1. An actor RoleBinding belongs to another view/episode, or is named target/instrument.
+1. The selected view has no interpretationBindsRole/candidateBindsRole edge to
+   the selected actor RoleBinding, or that role is named target/instrument.
 2. A hypothesis supplies replacement event/actor IDs or physical snapshots/Delta.
 3. A source-only candidate is silently upgraded when motivation is reviewed.
 4. Missing support is converted into denial, or review status becomes motive truth.
@@ -69,5 +111,6 @@ A future admission implementation must reject or keep unresolved these cases:
    ordered causal claim uses inconsistent scope/clocks or reversed valid times.
 6. Uncited operator/model text is relabeled as a source quote or given invented authorship.
 
-These are manual acceptance criteria, not successful rejection tests in this PR.
-The executable checks exercise package generation and object shapes only.
+These are manual motivation acceptance criteria, not successful motivation
+rejection tests in this PR. The executable checks exercise package generation,
+object shapes and the existing event validator's Delta/role-sharing controls.

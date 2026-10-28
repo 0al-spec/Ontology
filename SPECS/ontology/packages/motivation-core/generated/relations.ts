@@ -6,7 +6,7 @@ export const relationDefinitions = [
       "max" : 1,
       "min" : 0
     },
-    "description" : "If resolved, the actor role must belong to the selected view with roleName actor; its Entity derives through roleBoundEntity. Absence preserves an unknown actor and never manufactures one.",
+    "description" : "If resolved, hypothesisActorRole must be the target of interpretationBindsRole or candidateBindsRole from the selected hypothesisView and have roleName actor; derive Entity through roleBoundEntity. Other views may reference the same role. Absence preserves an unknown actor.",
     "domain" : "motivcore:MotivationHypothesis",
     "fqid" : "motivcore:hypothesisActorRole",
     "id" : "hypothesisActorRole",

@@ -2,8 +2,9 @@
 
 `org.0al.motivation.core@0.1.0`, namespace `motivcore`, approvalStatus draft.
 Imports `org.0al.events.core@0.2.0`; its exact local IR and source digest are pinned
-in [motivation-binding-v1.json](design/motivation-binding-v1.json). This is an inert
-semantic design contract, not an instance profile or runtime admission receipt.
+in [motivation-binding-v1.json](design/motivation-binding-v1.json), draft design
+revision 0.1.1. This is an inert semantic design contract, not an instance profile
+or runtime admission receipt.
 
 ## Meaning
 
@@ -31,8 +32,10 @@ lifecycle. All ten generated IR/SDK files are produced by the existing compiler.
 | ReviewMotivation / RejectMotivation | Proposal workflow commands; review/rejection is not a truth value. |
 
 hypothesisView references exactly one Interpretation or InterpretationCandidate.
-If hypothesisActorRole is present, it must be a role owned by that selected view,
-named actor. Derive its Entity through roleBoundEntity. Do not copy actor/event IDs
+If hypothesisActorRole is present, it must be the target of interpretationBindsRole
+or candidateBindsRole from that selected hypothesisView, with roleName actor.
+The same RoleBinding may be referenced by other views; exclusive ownership is
+not required. Derive its Entity through roleBoundEntity. Do not copy actor/event IDs
 or choose a narrator by default. Missing role means unresolved actor, never a
 synthetic person. Entity actors carry no human-only or intention requirement.
 
@@ -51,7 +54,11 @@ flowchart LR
     V -. admitted known view only: interpretsRecord .-> E[RecordedEvent]
     E -->|recordBeforeSnapshot| B[Before state]
     E -->|recordAfterSnapshot| F[After state]
-    D[Optional exact Delta: consequence] -->|deltaOfRecord| E
+    D[Optional exact Delta: own change] -->|deltaOfRecord| E
+    C[CausalHypothesis: proposed causal attribution] -->|hypothesisCauseView: known Interpretation only| V
+    C -->|hypothesisEffectView| W[Effect Interpretation]
+    W -->|interpretsRecord| T[Separate effect record]
+    X[Effect Delta: downstream change] -->|deltaOfRecord| T
 ```
 
 ## Motive, causation, goal and responsibility
@@ -62,10 +69,28 @@ same influence, but neither is automatically derived from the other. A physical
 reason can be a motive under the user's broad definition without becoming a
 mental intention; an actor's reported intention does not prove physical causation.
 
-The **actual consequence** remains the record's exact Added/Removed difference,
-when complete admitted states and a Delta are supplied. Follow the known view to
-its record; do not attach an independently chosen Delta to a motive. A source-only
-InterpretationCandidate may retain a motive account without a record, snapshot or
+Distinguish two questions rather than treating the selected record as the entire
+causal history:
+
+| Question | Exact navigation | Meaning |
+|---|---|---|
+| What changed within this contribution record? | hypothesisView -> interpretsRecord; optional Delta whose deltaOfRecord is that record. | **Own change**, exact Added/Removed within the supplied state projection. |
+| What change is hypothesized as its downstream consequence? | CausalHypothesis whose hypothesisCauseView is exactly hypothesisView -> hypothesisEffectView -> interpretsRecord; optional Delta belonging to that effect record. | **Hypothesized downstream consequence**; retain the causal hypothesis identity and workflow state separately from the effect's observed change. |
+
+An empty own Delta means no change in that record's selected projection. It does
+not mean that the contribution has no downstream consequences. An effect's exact
+Delta does not establish that this contribution caused it; even a reviewed causal
+hypothesis does not prove causation. The design describes one explicit causal hop.
+Longer paths require their own hypotheses and review, not automatic transitivity
+or merged Deltas. A motive never selects a replacement record or independent Delta.
+
+**Pilot omission representation:** use a separate omission record and a
+CausalHypothesis to the movement record, as in the R3/ONT-043 car fixture. Do not
+switch the motivation scope to an owner interpretation of the movement merely
+to obtain its nonempty Delta. Other event descriptions remain available, but are
+not interchangeable scopes for this pilot hypothesis.
+
+A source-only InterpretationCandidate may retain a motive account without a record, snapshot or
 Delta. Missing states mean unknown changes, not an empty diff. Candidate resolution
 must not silently rebind an existing hypothesis or generate physical observations.
 
@@ -104,11 +129,17 @@ Generated Zod schemas check scalar object shapes and discriminators; the runtime
 smoke exercises required fields and wrong primitive types. The CI generation gate
 checks the exact event dependency pin and all imported class refs.
 
-**All six policies remain manual.** Relation cardinality, selected-role ownership,
+**All six policies remain manual.** Relation cardinality, selected-view role edges,
 actor/episode identity, contributionKind enum, clock/order, semantic relevance,
 source authenticity and motivation truth are not checked by these object schemas.
 The MotivationReview semantics above are declared workflow, not executed instance
 history. No new instance validator/profile, Lean theorem or adapter is delivered.
+
+The fixture-backed smoke follows the omission/movement path in the existing
+synthetic event graph, accepts an exact empty omission Delta, rejects moving the
+movement Delta onto that omission, and preserves shared RoleBinding references.
+It checks event structure and design-example navigation, not motivation admission,
+source truth or causation. See [the machine-readable example](design/omission-consequence-example.json).
 
 Existing eventcore-v1 and eventcore-provenance-v1 admit only their pinned event
 vocabularies; they do not accept motivcore nodes or relations. Physical provenance

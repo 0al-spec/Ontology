@@ -1050,7 +1050,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Accept any Entity as actor. Intention, consciousness, goals, choice and legal
     responsibility are not inferred from a motivating reason.
   - Support source-only InterpretationCandidates without inventing records,
-    snapshots or Delta. Consequences derive from known recorded event states.
+    snapshots or Delta. Own change belongs to the contribution record; a
+    hypothesized downstream consequence retains the explicit causal hypothesis
+    and separate effect record/Delta. Empty own change does not deny downstream
+    effects. Pilot omission uses a separate omission record plus causal hypothesis.
+  - Actor role is reached by interpretationBindsRole/candidateBindsRole from the
+    selected view; other views may reference the same RoleBinding.
   - Compiler/generated-object checks are honest about unimplemented cross-node,
     source relevance, timing and motivation-truth checks. Existing profiles and
     saved reports remain unchanged; no new Lean/runtime adapter is implied.

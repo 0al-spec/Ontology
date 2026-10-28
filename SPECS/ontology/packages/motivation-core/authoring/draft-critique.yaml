@@ -16,7 +16,7 @@ scores:
 issues:
   - id: graph-admission-deferred
     severity: medium
-    message: Object schemas cannot check actor role ownership, contribution enums, scope, timing or evidence relevance.
+    message: Object schemas cannot check selected-view role edges, causal traversal, contribution enums, scope, timing or evidence relevance.
     affects: [MotivationHypothesis, OperatorMotivationSupport]
     suggestedFix: Keep the package draft and policies manual; no runtime admission or motivation-truth claim.
   - id: broad-cause-interpretation
@@ -31,3 +31,7 @@ questions:
 provenance:
   - source: SPECS/ontology/packages/motivation-core/authoring/intent.md
     note: Single-author critique; subjective rubric scores are not measured model or legal accuracy.
+  - source: https://github.com/0al-spec/Ontology/pull/70#discussion_r4401576173
+    note: Own record change is distinct from hypothesized downstream change; the pilot uses a separate omission record and explicit causal hypothesis. Fixture controls exercise the existing event validator only.
+  - source: https://github.com/0al-spec/Ontology/pull/70#discussion_r4401577197
+    note: Actor role is reached by an outgoing edge from the selected view; shared RoleBinding references are allowed.

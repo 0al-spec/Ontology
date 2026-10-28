@@ -152,7 +152,10 @@
     "assumptions": [
       "Any Entity actor; consciousness/intention not required.",
       "No motive runtime adapter, instance profile, proof backend or normative effect.",
-      "Source-only motives never supply physical snapshots or an empty Delta."
+      "Source-only motives never supply physical snapshots or an empty Delta.",
+      "Own record change and hypothesized downstream consequence are distinct; an empty own Delta does not deny downstream effects.",
+      "Pilot omission uses a separate omission record and an explicit CausalHypothesis to the effect view.",
+      "Actor RoleBinding is reached by an outgoing edge from the selected view; shared role nodes are allowed."
     ],
     "validationNotes": [
       "Compiler object schemas do not enforce graph scope, cardinality, contribution enums, source relevance or truth.",

@@ -1,7 +1,7 @@
 # ONT-048 — Validation Report
 
 **Date:** 2026-10-28
-**Verdict:** PASS — local draft/package/generation checks; independent review and hosted CI pending
+**Verdict:** PASS — local package and PR review-correction checks; correction-head hosted CI and independent re-review pending
 **Package:** org.0al.motivation.core@0.1.0 (draft), namespace motivcore
 
 ## Delivered
@@ -55,8 +55,8 @@ failure. No new dependency or build configuration was installed.
 
 ## Pins
 
-- Motivation source digest: sha256:bef057acd636164f43c43f70eb5e6d4795ee4c8a112c23906134e1ffd86ff823
-- Motivation IR SHA-256: 87a8918af5206b471ab896301959d0c0a9c39cd294f3b6a051feb3a73b05d0ff
+- Motivation source digest: sha256:3061eca33ddc2296c2c292695d98daf6697e92fb582da544bc1d5107721ae955
+- Motivation IR SHA-256: 25da040f4bd0b014014b1ed996250cd4c17a64503355f6f558917bec9ddd1fe9
 - Event dependency: org.0al.events.core@0.2.0,
   IR SHA-256 e6c932ad8c492d168b63dbe112335c270d88ff758e016f3502031aefe9dea916
 
@@ -64,16 +64,18 @@ failure. No new dependency or build configuration was installed.
 
 All policies are manual, and design/motivation-binding-v1.json is explicitly
 non-executable. Generated Zod objects verify scalar shapes/discriminators; they
-do not validate relation instances/cardinality, actor-role ownership, mode enums,
+do not validate relation instances/cardinality, selected-view actor-role edges, mode enums,
 scope/clock/order, source relevance or truth. The smoke explicitly demonstrates
 that the generic object schema accepts a string outside the intended contribution
 kind set; this is not a supported runtime admission case.
 
 Existing instance profiles admit no motivcore nodes/relations. Conceptual invalid
 examples are manual acceptance criteria, not executed semantic rejection tests.
-Review/rejection is workflow, not truth. Actual consequence needs admitted known
-states and an optional exact Delta; a desired outcome or motivating reason does
-not produce physical states, performance, omission grounds, fault or liability.
+Review/rejection is workflow, not truth. Own change uses the selected record
+states/Delta. Hypothesized downstream consequence retains the explicit causal
+hypothesis and separate effect record/Delta. Empty own change does not deny
+downstream effects; a desired outcome or motivating reason does not produce
+physical states, performance, omission grounds, fault or liability.
 
 No motivation runtime adapter, instance validator, Lean proof, NormLab code/tests,
 paid inference, deployment or automatic norm-result change is included.
@@ -82,3 +84,37 @@ paid inference, deployment or automatic norm-result change is included.
 
 Publish the draft for independent review. ONT-045 remains the separate bounded
 offline pilot and must agree its consumer contract before any motivation admission.
+
+
+## PR review correction checks — 2026-10-28
+
+The initial 6c02230 head received green hosted quality/DocC and independent
+review. That review identified two semantic ambiguities; the corrections above
+supersede the original own-record-only consequence wording.
+
+- Inert design version 0.1.1 records separate own and hypothesized downstream
+  navigation and selected-view role edges; existing instance-profile versions
+  and old reports remain unchanged. The draft package remains 0.1.0, unreleased.
+- validate-draft/check and two fresh compilations: PASS, matching all ten tracked
+  generated files. The six imported classes and exact event IR pins still match.
+- The design's role/record/causal navigation resolves against the actual event IR;
+  the smoke follows the referenced real synthetic car fixture and checks the
+  expected owner, omission, causal-link, movement and distinct local/effect changes.
+- Actual frozen-v1 CLI controls: an exact empty omission Delta PASSES; shared actor
+  RoleBinding referenced by an Interpretation and InterpretationCandidate PASSES;
+  moving the nonempty movement Delta onto omission FAILS with
+  instanceGraph.delta.exact as expected. Passing reports keep sourceTruthVerified
+  and causationVerified false. No motivcore nodes are submitted to this validator.
+- npm run typecheck and npm run smoke: PASS. Compiler Sources/Tests and frozen
+  event/responsibility/profile/fixture artifacts have no diff from 6c02230.
+- Shell syntax, whitespace and all 80 relative Markdown links: PASS.
+- Full 159-test quality/coverage evidence above is from the initial implementation;
+  it was not rerun locally for this documentation/design/smoke correction. Hosted
+  CI must verify the published correction head separately.
+
+During development the report assertion initially addressed sourceTruthVerified
+at the wrong nesting level; it now checks report.authority. An unsupported
+DraftCritique key was rejected by validate-draft and the review references were
+moved to its existing provenance list. Final correction checks pass without any
+compiler/schema changes. The fixture controls are structural event regressions,
+not motivation-truth, causal or legal proofs.
