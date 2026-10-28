@@ -18,6 +18,13 @@ intent -> staged prompt contracts -> validate-draft -> YAML -> ontologyc check -
 
 ## Authoring Steps
 
+For a single application behavior, the
+[minimal action-model guide](../../skills/ontology-action-model/references/modeling.md)
+and [worksheet](../../skills/ontology-action-model/assets/action-model.md) help frame
+entities, role interpretations, state changes and transition-based goal criteria.
+They include an image-encoding example and BDD/PBT mapping. This optional framing
+pattern precedes package authoring; it is not a new wire format or compiler profile.
+
 1. Classify the intent.
 2. Frame the domain and identify the governing concept.
 3. Extract domain concepts using the meta-model.

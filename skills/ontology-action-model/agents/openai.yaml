@@ -1,0 +1,3 @@
+interface:
+  display_name: "Ontology Action Model"
+  short_description: "Model bounded actions, goals and state transitions"
