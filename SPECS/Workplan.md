@@ -1123,7 +1123,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
   ontology, Hypercode composition and implementation/observed behavior.
 - **Priority:** P1 — explicit user selection
 - **Dependencies:** ONT-049, ONT-050; external Hypercode CLI/IR consumed explicitly
-- **Status:** INPROGRESS
+- **Status:** Complete — archived; local pilot checks PASS; PR/hosted CI separate
 - **Acceptance Criteria:**
   - Human-readable typed intent and explicit assumptions remain separate from
     downstream artifacts; no automatic target rewrite or inferred user approval.

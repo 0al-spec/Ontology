@@ -1,11 +1,12 @@
 # Tasks Archive
 
-**Last Updated:** 2026-10-28
+**Last Updated:** 2026-10-29
 
 ## Archived Tasks
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-051 | [ONT-051_Intent_Preservation_Review_Pilot/](ONT-051_Intent_Preservation_Review_Pilot/) | 2026-10-29 | PASS (bounded local intent/execution pilot) |
 | ONT-050 | [ONT-050_Action_Model_Template/](ONT-050_Action_Model_Template/) | 2026-10-28 | PASS (documentation/skill/template) |
 | ONT-049 | [ONT-049_Generic_Agency_Core/](ONT-049_Generic_Agency_Core/) | 2026-10-28 | PASS (local package/reference envelope) |
 | ONT-046 | [ONT-046_Linux_Compiler_Portability/](ONT-046_Linux_Compiler_Portability/) | 2026-10-28 | PASS (local macOS/Linux portability) |
@@ -58,6 +59,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-29 | ONT-051 | Archived executable pilot PRD and local validation; independent review fixes included |
 | 2026-10-28 | ONT-050 | Archived REVIEW_ONT-050 with forward exercises; FOLLOW-UP skipped (no unresolved findings) |
 | 2026-10-28 | ONT-050 | Archived action-model skill/template PRD and bounded validation |
 | 2026-10-28 | ONT-049 | Archived REVIEW_ONT-049; corrected independent P2, FOLLOW-UP skipped (no unresolved findings) |
