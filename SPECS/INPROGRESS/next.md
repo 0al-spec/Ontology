@@ -1,3 +1,12 @@
+# Current Task: ONT-052 — Intent Preservation Contract
+
+**Status:** Selected
+**Base:** feature/ONT-051-intent-preservation-pilot / PR #75
+**Scope:** Versioned common contract, image adapter, edit-cancellation example and regression evidence.
+**Workflow note:** The explicit request for a PR on top overrides FLOW default main base. Lower stack layers stay unchanged.
+
+---
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1

@@ -1138,6 +1138,19 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Publish the experiment and reproducible checks in a separate PR above ONT-050;
     no merge, deployment, external consumer activation or SpecGraph core mutation.
 
+#### ONT-052: Intent Preservation Contract
+- **Description:** Extract a versioned domain-neutral review contract from the accepted image pilot, with explicit coverage, mappings, bounded evidence and human decisions; exercise it on edit cancellation.
+- **Priority:** P1 — explicit user selection
+- **Dependencies:** ONT-051; separate PR immediately above #75 as requested
+- **Status:** INPROGRESS
+- **Acceptance Criteria:**
+  - Versioned schema and normative workflow separate intent, semantic change, validation and human acceptance.
+  - Every required obligation is accounted for at every declared boundary and checked against original intent as well as the preceding stage.
+  - Lost/unmapped requirements, consistently wrong downstream interpretations, stale evidence and unsupported profiles cannot yield success.
+  - Image and edit-cancellation examples use one contract without image-specific fields in its core.
+  - Independent observations and negative controls distinguish numerical/operation success from intent preservation; existing receipts are not upgraded.
+  - Publish a separate stacked PR; no merge, deployment or external consumer activation.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
