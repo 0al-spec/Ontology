@@ -60,8 +60,8 @@ func printHelp(_ text: String) -> Never {
 }
 
 func usageError(_ message: String, command: String? = nil) -> Never {
-    fputs("ontologyc: \(message)\n\n", stderr)
-    fputs((command.flatMap { commandUsage[$0] } ?? generalUsage) + "\n", stderr)
+    writeDiagnostic("ontologyc: \(message)\n\n")
+    writeDiagnostic((command.flatMap { commandUsage[$0] } ?? generalUsage) + "\n")
     exit(2)
 }
 

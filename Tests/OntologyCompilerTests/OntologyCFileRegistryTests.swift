@@ -63,7 +63,7 @@ final class OntologyCFileRegistryTests: XCTestCase {
     }
 
     private func ontologyc(_ arguments: [String]) throws -> FileRegistryCommandResult {
-        let binary = repoRoot.appendingPathComponent(".build/debug/ontologyc")
+        let binary = try ontologycTestBinary(in: repoRoot)
         if !FileManager.default.fileExists(atPath: binary.path) {
             let build = try run("/usr/bin/env", ["swift", "build", "--product", "ontologyc"])
             XCTAssertEqual(build.status, 0, build.combinedOutput)

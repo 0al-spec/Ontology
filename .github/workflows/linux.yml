@@ -1,0 +1,58 @@
+name: Linux Portability
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: Linux Swift ${{ matrix.swift }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - swift: "6.0.3"
+            image: swift:6.0.3-jammy
+          - swift: "6.3.3"
+            image: swift:6.3.3-bookworm
+    container: ${{ matrix.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Restore Linux SwiftPM cache
+        uses: actions/cache@v5
+        with:
+          path: .build/ci-quality
+          key: ontology-linux-${{ runner.arch }}-${{ matrix.swift }}-${{ hashFiles('Package.swift', 'Package.resolved') }}
+
+      - name: Build CLI and test
+        env:
+          ONTOLOGYC_TEST_BINARY_PATH: .build/ci-quality/debug/ontologyc
+        run: |
+          swift build --explicit-target-dependency-import-check error --scratch-path .build/ci-quality
+          swift test --scratch-path .build/ci-quality
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: SPECS/ontology/package-lock.json
+
+      - name: Run TypeScript SDK smoke gate
+        run: bash tools/typescript-smoke.sh
+
+      - name: Validate identical generated output and contracts
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: bash tools/portable-contract-smoke.sh

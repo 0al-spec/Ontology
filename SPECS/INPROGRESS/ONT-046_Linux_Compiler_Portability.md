@@ -1,7 +1,7 @@
 # ONT-046 — Linux Compiler Portability
 
 **Date:** 2026-10-28
-**Status:** Planned
+**Status:** Implemented; local checks pass, hosted Linux/macOS CI pending
 **Origin:** SpecGraph static-report publication runs on Linux, while Ontology
 0.1.0 documents only macOS source builds. The user explicitly requests support.
 

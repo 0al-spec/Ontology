@@ -110,7 +110,8 @@ into SpecSpace `/ontology` for cross-repo smoke checks.
 ## Requirements
 
 - Swift 6.0+
-- macOS 13+ (current build/CI platform); Linux portability is tracked in ONT-046
+- macOS 13+, or Linux with the Swift runtime/toolchain (CI: Swift 6.0.3 on
+  Ubuntu 22.04 and Swift 6.3.3 on Debian Bookworm)
 - `swiftformat` and `swiftlint` for the local quality gate
 
 Install quality tools on macOS:
@@ -124,6 +125,45 @@ brew install swiftformat swiftlint
 ```bash
 swift build --product ontologyc
 ```
+
+### Linux source builds and report consumers
+
+ONT-046 adds Linux support after the immutable `0.1.0` source release. Pin a
+commit/release containing that port; the original tag is not changed retroactively.
+The Linux CI builds the stock checkout, runs the compiler/rule tests and compares
+all six package-generated baselines with the same contracts used on macOS.
+
+```sh
+swift build --configuration release --product ontologyc
+.build/release/ontologyc --help
+```
+
+On Linux, SHA-256 uses the pinned
+[swift-crypto 4.3.1](https://github.com/apple/swift-crypto/tree/4.3.1) dependency
+(Apache-2.0); macOS retains native CryptoKit. Networking uses FoundationNetworking
+where available. `Package.resolved` records the dependency revisions.
+
+For a static-report pipeline, run validation in an image/stage with the supported
+Swift runtime present. Copying just the executable into an arbitrary minimal
+image does not supply its runtime libraries; this source port is not a standalone
+Linux binary distribution.
+
+Compiler availability and validation outcome are separate. A consumer must report
+`unavailable`/`not-run` if the compiler cannot start, never treat that as `passed`,
+and preserve nonzero exit status/diagnostics for invalid input. For example, in
+the operation that actually requires ontology validation:
+
+```sh
+if ! command -v ontologyc >/dev/null 2>&1; then
+    printf '%s\n' 'ontologyc unavailable: ontology validation was not run' >&2
+    exit 127
+fi
+ontologyc check path/to/domain-ontology-package.yaml
+```
+
+Scope that dependency to ontology validation/report operations. Unrelated consumer
+operations need not invoke it. This repository supplies the compiler and CI
+contract; consumer fallback/status behavior must be verified in that consumer.
 
 Run the CLI through SwiftPM:
 
