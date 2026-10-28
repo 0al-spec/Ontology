@@ -4,31 +4,47 @@ import OntologyRules
 extension OntologyCompiler {
     /// Emits consumer shapes for the pinned graph profile. Cross-node semantic
     /// checks still require validate-instances; this is not a second verifier.
-    public func exportInstanceContract(ontologyIRPath: OntologySourcePath, outDirectory: OntologyOutputDirectory) throws {
-        let ir = try pinnedEventCoreIR(at: ontologyIRPath)
+    public func exportInstanceContract(
+        ontologyIRPath: OntologySourcePath, outDirectory: OntologyOutputDirectory,
+        profile: String = "eventcore-v1"
+    ) throws {
+        guard let selected = EventCoreProfileSelection(rawValue: profile) else {
+            throw OntologyCompilerError.invalidArgument("instanceGraph.profile: unsupported explicit profile")
+        }
+        let ir = try pinnedEventCoreIR(at: ontologyIRPath, profile: selected)
         try FileManager.default.createDirectory(at: outDirectory.url, withIntermediateDirectories: true)
-        try write(json: instanceGraphSchema(ir), to: outDirectory.url.appendingPathComponent("instance-graph.schema.json"))
-        try write(text: instanceGraphTypeScript(ir), to: outDirectory.url.appendingPathComponent("instance-graph.ts"))
+        try write(json: instanceGraphSchema(ir, profile: selected), to: outDirectory.url.appendingPathComponent("instance-graph.schema.json"))
+        let authorityTypes = selected == .provenance ? snapshotAuthorityTypeScript : ""
+        try write(text: instanceGraphTypeScript(ir, profile: selected) + authorityTypes, to: outDirectory.url.appendingPathComponent("instance-graph.ts"))
+        if selected == .provenance {
+            try write(json: snapshotAuthoritySchema(selected), to: outDirectory.url.appendingPathComponent("snapshot-authority.schema.json"))
+        }
     }
 
-    func instanceGraphSchema(_ ir: JSONObject) -> JSONObject {
+    func instanceGraphSchema(_ ir: JSONObject, profile: EventCoreProfileSelection = .legacy) -> JSONObject {
         let classes = ir["classes"] as? [JSONObject] ?? []
         let relations = ir["relations"] as? [JSONObject] ?? []
         let projections = closedObject([
             "projectionKey": nonemptyStringSchema, "schemaKey": nonemptyStringSchema,
             "domain": ["enum": ["observation", "review", "normative"]]
         ])
-        let pin = closedObject(EventCoreInstanceProfile.ontology.mapValues { ["const": $0] })
+        let pin = closedObject(profile.ontology.mapValues { ["const": $0] })
         var schema = closedObject([
             "apiVersion": ["const": EventCoreInstanceProfile.apiVersion], "kind": ["const": "InstanceGraph"],
-            "profile": ["const": EventCoreInstanceProfile.name], "graphKey": identifierSchema, "revisionKey": identifierSchema,
+            "profile": ["const": profile.rawValue], "graphKey": identifierSchema, "revisionKey": identifierSchema,
             "ontology": pin, "projections": finiteArray(projections, maximum: 1000),
             "nodes": finiteArray(["oneOf": classes.map(instanceNodeSchema)], maximum: 10_000),
             "edges": finiteArray(["oneOf": relations.map(instanceEdgeSchema)], maximum: 50_000)
         ])
+        if profile == .provenance {
+            var properties = schema["properties"] as? JSONObject ?? [:]
+            properties["profilePin"] = closedObject(profile.definitionPin.mapValues { ["const": $0] })
+            schema["properties"] = properties
+            schema["required"] = properties.keys.sorted()
+        }
         schema["$schema"] = "https://json-schema.org/draft/2020-12/schema"
-        schema["title"] = "eventcore-v1 InstanceGraph (shapes only)"
-        schema["description"] = "Pinned IR SHA256 \(EventCoreInstanceProfile.irSHA256). Use ontologyc validate-instances for references, sets and profile checks."
+        schema["title"] = "\(profile.rawValue) InstanceGraph (shapes only)"
+        schema["description"] = "Pinned IR SHA256 \(profile.irSHA256). Use ontologyc validate-instances for references, sets and profile checks."
         return schema
     }
 
@@ -71,26 +87,28 @@ extension OntologyCompiler {
         ])
     }
 
-    func instanceGraphTypeScript(_ ir: JSONObject) -> String {
+    func instanceGraphTypeScript(_ ir: JSONObject, profile: EventCoreProfileSelection = .legacy) -> String {
         let classes = ir["classes"] as? [JSONObject] ?? []
         let relations = ir["relations"] as? [JSONObject] ?? []
         let nodes = classes.map(instanceNodeTypeScript).joined(separator: "\n  | ")
         let edges = relations.map {
             "{ readonly relation: \"\(string($0["fqid"]) ?? "")\"; readonly from: InstanceRef<\"\(string($0["domain"]) ?? "")\">; readonly to: InstanceRef<\"\(string($0["range"]) ?? "")\"> }"
         }.joined(separator: "\n  | ")
+        let profilePin = profile == .provenance
+            ? "\n  readonly profilePin: { readonly id: \"\(profile.rawValue)\"; readonly version: \"1.0.0\"; readonly definitionSHA256: \"\(profile.definitionPin["definitionSHA256"] ?? "")\" };" : ""
         return """
         // Generated by ontologyc export-instance-contract. Shapes only; use validate-instances for integrity.
-        // Pinned normalized IR SHA256: \(EventCoreInstanceProfile.irSHA256)
+        // Pinned normalized IR SHA256: \(profile.irSHA256)
         export interface InstanceRef<T extends string> { readonly graphKey: string; readonly revisionKey: string; readonly nodeId: string; readonly type: T }
         export type InstanceNode = \(nodes);
         export type InstanceEdge = \(edges);
         export interface InstanceGraph {
           readonly apiVersion: "\(EventCoreInstanceProfile.apiVersion)";
           readonly kind: "InstanceGraph";
-          readonly profile: "\(EventCoreInstanceProfile.name)";
+          readonly profile: "\(profile.rawValue)";\(profilePin)
           readonly graphKey: string;
           readonly revisionKey: string;
-          readonly ontology: { readonly id: "org.0al.events.core"; readonly namespace: "eventcore"; readonly version: "0.1.0"; readonly sourceDigest: "\(EventCoreInstanceProfile.sourceDigest)" };
+          readonly ontology: { readonly id: "org.0al.events.core"; readonly namespace: "eventcore"; readonly version: "\(profile.ontology["version"] ?? "")"; readonly sourceDigest: "\(profile.ontology["sourceDigest"] ?? "")" };
           readonly projections: readonly { readonly schemaKey: string; readonly projectionKey: string; readonly domain: "observation" | "review" | "normative" }[];
           readonly nodes: readonly InstanceNode[];
           readonly edges: readonly InstanceEdge[];

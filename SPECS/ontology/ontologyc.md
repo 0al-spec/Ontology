@@ -371,3 +371,14 @@ The refactor is constrained by the ONT-006 baseline:
 - SpecGraph validation outputs and compatibility report outputs must remain byte-identical;
 - YAML remains inert data and is never executed;
 - new implementation and validation tooling stays Swift-native; no Ruby growth is allowed.
+
+
+### Explicit snapshot provenance profile (ONT-047)
+
+`validate-instances` additionally accepts `--profile eventcore-provenance-v1`
+and `--provenance-authority <trusted-authority.json>` with the separately pinned
+event-core 0.2.0 IR. `export-instance-contract` accepts the same profile selector
+and emits the new authority consumer schema. The default remains eventcore-v1.
+See the [provenance contract](instance-graph/provenance/README.md) for origin types,
+scoped authority admission and the exact-byte confirmation boundary. Neither
+source presence nor admitted provenance establishes factual truth/authenticity.

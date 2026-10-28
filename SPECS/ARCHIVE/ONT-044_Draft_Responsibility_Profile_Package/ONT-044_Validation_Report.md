@@ -77,3 +77,18 @@ future consumer contract decision in ONT-045; this package adds no runtime graph
 profile, Lean adapter, legal rules, sanction, deployment or inference calls.
 ONT-045 must create/link its NormLab canonical Issue before consumer code changes;
 it must keep missing physical states source-only. ONT-047 owns snapshot provenance.
+
+
+## 2026-10-28 — Integration with merged ONT-047
+
+Merged main at 61b1e9a (PR #69) into the ONT-044 branch. Resolved only shared
+CI/package-smoke/archive/next-task bookkeeping conflicts. Both CI gates and all
+four TypeScript smoke programs are retained. The responsibility package, its
+source mapping, generated files and smoke implementation are byte-identical to
+the previously reviewed e8bb93a tree. Compiler Sources/Tests match main exactly.
+
+The full quality gate passes 159 tests, format/lint/import checks, with configured
+TOTAL line coverage 89.87%. TypeScript typecheck/runtime smoke and responsibility,
+provenance (18 static cases) and legacy instance-graph fixture/export gates pass.
+Local outputs remain on TB5; full quality log is ont-044-merge-quality.log in the
+checkout's external build root. Hosted CI of the integration head remains pending.

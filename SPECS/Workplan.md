@@ -932,7 +932,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-042
 - **Parallelizable:** yes, with ONT-043 after ONT-042
-- **Status:** Complete — draft package/mapping delivered; hosted PR review pending
+- **Status:** Complete — draft package/source mapping; integration in PR #68
 - **Origin:** ONT-041 proposal, stage 3 and CQ-03/05/06/10/11.
 - **Outputs:** Draft package, bounded profile/mapping contract and validation
   evidence; parking predicates and sanctions remain outside the generic package.
@@ -1010,7 +1010,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-043
 - **Parallelizable:** yes, independently of ONT-044 and source-only ONT-045 export
-- **Status:** Not Started
+- **Status:** Complete — merged PR #69; explicit provenance admission under caller-selected authority
 - **Origin:** PR #67 independent review of unknown candidates enriched with
   unsupported empty StateSnapshots, accepted structurally on `853a5fc`.
 - **Outputs:** Versioned provenance vocabulary, typed source/operator origin
@@ -1024,6 +1024,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
     reinterpretation of old reports or automatic migration to a stronger claim.
   - Keep absent physical states source-only in the NormLab pilot until a producer
     explicitly supplies provenance supported by the chosen reviewed contract.
+
+- **Validation:** Separately pinned events-core 0.2.0 and eventcore-provenance-v1
+  add typed source/direct/operator origins, graph-bound caller-selected authority
+  and explicit enrichment admission. Full quality passes 158 tests; 18 static
+  fixture outcomes and old v1 baseline/limitation pass their gates. Origin admission
+  is not identity authentication or factual truth; historical v1 reports are unchanged.
 
 ---
 

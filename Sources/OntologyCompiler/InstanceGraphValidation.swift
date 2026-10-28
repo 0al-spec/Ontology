@@ -10,21 +10,38 @@ public struct InstanceGraphValidationResult {
 }
 
 extension OntologyCompiler {
-    /// Validates a local graph against the exact reviewed eventcore-v1 artifact.
+    /// Validates against an explicitly selected exact profile; legacy remains the default.
     public func validateInstanceGraph(
         graphPath: OntologySourcePath,
         ontologyIRPath: OntologySourcePath,
-        outPath: OntologyOutputPath? = nil
+        outPath: OntologyOutputPath? = nil,
+        profile: String = "eventcore-v1",
+        provenanceAuthorityPath: OntologySourcePath? = nil
     ) throws -> InstanceGraphValidationResult {
         var graph = JSONObject()
         var graphSHA256 = ""
         var found = [Diagnostic]()
+        var authoritySHA256 = ""
+        let selected = EventCoreProfileSelection(rawValue: profile)
         do {
-            let ir = try pinnedEventCoreIR(at: ontologyIRPath)
+            guard let selected else { throw OntologyCompilerError.invalidArgument("instanceGraph.profile: unsupported explicit profile") }
+            guard selected == .provenance || provenanceAuthorityPath == nil else {
+                throw OntologyCompilerError.invalidArgument("instanceGraph.profile: authority input requires the provenance profile")
+            }
+            let ir = try pinnedEventCoreIR(at: ontologyIRPath, profile: selected)
             let graphData = try boundedJSONData(at: graphPath)
             graphSHA256 = instanceSHA256(graphData)
             graph = try jsonObject(graphData)
-            let context = InstanceGraphValidationContext(graph: graph, ontologyIR: ir)
+            var authority: JSONObject?
+            if let provenanceAuthorityPath {
+                let data = try boundedJSONData(at: provenanceAuthorityPath)
+                authoritySHA256 = instanceSHA256(data)
+                authority = try jsonObject(data)
+            }
+            let context = InstanceGraphValidationContext(
+                graph: graph, ontologyIR: ir, profile: selected, graphSHA256: graphSHA256,
+                provenanceAuthority: authority
+            )
             guard let issues = InstanceGraphValidationSpec().decide(context) else {
                 throw OntologyCompilerError.invalidArgument("instanceGraph.decision.unavailable: validation could not decide")
             }
@@ -33,24 +50,34 @@ extension OntologyCompiler {
             found = [Diagnostic(code: "instanceGraph.input", severity: "error", path: "input", message: String(describing: error), hint: nil)]
         }
         let passed = found.isEmpty
-        let report: JSONObject = [
+        var report: JSONObject = [
             "apiVersion": EventCoreInstanceProfile.apiVersion, "kind": "InstanceGraphValidationReport",
-            "profile": EventCoreInstanceProfile.name, "status": passed ? "passed" : "failed",
+            "profile": profile, "status": passed ? "passed" : "failed",
             "graphKey": graphTextValue(graph, "graphKey"), "revisionKey": graphTextValue(graph, "revisionKey"),
             "graphSHA256": graphSHA256,
-            "ontology": EventCoreInstanceProfile.ontology, "irSHA256": EventCoreInstanceProfile.irSHA256,
+            "ontology": selected?.ontology ?? [:], "irSHA256": selected?.irSHA256 ?? "",
             "authority": ["structuralOnly": true, "sourceTruthVerified": false, "causationVerified": false, "responsibilityVerified": false],
             "diagnostics": found.map { ["code": $0.code, "path": $0.path, "message": $0.message, "severity": $0.severity] }
         ]
+        if selected == .provenance {
+            let snapshotCount = (graph["nodes"] as? [JSONObject] ?? []).filter { $0["type"] as? String == "eventcore:StateSnapshot" }.count
+            report["profilePin"] = EventCoreProfileSelection.provenance.definitionPin
+            report["provenance"] = [
+                "confirmationStatus": passed ? (snapshotCount == 0 ? "no-snapshots" : "confirmed-under-supplied-authority") : "not-confirmed",
+                "authorityInputSHA256": authoritySHA256,
+                "authorityAuthenticationVerified": false, "sourceTruthVerified": false,
+                "snapshotCount": snapshotCount
+            ]
+        }
         if let outPath { try write(json: report, to: outPath.url) }
         return InstanceGraphValidationResult(passed: passed, report: report, diagnostics: found)
     }
 
-    func pinnedEventCoreIR(at path: OntologySourcePath) throws -> JSONObject {
+    func pinnedEventCoreIR(at path: OntologySourcePath, profile: EventCoreProfileSelection = .legacy) throws -> JSONObject {
         let data = try boundedJSONData(at: path)
         let digest = instanceSHA256(data)
-        guard digest == EventCoreInstanceProfile.irSHA256 else {
-            throw OntologyCompilerError.invalidArgument("instanceGraph.ir.pin: expected the exact reviewed eventcore-v1 normalized artifact")
+        guard digest == profile.irSHA256 else {
+            throw OntologyCompilerError.invalidArgument("instanceGraph.ir.pin: expected the exact reviewed \(profile.rawValue) normalized artifact")
         }
         return try jsonObject(data)
     }

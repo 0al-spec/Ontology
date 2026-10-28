@@ -16,6 +16,9 @@
     "instance-graph-contract.ts",
     "../instance-graph/generated/**/*.ts",
     "../packages/examcalc/generated/**/*.ts",
-    "../packages/events-core/generated/**/*.ts"
+    "../packages/events-core/generated/**/*.ts",
+    "snapshot-provenance.ts",
+    "../packages/events-core/versions/0.2.0/generated/**/*.ts",
+    "../instance-graph/provenance/generated/**/*.ts"
   ]
 }
