@@ -11,6 +11,8 @@
   "include": [
     "examcalc-schemas.ts",
     "events-core-schemas.ts",
+    "responsibility-core-schemas.ts",
+    "../packages/responsibility-core/generated/**/*.ts",
     "instance-graph-contract.ts",
     "../instance-graph/generated/**/*.ts",
     "../packages/examcalc/generated/**/*.ts",

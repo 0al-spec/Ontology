@@ -1,0 +1,209 @@
+{
+  "apiVersion": "ontology.specgraph.io/profile-mapping-draft/v1alpha1",
+  "authority": {
+    "caseValidation": "not-implemented",
+    "leanAdapterImplemented": false,
+    "newLeanProofs": false,
+    "packageApproval": "draft",
+    "sourceTruthVerified": false
+  },
+  "boundAPI": {
+    "checker": "NormLabActionAttribution.check",
+    "constructor": "NormLabActionAttribution.humanCandidate",
+    "context": "NormLabActionAttribution.HumanContext",
+    "forbiddenConsumerEntry": "NormLabActionAttribution.Profile.proposeUnbound",
+    "parkingProposal": "NormLabParkingAttribution.propose",
+    "proposal": "NormLabActionAttribution.propose",
+    "returnType": "NormLabActionAttribution.GroundedTransition"
+  },
+  "certificateBoundary": {
+    "additionRule": "Always recheck Profile.check; new opposite premises or negative effect can reject admission without invalidating Tree.verify.",
+    "deletionRule": "Remap retained supports; recheck used literal/rule membership or select another certificate.",
+    "literalRuleProof": "NormLabDerivationTraces.Tree.verify",
+    "preservationReferences": [
+      "NormLabDerivationTraces.Tree.verify_after_deletion",
+      "NormLabDerivationTraces.Tree.reject_missing_fact",
+      "NormLabActionAttribution.Profile.check_iff"
+    ],
+    "sourceSupportIDs": "external mapping/provenance layer, not Tree.usedFacts"
+  },
+  "conditions": [
+    {
+      "allowedPolarities": [
+        "positive",
+        "negative"
+      ],
+      "conditionKey": "normlab-r3:attributed",
+      "predicate": "NormLabActionAttribution.Profile.Predicate.attributed",
+      "supportMapping": "groundPositiveSupport -> positive; groundNegativeSupport -> negative; owner context supplies every argument"
+    },
+    {
+      "allowedPolarities": [
+        "positive",
+        "negative"
+      ],
+      "conditionKey": "normlab-r3:performed",
+      "predicate": "NormLabActionAttribution.Profile.Predicate.performed",
+      "supportMapping": "groundPositiveSupport -> positive; groundNegativeSupport -> negative; owner context supplies every argument"
+    },
+    {
+      "allowedPolarities": [
+        "positive",
+        "negative"
+      ],
+      "conditionKey": "normlab-r3:required",
+      "predicate": "NormLabActionAttribution.Profile.Predicate.required",
+      "supportMapping": "groundPositiveSupport -> positive; groundNegativeSupport -> negative; owner context supplies every argument"
+    },
+    {
+      "allowedPolarities": [
+        "positive",
+        "negative"
+      ],
+      "conditionKey": "normlab-r3:deadlineElapsed",
+      "predicate": "NormLabActionAttribution.Profile.Predicate.deadlineElapsed",
+      "supportMapping": "groundPositiveSupport -> positive; groundNegativeSupport -> negative; owner context supplies every argument"
+    },
+    {
+      "allowedPolarities": [
+        "positive",
+        "negative"
+      ],
+      "conditionKey": "normlab-r3:capable",
+      "predicate": "NormLabActionAttribution.Profile.Predicate.capable",
+      "supportMapping": "groundPositiveSupport -> positive; groundNegativeSupport -> negative; owner context supplies every argument"
+    },
+    {
+      "allowedPolarities": [
+        "positive",
+        "negative"
+      ],
+      "conditionKey": "normlab-r3:exception",
+      "predicate": "NormLabActionAttribution.Profile.Predicate.exception",
+      "supportMapping": "groundPositiveSupport -> positive; groundNegativeSupport -> negative; owner context supplies every argument"
+    }
+  ],
+  "eventVocabulary": {
+    "id": "org.0al.events.core",
+    "namespace": "eventcore",
+    "sourceDigest": "sha256:be771a8caa40e1ac23cb11fdb2f12a6ef7f8e166b12ef46f9d7d022a23944424",
+    "version": "0.1.0"
+  },
+  "executable": false,
+  "guards": [
+    "Every context comes from RegisteredEvent plus Interpretation of that exact record, never a free Scope.",
+    "Resolve exactly one actor/target and at most one instrument; unresolved/plural roles stay unsupported candidates.",
+    "Human anchor needs an explicit Universe.IsHuman proof; Entity labels or actor identity do not provide it.",
+    "Use explicit injective maps for graph/registry-scoped entity/event/interpretation/episode/action identities, not lossy string-to-number coercion.",
+    "Normalize time under an explicit clock policy before constructing Nat times; preserve clockKey as unverified external metadata.",
+    "Reject duplicate GroundAssessment for the same owner/condition, or provide an explicit reviewed aggregation contract. Never select only the favorable sign.",
+    "Include all accepted positive/negative supports under explicit mapping decisions; pending/rejected supports are not silently promoted or discarded as facts.",
+    "Require start <= finish and every requested literal present with its opposite absent.",
+    "Tree.verify must validate the fixed certificate with the exact profileRule for this mode/context in the authorized catalog.",
+    "The negative selected effect must be absent; a valid Tree alone does not establish profile admission."
+  ],
+  "id": "normlab-r3-bound-v1",
+  "kind": "ResponsibilityProfileMappingDraft",
+  "modes": {
+    "action": {
+      "effect": {
+        "polarity": "positive",
+        "predicate": "NormLabActionAttribution.Profile.Predicate.relationActive"
+      },
+      "eligible": {
+        "polarity": "positive",
+        "predicate": "NormLabActionAttribution.Profile.Predicate.actionGrounded"
+      },
+      "kind": "NormLabActionAttribution.Profile.Kind.action",
+      "premises": [
+        {
+          "conditionKey": "normlab-r3:attributed",
+          "polarity": "positive"
+        },
+        {
+          "conditionKey": "normlab-r3:performed",
+          "polarity": "positive"
+        }
+      ]
+    },
+    "omission": {
+      "effect": {
+        "polarity": "positive",
+        "predicate": "NormLabActionAttribution.Profile.Predicate.breachRecorded"
+      },
+      "eligible": {
+        "polarity": "positive",
+        "predicate": "NormLabActionAttribution.Profile.Predicate.omissionGrounded"
+      },
+      "kind": "NormLabActionAttribution.Profile.Kind.omission",
+      "premises": [
+        {
+          "conditionKey": "normlab-r3:attributed",
+          "polarity": "positive"
+        },
+        {
+          "conditionKey": "normlab-r3:required",
+          "polarity": "positive"
+        },
+        {
+          "conditionKey": "normlab-r3:deadlineElapsed",
+          "polarity": "positive"
+        },
+        {
+          "conditionKey": "normlab-r3:capable",
+          "polarity": "positive"
+        },
+        {
+          "conditionKey": "normlab-r3:exception",
+          "polarity": "negative"
+        },
+        {
+          "conditionKey": "normlab-r3:performed",
+          "polarity": "negative"
+        }
+      ]
+    }
+  },
+  "package": {
+    "id": "org.0al.responsibility.core",
+    "namespace": "respcore",
+    "version": "0.1.0"
+  },
+  "responseBoundary": "relationActive/breachRecorded are profile markers; neither proves generic relation applicability, response authority, liability or sanction.",
+  "scopeOrder": [
+    "actor",
+    "humanAnchor",
+    "target",
+    "instrument",
+    "episode",
+    "action",
+    "start",
+    "finish",
+    "eventId",
+    "interpretationId"
+  ],
+  "source": {
+    "executionEvidence": "not-run-in-ONT-044",
+    "files": {
+      "attribution": "https://github.com/SoundBlaster/NormLab/blob/e8041c937f28d3644d4df3680db5d81f0cff8ace/lean/ActionAttribution.lean",
+      "events": "https://github.com/SoundBlaster/NormLab/blob/e8041c937f28d3644d4df3680db5d81f0cff8ace/lean/EventTransitions.lean",
+      "parkingEntry": "https://github.com/SoundBlaster/NormLab/blob/e8041c937f28d3644d4df3680db5d81f0cff8ace/lean/ParkingAttribution.lean",
+      "runtimeBoundary": "https://github.com/SoundBlaster/NormLab/blob/e8041c937f28d3644d4df3680db5d81f0cff8ace/lean/ParkingRuntime.lean",
+      "traces": "https://github.com/SoundBlaster/NormLab/blob/e8041c937f28d3644d4df3680db5d81f0cff8ace/lean/DerivationTraces.lean"
+    },
+    "repository": "SoundBlaster/NormLab",
+    "reviewedBy": "CodexRootSourceReading",
+    "revision": "e8041c937f28d3644d4df3680db5d81f0cff8ace"
+  },
+  "status": "draft",
+  "unmappedMetadata": [
+    "Independent relationDutyBearer, DutySpecification identity and applicability semantics are not separate R3 Scope arguments.",
+    "Counterpart and ResponseRule identities are not represented by the R3 profile.",
+    "Deadline.dueAt does not compute deadlineElapsed; elapsed is an explicit supplied ground.",
+    "clockKey and source-citation identifiers are not Lean literal arguments.",
+    "If claiming a generic duty result, explicitly review any duty-bearer/human-anchor alignment and applicability outside R3; never infer equality from actor.",
+    "Source quote relevance, factual truth and snapshot origin remain unverified.",
+    "ActionRequirement.actionRequirementKind is not compared with the context action by R3; a generic duty claim needs an explicit matching decision outside the profile.",
+    "StateRequirement has no direct R3 state-condition slot; operationalizing it as an action needs a separate reviewed mapping and is not proved by performed alone."
+  ]
+}

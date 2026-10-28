@@ -75,6 +75,11 @@ jobs:
           TMPDIR: ${{ runner.temp }}
         run: bash tools/instance-graph-smoke.sh
 
+      - name: Validate responsibility draft and generated baseline
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: bash tools/responsibility-core-smoke.sh
+
       - name: Validate snapshot provenance profile and negative fixtures
         env:
           TMPDIR: ${{ runner.temp }}

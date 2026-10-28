@@ -854,7 +854,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-041; proposal review
 - **Parallelizable:** no
-- **Status:** Complete — draft implementation; PR review/CI pending
+- **Status:** Complete — merged PR #66, draft approval retained
 - **PRD:** `SPECS/ARCHIVE/ONT-042_Draft_Event_Core_Package/ONT-042_Draft_Event_Core_Package.md`
 - **Origin:** ONT-041 proposal, stages 1 and competency questions CQ-01–04.
 - **Outputs:** Authoring artifacts, draft package, deterministic IR/SDK and
@@ -877,7 +877,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-042
 - **Parallelizable:** yes, with ONT-044 after ONT-042
-- **Status:** Complete — bounded structural slice; snapshot provenance remains ONT-047; hosted PR re-review pending
+- **Status:** Complete — merged PR #67, bounded structural slice; snapshot provenance remains ONT-047
 - **Origin:** ONT-041 proposal, stage 2 and CQ-02/04/07/08/09/11/12/13/14.
 - **Outputs:** InstanceGraph wire/schema/diagnostic contract, validator surface,
   deterministic positive/negative fixtures and generated consumer contracts.
@@ -932,7 +932,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P1
 - **Dependencies:** ONT-042
 - **Parallelizable:** yes, with ONT-043 after ONT-042
-- **Status:** Not Started
+- **Status:** Complete — draft package/source mapping; integration in PR #68
 - **Origin:** ONT-041 proposal, stage 3 and CQ-03/05/06/10/11.
 - **Outputs:** Draft package, bounded profile/mapping contract and validation
   evidence; parking predicates and sanctions remain outside the generic package.
@@ -944,6 +944,11 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Compiler validation passes and profile examples cover missing/conflicting
     grounds and support deletion; no automatic liability or new theorem backend
     is claimed by package acceptance.
+
+- **Validation:** responsibility-core draft has 18 classes, 37 relations, 8 manual
+  policies and deterministic IR/SDK. Actual draft/check, source mapping comparison,
+  TS object smoke and 143 existing compiler tests pass. No responsibility runtime
+  adapter, graph admission or new Lean proof is claimed.
 
 #### ONT-045: NormLab Offline Event Graph Pilot
 - **Description:** Agree the consumer export contract and record evidence from a
@@ -1005,7 +1010,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Priority:** P2
 - **Dependencies:** ONT-043
 - **Parallelizable:** yes, independently of ONT-044 and source-only ONT-045 export
-- **Status:** Complete — local provenance implementation/fixtures delivered; hosted PR review pending
+- **Status:** Complete — merged PR #69; explicit provenance admission under caller-selected authority
 - **Origin:** PR #67 independent review of unknown candidates enriched with
   unsupported empty StateSnapshots, accepted structurally on `853a5fc`.
 - **Outputs:** Versioned provenance vocabulary, typed source/operator origin

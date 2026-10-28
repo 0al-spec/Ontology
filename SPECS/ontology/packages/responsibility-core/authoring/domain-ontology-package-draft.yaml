@@ -1,0 +1,540 @@
+apiVersion: "ontology.specgraph.io/v1alpha1"
+kind: "DomainOntologyPackage"
+metadata:
+  id: "org.0al.responsibility.core"
+  namespace: "respcore"
+  version: "0.1.0"
+  publisher: "OntologyService"
+  source: "SPECS/ontology/packages/responsibility-core/authoring/intent.md"
+  approvalStatus: "draft"
+spec:
+  imports:
+    - id: "specgraph.foundation"
+      namespace: "sg"
+      version: "0.1.0"
+    - id: "org.0al.events.core"
+      namespace: "eventcore"
+      version: "0.1.0"
+  classes:
+    ResponsibleRelation:
+      extends: "sg:DomainEntity"
+      description: "Claimed conditional duty relation. Actor, duty bearer, counterpart and human anchor are independent; package presence does not establish applicability or liability."
+      central: true
+      fields:
+        relationKey:
+          type: "string"
+          required: true
+    DutySpecification:
+      extends: "sg:ValueObject"
+      description: "Declared duty content and applicability. Required action/state, deadline and applicability need scoped grounds, not defaults."
+      fields:
+        dutyKey:
+          type: "string"
+          required: true
+    ActionRequirement:
+      extends: "sg:ValueObject"
+      description: "A duty requiring an action kind, independently of whether it was performed."
+      fields:
+        requirementKey:
+          type: "string"
+          required: true
+    StateRequirement:
+      extends: "sg:ValueObject"
+      description: "A duty requiring a condition on a declared state or history; no expression is executed."
+      fields:
+        requirementKey:
+          type: "string"
+          required: true
+    Condition:
+      extends: "sg:ValueObject"
+      description: "Opaque condition identity and reviewed semantic reference. Its truth is not stored here or inferred from its label."
+      fields:
+        conditionKey:
+          type: "string"
+          required: true
+        meaningRef:
+          type: "string"
+          required: true
+    Deadline:
+      extends: "sg:ValueObject"
+      description: "Supplied clock and due instant. This does not establish deadlineElapsed; comparable scoped support remains required."
+      fields:
+        deadlineKey:
+          type: "string"
+          required: true
+        dueAt:
+          type: "integer"
+          required: true
+        clockKey:
+          type: "string"
+          required: true
+    AttributionContext:
+      extends: "sg:ValueObject"
+      description: "Context derives registered event, roles, episode, action and interval through one event-core Interpretation. A selected human anchor is a candidate until the adapter constructs a Human proof."
+      fields:
+        contextKey:
+          type: "string"
+          required: true
+    ProfileDefinition:
+      extends: "sg:ValueObject"
+      description: "Versioned external profile/mapping descriptor pinned to source. Referencing it does not execute authored rules or verify an assessment."
+      fields:
+        profileKey:
+          type: "string"
+          required: true
+        mappingRef:
+          type: "string"
+          required: true
+        sourceRevision:
+          type: "string"
+          required: true
+    ResponsibilityAssessment:
+      extends: "sg:DomainEntity"
+      description: "Scoped action/omission assessment proposal. Workflow review is separate from support polarity, backend admission and legal responsibility."
+      lifecycle: "AssessmentReview"
+      fields:
+        assessmentKey:
+          type: "string"
+          required: true
+        mode:
+          type: "string"
+          required: true
+    GroundAssessment:
+      extends: "sg:ValueObject"
+      description: "One condition in one owning assessment. Its positive/negative supports determine unknown, positive, negative or conflict under a selected consumer mapping; no duplicate truth-status field."
+      fields:
+        groundKey:
+          type: "string"
+          required: true
+    CitedSupport:
+      extends: "sg:DomainEntity"
+      description: "A cited support record with exact SourceAssertion provenance. Citation structure alone does not prove condition relevance or polarity."
+      fields:
+        supportKey:
+          type: "string"
+          required: true
+    OperatorSupport:
+      extends: "sg:DomainEntity"
+      description: "Explicit uncited operator assertion. Author and rationale remain distinct from a source citation and cannot be silently relabelled as cited evidence."
+      fields:
+        supportKey:
+          type: "string"
+          required: true
+        rationale:
+          type: "string"
+          required: true
+    ResponseRule:
+      extends: "sg:DomainEntity"
+      description: "Declared conditional response template with a trigger and action. It is inert and contains no parking sanction or automatic enforcement."
+      fields:
+        ruleKey:
+          type: "string"
+          required: true
+        meaningRef:
+          type: "string"
+          required: true
+    ResponseCandidate:
+      extends: "sg:DomainEntity"
+      description: "Proposed response under a separate rule and assessment; unresolved responder/recipient remain missing, never invented. It is not an imposed sanction."
+      fields:
+        responseKey:
+          type: "string"
+          required: true
+    ProfileConsequenceCandidate:
+      extends: "sg:DomainEntity"
+      description: "Proposed profile-specific marker, such as relationActive or breachRecorded. It is not duty applicability, an imposed sanction, or proof of physical consequence."
+      fields:
+        consequenceKey:
+          type: "string"
+          required: true
+        symbolRef:
+          type: "string"
+          required: true
+    CertificateReference:
+      extends: "sg:ValueObject"
+      description: "Reference to an external certificate artifact, not an executed or verified proof. Source-support provenance and mapped Lean literals are separate layers."
+      fields:
+        certificateKey:
+          type: "string"
+          required: true
+        artifactRef:
+          type: "string"
+          required: true
+        artifactDigest:
+          type: "string"
+          required: true
+    ReviewAssessment:
+      extends: "sg:Command"
+      description: "Record workflow review of an assessment without asserting truth, backend acceptance or responsibility."
+    RejectAssessment:
+      extends: "sg:Command"
+      description: "Reject an assessment proposal while preserving supports and provenance."
+  protocols: {}
+  relations:
+    relationDutyBearer:
+      domain: "ResponsibleRelation"
+      range: "eventcore:Entity"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Duty bearer is explicit and is not derived from actor, ownership or human anchor."
+    relationCounterpart:
+      domain: "ResponsibleRelation"
+      range: "eventcore:Entity"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Counterpart is a separate model entity; this does not establish legal personality."
+    relationDuty:
+      domain: "ResponsibleRelation"
+      range: "DutySpecification"
+      cardinality:
+        min: 1
+        max: 1
+      description: "One declared duty specification belongs to the claimed relation."
+    relationOriginContext:
+      domain: "ResponsibleRelation"
+      range: "AttributionContext"
+      cardinality:
+        min: 0
+        max: 1
+      description: "Optional explicit action/omission interpretation proposed as origin; continuation is a separate question."
+    relationOriginCondition:
+      domain: "ResponsibleRelation"
+      range: "Condition"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Declared origin condition is distinct from other phases; its identity does not establish that it holds."
+    relationContinuationCondition:
+      domain: "ResponsibleRelation"
+      range: "Condition"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Declared continuation condition is distinct from other phases; its identity does not establish that it holds."
+    relationTerminationCondition:
+      domain: "ResponsibleRelation"
+      range: "Condition"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Declared termination condition is distinct from other phases; its identity does not establish that it holds."
+    relationResponseRule:
+      domain: "ResponsibleRelation"
+      range: "ResponseRule"
+      cardinality:
+        min: 0
+        max: "*"
+      description: "Possible response templates require their own trigger, authority and applicability; none is inferred by default."
+    dutyRequirement:
+      domain: "DutySpecification"
+      range:
+        oneOf:
+          - "ActionRequirement"
+          - "StateRequirement"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Exactly one typed action/state requirement; no free-form executable expression."
+    actionRequirementKind:
+      domain: "ActionRequirement"
+      range: "eventcore:ActionKind"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Identifies the required action without asserting performance."
+    stateRequirementCondition:
+      domain: "StateRequirement"
+      range: "Condition"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Identifies the state/history condition required by the duty."
+    dutyApplicability:
+      domain: "DutySpecification"
+      range: "Condition"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Applicability is an explicit condition; absence of support never means true."
+    dutyDeadline:
+      domain: "DutySpecification"
+      range: "Deadline"
+      cardinality:
+        min: 0
+        max: 1
+      description: "Missing deadline remains unresolved; no deadlineElapsed support is manufactured."
+    contextInterpretation:
+      domain: "AttributionContext"
+      range: "eventcore:Interpretation"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Derive the event and its exact registry/episode/action/interval from interpretsRecord; never copy conflicting event identifiers here."
+    contextHumanAnchor:
+      domain: "AttributionContext"
+      range: "eventcore:Entity"
+      cardinality:
+        min: 0
+        max: 1
+      description: "Candidate human anchor. A bound HumanContext additionally requires an explicit IsHuman proof in the selected universe."
+    assessmentContext:
+      domain: "ResponsibilityAssessment"
+      range: "AttributionContext"
+      cardinality:
+        min: 1
+        max: 1
+      description: "One interpretation context scopes every mapped ground and consequence."
+    assessmentProfile:
+      domain: "ResponsibilityAssessment"
+      range: "ProfileDefinition"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Select a pinned mapping and backend; no profile is chosen from labels."
+    assessmentRelation:
+      domain: "ResponsibilityAssessment"
+      range: "ResponsibleRelation"
+      cardinality:
+        min: 0
+        max: 1
+      description: "Optional claimed duty metadata. Current NormLab R3 has no independent duty-bearer, duty or response-rule identifier in Scope; these fields are not certified by it."
+    groundAssessmentOwner:
+      domain: "GroundAssessment"
+      range: "ResponsibilityAssessment"
+      cardinality:
+        min: 1
+        max: 1
+      description: "The sole owner determines context/profile; duplicate scope fields are not supplied on a ground."
+    groundCondition:
+      domain: "GroundAssessment"
+      range: "Condition"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Selected condition must have an accepted profile predicate/polarity mapping."
+    groundPositiveSupport:
+      domain: "GroundAssessment"
+      range:
+        oneOf:
+          - "CitedSupport"
+          - "OperatorSupport"
+      cardinality:
+        min: 0
+        max: "*"
+      description: "Independent support for the condition; not a workflow status."
+    groundNegativeSupport:
+      domain: "GroundAssessment"
+      range:
+        oneOf:
+          - "CitedSupport"
+          - "OperatorSupport"
+      cardinality:
+        min: 0
+        max: "*"
+      description: "Explicit support against the condition; absence of positive support does not create this link."
+    citedSupportAssertion:
+      domain: "CitedSupport"
+      range: "eventcore:SourceAssertion"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Preserve source, revision, digest, quote offsets and speaker via the imported assertion."
+    operatorSupportAuthor:
+      domain: "OperatorSupport"
+      range: "eventcore:Entity"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Explicit author of an uncited claim; rationale remains required."
+    profileMapsCondition:
+      domain: "ProfileDefinition"
+      range: "Condition"
+      cardinality:
+        min: 0
+        max: "*"
+      description: "Declare the set of condition identities covered by the reviewed external mapping; semantic validation remains consumer-owned."
+    responseRuleTrigger:
+      domain: "ResponseRule"
+      range: "Condition"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Trigger condition needs its own scoped support before any response is proposed."
+    responseRuleAuthorityCondition:
+      domain: "ResponseRule"
+      range: "Condition"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Authority is a distinct explicit condition, not inferred from the trigger, counterpart or selected responder."
+    responseRuleAction:
+      domain: "ResponseRule"
+      range: "eventcore:ActionKind"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Proposed response action kind, not a performed enforcement event."
+    responseCandidateRule:
+      domain: "ResponseCandidate"
+      range: "ResponseRule"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Candidate response retains its separate response-rule origin."
+    responseCandidateAssessment:
+      domain: "ResponseCandidate"
+      range: "ResponsibilityAssessment"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Retain the assessment context rather than transferring a breach from another event."
+    responseCandidateResponder:
+      domain: "ResponseCandidate"
+      range: "eventcore:Entity"
+      cardinality:
+        min: 0
+        max: 1
+      description: "Unresolved responder remains absent; no authority is inferred from counterpart."
+    responseCandidateRecipient:
+      domain: "ResponseCandidate"
+      range: "eventcore:Entity"
+      cardinality:
+        min: 0
+        max: 1
+      description: "Unresolved response recipient remains absent; actor is not automatically the recipient."
+    consequenceAssessment:
+      domain: "ProfileConsequenceCandidate"
+      range: "ResponsibilityAssessment"
+      cardinality:
+        min: 1
+        max: 1
+      description: "Proposed marker belongs to the selected assessment and its derived event context."
+    consequenceCertificate:
+      domain: "ProfileConsequenceCandidate"
+      range: "CertificateReference"
+      cardinality:
+        min: 0
+        max: 1
+      description: "Optional external certificate reference is not a verification verdict."
+    certificateAssessment:
+      domain: "CertificateReference"
+      range: "ResponsibilityAssessment"
+      cardinality:
+        min: 1
+        max: 1
+      description: "The referenced certificate must target this exact context/profile; no cross-event substitution."
+    certificateUsedGround:
+      domain: "CertificateReference"
+      range: "GroundAssessment"
+      cardinality:
+        min: 0
+        max: "*"
+      description: "External mapping provenance: used ground nodes must belong to the same assessment. This is not the Lean Tree.usedFacts list itself."
+    certificateUsedSupport:
+      domain: "CertificateReference"
+      range:
+        oneOf:
+          - "CitedSupport"
+          - "OperatorSupport"
+      cardinality:
+        min: 0
+        max: "*"
+      description: "External selected support IDs for replay. Lean tracks literal/rule values; citation deletion needs mapping/provenance revalidation separately."
+  policies:
+    ScopedBoundMapping:
+      extends: "sg:Policy"
+      enforceability: "manual"
+      appliesTo:
+        - "AttributionContext"
+        - "ProfileDefinition"
+        - "ResponsibilityAssessment"
+        - "GroundAssessment"
+        - "CertificateReference"
+      text: "Use one derived registered event/interpretation context and explicit injective ID mapping. Missing roles, Human proof or registry binding cannot be invented. A ground and certificate derive the same owner context/profile. The eventcore-v1 validator does not admit respcore nodes; this draft adds no responsibility graph checker."
+    DistinctResponsibilityRoles:
+      extends: "sg:Policy"
+      enforceability: "manual"
+      appliesTo:
+        - "ResponsibleRelation"
+        - "AttributionContext"
+      text: "Actor, duty bearer, counterpart, human anchor, responder and recipient are independent roles. The current human-contribution profile has no separate dutyBearer, duty or responseRule scope slots; do not present its result as certification of those metadata fields. Any chosen alignment must be explicit and separately reviewed."
+    IndependentGroundSupport:
+      extends: "sg:Policy"
+      enforceability: "manual"
+      appliesTo:
+        - "GroundAssessment"
+        - "Condition"
+        - "ResponsibilityAssessment"
+      text: "No support means unknown; positive-only, negative-only and both polarities remain distinct. Preserve opposing supports. Condition labels and assessment review do not establish truth. The selected NormLab profile requires each requested literal and absence of its opposite, not a full Belnap calculus."
+    SourceAndOperatorBoundary:
+      extends: "sg:Policy"
+      enforceability: "manual"
+      appliesTo:
+        - "CitedSupport"
+        - "OperatorSupport"
+      text: "Cited support retains the exact SourceAssertion and speaker. Uncited operator support retains author and rationale and must stay labelled uncited. Citation identity does not establish condition relevance, polarity, human status or factual truth."
+    ExplicitOmissionGrounds:
+      extends: "sg:Policy"
+      enforceability: "manual"
+      appliesTo:
+        - "DutySpecification"
+        - "Deadline"
+        - "GroundAssessment"
+      text: "The mapped omission profile requires attributed+, required+, deadlineElapsed+, capable+, exception- and performed- in the same scope. Missing performance evidence is not nonperformance. Deadline metadata alone does not supply elapsed support; external duty applicability is not silently proved by R3."
+    ConditionalRelationPersistence:
+      extends: "sg:Policy"
+      enforceability: "manual"
+      appliesTo:
+        - "ResponsibleRelation"
+        - "Condition"
+      text: "Origin, continuation and termination are distinct declared conditions. A relation can persist without a current action by its originator. Observed Delta or the R3 relationActive marker alone does not establish the legal applicability or persistence of this ResponsibleRelation."
+    SupportSensitiveRevalidation:
+      extends: "sg:Policy"
+      enforceability: "manual"
+      appliesTo:
+        - "CertificateReference"
+        - "ProfileConsequenceCandidate"
+      text: "Deleting unused mapped facts/rules can preserve a selected Tree under the pinned theorem conditions. Deleting used support requires mapping revalidation; an alternate source may preserve the same literal value. Profile.check must be rechecked after updates: adding opposed grounds or negative effect can reject a still-valid Tree. Never identify source support IDs with Lean literal values."
+    SeparateConditionalResponse:
+      extends: "sg:Policy"
+      enforceability: "manual"
+      appliesTo:
+        - "ResponseRule"
+        - "ResponseCandidate"
+        - "ProfileConsequenceCandidate"
+      text: "An omission-grounded breachRecorded marker is not an imposed sanction. A response needs its own rule, scoped trigger, authority and recipient. Package approval, workflow review, source truth, profile acceptance and legal responsibility are distinct. This package neither executes response rules nor inserts a physical or normative Delta."
+  stateMachines:
+    AssessmentReview:
+      states:
+        - "unreviewed"
+        - "reviewed"
+        - "rejected"
+      transitions:
+        - from: "unreviewed"
+          to: "reviewed"
+          command: "ReviewAssessment"
+        - from: "unreviewed"
+          to: "rejected"
+          command: "RejectAssessment"
+  modelApplicability:
+    appliesTo:
+      domains:
+        - "general_responsibility_modeling"
+      contexts:
+        - "draft_vocabulary_review"
+        - "offline_profile_mapping_design"
+    excludes:
+      contexts:
+        - "automatic_liability_assignment"
+        - "trusted_legal_advice"
+        - "runtime_responsibility_graph_enforcement"
+    assumptions:
+      - id: "manual_mapping_review"
+        text: "Cross-node support, role, clock, identity, source relevance and mapping checks remain consumer-owned; scalar fields do not enforce enum strings."
+      - id: "source_and_proof_boundary"
+        text: "Pinned Lean source reading establishes a mapping boundary only; no adapter, source-truth verifier or new theorem backend is implemented."
+    invalidationTriggers:
+      - id: "profile_source_changed"
+        text: "Re-review the condition/polarity/context mapping when NormLab profile source or imported event vocabulary changes."
