@@ -1,0 +1,30 @@
+{
+  "id": "cancel-document-edit",
+  "revision": "1",
+  "obligations": [
+    {
+      "id": "restore_content",
+      "label": "Отмена восстанавливает содержимое до редактирования",
+      "origin": "assumption",
+      "source": "Second bounded example selected to exercise the agreed contract; concrete document semantics remain illustrative.",
+      "scope": "One completed edit/cancel operation on the selected document",
+      "criterion": "restore_pre_edit"
+    },
+    {
+      "id": "preserve_identity",
+      "label": "После отмены остаётся тот же документ",
+      "origin": "assumption",
+      "source": "The example chooses stable domain identity across editing and cancellation.",
+      "scope": "Selected document entity, not filesystem inode identity",
+      "criterion": "preserve"
+    },
+    {
+      "id": "missing_before",
+      "label": "Нет исходного наблюдения — восстановление неизвестно",
+      "origin": "user_direction",
+      "source": "Missing states must not become invented states or an empty Delta.",
+      "scope": "Restoration and identity evaluations that require the initial observation",
+      "criterion": "unknown"
+    }
+  ]
+}

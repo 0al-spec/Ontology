@@ -18,14 +18,16 @@ from pathlib import Path
 from contract import (BY_KEY, CODE_ANCHORS, PROFILE, boundary, hypercode_values,
                       implementation_values, intent_values, load, model_values,
                       sha256, worst)
+import contract_export
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 PACKAGE = ROOT / "SPECS/ontology/packages/image-encoding-pilot"
 INPUTS = ("intent.json", "ontology-model.json", "image.hc", "image.hcs", "implementation.json")
-ADAPTERS = ("contract.py", "pipeline.py", "observe.py", "report.py", "image_app.py", "worker.py", "profile.json", "requirements.txt")
+ADAPTERS = ("contract.py", "pipeline.py", "observe.py", "report.py", "image_app.py", "worker.py", "profile.json", "requirements.txt", "contract_export.py")
 
 LOADED = {name: sha256(HERE / name) for name in ("contract.py", "pipeline.py")}
+LOADED_SUPPORT = {name: sha256(path) for name, path in contract_export.support_sources().items()}
 
 def write_json(path: Path, value: dict) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -48,6 +50,7 @@ def sources(inputs: Path, ontologyc: Path, hypercode: Path) -> dict[str, Path]:
     result = {"input/" + name: inputs / name for name in INPUTS}
     result.update({"adapter/" + name: HERE / name for name in ADAPTERS})
     result.update({"tool/ontologyc": ontologyc, "tool/hypercode": hypercode})
+    result.update(contract_export.support_sources())
     for pin in load(HERE / "profile.json")["packages"]:
         ir = ROOT / pin["path"]
         result[pin["path"]] = ir
@@ -129,6 +132,8 @@ def run(inputs: Path, ontologyc: Path, hypercode: Path, out: Path) -> dict:
     """Produce a new receipt in an empty directory; never amend old evidence."""
     if any(sha256(HERE / name) != digest for name, digest in LOADED.items()):
         raise ValueError("loaded comparator source changed; start a fresh Python process")
+    if any(sha256(path) != LOADED_SUPPORT[name] for name, path in contract_export.support_sources().items()):
+        raise ValueError("loaded shared contract source changed; start a fresh Python process")
     if out.exists() and any(out.iterdir()):
         raise ValueError("output directory must be empty; keep earlier receipts immutable")
     out.mkdir(parents=True, exist_ok=True)
@@ -191,6 +196,7 @@ def run(inputs: Path, ontologyc: Path, hypercode: Path, out: Path) -> dict:
     write_json(out / "report.json", report)
     from report import render
     render(report, out)
+    contract_export.emit(report, out)
     return report
 
 
@@ -221,9 +227,21 @@ def freshness(report_dir: Path, inputs: Path, ontologyc: Path, hypercode: Path) 
         return {"status": "unknown", "reason": str(error)}
 
 
+def contract_freshness(report_dir: Path, inputs: Path, ontologyc: Path, hypercode: Path) -> dict:
+    """The generic receipt supplements the original, versioned pilot evidence."""
+    original = freshness(report_dir, inputs, ontologyc, hypercode)
+    if original["status"] != "matched":
+        return {"status": "unknown", "freshness": "unknown", "diagnostics": [str(original)]}
+    current = bindings(inputs, ontologyc, hypercode)
+    current.update({"output/hypercode.ir.json": sha256(report_dir / "hypercode.ir.json"),
+                    "output/ontology.ir.json": sha256(report_dir / "ontology-generated/ontology.normalized.json"),
+                    "output/runtime.json": sha256(report_dir / "runtime.json")})
+    return contract_export.verify(report_dir, current)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("run", "verify"))
+    parser.add_argument("command", choices=("run", "verify", "verify-contract"))
     parser.add_argument("--inputs", type=Path, default=HERE)
     parser.add_argument("--ontologyc", type=Path, required=True)
     parser.add_argument("--hypercode", type=Path, required=True)
@@ -236,10 +254,17 @@ def main() -> int:
             result = freshness(args.out, args.inputs, args.ontologyc, args.hypercode)
             print(json.dumps(result, ensure_ascii=False))
             return 0 if result["status"] == "matched" else 2
+        if args.command == "verify-contract":
+            result = contract_freshness(args.out, args.inputs, args.ontologyc, args.hypercode)
+            print(json.dumps(result, ensure_ascii=False))
+            return 0 if result["freshness"] == "matched" else 2
         report = run(args.inputs, args.ontologyc, args.hypercode, args.out)
+        assessment = load(args.out / "contract/assessment.json")
         print(json.dumps({"status": report["status"], "human_alignment": report["human_alignment"],
-                          "goal_result": report["runtime"]["goal_result"], "report": str(args.out / "report.html")}, ensure_ascii=False))
-        return 0 if report["status"] == "satisfied" else 1
+                          "goal_result": report["runtime"]["goal_result"], "report": str(args.out / "report.html"),
+                          "contract_status": assessment["status"],
+                          "contract_report": str(args.out / "contract/report.html")}, ensure_ascii=False))
+        return 0 if worst([report["status"], assessment["status"]]) == "satisfied" else 1
     except (OSError, ValueError, KeyError, TypeError, subprocess.TimeoutExpired) as error:
         print(json.dumps({"status": "unknown", "error": str(error)}, ensure_ascii=False), file=sys.stderr)
         return 2

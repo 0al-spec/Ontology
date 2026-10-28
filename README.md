@@ -304,6 +304,11 @@ runs a real image example through a draft application ontology, Hypercode and
 Python implementation. It reports compact differences at each boundary, with a
 fixed intent baseline, independent observations and negative controls. Its bounded
 test evidence is separate from human approval and formal proof.
+The [intent preservation contract 0.1](SPECS/intent-preservation/0.1/README.md)
+defines a shared receipt, coverage rules and correction workflow. Fresh image runs
+also emit this contract; an independent [edit-cancellation example](Examples/edit-cancellation/README.md)
+uses the same format and mobile-readable report. Domain profiles supply their own
+bounded semantic checks. Old pilot receipts are not reinterpreted.
 For personal Codex discovery, copy the complete `skills/ontology-action-model`
 folder into `${CODEX_HOME:-$HOME/.codex}/skills/` (inspect an existing destination
 before replacing it). Its references and templates stay relative to the skill.

@@ -129,3 +129,30 @@ Lean proof, full source equivalence, visual-quality criterion, metadata preserva
 or universal codec property is claimed. The next experiment should add one new
 criterion and measure whether a person can identify and correct its intentional
 mistranslation from the compact report alone.
+
+## Shared review contract 0.1
+
+Fresh runs additionally create `contract/receipt.json`, `contract/assessment.json`,
+`contract/report.html` and `contract/report.md`, following the
+[shared specification](../../SPECS/intent-preservation/0.1/README.md).
+The new views use compact cards that fit a phone and expand preserved mappings.
+The `image-encoding/1` adapter projects the original comparator results into the
+shared envelope: nine baseline obligations, five stages and four boundaries.
+It retains independent adjacent/baseline verdicts, evidence scope, exact artifact
+bindings and a separate pending human decision. Structural agreement is not
+behavioral evidence; the final boundary references the real observation worker.
+
+The old `intent-preservation-pilot/v1` input and report meaning is retained.
+No command automatically converts an archived v1 report. The supplementary receipt
+is produced only by a fresh run. Its support sources and schema are snapshotted
+and included in freshness checks. An absent contract, unknown version or changed
+source gives unknown rather than upgrading an old result.
+
+Use the same arguments as `verify`, with `verify-contract`, to check the shared
+receipt against current artifacts. Exit 0 from verification means the receipt is
+current, including when its saved result is violated; it does not turn a failure
+into success. The command prints status and freshness separately. A fresh `run`
+returns success only when both the pilot and shared contract checks succeed.
+
+The independent [edit cancellation example](../edit-cancellation/README.md) uses
+this envelope without image fields or compiler assumptions in the shared core.

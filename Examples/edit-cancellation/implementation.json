@@ -1,0 +1,8 @@
+{
+  "implementation": "document-editor/1",
+  "values": {
+    "restore_content": "restore_pre_edit",
+    "preserve_identity": "preserve",
+    "missing_before": "unknown"
+  }
+}
