@@ -49,3 +49,31 @@ reviewed consumer contract before anyone claims these invariants are executed.
 ---
 **Archived:** 2026-10-28
 **Verdict:** PASS (local package/object/generation checks)
+
+## PR review correction plan — 2026-10-28
+
+The review of PR #70 at 6c02230 found that a contribution record's own Delta
+does not exhaust its hypothesized downstream consequences. In the canonical
+car fixture, the omission record preserves its own state while the movement
+record changes location. The earlier consequence wording above is superseded
+by this correction; no frozen event/profile semantics will change.
+
+1. Distinguish local record change from hypothesized downstream effect change.
+   Follow an explicit CausalHypothesis whose hypothesisCauseView is the selected
+   motivation view, then hypothesisEffectView and its own record/Delta. Retain
+   hypothesis identity/state; do not promote the causal attribution to fact.
+2. For this pilot use a separate omission record plus causal hypothesis. Do not
+   substitute an owner reading of the movement record as the same motive scope.
+   An empty local Delta says nothing about downstream effects or other projections.
+3. Define actor-role binding by an outgoing interpretationBindsRole or
+   candidateBindsRole edge from the selected view, with roleName actor. Shared
+   RoleBinding nodes are allowed; exclusive ownership is not required.
+4. Regenerate the staged package/IR and align the inert contract and examples.
+   Add fixture-backed smoke controls using the real frozen graph validator:
+   empty omission Delta passes, movement Delta stays nonempty, moving that Delta
+   to omission fails, and shared role references remain structurally admissible.
+   These controls test event structure, not a new motivation admission engine.
+
+Re-run package generation/pin checks and TypeScript smoke. Preserve the existing
+159-test quality result unless compiler changes or a fresh failure require a
+broader local rerun; hosted CI will validate the correction head separately.
