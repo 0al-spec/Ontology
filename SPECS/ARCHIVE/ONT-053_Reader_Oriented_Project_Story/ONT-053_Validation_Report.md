@@ -19,7 +19,8 @@ Verdict: **PASS — documentation scope**
   tooling guide and PRD exist; fenced code blocks are balanced.
 - Configured documentation gates: `test -f README.md` and
   `test -f SPECS/Workplan.md` pass.
-- `git diff --check` passes.
+- `git diff --check` passes. Staged validation found an extra blank line at
+  the end of the moved guide; it was removed before the final branch check.
 - Source comparison covers the image/cancellation pilots, event and provenance
   profiles, responsibility/motivation/agency package docs, the intent contract,
   and NormLab's relation, state, event and attribution modules.

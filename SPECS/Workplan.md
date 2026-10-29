@@ -1155,7 +1155,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Description:** Rewrite the entry-point README around the problem of preserving meaning across human intent, domain models and software; show the relationship to NormLab and the precise role of Lean.
 - **Priority:** P1 — explicit user request
 - **Dependencies:** ONT-049 through ONT-052 merged; current implementation and profile documentation
-- **Status:** INPROGRESS
+- **Status:** Complete
 - **Acceptance Criteria:**
   - A new reader can identify the problem, intended user, implemented mechanism and value from the opening sections.
   - A concrete example and diagram explain concepts, state changes, goals and compact correspondence reports.

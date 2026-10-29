@@ -1,12 +1,4 @@
-# Current Task: ONT-053 — Reader-Oriented Project Story
-
-**Status:** Selected by explicit user request; documentation only
-**Goal:** Explain the problem, mechanism and value of Ontology, with a concrete example and accurate Lean/NormLab boundaries.
-**Next step:** Prepare the source-grounded README and validate links and claims.
-
----
-
-## Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
@@ -40,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-053: reader-oriented README, action and review diagrams, explicit Lean/NormLab boundaries and separate tooling guide. Documentation checks and independent review pass. Next: review the separate documentation PR; no runtime integration selected.
 
 - ONT-052: contract 0.1, separate semantic/evidence/human/outcome axes, image adapter and edit cancellation profile. 113 local tests pass; independent review fixes closed. Next: review the separate PR above #75 and try the compact report against another real change. No consumer integration or merge selected automatically.
 

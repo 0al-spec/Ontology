@@ -394,4 +394,3 @@ swift run ontologyc compile \
 ```
 
 Commit compiler changes and regenerated baselines together.
-
