@@ -47,6 +47,10 @@ The common `outcomes` projection separately displays operation completion and th
 selected-document change; neither is conflated with intent conformity.
 The report stays compact while every required mapping and evidence scope can be
 expanded. Decisions remain `pending`; example choices do not become human approval.
+The first card keeps correspondence, freshness and human decision side by side.
+Every evidence item explicitly identifies its boundary and obligation in `subjects`.
+Substituting another requirement's evidence or reusing it across undeclared
+boundaries yields `unknown`, even when all artifact hashes match.
 
 The negative mode changes both model and implementation declarations to keep the
 edited bytes, preserving the original intent. Those downstream layers agree and
@@ -80,6 +84,8 @@ archived observation hashes. With custom source inputs, pass the same `--inputs`
 directory to verification. A changed/missing artifact or unsupported profile yields
 `unknown`; old receipt bytes are not rewritten or reinterpreted. These hashes are
 not signatures and do not authenticate a producer who can rewrite the receipt.
+Earlier draft receipts without evidence subjects are rejected without modification;
+the consumer never infers those subjects from IDs or regenerates historical claims.
 
 ## Evidence boundary
 

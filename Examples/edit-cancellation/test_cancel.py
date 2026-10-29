@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import shutil
 import subprocess
 import sys
@@ -52,6 +53,43 @@ class CancellationTests(unittest.TestCase):
             row = next(row for row in boundary["rows"] if row["obligationId"] == "restore_content")
             self.assertEqual(row["adjacent"], "satisfied")
             self.assertEqual(row["baseline"], "violated")
+
+    def test_real_receipt_rejects_changed_with_satisfied_checks(self):
+        receipt, _ = run(self.out)
+        receipt["boundaries"][0]["rows"][0]["change"] = "changed"
+        result = check(receipt, supported_profiles={PROFILE}, current_bindings=receipt["bindings"])
+        self.assertEqual(result["status"], "unknown")
+        self.assertTrue(result["diagnostics"])
+
+    def test_real_receipt_requires_exact_evidence_subject(self):
+        original, _ = run(self.out)
+        for mode in ("other-obligation", "other-boundary", "one-for-all"):
+            with self.subTest(mode=mode):
+                receipt = copy.deepcopy(original)
+                first = receipt["boundaries"][0]
+                if mode == "other-obligation":
+                    first["rows"][0]["evidence"] = first["rows"][1]["evidence"][:]
+                elif mode == "other-boundary":
+                    receipt["boundaries"][1]["rows"][0]["evidence"] = first["rows"][0]["evidence"][:]
+                else:
+                    reference = first["rows"][0]["evidence"][:]
+                    for boundary in receipt["boundaries"]:
+                        for row in boundary["rows"]:
+                            row["evidence"] = reference[:]
+                result = check(receipt, supported_profiles={PROFILE}, current_bindings=receipt["bindings"])
+                self.assertEqual(result["status"], "unknown")
+                self.assertTrue(result["diagnostics"])
+
+    def test_receipt_without_subjects_is_not_upgraded(self):
+        run(self.out)
+        receipt_path = self.out / "receipt.json"
+        receipt = load(receipt_path)
+        for evidence in receipt["evidence"]:
+            evidence.pop("subjects")
+        write_json(receipt_path, receipt)
+        before = receipt_path.read_bytes()
+        self.assertEqual(verify(self.out)["status"], "unknown")
+        self.assertEqual(receipt_path.read_bytes(), before)
 
     def test_restored_bytes_in_another_entity_fail_identity(self):
         receipt, result = run(self.out, mode="replace-identity")

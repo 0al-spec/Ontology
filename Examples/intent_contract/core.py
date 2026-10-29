@@ -106,7 +106,9 @@ def check(receipt: dict, *, supported_profiles: set[str] | tuple[str, ...],
     obligations = indexed(baseline["obligations"], "obligation")
     stages = indexed(receipt["stages"], "stage")
     evidence = indexed(receipt["evidence"], "evidence")
-    indexed(receipt["boundaries"], "boundary")
+    boundaries = indexed(receipt["boundaries"], "boundary")
+    subjects = {(boundary["id"], row["obligationId"])
+                for boundary in boundaries.values() for row in boundary["rows"]}
     if baseline["artifact"] not in bindings:
         gap("baseline artifact missing from bindings")
     if baseline["artifact"] not in receipt["stages"][0]["artifacts"]:
@@ -117,6 +119,10 @@ def check(receipt: dict, *, supported_profiles: set[str] | tuple[str, ...],
     for item in evidence.values():
         if not set(item["bindings"]) <= bindings:
             gap(f"evidence {item['id']} references unbound artifacts")
+        for target in item["subjects"]:
+            pair = (target["boundary"], target["obligationId"])
+            if pair not in subjects:
+                gap(f"evidence {item['id']} references missing subject {pair[0]}/{pair[1]}")
     outcomes = indexed(receipt["outcomes"], "outcome")
     for outcome in outcomes.values():
         for evidence_id in outcome["evidence"]:
@@ -145,6 +151,12 @@ def check(receipt: dict, *, supported_profiles: set[str] | tuple[str, ...],
                 gap(f"{boundary['id']} references missing stage {stage_id}")
         for key, row in rows.items():
             subject = f"{boundary['id']}/{key}"
+            coherent_change = not (
+                row["change"] in ("changed", "removed") and row["adjacent"] == "satisfied"
+                or row["change"] in ("preserved", "refined") and row["adjacent"] == "violated"
+            )
+            if not coherent_change:
+                gap(f"{subject}: change {row['change']} contradicts adjacent {row['adjacent']}")
             if key not in obligations:
                 if row["change"] != "added" or row["baseline"] != "unknown":
                     gap(f"{subject}: unrecognized obligation must be an added, unreviewed assumption")
@@ -153,7 +165,7 @@ def check(receipt: dict, *, supported_profiles: set[str] | tuple[str, ...],
                 gap(f"{subject}: expected value differs from independently supplied baseline")
             if row["change"] == "unmapped":
                 gap(f"{subject}: no semantic mapping")
-            elif row["change"] == "removed":
+            elif row["change"] == "removed" and coherent_change:
                 verdicts.append("violated")
                 diagnostics.append(f"{subject}: obligation removed")
             elif row["change"] == "added":
@@ -164,6 +176,8 @@ def check(receipt: dict, *, supported_profiles: set[str] | tuple[str, ...],
                 item = evidence.get(evidence_id)
                 if item is None:
                     gap(f"{subject}: missing evidence {evidence_id}")
+                elif {"boundary": boundary["id"], "obligationId": key} not in item["subjects"]:
+                    gap(f"{subject}: evidence {evidence_id} does not cover this subject")
                 elif not required_bindings <= set(item["bindings"]):
                     gap(f"{subject}: evidence {evidence_id} does not bind baseline and both stages")
                 else:

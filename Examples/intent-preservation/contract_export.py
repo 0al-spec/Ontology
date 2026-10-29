@@ -77,6 +77,7 @@ def project(report: dict, bindings: dict[str, str]) -> dict:
                 change = "added"
             evidence.append({
                 "id": evidence_id,
+                "subjects": [{"boundary": f"boundary-{index}", "obligationId": identity}],
                 "kind": "execution" if index == 3 else "structural",
                 "checker": "image-intent-adapter/1",
                 "scope": (

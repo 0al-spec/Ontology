@@ -124,6 +124,7 @@ def make_receipt(intent: dict, model: dict, implementation: dict, observed: dict
             baseline = "satisfied" if expected[key] == right[key] else "violated"
             evidence_id = boundary_id + ":" + key
             evidence.append({"id": evidence_id, "kind": "structural", "checker": "cancel-declarations/1",
+                             "subjects": [{"boundary": boundary_id, "obligationId": key}],
                              "scope": "Exact values in local inert declarations; no compiler IR or behavior proof",
                              "bindings": list(bindings), "verdict": "violated" if "violated" in (adjacent, baseline) else "satisfied"})
             rows.append({"obligationId": key, "change": "preserved" if adjacent == "satisfied" else "changed",
@@ -143,6 +144,7 @@ def make_receipt(intent: dict, model: dict, implementation: dict, observed: dict
         evidence_id = "execution:" + key
         verdict = "violated" if "violated" in (adjacent, baseline) else "unknown" if "unknown" in (adjacent, baseline) else "satisfied"
         evidence.append({"id": evidence_id, "kind": "execution", "checker": "cancel-observer/1",
+                         "subjects": [{"boundary": "transition-3", "obligationId": key}],
                          "scope": "One disposable UTF-8 document edit/cancel plus missing-before oracle probes; file hashes and domain identity",
                          "bindings": list(bindings), "verdict": verdict})
         rows.append({"obligationId": key,

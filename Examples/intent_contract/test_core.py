@@ -31,6 +31,7 @@ def fixture() -> dict:
                        for name, left, right in (("first", "intent", "model"), ("second", "model", "code"))],
         "evidence": [{"id": name, "kind": "structural", "checker": "fixture-equality/1",
                       "scope": "One declared property; no behavior proof", "bindings": list(bindings),
+                      "subjects": [{"boundary": name, "obligationId": "keep"}],
                       "verdict": "satisfied"} for name in ("first", "second")],
         "bindings": bindings,
         "decision": {"status": "pending", "baselineRevision": "r1", "bindings": [],
@@ -130,8 +131,43 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(self.assess()["status"], "unknown")
 
     def test_removed_requirement_cannot_be_green(self):
-        self.receipt["boundaries"][0]["rows"][0]["change"] = "removed"
+        self.receipt["boundaries"][0]["rows"][0].update(change="removed", adjacent="violated")
+        self.receipt["evidence"][0]["verdict"] = "violated"
         self.assertEqual(self.assess()["status"], "violated")
+
+    def test_change_and_adjacent_matrix(self):
+        for change in ("preserved", "refined", "changed", "removed"):
+            for adjacent in ("satisfied", "violated", "unknown"):
+                with self.subTest(change=change, adjacent=adjacent):
+                    self.receipt = fixture()
+                    self.receipt["boundaries"][0]["rows"][0].update(change=change, adjacent=adjacent)
+                    self.receipt["evidence"][0]["verdict"] = adjacent
+                    result = self.assess()
+                    contradiction = (change in ("changed", "removed") and adjacent == "satisfied"
+                                     or change in ("preserved", "refined") and adjacent == "violated")
+                    expected = ("unknown" if contradiction and adjacent == "satisfied"
+                                else "violated" if adjacent == "violated" or change == "removed"
+                                else adjacent)
+                    self.assertEqual(result["status"], expected)
+                    self.assertEqual(any("contradicts adjacent" in message
+                                         for message in result["diagnostics"]), contradiction)
+
+    def test_contradiction_does_not_erase_independently_supported_violation(self):
+        self.receipt["boundaries"][0]["rows"][0]["change"] = "changed"
+        self.receipt["boundaries"][1]["rows"][0]["baseline"] = "violated"
+        self.receipt["evidence"][1]["verdict"] = "violated"
+        result = self.assess()
+        self.assertEqual(result["status"], "violated")
+        self.assertIn("contradicts adjacent", result["diagnostics"][0])
+
+    def test_correction_toward_baseline_still_records_changed_transition(self):
+        self.receipt["boundaries"][1]["rows"][0].update(
+            change="changed", adjacent="violated", baseline="satisfied",
+            left="resize", right="preserve")
+        self.receipt["evidence"][1]["verdict"] = "violated"
+        result = self.assess()
+        self.assertEqual(result["status"], "violated")
+        self.assertEqual(result["diagnostics"], [])
 
     def test_added_assumption_requires_new_baseline(self):
         row = copy.deepcopy(self.receipt["boundaries"][0]["rows"][0])
@@ -151,6 +187,75 @@ class CoreTests(unittest.TestCase):
     def test_evidence_must_bind_both_stages_and_original(self):
         self.receipt["evidence"][1]["bindings"] = ["model.json", "code.py"]
         self.assertEqual(self.assess()["status"], "unknown")
+
+    def test_evidence_cannot_be_reused_on_another_boundary(self):
+        self.receipt["boundaries"][1]["rows"][0]["evidence"] = ["first"]
+        result = self.assess(self.receipt["bindings"])
+        self.assertEqual(result["status"], "unknown")
+        self.assertEqual(result["freshness"], "matched")
+        self.assertTrue(any("does not cover this subject" in message for message in result["diagnostics"]))
+
+    def test_evidence_cannot_be_swapped_between_obligations(self):
+        extra = copy.deepcopy(self.receipt["baseline"]["obligations"][0])
+        extra["id"] = "identity"
+        self.receipt["baseline"]["obligations"].append(extra)
+        for boundary, evidence in zip(self.receipt["boundaries"], self.receipt["evidence"][:]):
+            row = copy.deepcopy(boundary["rows"][0])
+            row.update(obligationId="identity", evidence=[evidence["id"]])
+            extra_evidence = copy.deepcopy(evidence)
+            extra_evidence.update(id=evidence["id"] + "-identity",
+                                  subjects=[{"boundary": boundary["id"], "obligationId": "identity"}])
+            boundary["rows"][0]["evidence"] = [extra_evidence["id"]]
+            boundary["rows"].append(row)
+            self.receipt["evidence"].append(extra_evidence)
+        result = self.assess(self.receipt["bindings"])
+        self.assertEqual(result["status"], "unknown")
+        self.assertEqual(sum("does not cover this subject" in message for message in result["diagnostics"]), 4)
+
+    def test_explicit_multi_subject_evidence_can_cover_multiple_rows(self):
+        evidence = self.receipt["evidence"][0]
+        evidence["subjects"].append({"boundary": "second", "obligationId": "keep"})
+        self.receipt["evidence"] = [evidence]
+        self.receipt["boundaries"][1]["rows"][0]["evidence"] = [evidence["id"]]
+        self.assertEqual(self.assess()["status"], "satisfied")
+
+    def test_all_evidence_kinds_require_nonempty_unique_explicit_subjects(self):
+        for kind in ("structural", "execution", "property_test", "formal_proof"):
+            for subjects in (None, [], [{"boundary": "first", "obligationId": "keep"}] * 2):
+                with self.subTest(kind=kind, subjects=subjects):
+                    self.receipt = fixture()
+                    item = self.receipt["evidence"][0]
+                    item["kind"] = kind
+                    if subjects is None:
+                        item.pop("subjects")
+                    else:
+                        item["subjects"] = subjects
+                    with self.assertRaises(ValueError):
+                        self.assess()
+
+    def test_evidence_subject_references_must_resolve_even_when_uncited(self):
+        for target in ({"boundary": "missing", "obligationId": "keep"},
+                       {"boundary": "first", "obligationId": "missing"},
+                       {"boundary": "*", "obligationId": "*"}):
+            with self.subTest(target=target):
+                self.receipt = fixture()
+                unused = copy.deepcopy(self.receipt["evidence"][0])
+                unused.update(id="unused", subjects=[target])
+                self.receipt["evidence"].append(unused)
+                result = self.assess()
+                self.assertEqual(result["status"], "unknown")
+                self.assertIn("references missing subject", result["diagnostics"][0])
+
+    def test_added_assumption_is_an_explicit_subject_without_becoming_baseline(self):
+        row = copy.deepcopy(self.receipt["boundaries"][0]["rows"][0])
+        row.update(obligationId="new", change="added", adjacent="unknown", baseline="unknown", evidence=["new"])
+        self.receipt["boundaries"][0]["rows"].append(row)
+        item = copy.deepcopy(self.receipt["evidence"][0])
+        item.update(id="new", subjects=[{"boundary": "first", "obligationId": "new"}], verdict="unknown")
+        self.receipt["evidence"].append(item)
+        result = self.assess()
+        self.assertEqual(result["status"], "unknown")
+        self.assertFalse(any("subject" in message for message in result["diagnostics"]))
 
     def test_unknown_evidence_is_not_success(self):
         self.receipt["evidence"][0]["verdict"] = "unknown"

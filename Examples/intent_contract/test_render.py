@@ -23,6 +23,7 @@ def receipt():
                        {"id": "result", "label": "Результат", "artifacts": ["observation.json"]}],
             "boundaries": [{"id": "intent-result", "from": "intent", "to": "result", "rows": [row], "unmapped": []}],
             "evidence": [{"id": "e1", "kind": "execution", "checker": "cancel-check/1", "scope": "One example",
+                          "subjects": [{"boundary": "intent-result", "obligationId": "restore"}],
                           "bindings": ["intent.json", "observation.json"], "verdict": "satisfied"}],
             "bindings": {"intent.json": "a" * 64, "observation.json": "b" * 64},
             "decision": {"status": "pending", "baselineRevision": "1", "bindings": ["intent.json"],
@@ -76,6 +77,39 @@ class RenderTests(unittest.TestCase):
             self.assertIn("cancel-check/1", output)
             self.assertIn("1 из 1", output)
             self.assertNotIn("<table", output)
+
+    def test_first_card_shows_all_three_axes_before_profile_and_details(self):
+        for decision in ("pending", "rejected"):
+            with self.subTest(decision=decision):
+                value = receipt()
+                value["decision"]["status"] = decision
+                html, markdown = self.output(value, {
+                    "status": "satisfied", "freshness": "not_checked", "diagnostics": [],
+                })
+                html_card = html.split('aria-label="Краткий итог">', 1)[1].split("</section>", 1)[0]
+                md_card = markdown.split("## Краткий итог", 1)[1].split("Результат проверки", 1)[0]
+                for card in (html_card, md_card):
+                    self.assertIn("Соответствие", card)
+                    self.assertIn("Актуальность", card)
+                    self.assertIn("Решение человека", card)
+                    self.assertIn("satisfied", card)
+                    self.assertIn("актуальность не проверялась", card)
+                    self.assertIn(decision, card)
+                for output in (html, markdown):
+                    self.assertLess(output.index("Краткий итог"), output.index("edit-cancellation/1"))
+                    self.assertLess(output.index("актуальность не проверялась"), output.index("<details>"))
+                    self.assertLess(output.index("ожидается решение" if decision == "pending" else "отклонено человеком"),
+                                    output.index("<details>"))
+
+    def test_refinement_stays_visible_without_being_declared_a_violation(self):
+        value = receipt()
+        value["boundaries"][0]["rows"][0].update(change="refined", reason="Explicit detail within the criterion")
+        html, markdown = self.output(value, {"status": "satisfied", "freshness": "matched", "diagnostics": []})
+        for output in (html, markdown):
+            self.assertIn("уточнено", output)
+            self.assertLess(output.index("Explicit detail within the criterion"), output.index("<details>"))
+            self.assertNotIn("нарушено", output)
+            self.assertNotIn("Сохранённые сопоставления", output)
 
     def test_unmapped_and_missing_obligation_never_hidden(self):
         value = receipt()
@@ -132,6 +166,32 @@ class RenderTests(unittest.TestCase):
                 self.assertIn("Изменения и вопросы</dt><dd>1</dd>", html)
                 self.assertIn("**Изменения и вопросы:** 1", markdown)
 
+    def test_evidence_for_another_subject_is_never_collapsed(self):
+        for subjects in (None, [], [{"boundary": "other", "obligationId": "restore"}],
+                         [{"boundary": "intent-result", "obligationId": "identity"}]):
+            with self.subTest(subjects=subjects):
+                value = receipt()
+                if subjects is None:
+                    del value["evidence"][0]["subjects"]
+                else:
+                    value["evidence"][0]["subjects"] = subjects
+                html, markdown = self.output(value, {
+                    "status": "unknown", "freshness": "matched", "diagnostics": ["Wrong evidence subject"],
+                })
+                for output in (html, markdown):
+                    self.assertNotIn("Сохранённые сопоставления", output)
+                    self.assertLess(output.index("editor.py"), output.index("<details>"))
+                    self.assertIn("не подтверждает это требование на этом переходе", output)
+
+    def test_explicit_multi_subject_evidence_displays_its_attribution(self):
+        value = receipt()
+        value["evidence"][0]["subjects"].append({"boundary": "later", "obligationId": "identity"})
+        html, markdown = self.output(value, {"status": "satisfied", "freshness": "matched", "diagnostics": []})
+        for output in (html, markdown):
+            self.assertIn("Сохранённые сопоставления · 1", output)
+            self.assertIn("intent-result / restore; later / identity", output)
+            self.assertIn("Переходы и требования свидетельства", output)
+
     def test_added_criterion_and_missing_evidence_are_visible(self):
         value = receipt()
         row = value["boundaries"][0]["rows"][0]
@@ -164,6 +224,7 @@ class RenderTests(unittest.TestCase):
         value["stages"][0]["label"] = payload
         value["boundaries"][0]["rows"][0].update(reason=payload, editSource="javascript:alert(1)", change="changed")
         value["evidence"][0]["scope"] = payload
+        value["evidence"][0]["subjects"] = [{"boundary": payload, "obligationId": payload}]
         value["outcomes"] = [{"id": "result", "label": payload, "value": payload, "scope": payload, "evidence": ["e1"]}]
         html, markdown = self.output(value, {"status": "unknown", "diagnostics": [payload]})
         self.assertNotIn("<script>", html)

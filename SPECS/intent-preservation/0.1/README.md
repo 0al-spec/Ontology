@@ -19,7 +19,7 @@ cannot express. The schema `$id` is an identifier, not a runtime network depende
 | `baseline` | Intent ID/revision, bound source artifact, required obligations with stable IDs, origin, scope and criterion |
 | `stages` | Ordered, named representations with exact artifact bindings; the first stage includes the baseline |
 | `boundaries` | One entry for each adjacent stage pair, in order; one row for every required obligation |
-| `evidence` | Versioned checker, explicit kind/scope, judgment and referenced artifact bytes |
+| `evidence` | Versioned checker, explicit kind/scope, judgment, exact boundary/obligation subjects and referenced artifact bytes |
 | `bindings` | Complete selected inventory of influencing input, tool, adapter and output hashes |
 | `decision` | Human review of this baseline revision and exact inventory, independently of verification |
 | `outcomes` | Separately labeled, scoped actual operation/goal results, with bound evidence; may be empty |
@@ -31,7 +31,7 @@ origin does not authenticate the statement or imply that the reviewer agreed.
 All baseline obligations are required in 0.1; profiles must not silently omit one.
 A motive can explain the intent but need not itself be an executable criterion.
 
-Each mapping row has three independent axes:
+Each mapping row keeps three separate axes:
 
 - `change`: `preserved`, `refined`, `added`, `changed`, `removed`, `unmapped`.
 - Verification: `adjacent` compares the two stages; `baseline` compares the new
@@ -58,12 +58,36 @@ erase the prior mismatch or rewrite the old expected value to match the code.
    adds implementation detail justified by the profile; it is not strict value
    equality. Semantic equivalence and refinement rules belong to the pinned
    domain checker, not a general string comparison in the shared validator.
+   The declared change and adjacent judgment must be coherent:
+
+   | Change | Permitted adjacent judgments |
+   | --- | --- |
+   | `preserved`, `refined` | `satisfied`, `unknown` |
+   | `changed`, `removed` | `violated`, `unknown` |
+   | `added`, `unmapped` | No success inferred; the separate gap rules below apply |
+
+   A contradiction contributes `unknown` with a diagnostic, never success. It
+   does not hide an independently supported violation. A contradictory
+   `removed`/`satisfied` declaration is not itself promoted to a known removal.
+   Correcting an earlier mistake toward the original intent is expressible as
+   `changed`, `adjacent: violated`, `baseline: satisfied`: the new stage meets
+   the intent, but the transition did not preserve the preceding meaning. The
+   chain remains violated until the erroneous preceding artifact is corrected
+   and the affected checks produce a new receipt. A valid `refined` mapping may
+   satisfy both judgments while remaining visible for review.
 5. New assumptions are `added`, with baseline correspondence `unknown`. They
    remain visible until explicitly incorporated into a new baseline. Unsupported
    content belongs in `unmapped` or `gaps`. Removed obligations are violations;
    missing coverage, unresolved references and missing support are unknown.
 6. Every non-unknown row judgment cites bound evidence. Each cited item includes
-   the baseline artifact and both stages' artifact keys. Its verdict summarizes
+   the baseline artifact and both stages' artifact keys. Every evidence kind,
+   including `formal_proof`, has nonempty, unique `subjects` pairs with explicit
+   `boundary` and `obligationId` fields. Each pair resolves to an existing row
+   in that boundary, including a row declaring an added assumption. A row may
+   cite only evidence whose subjects include that exact pair. IDs, naming
+   conventions and shared artifact bindings never imply subject coverage.
+   Evidence may explicitly cover several pairs; there are no wildcard subjects.
+   Its verdict summarizes
    the worst of the two row judgments: a downstream adjacent match plus a
    baseline violation uses violated evidence. A green row cannot hide cited
    unknown or violated evidence.
@@ -90,6 +114,9 @@ versioned checker and its scope. Structural validity does not demonstrate runtim
 behavior; finite tests do not establish universal equivalence. A formal proof
 must identify the proposition and assumptions in its scope and bind its artifacts.
 The shared consumer does not run theorem provers or authenticate evidence authors.
+Subject coverage is a producer declaration checked for structural consistency;
+the domain checker still establishes whether its evidence actually supports the
+stated property. Listing every row in `subjects` does not prove every obligation.
 
 The domain profile owns its independent expected values and behavioral oracle.
 Expected values must not be generated from the same implementation result they
@@ -116,6 +143,10 @@ Unsupported contract/profile versions return unknown without applying new rules
 to old content. Existing `intent-preservation-pilot/v1` image receipts keep their
 meaning and bytes. New image runs may also emit this separate 0.1 receipt; the
 old saved reports are not silently migrated.
+The unreleased 0.1 draft requires explicit evidence subjects. Earlier draft
+receipts lacking them fail schema validation; consumers must not infer subjects
+from evidence IDs or rewrite saved receipts. Regeneration is an explicit new run
+with new artifact bindings and, where applicable, a new human review decision.
 
 ## Workflow
 
@@ -142,6 +173,9 @@ programming architecture.
 
 The default view includes baseline obligations and origins, coverage per boundary,
 changes and unresolved questions, evidence scope/freshness and human decision.
+Its first card displays correspondence, freshness and human decision together as
+three separate axes. `satisfied` alone is not an acceptance or readiness signal:
+freshness may be `not_checked` and the human decision may be `rejected` or `pending`.
 Preserved mappings can be collapsed, but complete coverage must remain accessible.
 Each correction is a displayed source reference, never an executable command.
 Successful goal evaluation and operation completion stay separate from intent
@@ -159,8 +193,11 @@ The reference profiles are `image-encoding/1` and `edit-cancellation/1`. Their
 domain-owned adapters supply the judgments; the generic consumer has no image,
 codec or editor-specific fields. Existing package IR and pins remain unchanged.
 The mandatory negative controls cover lost obligations, a consistent downstream
-mistake, missing or unknown evidence, stale/missing inventory, unsupported versions
-and human acceptance that does not override a failed check.
+mistake, contradictory change/adjacent declarations, missing or unknown evidence,
+evidence swapped between obligations or reused on undeclared boundaries,
+stale/missing inventory, unsupported versions and human acceptance that does not
+override a failed check. Positive controls include explicit multi-subject
+evidence, valid refinement and correction toward the original intent.
 
 Both receipts and reports are inspectable evidence records, not tamper-proof
 certificates. A producer able to forge the complete inventory and claims can

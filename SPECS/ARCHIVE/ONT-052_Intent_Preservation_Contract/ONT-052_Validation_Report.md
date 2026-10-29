@@ -22,7 +22,7 @@ python -B -m unittest discover -s Examples/intent-preservation -p "test_*.py"
 python -B -m unittest discover -s Examples/edit-cancellation -p "test_*.py"
 ```
 
-Results: **36 + 60 + 17 = 113 tests passed**, no skipped real-tool integration. Shared tests cover missing/duplicate coverage, reference binding, typed JSON criteria, nonfinite input, unsupported versions, unsubstantiated judgments, stale bytes/imported consumers, human decision transfer, outcomes and escaped renderer content. Image controls include the independent numerical goal not achieved while evaluator conformance remains satisfied. Cancellation controls mutate real isolated source copies for cached modules, decoy restoration and a skipped edit.
+Results after the second review: **49 + 60 + 20 = 129 tests passed**, no skipped real-tool integration. Shared tests cover missing/duplicate coverage, reference binding, typed JSON criteria, nonfinite input, unsupported versions, unsubstantiated judgments, stale bytes/imported consumers, human decision transfer, outcomes and escaped renderer content. Image controls include the independent numerical goal not achieved while evaluator conformance remains satisfied. Cancellation controls mutate real isolated source copies for cached modules, decoy restoration and a skipped edit.
 
 Fresh CLI evidence:
 
@@ -49,3 +49,29 @@ Core validates declared correspondence and evidence integrity, not arbitrary sem
 ## PR review regression follow-up
 
 The initial PR head 12ead7f passed all five hosted jobs. Two subsequent bot findings were addressed before completing delivery: loaded export bytes now have an import-time guard (including export loaded before pipeline import), and preserved-looking rows with missing/unknown/violated cited evidence stay expanded. The renderer has the same import-time source guard for its human projection. Isolated regressions pass; the updated total is 113 local tests. Hosted validation of the follow-up commit is tracked in PR #76. Earlier local receipts remain immutable and become stale against changed adapters as designed.
+
+## Second review: coherent changes and scoped evidence subjects
+
+The review of ab53346 reproduced two false-success cases in a real cancellation
+receipt: a declared `changed` row with satisfied checks, and evidence borrowed
+from another obligation or boundary. The new controls return `unknown` with
+diagnostics. A separately supported violation still dominates uncertainty.
+
+All evidence kinds now require explicit, nonempty, unique `{boundary, obligationId}`
+subjects. References must resolve and include the citing row. Explicit multi-subject
+checks remain allowed; coverage remains a producer claim, not proof of semantic
+truth. Both adapters emit subjects. Older draft receipts are rejected without
+rewriting or inferring coverage from their IDs.
+
+The first report card shows correspondence, freshness and human decision together.
+Rows citing evidence for a different subject stay expanded. Regression controls
+cover unknown/rejected decisions, valid refinements, correction toward baseline,
+cross-subject substitutions and HTML/Markdown escaping of the new fields.
+
+Local tests: 34 core + 15 renderer + 60 image + 20 cancellation = **129 passed**.
+An independent review reran 49 common/render and 20 cancellation tests and repeated
+the reviewer mutations against a fresh cancellation receipt; no blocker found.
+Fresh image and cancellation CLI runs both return `satisfied`; cancellation has
+`freshness: matched`, and both retain pending human decisions. New local reports
+are in `ont052-review-subjects/` under the external build root. Hosted validation
+of this fix is recorded on the new PR head, separately from these local checks.

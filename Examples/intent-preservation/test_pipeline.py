@@ -158,9 +158,14 @@ class RealToolchainTests(unittest.TestCase):
         self.assertEqual(receipt["profile"], "image-encoding/1")
         self.assertEqual(receipt["decision"]["status"], "pending")
         self.assertEqual(len(receipt["stages"]), 5)
+        evidence = {item["id"]: item for item in receipt["evidence"]}
         for transition in receipt["boundaries"]:
             self.assertEqual({r["obligationId"] for r in transition["rows"]},
                              {o["id"] for o in receipt["baseline"]["obligations"]})
+            for row in transition["rows"]:
+                for evidence_id in row["evidence"]:
+                    self.assertEqual(evidence[evidence_id]["subjects"],
+                                     [{"boundary": transition["id"], "obligationId": row["obligationId"]}])
         assessment = contract_freshness(self.output, self.inputs, self.ontologyc, self.hypercode)
         self.assertEqual(assessment["status"], "satisfied")
         self.assertEqual(assessment["freshness"], "matched")
@@ -195,7 +200,7 @@ class RealToolchainTests(unittest.TestCase):
         self.assertIn("not_satisfied", (output / "contract/report.html").read_text())
 
     def test_generic_receipt_never_upgrades_legacy_or_stale_support(self):
-        for mode in ("no-contract", "stale-support", "future-contract", "lost-row"):
+        for mode in ("no-contract", "stale-support", "future-contract", "lost-row", "missing-subjects"):
             with self.subTest(mode=mode):
                 output = self.root / ("generic-" + mode)
                 shutil.copytree(self.output, output)
@@ -208,6 +213,9 @@ class RealToolchainTests(unittest.TestCase):
                     receipt = load(receipt_path)
                     if mode == "future-contract":
                         receipt["contract"] = "intent-preservation/999"
+                    elif mode == "missing-subjects":
+                        for evidence in receipt["evidence"]:
+                            evidence.pop("subjects")
                     else:
                         receipt["boundaries"][0]["rows"].pop()
                     write_json(receipt_path, receipt)

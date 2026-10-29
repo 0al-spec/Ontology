@@ -141,12 +141,18 @@ shared envelope: nine baseline obligations, five stages and four boundaries.
 It retains independent adjacent/baseline verdicts, evidence scope, exact artifact
 bindings and a separate pending human decision. Structural agreement is not
 behavioral evidence; the final boundary references the real observation worker.
+Every evidence item explicitly names its boundary and obligation in `subjects`;
+a matching artifact hash alone cannot authorize reuse for another requirement.
+The first report card shows correspondence, freshness and human decision together,
+as separate axes rather than a single acceptance signal.
 
 The old `intent-preservation-pilot/v1` input and report meaning is retained.
 No command automatically converts an archived v1 report. The supplementary receipt
 is produced only by a fresh run. Its support sources and schema are snapshotted
 and included in freshness checks. An absent contract, unknown version or changed
 source gives unknown rather than upgrading an old result.
+Earlier draft common receipts without `subjects` are not migrated or repaired from
+their evidence IDs. Re-run the producer to obtain evidence under the current draft.
 
 Use the same arguments as `verify`, with `verify-contract`, to check the shared
 receipt against current artifacts. Exit 0 from verification means the receipt is

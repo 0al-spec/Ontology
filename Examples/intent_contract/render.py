@@ -77,15 +77,21 @@ def _object(value: object) -> dict:
     return value if isinstance(value, dict) else {}
 
 
-def _problem(row: dict, evidence: dict[str, dict]) -> bool:
+def _covers(item: dict, boundary_id: object, obligation_id: object) -> bool:
+    return any(subject.get("boundary") == boundary_id and subject.get("obligationId") == obligation_id
+               for subject in _objects(item.get("subjects")))
+
+
+def _problem(row: dict, evidence: dict[str, dict], boundary_id: object) -> bool:
     references = _values(row.get("evidence"))
     return (row.get("change") != "preserved" or row.get("adjacent") != "satisfied"
             or row.get("baseline") != "satisfied" or not references
             or any(evidence.get(str(reference), {}).get("verdict") != "satisfied"
+                   or not _covers(evidence.get(str(reference), {}), boundary_id, row.get("obligationId"))
                    for reference in references))
 
 
-def _fields(row: dict, evidence: dict[str, dict]) -> list[tuple[str, object]]:
+def _fields(row: dict, evidence: dict[str, dict], boundary_id: object) -> list[tuple[str, object]]:
     fields = [
         ("Изменение", _CHANGE.get(_text(row.get("change")), row.get("change"))),
         ("Исходный критерий", row.get("expected")),
@@ -107,14 +113,19 @@ def _fields(row: dict, evidence: dict[str, dict]) -> list[tuple[str, object]]:
             fields.append(("Свидетельство " + str(reference),
                            f"{_text(item.get('kind'))} · {_status(item.get('verdict'))} · "
                            f"{_text(item.get('scope'))} · {_text(item.get('checker'))}"))
+            subjects = [f"{_text(subject.get('boundary'))} / {_text(subject.get('obligationId'))}"
+                        for subject in _objects(item.get("subjects"))]
+            fields.append(("Переходы и требования свидетельства", "; ".join(subjects) or "не указаны"))
+            if not _covers(item, boundary_id, row.get("obligationId")):
+                fields.append(("Привязка свидетельства", "не подтверждает это требование на этом переходе"))
     return fields
 
 
-def _card(row: dict, labels: dict[str, str], evidence: dict[str, dict]) -> tuple[str, str]:
+def _card(row: dict, labels: dict[str, str], evidence: dict[str, dict], boundary_id: object) -> tuple[str, str]:
     identity = _text(row.get("obligationId"))
     label = labels.get(identity, "Дополнительное или нераспознанное обязательство")
     title = identity + " · " + label
-    fields = _fields(row, evidence)
+    fields = _fields(row, evidence, boundary_id)
     markdown = "**" + _m(title) + "**\n\n" + "\n".join(
         f"- **{_m(name)}:** {_m(value)}" for name, value in fields)
     document = '<article class="card"><h3>' + _h(title) + "</h3><dl>" + "".join(
@@ -142,20 +153,26 @@ def render(receipt: dict, directory: Path, *, assessment: dict | None = None) ->
     covered = sum(len(required.intersection(str(r.get("obligationId"))
                                             for r in _objects(b.get("rows")))) for b in boundaries)
     expected = len(obligations) * max(len(declared_stages) - 1, 0)
-    issues = sum(_problem(r, evidence) for b in boundaries for r in _objects(b.get("rows")))
-    summary = [
-        ("Контракт", receipt.get("contract")), ("Профиль", receipt.get("profile")),
-        ("Проверка", _status(assessment.get("status", "unknown"))),
+    issues = sum(_problem(r, evidence, b.get("id")) for b in boundaries for r in _objects(b.get("rows")))
+    axes = [
+        ("Соответствие", _status(assessment.get("status", "unknown"))),
         ("Актуальность", _status(assessment.get("freshness", "not_checked"))),
         ("Решение человека", _status(decision.get("status", "pending"))),
+    ]
+    summary = [
+        ("Контракт", receipt.get("contract")), ("Профиль", receipt.get("profile")),
         ("Версия замысла", baseline.get("revision")),
         ("Покрытие", f"{covered} из {expected} обязательных сопоставлений представлены; "
                      "это счётчик записей, не доказательство соответствия"),
         ("Изменения и вопросы", issues),
     ]
-    markdown = ["# Сохранение замысла", _NOTICE,
+    markdown = ["# Сохранение замысла", "## Краткий итог",
+                "\n".join(f"- **{_m(name)}:** {_m(value)}" for name, value in axes), _NOTICE,
                 "\n".join(f"- **{_m(name)}:** {_m(value)}" for name, value in summary)]
-    document = ["<h1>Сохранение замысла</h1>", '<p class="notice">' + _h(_NOTICE) + "</p>",
+    document = ["<h1>Сохранение замысла</h1>",
+                '<section class="card" aria-label="Краткий итог"><h2>Краткий итог</h2><dl>' + "".join(
+                    f"<dt>{_h(name)}</dt><dd>{_h(value)}</dd>" for name, value in axes) + "</dl></section>",
+                '<p class="notice">' + _h(_NOTICE) + "</p>",
                 '<section aria-label="Обзор"><dl>' + "".join(
                     f"<dt>{_h(name)}</dt><dd>{_h(value)}</dd>" for name, value in summary) + "</dl></section>"]
     outcomes = _objects(receipt.get("outcomes"))
@@ -182,8 +199,8 @@ def render(receipt: dict, directory: Path, *, assessment: dict | None = None) ->
         markdown.append("## " + _m(title))
         document.append("<section><h2>" + _h(title) + "</h2>")
         rows = _objects(boundary.get("rows"))
-        changed = [r for r in rows if _problem(r, evidence)]
-        preserved = [r for r in rows if not _problem(r, evidence)]
+        changed = [r for r in rows if _problem(r, evidence, boundary.get("id"))]
+        preserved = [r for r in rows if not _problem(r, evidence, boundary.get("id"))]
         missing = required - {str(r.get("obligationId")) for r in rows}
         notices = _values(boundary.get("unmapped")) + ["Нет записи для обязательства: " + i for i in sorted(missing)]
         if not rows:
@@ -192,7 +209,7 @@ def render(receipt: dict, directory: Path, *, assessment: dict | None = None) ->
             markdown.append("\n".join("- " + _m(n) for n in notices))
             document.append('<div class="notice"><ul>' + "".join("<li>" + _h(n) + "</li>" for n in notices) + "</ul></div>")
         for row in changed:
-            md, html_card = _card(row, labels, evidence)
+            md, html_card = _card(row, labels, evidence, boundary.get("id"))
             markdown.append(md)
             document.append(html_card)
         if preserved:
@@ -200,7 +217,7 @@ def render(receipt: dict, directory: Path, *, assessment: dict | None = None) ->
             markdown.append("<details>\n<summary>" + title + "</summary>\n")
             document.append("<details><summary>" + title + "</summary>")
             for row in preserved:
-                md, html_card = _card(row, labels, evidence)
+                md, html_card = _card(row, labels, evidence, boundary.get("id"))
                 markdown.append(md)
                 document.append(html_card)
             markdown.append("</details>")

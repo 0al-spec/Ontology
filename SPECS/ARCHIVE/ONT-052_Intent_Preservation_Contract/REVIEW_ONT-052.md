@@ -34,3 +34,26 @@ Review the compact common reports and the domain-bound profile claims in the sep
 ## PR #76 bot feedback
 
 Closed the two concrete follow-up defects: exporter cached-source mismatch and collapsed rows whose cited evidence does not support their declared success. Regression coverage includes both exporter import orders, all three problematic evidence variants, and a stale renderer module. No unresolved defect remains in this scope.
+
+## Second external review follow-up
+
+The review of ab53346 found two additional false-success paths, now covered by
+real cancellation receipt mutations and shared validator tests:
+
+1. Contradictory `change` and `adjacent` declarations now contribute `unknown`
+   with a diagnostic. Independently supported violations remain visible. Valid
+   refinement and correction back toward baseline have explicit positive controls.
+2. Every evidence kind declares exact boundary/obligation subjects. The consumer
+   rejects cross-subject reuse and dangling targets; no subjects are inferred from
+   identifiers or artifact hashes. Explicit multi-subject evidence is permitted
+   within the declared producer trust boundary.
+
+The report's first card presents correspondence, freshness and human decision
+together, without turning `satisfied` into acceptance. Unsupported subjects cannot
+hide a row among collapsed preserved mappings. Historical draft receipts stay
+unchanged and are not automatically upgraded.
+
+All 129 local tests pass, including real ontologyc/Hypercode integration. Independent
+review repeated both bypasses on a fresh receipt and ran 49 common/render plus 20
+cancellation tests; no blocking finding. This update remains within ONT-052 and
+does not change the earlier stack layers or authorize a merge.
