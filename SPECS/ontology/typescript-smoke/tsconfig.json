@@ -6,7 +6,8 @@
     "strict": true,
     "exactOptionalPropertyTypes": true,
     "noEmit": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
   "include": [
     "examcalc-schemas.ts",
@@ -21,6 +22,9 @@
     "../packages/events-core/versions/0.2.0/generated/**/*.ts",
     "../instance-graph/provenance/generated/**/*.ts",
     "motivation-core-schemas.ts",
-    "../packages/motivation-core/generated/**/*.ts"
+    "../packages/motivation-core/generated/**/*.ts",
+    "agency-core-schemas.ts",
+    "../packages/agency-core/generated/**/*.ts",
+    "../packages/agency-core/consumer/**/*.ts"
   ]
 }

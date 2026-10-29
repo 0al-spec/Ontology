@@ -1,0 +1,42 @@
+{
+  "apiVersion": "ontology-induction.specgraph.io/v1alpha1",
+  "kind": "DraftCritique",
+  "status": "approved_for_yaml",
+  "summary": "Independent claims and unasserted content preserve source-only and epistemic boundaries. The caller-provided reference index is not authentication.",
+  "scores": {
+    "domainFraming": 4,
+    "conceptCoverage": 4,
+    "behavioralModeling": 4,
+    "policyModeling": 4,
+    "trustAndEvidence": 4,
+    "uncertaintyHandling": 4,
+    "implementationLeakage": 4,
+    "relationQuality": 4,
+    "competencyQuestions": 4,
+    "yamlReadiness": 4
+  },
+  "issues": [
+    {
+      "id": "underlying-index-boundary",
+      "severity": "medium",
+      "message": "The envelope cannot independently verify the caller-supplied graph index or mental state truth.",
+      "affects": [
+        "AgencyContext"
+      ],
+      "suggestedFix": "State the trust boundary explicitly and keep universal graph admission outside this profile."
+    }
+  ],
+  "questions": [
+    {
+      "id": "external-domain-mapping",
+      "question": "Which downstream profile will interpret the primitives?",
+      "blocksApproval": false
+    }
+  ],
+  "provenance": [
+    {
+      "source": "SPECS/ontology/packages/agency-core/authoring/intent.md",
+      "note": "Subjective authoring rubric, not measured accuracy."
+    }
+  ]
+}

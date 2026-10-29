@@ -1,0 +1,36 @@
+{
+  "graphKey": "parking-story",
+  "revisionKey": "source-only-1",
+  "views": [
+    {
+      "id": "placement-view",
+      "type": "eventcore:InterpretationCandidate",
+      "actorRoleIds": [
+        "driver-role"
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "id": "driver-role",
+      "roleName": "actor",
+      "entityId": "driver"
+    }
+  ],
+  "entities": [
+    "driver",
+    "operator"
+  ],
+  "motivations": [
+    {
+      "id": "convenience-motive",
+      "viewId": "placement-view",
+      "actorRoleId": "driver-role",
+      "contributionKind": "action"
+    }
+  ],
+  "sourceAssertions": [
+    "report-placement",
+    "report-risk"
+  ]
+}

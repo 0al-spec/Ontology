@@ -1,0 +1,612 @@
+{
+  "apiVersion": "ontology.specgraph.io/v1alpha1",
+  "kind": "DomainOntologyPackage",
+  "metadata": {
+    "id": "org.0al.agency.core",
+    "namespace": "agencycore",
+    "version": "0.1.0",
+    "publisher": "OntologyService",
+    "source": "SPECS/ontology/packages/agency-core/authoring/intent.md",
+    "approvalStatus": "draft"
+  },
+  "spec": {
+    "imports": [
+      {
+        "id": "specgraph.foundation",
+        "namespace": "sg",
+        "version": "0.1.0"
+      },
+      {
+        "id": "org.0al.events.core",
+        "namespace": "eventcore",
+        "version": "0.2.0"
+      },
+      {
+        "id": "org.0al.motivation.core",
+        "namespace": "motivcore",
+        "version": "0.1.0"
+      }
+    ],
+    "classes": {
+      "PropositionContent": {
+        "extends": "sg:ValueObject",
+        "central": true,
+        "layer": "mechanics",
+        "description": "Unasserted descriptive content of a condition on a situation or history. It may be desired, anticipated or considered without being true or observed. No expression is evaluated.",
+        "fields": {
+          "contentKey": {
+            "type": "string",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": true
+          },
+          "meaningRef": {
+            "type": "string",
+            "required": false
+          }
+        }
+      },
+      "AgencyContext": {
+        "extends": "sg:ValueObject",
+        "description": "One actor-relative perspective on a selected contribution view. View, actor role and contribution kind define scope; an unknown actor remains unresolved. Perspective time and report time are independent optional declarations, never defaulted from one another.",
+        "fields": {
+          "contextKey": {
+            "type": "string",
+            "required": true
+          },
+          "contributionKind": {
+            "type": "string",
+            "required": true
+          },
+          "perspectiveClockKey": {
+            "type": "string",
+            "required": false
+          },
+          "perspectiveAt": {
+            "type": "integer",
+            "required": false
+          },
+          "reportClockKey": {
+            "type": "string",
+            "required": false
+          },
+          "reportAt": {
+            "type": "integer",
+            "required": false
+          }
+        }
+      },
+      "AwarenessHypothesis": {
+        "extends": "sg:DomainEntity",
+        "lifecycle": "AgencyReview",
+        "description": "Attributed awareness of one exact same-scope motivation attribution or proposition content. Values aware, partly_aware, unaware and not_applicable describe the subject claim, not analyst certainty.",
+        "fields": {
+          "hypothesisKey": {
+            "type": "string",
+            "required": true
+          },
+          "value": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "GoalHypothesis": {
+        "extends": "sg:DomainEntity",
+        "lifecycle": "AgencyReview",
+        "description": "Attributed orientation to seek, avoid or maintain proposition content. A goal need not be consciously represented or realized; it does not imply intention.",
+        "fields": {
+          "hypothesisKey": {
+            "type": "string",
+            "required": true
+          },
+          "direction": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "IntentionHypothesis": {
+        "extends": "sg:DomainEntity",
+        "lifecycle": "AgencyReview",
+        "description": "Attributed adopted commitment to the selected action or omission, with optional goal links. Neither a goal nor actual performance is inferred from this assertion.",
+        "fields": {
+          "hypothesisKey": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "AnticipationHypothesis": {
+        "extends": "sg:DomainEntity",
+        "lifecycle": "AgencyReview",
+        "description": "Attributed anticipation of content as possible, expected or certain, or an explicit claim not_anticipated. This is not objective probability, desire or actual occurrence.",
+        "fields": {
+          "hypothesisKey": {
+            "type": "string",
+            "required": true
+          },
+          "expectation": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "OutcomeAttitudeHypothesis": {
+        "extends": "sg:DomainEntity",
+        "lifecycle": "AgencyReview",
+        "description": "Attributed attitude desires, accepts, opposes or indifferent toward content. Multiple attitudes may coexist, including opposed testimony; consciousness is an independent claim.",
+        "fields": {
+          "hypothesisKey": {
+            "type": "string",
+            "required": true
+          },
+          "attitude": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "OperatorAgencySupport": {
+        "extends": "sg:DomainEntity",
+        "description": "Declared uncited support supplied by an Entity author; this does not authenticate the author or create a source citation.",
+        "fields": {
+          "supportKey": {
+            "type": "string",
+            "required": true
+          },
+          "rationale": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "ReviewAgency": {
+        "extends": "sg:Command",
+        "description": "Review exactly one hypothesis; this does not review another claim or establish its truth."
+      },
+      "RejectAgency": {
+        "extends": "sg:Command",
+        "description": "Reject exactly one hypothesis while retaining its sources; rejection does not manufacture opposing evidence."
+      }
+    },
+    "protocols": {},
+    "relations": {
+      "contextView": {
+        "domain": "AgencyContext",
+        "range": {
+          "oneOf": [
+            "eventcore:Interpretation",
+            "eventcore:InterpretationCandidate"
+          ]
+        },
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "Sole existing view from which episode, contribution and available observations derive; a candidate may remain source-only."
+      },
+      "contextActorRole": {
+        "domain": "AgencyContext",
+        "range": "eventcore:RoleBinding",
+        "cardinality": {
+          "min": 0,
+          "max": 1
+        },
+        "description": "If present, selected role must be named actor and reached by the selected view through interpretationBindsRole or candidateBindsRole. Shared role references are allowed."
+      },
+      "awarenessContext": {
+        "domain": "AwarenessHypothesis",
+        "range": "AgencyContext",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "One immutable selected actor/view perspective for this independent hypothesis."
+      },
+      "awarenessPositiveSupport": {
+        "domain": "AwarenessHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared positive support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "awarenessNegativeSupport": {
+        "domain": "AwarenessHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared negative support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "goalContext": {
+        "domain": "GoalHypothesis",
+        "range": "AgencyContext",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "One immutable selected actor/view perspective for this independent hypothesis."
+      },
+      "goalPositiveSupport": {
+        "domain": "GoalHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared positive support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "goalNegativeSupport": {
+        "domain": "GoalHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared negative support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "intentionContext": {
+        "domain": "IntentionHypothesis",
+        "range": "AgencyContext",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "One immutable selected actor/view perspective for this independent hypothesis."
+      },
+      "intentionPositiveSupport": {
+        "domain": "IntentionHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared positive support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "intentionNegativeSupport": {
+        "domain": "IntentionHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared negative support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "anticipationContext": {
+        "domain": "AnticipationHypothesis",
+        "range": "AgencyContext",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "One immutable selected actor/view perspective for this independent hypothesis."
+      },
+      "anticipationPositiveSupport": {
+        "domain": "AnticipationHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared positive support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "anticipationNegativeSupport": {
+        "domain": "AnticipationHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared negative support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "attitudeContext": {
+        "domain": "OutcomeAttitudeHypothesis",
+        "range": "AgencyContext",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "One immutable selected actor/view perspective for this independent hypothesis."
+      },
+      "attitudePositiveSupport": {
+        "domain": "OutcomeAttitudeHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared positive support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "attitudeNegativeSupport": {
+        "domain": "OutcomeAttitudeHypothesis",
+        "range": {
+          "oneOf": [
+            "eventcore:SourceAssertion",
+            "OperatorAgencySupport"
+          ]
+        },
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Independent declared negative support for this exact hypothesis, not another axis. Source relevance and truth require separate review."
+      },
+      "goalContent": {
+        "domain": "GoalHypothesis",
+        "range": "PropositionContent",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "Unasserted target content; its occurrence and actual State diff remain separate."
+      },
+      "anticipationContent": {
+        "domain": "AnticipationHypothesis",
+        "range": "PropositionContent",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "Unasserted target content; its occurrence and actual State diff remain separate."
+      },
+      "attitudeContent": {
+        "domain": "OutcomeAttitudeHypothesis",
+        "range": "PropositionContent",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "Unasserted target content; its occurrence and actual State diff remain separate."
+      },
+      "awarenessMotivation": {
+        "domain": "AwarenessHypothesis",
+        "range": "motivcore:MotivationHypothesis",
+        "cardinality": {
+          "min": 0,
+          "max": 1
+        },
+        "description": "Exactly one awareness target across awarenessMotivation/awarenessContent. Motivation must select the same view, optional actor role (including joint absence) and action/omission contribution kind."
+      },
+      "awarenessContent": {
+        "domain": "AwarenessHypothesis",
+        "range": "PropositionContent",
+        "cardinality": {
+          "min": 0,
+          "max": 1
+        },
+        "description": "Exactly one awareness target across both alternatives; no Fact or StateSnapshot is created."
+      },
+      "intentionGoal": {
+        "domain": "IntentionHypothesis",
+        "range": "GoalHypothesis",
+        "cardinality": {
+          "min": 0,
+          "max": "*"
+        },
+        "description": "Optional goals in the same context. Absence does not invent a goal; commitment does not establish performance."
+      },
+      "operatorSupportAuthor": {
+        "domain": "OperatorAgencySupport",
+        "range": "eventcore:Entity",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "Declared author, independently of actor and source speaker; authentication is external."
+      }
+    },
+    "policies": {
+      "ActorRelativeScope": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "AgencyContext",
+          "AwarenessHypothesis",
+          "GoalHypothesis",
+          "IntentionHypothesis",
+          "AnticipationHypothesis",
+          "OutcomeAttitudeHypothesis"
+        ],
+        "text": "Any Entity may occupy actor role without acquiring psychological properties. Context selects one view and optional role reached from that view, named actor; shared role bindings are allowed. An absent actor stays absent. Source speaker and operator author never fill actor by default. Awareness of a motive targets the exact same-view/same-role MotivationHypothesis, not just equal motive text. Awareness of a motivation also requires matching contributionKind; action and omission are not interchangeable on the same view/actor."
+      },
+      "IndependentAgencyClaims": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "AgencyContext",
+          "AwarenessHypothesis",
+          "GoalHypothesis",
+          "IntentionHypothesis",
+          "AnticipationHypothesis",
+          "OutcomeAttitudeHypothesis"
+        ],
+        "text": "Each axis has a separate hypothesis, review lifecycle and positive/negative support. Motive does not entail goal; goal does not entail commitment; commitment does not entail performance; anticipation does not entail desire; lack of desire does not entail opposition. Claims with no supplied support remain unsupported. Both signs may coexist without erasure or arbitrary inference."
+      },
+      "ContentIsNotObservation": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "AgencyContext",
+          "AwarenessHypothesis",
+          "GoalHypothesis",
+          "IntentionHypothesis",
+          "AnticipationHypothesis",
+          "OutcomeAttitudeHypothesis"
+        ],
+        "text": "PropositionContent is unasserted content about a situation or history, not a physical StateSnapshot, observed Fact, full state or actual Delta. Goals may seek, avoid or maintain a condition; no change is required for a maintenance goal. Unknown actual outcomes never become empty states or empty differences. Matching content to actual observations requires a separately reviewed semantic mapping."
+      },
+      "AwarenessAndKnowledge": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "AgencyContext",
+          "AwarenessHypothesis",
+          "GoalHypothesis",
+          "IntentionHypothesis",
+          "AnticipationHypothesis",
+          "OutcomeAttitudeHypothesis"
+        ],
+        "text": "Actor awareness aware/partly_aware/unaware is distinct from analyst uncertainty. Missing awareness claims or evidence do not imply unaware, not_applicable or aware. Explicit not_applicable concerns this property and perspective; it is never a default inferred from Entity kind. An actor may fail to recognize a motive while intentionally contributing or anticipating an outcome."
+      },
+      "DistinctTimes": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "AgencyContext",
+          "AwarenessHypothesis",
+          "GoalHypothesis",
+          "IntentionHypothesis",
+          "AnticipationHypothesis",
+          "OutcomeAttitudeHypothesis"
+        ],
+        "text": "Perspective time describes when the attributed stance applies; report time describes the account. Each known time requires its own clock/instant pair. Neither supplies the other. Unknown times remain absent. Distinct clocks are not ordered without an external mapping; even comparable supplied times are declarations, not verified chronology. Intentions may arise during an ongoing contribution; no blanket before-start constraint is imposed."
+      },
+      "SourceAndReviewBoundary": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "AgencyContext",
+          "AwarenessHypothesis",
+          "GoalHypothesis",
+          "IntentionHypothesis",
+          "AnticipationHypothesis",
+          "OutcomeAttitudeHypothesis"
+        ],
+        "text": "Each hypothesis retains its own source/uncited-operator support and review state. Reusing a SourceAssertion does not authenticate it or transfer its relevance to another claim. Reviewed is workflow, not truth; rejected does not negate content. Independent support presence is unknown/supported/opposed/contested, never a duplicate world truth field."
+      },
+      "ActualConsequencesRemainSeparate": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "AgencyContext",
+          "AwarenessHypothesis",
+          "GoalHypothesis",
+          "IntentionHypothesis",
+          "AnticipationHypothesis",
+          "OutcomeAttitudeHypothesis"
+        ],
+        "text": "Actual own change follows selected Interpretation -> interpretsRecord -> supplied before/after states and optional exact Delta. A downstream effect requires a separate causal hypothesis and effect record. Source-only candidates need no records, snapshots or Delta. Desired/anticipated content does not establish occurrence or cause, and actual outcomes do not establish prior motives, awareness, goals or anticipation."
+      },
+      "DomainNeutralExtension": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "AgencyContext",
+          "AwarenessHypothesis",
+          "GoalHypothesis",
+          "IntentionHypothesis",
+          "AnticipationHypothesis",
+          "OutcomeAttitudeHypothesis"
+        ],
+        "text": "No normative or psychological classification is produced by these primitives. A consumer may define separately versioned mappings and additional applicability grounds. agency-source-attribution/v1 checks only its bounded reference envelope against caller-supplied indexes; it is not universal InstanceGraph admission, graph-byte authentication, source relevance, truth, chronology or a proof backend. Existing profile pins and saved reports remain unchanged."
+      }
+    },
+    "stateMachines": {
+      "AgencyReview": {
+        "states": [
+          "proposed",
+          "reviewed",
+          "rejected"
+        ],
+        "transitions": [
+          {
+            "from": "proposed",
+            "to": "reviewed",
+            "command": "ReviewAgency"
+          },
+          {
+            "from": "proposed",
+            "to": "rejected",
+            "command": "RejectAgency"
+          }
+        ]
+      }
+    },
+    "modelApplicability": {
+      "appliesTo": {
+        "domains": [
+          "general_event_modeling"
+        ],
+        "contexts": [
+          "actor_relative_attribution",
+          "source_only_candidates",
+          "domain_neutral_agency"
+        ]
+      },
+      "excludes": {
+        "contexts": [
+          "automatic_psychological_truth",
+          "automatic_normative_classification",
+          "implicit_instance_profile_extension"
+        ]
+      },
+      "assumptions": [
+        {
+          "id": "independent_claims",
+          "text": "Content, attitude, support, review and actual observations are independent; any Entity may remain described without psychological claims."
+        },
+        {
+          "id": "explicit_reference_consumer",
+          "text": "Generated object schemas do not enforce relational policies. The separate strict TypeScript reference envelope checks only declared inventory/reference constraints."
+        }
+      ],
+      "invalidationTriggers": [
+        {
+          "id": "consumer_mapping_changed",
+          "text": "Re-review the consumer profile and dependency pins before changing representation or adding a normative mapping."
+        }
+      ]
+    }
+  }
+}

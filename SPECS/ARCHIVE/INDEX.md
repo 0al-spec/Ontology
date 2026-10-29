@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-049 | [ONT-049_Generic_Agency_Core/](ONT-049_Generic_Agency_Core/) | 2026-10-28 | PASS (local package/reference envelope) |
 | ONT-046 | [ONT-046_Linux_Compiler_Portability/](ONT-046_Linux_Compiler_Portability/) | 2026-10-28 | PASS (local macOS/Linux portability) |
 | ONT-048 | [ONT-048_Draft_Motivation_Core_Package/](ONT-048_Draft_Motivation_Core_Package/) | 2026-10-28 | PASS (draft vocabulary/generation) |
 | ONT-044 | [ONT-044_Draft_Responsibility_Profile_Package/](ONT-044_Draft_Responsibility_Profile_Package/) | 2026-10-27 | PASS (draft vocabulary/source mapping) |
@@ -56,6 +57,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-28 | ONT-049 | Archived REVIEW_ONT-049; corrected independent P2, FOLLOW-UP skipped (no unresolved findings) |
+| 2026-10-28 | ONT-049 | Archived generic agency package/reference-consumer PRD and local validation |
 | 2026-10-28 | ONT-046 | Archived self-review; hosted/independent review remains separate |
 | 2026-10-28 | ONT-046 | Archived Linux compiler source port, local platform checks and CI matrix |
 | 2026-10-28 | ONT-048 | Archived REVIEW_ONT-048; FOLLOW-UP skipped (no new actionable findings) |

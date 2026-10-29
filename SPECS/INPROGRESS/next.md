@@ -33,6 +33,8 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-049: generic agency vocabulary and bounded reference consumer; local package/Swift/TypeScript gates pass, PR review/CI separate. This does not start a normative profile or NormLab integration.
+
 - ONT-046: Linux source portability, shared baseline gate and CI matrix; local macOS/Linux checks pass.
 
 - ONT-048: merged PR #70; included in source release 0.1.0. Follow-up: GitHub Issue #71.
