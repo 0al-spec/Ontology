@@ -1,0 +1,444 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://0al-spec.github.io/Ontology/contracts/intent-preservation/0.1/receipt.schema.json",
+  "title": "Intent Preservation Contract 0.1 receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "profile",
+    "baseline",
+    "stages",
+    "boundaries",
+    "evidence",
+    "bindings",
+    "decision",
+    "gaps",
+    "outcomes"
+  ],
+  "properties": {
+    "contract": {
+      "const": "intent-preservation/0.1"
+    },
+    "profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "revision",
+        "artifact",
+        "obligations"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "obligations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/obligation"
+          }
+        }
+      }
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/stage"
+      }
+    },
+    "boundaries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/boundary"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "bindings": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "baselineRevision",
+        "bindings",
+        "reason",
+        "reviewedReceiptSHA256"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "accepted",
+            "rejected"
+          ]
+        },
+        "baselineRevision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "uniqueItems": true
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewedReceiptSHA256": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          ]
+        }
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/text"
+      },
+      "uniqueItems": true
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/outcome"
+      }
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "strings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/text"
+      },
+      "uniqueItems": true
+    },
+    "verdict": {
+      "enum": [
+        "satisfied",
+        "violated",
+        "unknown"
+      ]
+    },
+    "obligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "origin",
+        "source",
+        "scope",
+        "criterion"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "origin": {
+          "enum": [
+            "user_direction",
+            "assumption",
+            "agreed_refinement"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "criterion": {}
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "artifacts"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      }
+    },
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "obligationId",
+        "change",
+        "left",
+        "right",
+        "expected",
+        "adjacent",
+        "baseline",
+        "evidence",
+        "editSource",
+        "reason"
+      ],
+      "properties": {
+        "obligationId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "change": {
+          "enum": [
+            "preserved",
+            "refined",
+            "added",
+            "changed",
+            "removed",
+            "unmapped"
+          ]
+        },
+        "left": {},
+        "right": {},
+        "expected": {},
+        "adjacent": {
+          "enum": [
+            "satisfied",
+            "violated",
+            "unknown"
+          ]
+        },
+        "baseline": {
+          "enum": [
+            "satisfied",
+            "violated",
+            "unknown"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "uniqueItems": true
+        },
+        "editSource": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "from",
+        "to",
+        "rows",
+        "unmapped"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "from": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/row"
+          }
+        },
+        "unmapped": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "checker",
+        "scope",
+        "bindings",
+        "verdict",
+        "subjects"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "structural",
+            "execution",
+            "property_test",
+            "formal_proof"
+          ]
+        },
+        "checker": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "verdict": {
+          "enum": [
+            "satisfied",
+            "violated",
+            "unknown"
+          ]
+        },
+        "subjects": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidenceSubject"
+          }
+        }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "value",
+        "scope",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/text"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "value": {},
+        "scope": {
+          "$ref": "#/$defs/text"
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "evidenceSubject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boundary",
+        "obligationId"
+      ],
+      "properties": {
+        "boundary": {
+          "$ref": "#/$defs/text"
+        },
+        "obligationId": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    }
+  }
+}

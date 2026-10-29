@@ -1,0 +1,9 @@
+{
+  "model": "document-edit-cancellation/1",
+  "concepts": ["Document", "EditSession", "Cancel"],
+  "values": {
+    "restore_content": "restore_pre_edit",
+    "preserve_identity": "preserve",
+    "missing_before": "unknown"
+  }
+}

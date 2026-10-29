@@ -4,6 +4,7 @@ import copy
 import os
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -11,12 +12,47 @@ from unittest.mock import patch
 
 from contract import (PROFILE, boundary, implementation_values, intent_values,
                       load, model_values, sha256)
-from pipeline import (HERE, INPUTS, PACKAGE, code_anchors, command, freshness, review_layers,
+from pipeline import (HERE, INPUTS, PACKAGE, code_anchors, command, contract_freshness, freshness, review_layers,
                       run, write_json)
 from report import render
+import contract_export
 
 
 class ContractTests(unittest.TestCase):
+    def test_cached_export_is_rejected_before_or_after_pipeline_import(self):
+        for import_first in ("export", "pipeline"):
+            with self.subTest(import_first=import_first), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                copied = root / "Examples/intent-preservation"
+                shutil.copytree(HERE, copied, ignore=shutil.ignore_patterns("__pycache__"))
+                shutil.copytree(HERE.parent / "intent_contract", copied.parent / "intent_contract",
+                                ignore=shutil.ignore_patterns("__pycache__"))
+                schema = root / "SPECS/intent-preservation/0.1/receipt.schema.json"
+                schema.parent.mkdir(parents=True)
+                shutil.copyfile(HERE.parents[1] / "SPECS/intent-preservation/0.1/receipt.schema.json", schema)
+                script = '''
+import sys
+from pathlib import Path
+sys.path.insert(0, sys.argv[1])
+if sys.argv[2] == "export":
+    import contract_export
+else:
+    import pipeline
+path = Path(sys.argv[1]) / "contract_export.py"
+path.write_text(path.read_text() + "\\n# newer export bytes\\n")
+import pipeline
+try:
+    pipeline.run(Path(sys.argv[1]), Path("unused-ontologyc"), Path("unused-hypercode"), Path(sys.argv[3]))
+except ValueError as error:
+    assert "loaded export adapter source changed" in str(error), str(error)
+else:
+    raise AssertionError("cached exporter accepted new source bytes")
+'''
+                result = subprocess.run([sys.executable, "-I", "-B", "-c", script, str(copied),
+                                         import_first, str(root / "output")], capture_output=True, text=True, timeout=30)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertFalse((root / "output").exists())
+
     def test_empty_does_not_mean_preserved(self):
         self.assertEqual(boundary({}, {}, {}, "empty")["status"], "unknown")
 
@@ -116,6 +152,77 @@ class RealToolchainTests(unittest.TestCase):
         self.assertFalse(self.report["universal_equivalence_verified"])
         self.assertFalse(self.report["lean_proof_performed"])
 
+    def test_fresh_run_emits_shared_contract_with_complete_coverage(self):
+        receipt = load(self.output / "contract/receipt.json")
+        self.assertEqual(receipt["contract"], "intent-preservation/0.1")
+        self.assertEqual(receipt["profile"], "image-encoding/1")
+        self.assertEqual(receipt["decision"]["status"], "pending")
+        self.assertEqual(len(receipt["stages"]), 5)
+        evidence = {item["id"]: item for item in receipt["evidence"]}
+        for transition in receipt["boundaries"]:
+            self.assertEqual({r["obligationId"] for r in transition["rows"]},
+                             {o["id"] for o in receipt["baseline"]["obligations"]})
+            for row in transition["rows"]:
+                for evidence_id in row["evidence"]:
+                    self.assertEqual(evidence[evidence_id]["subjects"],
+                                     [{"boundary": transition["id"], "obligationId": row["obligationId"]}])
+        assessment = contract_freshness(self.output, self.inputs, self.ontologyc, self.hypercode)
+        self.assertEqual(assessment["status"], "satisfied")
+        self.assertEqual(assessment["freshness"], "matched")
+
+    def test_common_execution_baseline_cannot_ignore_runtime_failure(self):
+        report = copy.deepcopy(self.report)
+        row = next(r for r in report["boundaries"][3]["rows"] if r["id"] == "dimensions")
+        row["correspondence"] = "violated"
+        receipt = contract_export.project(report, report["artifacts"])
+        row = next(r for r in receipt["boundaries"][3]["rows"] if r["obligationId"] == "dimensions")
+        self.assertEqual(row["baseline"], "violated")
+
+    def test_unachieved_goal_remains_explicit_when_evaluator_is_correct(self):
+        inputs = self.root / "unachievable-inputs"
+        shutil.copytree(self.inputs, inputs)
+        intent = load(inputs / "intent.json")
+        next(o for o in intent["obligations"] if o["id"] == "goal_bytes")["value"] = 1000000
+        model = load(inputs / "ontology-model.json")
+        next(n for n in model["nodes"] if n["id"] == "goal")["values"]["targetBytes"] = 1000000
+        code = load(inputs / "implementation.json")
+        code["values"]["goal_bytes"] = 1000000
+        for name, value in (("intent.json", intent), ("ontology-model.json", model), ("implementation.json", code)):
+            write_json(inputs / name, value)
+        hcs = inputs / "image.hcs"
+        hcs.write_text(hcs.read_text().replace("targetBytes: 200000", "targetBytes: 1000000"))
+        output = self.root / "unachievable-output"
+        report = run(inputs, self.ontologyc, self.hypercode, output)
+        self.assertEqual(report["status"], "satisfied")
+        self.assertEqual(report["runtime"]["goal_result"], "not_satisfied")
+        receipt = load(output / "contract/receipt.json")
+        self.assertEqual(next(o["value"] for o in receipt["outcomes"] if o["id"] == "goal"), "not_satisfied")
+        self.assertIn("not_satisfied", (output / "contract/report.html").read_text())
+
+    def test_generic_receipt_never_upgrades_legacy_or_stale_support(self):
+        for mode in ("no-contract", "stale-support", "future-contract", "lost-row", "missing-subjects"):
+            with self.subTest(mode=mode):
+                output = self.root / ("generic-" + mode)
+                shutil.copytree(self.output, output)
+                receipt_path = output / "contract/receipt.json"
+                if mode == "no-contract":
+                    shutil.rmtree(output / "contract")
+                elif mode == "stale-support":
+                    (output / "contract/common/core.py").write_text("changed")
+                else:
+                    receipt = load(receipt_path)
+                    if mode == "future-contract":
+                        receipt["contract"] = "intent-preservation/999"
+                    elif mode == "missing-subjects":
+                        for evidence in receipt["evidence"]:
+                            evidence.pop("subjects")
+                    else:
+                        receipt["boundaries"][0]["rows"].pop()
+                    write_json(receipt_path, receipt)
+                assessment = contract_freshness(output, self.inputs, self.ontologyc, self.hypercode)
+                self.assertNotEqual(assessment["status"], "satisfied")
+                self.assertEqual(load(output / "report.json")["profile"], PROFILE)
+
     def test_model_dropped_requirement_is_visible(self):
         model = copy.deepcopy(self.model)
         model["nodes"][1]["values"].pop("dimensions")
@@ -198,6 +305,11 @@ class RealToolchainTests(unittest.TestCase):
         self.assertEqual(report["status"], "violated")
         self.assertEqual(report["runtime"]["status"], "satisfied")
         self.assertEqual(report["boundaries"][2]["status"], "violated")
+        shared = load(self.root / "consistent-drift-output/contract/receipt.json")
+        row = next(r for r in shared["boundaries"][2]["rows"] if r["obligationId"] == "dimensions")
+        self.assertEqual(row["adjacent"], "satisfied")
+        self.assertEqual(row["baseline"], "violated")
+        self.assertEqual(load(self.root / "consistent-drift-output/contract/assessment.json")["status"], "violated")
 
     def test_current_input_drift_does_not_upgrade_old_receipt(self):
         changed = self.root / "changed-inputs"

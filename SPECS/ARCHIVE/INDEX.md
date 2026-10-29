@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-052 | [ONT-052_Intent_Preservation_Contract/](ONT-052_Intent_Preservation_Contract/) | 2026-10-29 | PASS (bounded contract and two profiles) |
 | ONT-051 | [ONT-051_Intent_Preservation_Review_Pilot/](ONT-051_Intent_Preservation_Review_Pilot/) | 2026-10-29 | PASS (bounded local intent/execution pilot) |
 | ONT-050 | [ONT-050_Action_Model_Template/](ONT-050_Action_Model_Template/) | 2026-10-28 | PASS (documentation/skill/template) |
 | ONT-049 | [ONT-049_Generic_Agency_Core/](ONT-049_Generic_Agency_Core/) | 2026-10-28 | PASS (local package/reference envelope) |
@@ -59,6 +60,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-29 | ONT-052 | Archived independent review and closed fixes; FOLLOW-UP skipped (no unresolved defects) |
+| 2026-10-29 | ONT-052 | Archived contract PRD and local validation; 110 tests and independent review controls pass |
 | 2026-10-29 | ONT-051 | Archived independent review and closed fixes; FOLLOW-UP skipped (no unresolved defects) |
 | 2026-10-29 | ONT-051 | Archived executable pilot PRD and local validation; independent review fixes included |
 | 2026-10-28 | ONT-050 | Archived REVIEW_ONT-050 with forward exercises; FOLLOW-UP skipped (no unresolved findings) |
