@@ -291,6 +291,18 @@ evidence only; trusted publication still requires compiler validation and govern
 
 ## Ontology Authoring
 
+For one bounded application behavior, start with the
+[minimal action model](skills/ontology-action-model/references/modeling.md),
+[image-encoding example](skills/ontology-action-model/references/image-encoding.md)
+and [reusable worksheet](skills/ontology-action-model/assets/action-model.md).
+The [ontology-action-model skill](skills/ontology-action-model/SKILL.md) packages
+this workflow for agents. It distinguishes transition-based goal criteria from
+actual consequences and maps examples to Gherkin and property-based test designs;
+it does not introduce an executable goal profile or application tests.
+For personal Codex discovery, copy the complete `skills/ontology-action-model`
+folder into `${CODEX_HOME:-$HOME/.codex}/skills/` (inspect an existing destination
+before replacing it). Its references and templates stay relative to the skill.
+
 Do not start ontology authoring by writing YAML directly. For new product/domain intents,
 use the staged induction workflow:
 

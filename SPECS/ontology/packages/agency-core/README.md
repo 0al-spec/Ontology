@@ -67,6 +67,13 @@ is not `ontologyc validate-instances` admission of agencycore/motivcore nodes:
 
 ## Neutral examples and extension
 
+For a software example, see the
+[action-modeling guide](../../../../skills/ontology-action-model/references/modeling.md)
+and [image encoding](../../../../skills/ontology-action-model/references/image-encoding.md).
+They distinguish a goal criterion on the transition/Delta from its evaluation by an
+actor or consumer. These are documentation patterns, not executable goal predicates
+added to this package or its source-attribution profile.
+
 See [examples](examples.md) and the executable TypeScript smoke controls. A future
 NormLab profile should pin these versions plus its own semantic mapping, supply
 additional normative grounds and retain unknown/contested inputs. It must not
