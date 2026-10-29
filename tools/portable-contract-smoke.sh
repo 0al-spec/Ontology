@@ -14,7 +14,7 @@ export LLVM_PROFILE_FILE="$output/portable-%p.profraw"
 
 # Compare complete compiler output with tracked baselines on each platform.
 # These are package/structural checks, not proof of source truth or causation.
-for name in examcalc specgraph-core events-core events-core/versions/0.2.0 responsibility-core motivation-core agency-core; do
+for name in examcalc specgraph-core events-core events-core/versions/0.2.0 responsibility-core motivation-core agency-core image-encoding-pilot; do
     package="SPECS/ontology/packages/$name"
     "$compiler" check "$package/domain-ontology-package.yaml"
     "$compiler" compile "$package/domain-ontology-package.yaml" --target typescript --out "$output/$name"

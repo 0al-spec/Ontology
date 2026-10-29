@@ -33,6 +33,12 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-051: executable image intent-preservation pilot, compact boundary reports,
+  real ontology/Hypercode integration and 55 Python checks. Local validation PASS;
+  human intent approval, arbitrary-code equivalence and Lean proof remain separate.
+  Next review exercise: add one criterion and detect/correct its mistranslation
+  using the report. This does not select or start ONT-045 automatically.
+
 - ONT-050: minimal action-model skill, guide, worksheet and image-encoding Gherkin examples; local syntax/skill checks pass. Goal evaluation can inspect the transition/Delta. No app evaluator or PBT suite was implemented.
 
 - ONT-049: generic agency vocabulary and bounded reference consumer; local package/Swift/TypeScript gates pass, PR review/CI separate. This does not start a normative profile or NormLab integration.

@@ -1,0 +1,38 @@
+{
+  "profile": "intent-preservation-pilot/v1",
+  "packages": [
+    {
+      "path": "SPECS/ontology/packages/image-encoding-pilot/generated/ontology.normalized.json",
+      "id": "org.0al.image.encoding.pilot",
+      "version": "0.1.0",
+      "sha256": "5b8ce46254775710f07ea5fad3ce7f69c77ca51d50b6e85ef8955c4f8d586c0f"
+    },
+    {
+      "path": "SPECS/ontology/packages/specgraph-core/generated/ontology.normalized.json",
+      "id": "org.0al.specgraph.core",
+      "version": "0.1.0",
+      "sha256": "c7f5054c0fa179514868249e22dea1a95aa92b504dcf4ccb52709895a6bf1164"
+    },
+    {
+      "path": "SPECS/ontology/packages/events-core/versions/0.2.0/generated/ontology.normalized.json",
+      "id": "org.0al.events.core",
+      "version": "0.2.0",
+      "sha256": "e6c932ad8c492d168b63dbe112335c270d88ff758e016f3502031aefe9dea916"
+    },
+    {
+      "path": "SPECS/ontology/packages/agency-core/generated/ontology.normalized.json",
+      "id": "org.0al.agency.core",
+      "version": "0.1.0",
+      "sha256": "edace0fc7bea8a545591add881110a5752dd27b7647b27cf3ff060e685ce4f7f"
+    },
+    {
+      "path": "SPECS/ontology/packages/motivation-core/generated/ontology.normalized.json",
+      "id": "org.0al.motivation.core",
+      "version": "0.1.0",
+      "sha256": "25da040f4bd0b014014b1ed996250cd4c17a64503355f6f558917bec9ddd1fe9"
+    }
+  ],
+  "hypercodeSourceRevision": "cb577e1bf68db79da34e465f63656c3cd79a7d53",
+  "humanApprovalInferred": false,
+  "universalEquivalenceVerified": false
+}

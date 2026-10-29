@@ -1,0 +1,24 @@
+{
+  "apiVersion": "ontology-induction.specgraph.io/v1alpha1",
+  "kind": "IntentClassification",
+  "intentType": "ArchitectureIntent",
+  "domain": "RasterImageEncoding",
+  "subdomain": "BoundedIntentPreservation",
+  "productType": "ReusableDraftOntologyPackage",
+  "criticality": "medium",
+  "primaryConcern": "Keep one compact declared image action, identity/configuration constraints and explicit size criterion recognizable across ontology, composition, code and evidence without equating structural validity with semantic truth.",
+  "requiresExistingOntology": true,
+  "confidence": 0.75,
+  "uncertainties": [
+    {
+      "id": "consumer-acceptance-boundary",
+      "question": "Which image files, codec settings and evidence methods does the separately versioned pilot consumer actually check?"
+    }
+  ],
+  "provenance": [
+    {
+      "source": "user-request-2026-10-28",
+      "note": "Confidence is a staged-authoring estimate, not measured accuracy or approval."
+    }
+  ]
+}

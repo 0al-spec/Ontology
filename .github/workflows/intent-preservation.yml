@@ -1,0 +1,80 @@
+name: Intent Preservation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  image-encoding:
+    name: Image encoding intent correspondence
+    runs-on: macos-15
+    timeout-minutes: 30
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+
+    steps:
+      - name: Checkout Ontology
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Configure runner scratch paths
+        run: |
+          printf '%s\n' \
+            "TMPDIR=$RUNNER_TEMP" \
+            "PYTHONPYCACHEPREFIX=$RUNNER_TEMP/intent-preservation-bytecode" \
+            "PIP_CACHE_DIR=$RUNNER_TEMP/intent-preservation-pip-cache" \
+            "HYPOTHESIS_STORAGE_DIRECTORY=$RUNNER_TEMP/intent-preservation-hypothesis" \
+            "LLVM_PROFILE_FILE=$RUNNER_TEMP/intent-preservation-%p.profraw" \
+            "ONTOLOGYC_BINARY=$RUNNER_TEMP/ontology-build/debug/ontologyc" \
+            "HYPERCODE_BINARY=$RUNNER_TEMP/hypercode-build/debug/hypercode" >> "$GITHUB_ENV"
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install example requirements
+        run: python -B -m pip install -r Examples/intent-preservation/requirements.txt
+
+      - name: Build ontologyc
+        run: swift build --scratch-path "$RUNNER_TEMP/ontology-build" --product ontologyc
+
+      - name: Checkout pinned Hypercode
+        uses: actions/checkout@v6
+        with:
+          repository: 0al-spec/Hypercode
+          ref: cb577e1bf68db79da34e465f63656c3cd79a7d53
+          path: .build/hypercode-source
+          persist-credentials: false
+
+      - name: Build Hypercode
+        run: >-
+          swift build --package-path .build/hypercode-source
+          --scratch-path "$RUNNER_TEMP/hypercode-build" --product hypercode
+
+      - name: Run bounded consumer tests
+        run: python -B -m unittest discover -s Examples/intent-preservation -p 'test_*.py'
+
+      - name: Produce correspondence evidence
+        run: >-
+          python -B Examples/intent-preservation/pipeline.py run
+          --ontologyc "$ONTOLOGYC_BINARY" --hypercode "$HYPERCODE_BINARY"
+          --out "$RUNNER_TEMP/intent-preservation-report"
+
+      - name: Upload correspondence report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: intent-preservation-report
+          path: |
+            ${{ runner.temp }}/intent-preservation-report/report.html
+            ${{ runner.temp }}/intent-preservation-report/report.json
+            ${{ runner.temp }}/intent-preservation-report/report.md
+          if-no-files-found: error

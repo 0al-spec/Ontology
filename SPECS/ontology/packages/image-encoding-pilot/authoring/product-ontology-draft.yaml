@@ -1,0 +1,117 @@
+{
+  "apiVersion": "ontology-induction.specgraph.io/v1alpha1",
+  "kind": "ProductOntologyDraft",
+  "metadata": {
+    "status": "candidate",
+    "sourceIntentId": "image-encoding-pilot-user-request-2026-10-28",
+    "producedBy": "CodexBoundedPackageAuthor",
+    "confidence": 0.75,
+    "provenance": [
+      {
+        "source": "user-request-2026-10-28",
+        "note": "Bounded image-encoding intent-preservation experiment; no universal architecture, accepted physical graph or semantic equivalence claim."
+      }
+    ],
+    "uncertainties": [
+      {
+        "id": "consumer-acceptance-boundary",
+        "question": "Which image files, codec settings and evidence methods does the separately versioned pilot consumer actually check?"
+      }
+    ]
+  },
+  "spec": {
+    "namespaceCandidate": "imagepilot",
+    "governingConcept": {
+      "id": "Reencode",
+      "rationale": "One declared action relates the selected image, configured encoder and explicit size criterion without asserting runtime performance."
+    },
+    "classes": [
+      {
+        "id": "ImageDocument",
+        "category": "domainEntity"
+      },
+      {
+        "id": "Encoder",
+        "category": "domainEntity"
+      },
+      {
+        "id": "Reencode",
+        "category": "command"
+      },
+      {
+        "id": "ImageState",
+        "category": "valueObject"
+      },
+      {
+        "id": "SizeGoal",
+        "category": "valueObject"
+      }
+    ],
+    "relations": [
+      {
+        "id": "reencodeTarget",
+        "domain": "Reencode",
+        "range": "ImageDocument"
+      },
+      {
+        "id": "reencodeEncoder",
+        "domain": "Reencode",
+        "range": "Encoder"
+      },
+      {
+        "id": "reencodeGoal",
+        "domain": "Reencode",
+        "range": "SizeGoal"
+      },
+      {
+        "id": "reencodeContext",
+        "domain": "Reencode",
+        "range": "agencycore:AgencyContext"
+      },
+      {
+        "id": "stateOfDocument",
+        "domain": "ImageState",
+        "range": "ImageDocument"
+      }
+    ],
+    "protocols": [],
+    "policies": [
+      {
+        "id": "SelectedImageIdentity",
+        "enforceability": "manual"
+      },
+      {
+        "id": "DeclaredEncodingConstraints",
+        "enforceability": "manual"
+      },
+      {
+        "id": "ExplicitSizeCriterion",
+        "enforceability": "manual"
+      },
+      {
+        "id": "ObservationAndAgencyBoundary",
+        "enforceability": "manual"
+      },
+      {
+        "id": "ConsumerOwnedMeaning",
+        "enforceability": "manual"
+      }
+    ],
+    "stateMachines": [
+      {
+        "id": "ReencodeRequest",
+        "rationale": "The current package format requires a nonempty machine. ready to requested on Reencode describes request workflow only, not execution or goal satisfaction."
+      }
+    ],
+    "assumptions": [
+      "Entity identity is an explicit contract; overwrite and copy are different modes.",
+      "Encoder quality, observed bytes and visual acceptance are separate.",
+      "Goal basis/comparator are explicit; required unknown observations are never invented.",
+      "All executable semantics and evidence methods belong to the caller-owned pilot."
+    ],
+    "validationNotes": [
+      "Generated schemas validate required primitive fields, not enum values or cross-object meaning.",
+      "This package adds no StateSnapshot, Delta, formal theorem or implicit InstanceGraph profile."
+    ]
+  }
+}

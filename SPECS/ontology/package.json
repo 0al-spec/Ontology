@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --project typescript-smoke/tsconfig.json --noEmit",
-    "smoke": "tsx typescript-smoke/examcalc-schemas.ts && tsx typescript-smoke/events-core-schemas.ts && tsx typescript-smoke/snapshot-provenance.ts && tsx typescript-smoke/responsibility-core-schemas.ts && tsx typescript-smoke/motivation-core-schemas.ts && tsx typescript-smoke/agency-core-schemas.ts"
+    "smoke": "tsx typescript-smoke/examcalc-schemas.ts && tsx typescript-smoke/events-core-schemas.ts && tsx typescript-smoke/snapshot-provenance.ts && tsx typescript-smoke/responsibility-core-schemas.ts && tsx typescript-smoke/motivation-core-schemas.ts && tsx typescript-smoke/agency-core-schemas.ts && tsx typescript-smoke/image-encoding-schemas.ts"
   },
   "devDependencies": {
     "tsx": "4.22.4",

@@ -1,0 +1,14 @@
+{
+  "profile": "intent-preservation-pilot/v1",
+  "values": {
+    "selected_entity": "image-1",
+    "action": "jpeg_reencode",
+    "identity": "in_place",
+    "dimensions": "preserve",
+    "goal_basis": "reduction",
+    "goal_comparison": "at_least",
+    "goal_bytes": 200000,
+    "missing_input": "unknown",
+    "quality": 65
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "apiVersion": "ontology-induction.specgraph.io/v1alpha1",
+  "kind": "DraftCritique",
+  "status": "approved_for_yaml",
+  "summary": "The five-class vocabulary is sufficient for the bounded experiment if the independent runtime consumer owns enum admission, selected-image measurements and implementation evidence. The format-required ReencodeRequest machine describes only a request, not runtime execution. This is an authoring readiness assessment, not a verified semantic equivalence result.",
+  "scores": {
+    "domainFraming": 4,
+    "conceptCoverage": 4,
+    "behavioralModeling": 3,
+    "policyModeling": 4,
+    "trustAndEvidence": 4,
+    "uncertaintyHandling": 4,
+    "implementationLeakage": 4,
+    "relationQuality": 4,
+    "competencyQuestions": 4,
+    "yamlReadiness": 4
+  },
+  "issues": [
+    {
+      "id": "runtime-policy-boundary",
+      "severity": "medium",
+      "message": "Package validation cannot enforce action enums, selected-image identity, dimension preservation, digest truth or size arithmetic.",
+      "affects": [
+        "Reencode",
+        "ImageState",
+        "SizeGoal"
+      ],
+      "suggestedFix": "Keep these checks and their exact evidence in the separately versioned caller-owned pilot; report each boundary explicitly."
+    },
+    {
+      "id": "formal-correspondence-boundary",
+      "severity": "medium",
+      "message": "Structural ontology/composition validity and generated SDK objects do not prove actual code preserves user intent.",
+      "affects": [
+        "Reencode"
+      ],
+      "suggestedFix": "Bind each implementation/evidence claim to the actual artifacts and stated method; do not treat draft approval or a generated hash marker as a semantic proof."
+    }
+  ],
+  "questions": [
+    {
+      "id": "consumer-acceptance-boundary",
+      "question": "Which image files, codec settings and evidence methods does the separately versioned pilot consumer actually check?",
+      "blocksApproval": false
+    }
+  ],
+  "provenance": [
+    {
+      "source": "SPECS/ontology/packages/image-encoding-pilot/authoring/intent.md",
+      "note": "Self-critique against staged-authoring concerns; scores are subjective and confer no runtime or truth authority."
+    }
+  ]
+}

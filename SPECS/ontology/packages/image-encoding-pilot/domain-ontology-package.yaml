@@ -1,0 +1,279 @@
+{
+  "apiVersion": "ontology.specgraph.io/v1alpha1",
+  "kind": "DomainOntologyPackage",
+  "metadata": {
+    "id": "org.0al.image.encoding.pilot",
+    "namespace": "imagepilot",
+    "version": "0.1.0",
+    "publisher": "OntologyService",
+    "source": "SPECS/ontology/packages/image-encoding-pilot/authoring/intent.md",
+    "approvalStatus": "draft"
+  },
+  "spec": {
+    "imports": [
+      {
+        "id": "specgraph.foundation",
+        "namespace": "sg",
+        "version": "0.1.0"
+      },
+      {
+        "id": "org.0al.events.core",
+        "namespace": "eventcore",
+        "version": "0.2.0"
+      },
+      {
+        "id": "org.0al.agency.core",
+        "namespace": "agencycore",
+        "version": "0.1.0"
+      }
+    ],
+    "classes": {
+      "ImageDocument": {
+        "extends": "eventcore:Entity",
+        "description": "The selected image document under an explicit identity rule. entityKey identifies this domain entity; a shared path or filename does not establish identity.",
+        "fields": {
+          "entityKey": {
+            "type": "string",
+            "required": true,
+            "description": "Caller-selected stable identity for the image document in this model."
+          }
+        }
+      },
+      "Encoder": {
+        "extends": "eventcore:Entity",
+        "description": "An encoding participant that may occupy instrument or actor roles under a selected interpretation. Its configuration does not imply a desire, awareness or autonomous goal.",
+        "fields": {
+          "quality": {
+            "type": "integer",
+            "required": true,
+            "description": "Declared integer codec quality setting. Its supported range and effect are defined by the caller-owned runtime profile."
+          }
+        }
+      },
+      "Reencode": {
+        "extends": "sg:Command",
+        "layer": "mechanics",
+        "central": true,
+        "description": "Declared reencoding action and constraints for the selected image. The command describes requested behavior; its presence does not establish execution, completion or goal satisfaction.",
+        "fields": {
+          "identityMode": {
+            "type": "string",
+            "required": true,
+            "description": "Declared identity mode: in_place preserves the selected entity; copy creates a separately identified result. The selected runtime profile decides supported modes."
+          },
+          "dimensions": {
+            "type": "string",
+            "required": true,
+            "description": "Declared dimensions constraint: preserve or resize. No automatic visual acceptance or preservation proof follows."
+          },
+          "actionKind": {
+            "type": "string",
+            "required": true,
+            "description": "Declared action kind. The bounded pilot names jpeg_reencode; the generated primitive schema does not admit or execute an action enum."
+          }
+        }
+      },
+      "ImageState": {
+        "extends": "sg:ValueObject",
+        "description": "A declared finite image observation projection at one measurement boundary: identity, byte length, dimensions and content digest. This is not an eventcore:StateSnapshot, a completeness declaration for all physical facts, an exact Delta or authenticated observation.",
+        "fields": {
+          "entityKey": {
+            "type": "string",
+            "required": true,
+            "description": "ImageDocument identity to which these declared measurements refer."
+          },
+          "byteLength": {
+            "type": "integer",
+            "required": true,
+            "description": "Declared measured byte length; absent observations are not represented by zero."
+          },
+          "width": {
+            "type": "integer",
+            "required": true,
+            "description": "Declared measured image width in pixels."
+          },
+          "height": {
+            "type": "integer",
+            "required": true,
+            "description": "Declared measured image height in pixels."
+          },
+          "contentSHA256": {
+            "type": "string",
+            "required": true,
+            "description": "Declared SHA-256 digest of the measured content. Format, byte binding and truthful measurement require a separate consumer check."
+          }
+        }
+      },
+      "SizeGoal": {
+        "extends": "sg:ValueObject",
+        "description": "An explicit application criterion over supplied image measurements, not a performed action or an attributed mental stance. Its evaluation belongs to the selected runtime profile.",
+        "fields": {
+          "basis": {
+            "type": "string",
+            "required": true,
+            "description": "Declared quantity: reduction is before.byteLength minus after.byteLength; final_size uses after.byteLength."
+          },
+          "comparison": {
+            "type": "string",
+            "required": true,
+            "description": "Declared comparison: at_least, exactly or at_most. Each has a distinct meaning; no comparator substitution is permitted."
+          },
+          "targetBytes": {
+            "type": "integer",
+            "required": true,
+            "description": "Declared nonnegative byte quantity used by the selected basis and comparison. Human units must be converted explicitly before supplying bytes."
+          },
+          "missingInput": {
+            "type": "string",
+            "required": true,
+            "description": "Declared missing-input behavior: unknown when supplied information cannot decide the criterion. Missing measurements never become zero or an empty Delta."
+          }
+        }
+      }
+    },
+    "protocols": {},
+    "relations": {
+      "reencodeTarget": {
+        "domain": "Reencode",
+        "range": "ImageDocument",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "The image selected for this declared action. A codec result for another entity does not fulfill this target binding."
+      },
+      "reencodeEncoder": {
+        "domain": "Reencode",
+        "range": "Encoder",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "Encoding participant used by this action. Actor versus instrument is determined by the selected interpretation, not by this link alone."
+      },
+      "reencodeGoal": {
+        "domain": "Reencode",
+        "range": "SizeGoal",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "Explicit criterion selected for this bounded action. Its existence does not establish achievement or an operator's psychological goal."
+      },
+      "reencodeContext": {
+        "domain": "Reencode",
+        "range": "agencycore:AgencyContext",
+        "cardinality": {
+          "min": 0,
+          "max": 1
+        },
+        "description": "Optional actor/view context. Derive a resolved subject through the selected AgencyContext and its existing actor role; absence remains unresolved. Role scope needs separate consumer validation."
+      },
+      "stateOfDocument": {
+        "domain": "ImageState",
+        "range": "ImageDocument",
+        "cardinality": {
+          "min": 1,
+          "max": 1
+        },
+        "description": "Document to which the observation projection is attributed. entityKey agreement, measurement provenance and before/after placement are consumer obligations."
+      }
+    },
+    "policies": {
+      "SelectedImageIdentity": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "ImageDocument",
+          "Reencode",
+          "ImageState"
+        ],
+        "text": "The selected action targets the selected ImageDocument. In_place preserves its entity identity across the declared before/after measurements; copy requires a distinct result identity and explicit derivation outside this minimum package. A path, label or hash alone does not select the identity rule. An image measurement must not be rebound to another document to satisfy a goal."
+      },
+      "DeclaredEncodingConstraints": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "Encoder",
+          "Reencode",
+          "ImageState"
+        ],
+        "text": "The bounded action kind is jpeg_reencode. Dimensions preserve requires equal declared before/after width and height; resize is a separate declared mode and must not silently replace preserve. Encoder quality is a configuration input, not measured size, visual acceptance or proof of a desired result. Supported integer quality bounds and actual codec behavior belong to the selected caller profile."
+      },
+      "ExplicitSizeCriterion": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "SizeGoal",
+          "ImageState"
+        ],
+        "text": "For basis reduction compare before.byteLength minus after.byteLength with targetBytes; for final_size compare after.byteLength. Interpret at_least as >=, exactly as equality and at_most as <=. targetBytes is nonnegative and expressed in bytes. Missing data yields unknown only when available observations cannot decide the selected criterion; a known-false conjunct may establish not_satisfied despite unknown other operands. Operation completion and goal evaluation remain separate. No missing measurement becomes zero, a fabricated observation or an empty Delta."
+      },
+      "ObservationAndAgencyBoundary": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "Reencode",
+          "ImageState",
+          "SizeGoal"
+        ],
+        "text": "ImageState is an application measurement projection, not an admitted complete physical StateSnapshot or actual event Delta. Source-only descriptions may omit states rather than invent measurements. A desired condition, runtime success message, source quotation or reviewed claim does not establish factual truth, actual change, causation or mental state. Selecting a SizeGoal does not automatically create an agencycore:GoalHypothesis, motive or awareness attribution."
+      },
+      "ConsumerOwnedMeaning": {
+        "extends": "sg:Policy",
+        "enforceability": "manual",
+        "appliesTo": [
+          "ImageDocument",
+          "Encoder",
+          "Reencode",
+          "ImageState",
+          "SizeGoal"
+        ],
+        "text": "Package compilation and generated SDK checks cover declaration consistency and primitive object shapes. String enums, cross-object identity, image dimensions, digest binding, exact observations, goal arithmetic, implementation correspondence and runtime behavior are not enforced by this package. The separately reviewed Examples/intent-preservation consumer owns the bounded executable profile. Existing InstanceGraph profiles do not implicitly admit imagepilot nodes."
+      }
+    },
+    "stateMachines": {
+      "ReencodeRequest": {
+        "states": ["ready", "requested"],
+        "transitions": [
+          {"from": "ready", "to": "requested", "command": "Reencode"}
+        ]
+      }
+    },
+    "modelApplicability": {
+      "appliesTo": {
+        "domains": [
+          "raster_image_encoding"
+        ],
+        "contexts": [
+          "bounded_intent_preservation_pilot",
+          "declared_action_and_size_criterion"
+        ]
+      },
+      "excludes": {
+        "contexts": [
+          "automatic_mental_state_attribution",
+          "universal_codec_equivalence",
+          "implicit_instance_graph_admission",
+          "automatic_formal_correctness"
+        ]
+      },
+      "assumptions": [
+        {
+          "id": "explicit_projection",
+          "text": "ImageState supplies only the named image measurement projection; absent values require absent states or source-only descriptions."
+        },
+        {
+          "id": "consumer_profile",
+          "text": "Examples/intent-preservation defines supported combinations, validates observations and evaluates the criterion. The package alone does not execute these policies."
+        }
+      ],
+      "invalidationTriggers": [
+        {
+          "id": "meaning_changed",
+          "text": "Review and version the consumer profile and this draft before changing the image identity rule, supported action, quantity basis or comparison semantics."
+        }
+      ]
+    }
+  }
+}

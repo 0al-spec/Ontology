@@ -1,0 +1,28 @@
+'#image':
+  entityKey: "image-1"
+'#encoding':
+  actionKind: "jpeg_reencode"
+  identityMode: "in_place"
+  dimensions: "preserve"
+'#encoder':
+  quality: 65
+'#goal':
+  basis: "reduction"
+  comparison: "at_least"
+  targetBytes: 200000
+  missingInput: "unknown"
+
+@contract:
+  '#image':
+    entityKey: string
+  '#encoding':
+    actionKind: string
+    identityMode: string
+    dimensions: string
+  '#encoder':
+    quality: int >= 1 <= 95
+  '#goal':
+    basis: string
+    comparison: string
+    targetBytes: int >= 0
+    missingInput: string

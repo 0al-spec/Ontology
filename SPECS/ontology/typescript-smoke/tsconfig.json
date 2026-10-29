@@ -25,6 +25,8 @@
     "../packages/motivation-core/generated/**/*.ts",
     "agency-core-schemas.ts",
     "../packages/agency-core/generated/**/*.ts",
-    "../packages/agency-core/consumer/**/*.ts"
+    "../packages/agency-core/consumer/**/*.ts",
+    "image-encoding-schemas.ts",
+    "../packages/image-encoding-pilot/generated/**/*.ts"
   ]
 }
