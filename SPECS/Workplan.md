@@ -1151,6 +1151,19 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Independent observations and negative controls distinguish numerical/operation success from intent preservation; existing receipts are not upgraded.
   - Publish a separate stacked PR; no merge, deployment or external consumer activation.
 
+#### ONT-053: Reader-Oriented Project Story
+- **Description:** Rewrite the entry-point README around the problem of preserving meaning across human intent, domain models and software; show the relationship to NormLab and the precise role of Lean.
+- **Priority:** P1 — explicit user request
+- **Dependencies:** ONT-049 through ONT-052 merged; current implementation and profile documentation
+- **Status:** INPROGRESS
+- **Acceptance Criteria:**
+  - A new reader can identify the problem, intended user, implemented mechanism and value from the opening sections.
+  - A concrete example and diagram explain concepts, state changes, goals and compact correspondence reports.
+  - Lean verification in NormLab is clearly distinguished from this repository's Swift compiler, structural profiles and bounded executable pilots.
+  - Current capabilities, draft packages and future integrations are separated; novelty is explained without unsupported priority or universal-proof claims.
+  - Practical build/example navigation and MIT licensing remain accessible; documentation links and source-grounded claims are checked.
+  - Deliver a separate documentation PR; no runtime changes, merge, release or deployment.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

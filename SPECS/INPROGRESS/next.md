@@ -1,4 +1,12 @@
-# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Current Task: ONT-053 — Reader-Oriented Project Story
+
+**Status:** Selected by explicit user request; documentation only
+**Goal:** Explain the problem, mechanism and value of Ontology, with a concrete example and accurate Lean/NormLab boundaries.
+**Next step:** Prepare the source-grounded README and validate links and claims.
+
+---
+
+## Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
