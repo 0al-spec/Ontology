@@ -1,6 +1,6 @@
 # ONT-053 — Reader-Oriented Project Story
 
-Status: PRD Ready. Selected by the user on 2026-10-29.
+Status: Complete; local documentation validation passed on 2026-10-29.
 
 ## Problem and intended result
 
