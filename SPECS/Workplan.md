@@ -1164,6 +1164,20 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Practical build/example navigation and MIT licensing remain accessible; documentation links and source-grounded claims are checked.
   - Deliver a separate documentation PR; no runtime changes, merge, release or deployment.
 
+#### ONT-054: Optional Local Package Sections
+- **Description:** Permit lightweight local ontology packages without artificial policy or state-machine declarations while preserving structural validation.
+- **Priority:** P1 — explicit user request on 2026-10-30
+- **Dependencies:** Ontology 0.2.0; SpecGraph SG72-MIXED pilot feedback (#839)
+- **Status:** Complete — local quality and SpecGraph consumer probe PASS; hosted review/merge pending
+- **Source:** SpecGraph proposal 0233 local-model pilot and operator request to send Sol 6.1 High for fixes directly in Ontology.
+- **Acceptance Criteria:**
+  - Omitted and empty policies/stateMachines maps are accepted and normalize to empty declarations.
+  - Explicit null, lists and scalar values remain invalid; supplied declarations retain semantic checks.
+  - Unresolved lifecycle and local relation references remain errors.
+  - Schema, Swift compiler and Ruby fixture validation agree; generated SDK surfaces remain available.
+  - Existing nonempty packages retain deterministic output, and meaningful regression/quality checks pass.
+  - Publish a focused PR; no merge, release, global ontology change or universal instance validator.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

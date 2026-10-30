@@ -33,6 +33,8 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-054: optional policies/stateMachines, retained structural checks and Ruby class-field parity. Local quality: 166 Swift tests, 10 Ruby fixtures; the actual SpecGraph model passes without dummy declarations. Next: review the focused PR, then select a stable compiler revision for downstream adoption. No release or pin update performed.
+
 - ONT-053: reader-oriented README, action and review diagrams, explicit Lean/NormLab boundaries and separate tooling guide. Documentation checks and independent review pass. Next: review the separate documentation PR; no runtime integration selected.
 
 - ONT-052: contract 0.1, separate semantic/evidence/human/outcome axes, image adapter and edit cancellation profile. 113 local tests pass; independent review fixes closed. Next: review the separate PR above #75 and try the compact report against another real change. No consumer integration or merge selected automatically.

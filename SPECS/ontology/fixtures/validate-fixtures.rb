@@ -43,6 +43,17 @@ INVALID_FIXTURES = {
   "missing-metadata.yaml" => /metadata\.version/,
   "invalid-inheritance.yaml" => /extends must be scalar string/,
   "unknown-relation-ref.yaml" => /unknown relation domain reference/,
+  "invalid-class-fields.yaml" => [
+    /fields\.title must be an object/,
+    /fields\.Invalid-Name must use a nonreserved field name/,
+    /fields\.Invalid-Name\.type must be a supported primitive field type/,
+    /fields\.Invalid-Name\.required must be a boolean/,
+    /fields\.Invalid-Name\.description must be a string/,
+    /fields\.Invalid-Name\.unexpected is not allowed/,
+    /fields\.id must use a nonreserved field name/,
+    /fields\.incomplete\.type is required/,
+    /fields\.incomplete\.required is required/
+  ],
   "unsafe-executable-looking-yaml.yaml" => /unsafe executable-looking/
 }.transform_keys { |name| File.join(ROOT, "SPECS/ontology/fixtures/invalid", name) }
 
@@ -237,7 +248,7 @@ def validate_classes(classes, state_machine_names, package_namespace, import_nam
     check_pattern(name, NAME_RE, path, errors)
     next unless require_hash(definition, path, errors)
 
-    unknown_keys(definition, %w[extends implements description central lifecycle aliases], path, errors)
+    unknown_keys(definition, %w[extends implements description central lifecycle aliases fields], path, errors)
     extends = require_key(definition, "extends", path, errors)
     if !extends.is_a?(String)
       errors << "#{path}.extends must be scalar string (multiple inheritance is not allowed)"
@@ -247,6 +258,7 @@ def validate_classes(classes, state_machine_names, package_namespace, import_nam
 
     description = require_key(definition, "description", path, errors)
     require_string(description, "#{path}.description", errors)
+    validate_class_fields(definition["fields"], "#{path}.fields", errors) if definition.key?("fields")
 
     implements = definition.key?("implements") ? require_array(definition["implements"], "#{path}.implements", errors) : []
     Array(implements).each_with_index do |ref, index|
@@ -266,6 +278,32 @@ def validate_classes(classes, state_machine_names, package_namespace, import_nam
   end
 
   [class_names, command_names, event_names]
+end
+
+def validate_class_fields(value, path, errors)
+  fields = require_hash(value, path, errors)
+  return unless fields
+
+  fields.each do |name, definition|
+    field_path = "#{path}.#{name}"
+    unless name.is_a?(String) && name.match?(/\A[a-z][A-Za-z0-9_]*\z/) && name != "id"
+      errors << "#{field_path} must use a nonreserved field name"
+    end
+    next unless require_hash(definition, field_path, errors)
+
+    unknown_keys(definition, %w[type required description], field_path, errors)
+    type = require_key(definition, "type", field_path, errors)
+    unless %w[string boolean integer number].include?(type)
+      errors << "#{field_path}.type must be a supported primitive field type"
+    end
+    required = require_key(definition, "required", field_path, errors)
+    unless required == true || required == false
+      errors << "#{field_path}.required must be a boolean"
+    end
+    if definition.key?("description") && !definition["description"].is_a?(String)
+      errors << "#{field_path}.description must be a string"
+    end
+  end
 end
 
 def range_refs(range)
@@ -313,7 +351,6 @@ def validate_policies(policies, class_names, package_namespace, import_namespace
   policies = require_hash(policies, "spec.policies", errors)
   return Set.new unless policies
 
-  errors << "spec.policies must contain at least one policy" if policies.empty?
   policy_names = Set.new(policies.keys)
   allowed_enforceability = Set.new(%w[design runtime manual audit])
 
@@ -354,7 +391,6 @@ def validate_state_machines(state_machines, command_names, event_names, package_
   state_machines = require_hash(state_machines, "spec.stateMachines", errors)
   return Set.new unless state_machines
 
-  errors << "spec.stateMachines must contain at least one state machine" if state_machines.empty?
   names = Set.new(state_machines.keys)
 
   state_machines.each do |name, definition|
@@ -411,7 +447,7 @@ def validate_package(data, load_errors)
   return errors unless spec
 
   unknown_keys(spec, %w[imports classes protocols relations policies stateMachines compatibility], "spec", errors)
-  %w[imports classes relations policies stateMachines].each do |key|
+  %w[imports classes relations].each do |key|
     require_key(spec, key, "spec", errors)
   end
 
@@ -425,8 +461,8 @@ def validate_package(data, load_errors)
     errors
   )
   validate_relations(spec["relations"], class_names, package_namespace, import_namespaces, errors)
-  validate_policies(spec["policies"], class_names, package_namespace, import_namespaces, errors)
-  validate_state_machines(spec["stateMachines"], command_names, event_names, package_namespace, errors)
+  validate_policies(spec.fetch("policies", {}), class_names, package_namespace, import_namespaces, errors)
+  validate_state_machines(spec.fetch("stateMachines", {}), command_names, event_names, package_namespace, errors)
 
   errors
 end
@@ -441,7 +477,7 @@ def check_fixture(path, expected, expected_error = nil)
     return true
   end
 
-  if expected == :invalid && !valid && errors.any? { |error| error.match?(expected_error) }
+  if expected == :invalid && !valid && Array(expected_error).all? { |pattern| errors.any? { |error| error.match?(pattern) } }
     puts "PASS invalid #{rel(path)}"
     return true
   end

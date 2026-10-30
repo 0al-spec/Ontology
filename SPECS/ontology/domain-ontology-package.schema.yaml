@@ -47,8 +47,6 @@ properties:
       - imports
       - classes
       - relations
-      - policies
-      - stateMachines
     properties:
       imports:
         type: array
@@ -88,14 +86,14 @@ properties:
           $ref: "#/$defs/relationDefinition"
       policies:
         type: object
-        minProperties: 1
+        description: Optional local policy declarations. Omission or an empty object declares no local policies.
         propertyNames:
           $ref: "#/$defs/nameReference"
         additionalProperties:
           $ref: "#/$defs/policyDefinition"
       stateMachines:
         type: object
-        minProperties: 1
+        description: Optional local state machines. Omission or an empty object declares no local state machines.
         propertyNames:
           $ref: "#/$defs/nameReference"
         additionalProperties:
