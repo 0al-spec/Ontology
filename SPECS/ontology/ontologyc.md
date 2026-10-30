@@ -28,6 +28,17 @@ Behavior:
 8. Emit diagnostics.
 9. Exit non-zero on any `error` diagnostic.
 
+`spec.imports`, `spec.classes`, and `spec.relations` remain required and nonempty.
+`spec.policies` and `spec.stateMachines` are optional maps: omission or `{}` means
+no local declarations. Explicit `null`, arrays and scalar values are invalid.
+Every supplied declaration retains its structural and reference checks, and a
+class `lifecycle` must still name a declared local state machine.
+
+Normalization represents absent or empty sections as `policies: []` and
+`stateMachines: []`. Compilation still emits the policy and state-machine SDK
+files and registry exports, with empty definitions and ref maps. This shape
+does not imply any runtime policy or lifecycle behavior.
+
 ### `ontologyc compile`
 
 ```bash

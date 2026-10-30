@@ -54,7 +54,9 @@ validate relation cardinality instances, entity agreement, dimensions, measured
 digests, codec behavior, goal arithmetic, source truth or implementation fidelity.
 No new InstanceGraph profile or semantic equivalence theorem is supplied.
 
-The current package format also requires a nonempty state machine.
+The compiler used for this saved pilot required a nonempty state machine.
+The current package format allows omitted or empty policies/stateMachines;
+the saved intent, draft and generated artifacts retain their original declarations.
 `ReencodeRequest` declares `ready -> requested` on the existing Reencode command.
 It records request vocabulary only; it is not bound to physical image states and
 does not assert execution, completion, criterion satisfaction or runtime history.

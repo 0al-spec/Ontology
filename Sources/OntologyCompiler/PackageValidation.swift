@@ -26,14 +26,12 @@ extension OntologyCompiler {
         let importNamespaces = collectImportNamespaces(imports)
         let classes = requiredObject(spec, "classes", path: "spec.classes", code: "spec.required") ?? [:]
         let relations = requiredObject(spec, "relations", path: "spec.relations", code: "spec.required") ?? [:]
-        let policies = requiredObject(spec, "policies", path: "spec.policies", code: "spec.required") ?? [:]
-        let stateMachines = requiredObject(spec, "stateMachines", path: "spec.stateMachines", code: "spec.required") ?? [:]
+        let policies = optionalDefinitionSection(spec, key: "policies")
+        let stateMachines = optionalDefinitionSection(spec, key: "stateMachines")
 
         if imports.isEmpty { add("imports.empty", "spec.imports", "spec.imports must contain at least one import") }
         if classes.isEmpty { add("classes.empty", "spec.classes", "spec.classes must contain at least one class") }
         if relations.isEmpty { add("relations.empty", "spec.relations", "spec.relations must contain at least one relation") }
-        if policies.isEmpty { add("policies.empty", "spec.policies", "spec.policies must contain at least one policy") }
-        if stateMachines.isEmpty { add("stateMachines.empty", "spec.stateMachines", "spec.stateMachines must contain at least one state machine") }
 
         let classNames = Set(classes.keys)
         let policyNames = Set(policies.keys)
@@ -83,6 +81,11 @@ extension OntologyCompiler {
             relations: relations,
             packageNamespace: package.namespace
         )
+    }
+
+    private func optionalDefinitionSection(_ spec: JSONObject, key: String) -> JSONObject {
+        guard spec.keys.contains(key) else { return [:] }
+        return requiredObject(spec, key, path: "spec.\(key)", code: "spec.required") ?? [:]
     }
 
     func collectImportNamespaces(_ imports: [Any]) -> Set<String> {

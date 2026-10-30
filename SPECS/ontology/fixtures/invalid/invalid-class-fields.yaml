@@ -1,0 +1,28 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: test.invalid-fields
+  namespace: invalidfields
+  version: 0.1.0
+spec:
+  imports:
+    - {id: specgraph.foundation, namespace: sg, version: 0.1.0}
+  classes:
+    Scenario:
+      extends: sg:ValueObject
+      description: A declaration with malformed fields.
+      fields:
+        title: []
+        Invalid-Name:
+          type: date
+          required: "yes"
+          description: 7
+          unexpected: true
+        id:
+          type: string
+          required: false
+        incomplete: {}
+  relations:
+    follows:
+      domain: Scenario
+      range: Scenario
