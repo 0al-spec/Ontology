@@ -1,4 +1,25 @@
-# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Selected: ONT-054 — Optional Local Package Sections
+
+**Priority:** P1 — explicit operator request
+**Status:** Selected; PLAN before implementation
+**Dependencies:** Ontology 0.2.0; SpecGraph local model pilot #839 supplies feedback
+**Branch:** `feature/ONT-054-local-package-ergonomics`
+**Review subject:** `ONT-054_optional_local_package_sections`
+
+## Intended result
+
+Allow a small classes/relations package to omit policies and state machines
+instead of inventing declarations solely to satisfy package shape. Preserve
+validation of every supplied declaration and malformed section value.
+
+Root owns FLOW checkpoints and publication; Sol 6.1 High owns bounded compiler,
+schema, regression and documentation changes after the PRD is committed.
+Builds/tests use the isolated worktree's verified external cache/output paths.
+No release, consumer pin update or merge is part of this task.
+
+## Prior candidate, retained without selection
+
+### Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
