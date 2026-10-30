@@ -44,6 +44,14 @@ task implements the package-shape issue; it does not reinterpret the scenario.
 - `Tests/OntologyCompilerTests/OptionalPackageSectionsTests.swift`.
 - Narrow explanatory updates to the existing image-pilot README where needed.
 
+Discovery addendum: the unchanged Ruby fixture validator rejects the existing
+examcalc package's `fields` section, although the schema and Swift support it.
+The full selected fixture gate reproduces this baseline defect. Include a narrow
+field shape/type/required/description parity fix and a negative fixture so
+allowing the known key does not admit malformed field declarations. Do not
+expand this into a replacement schema engine or change historical fixtures to
+hide the discrepancy.
+
 Keep existing SpecificationCore predicates authoritative. This is structural
 input handling and removal of unnecessary emptiness requirements, not a new
 runtime policy. If another predicate needs a change, explain it before expanding
