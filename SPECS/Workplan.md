@@ -1168,7 +1168,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Description:** Permit lightweight local ontology packages without artificial policy or state-machine declarations while preserving structural validation.
 - **Priority:** P1 — explicit user request on 2026-10-30
 - **Dependencies:** Ontology 0.2.0; SpecGraph SG72-MIXED pilot feedback (#839)
-- **Status:** INPROGRESS — selected; implementation awaits task PRD
+- **Status:** Complete — local quality and SpecGraph consumer probe PASS; hosted review/merge pending
 - **Source:** SpecGraph proposal 0233 local-model pilot and operator request to send Sol 6.1 High for fixes directly in Ontology.
 - **Acceptance Criteria:**
   - Omitted and empty policies/stateMachines maps are accepted and normalize to empty declarations.

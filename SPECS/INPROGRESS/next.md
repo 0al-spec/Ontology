@@ -1,25 +1,4 @@
-# Selected: ONT-054 — Optional Local Package Sections
-
-**Priority:** P1 — explicit operator request
-**Status:** Selected; PLAN before implementation
-**Dependencies:** Ontology 0.2.0; SpecGraph local model pilot #839 supplies feedback
-**Branch:** `feature/ONT-054-local-package-ergonomics`
-**Review subject:** `ONT-054_optional_local_package_sections`
-
-## Intended result
-
-Allow a small classes/relations package to omit policies and state machines
-instead of inventing declarations solely to satisfy package shape. Preserve
-validation of every supplied declaration and malformed section value.
-
-Root owns FLOW checkpoints and publication; Sol 6.1 High owns bounded compiler,
-schema, regression and documentation changes after the PRD is committed.
-Builds/tests use the isolated worktree's verified external cache/output paths.
-No release, consumer pin update or merge is part of this task.
-
-## Prior candidate, retained without selection
-
-### Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
@@ -53,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-054: optional policies/stateMachines, retained structural checks and Ruby class-field parity. Local quality: 166 Swift tests, 10 Ruby fixtures; the actual SpecGraph model passes without dummy declarations. Next: review the focused PR, then select a stable compiler revision for downstream adoption. No release or pin update performed.
 
 - ONT-053: reader-oriented README, action and review diagrams, explicit Lean/NormLab boundaries and separate tooling guide. Documentation checks and independent review pass. Next: review the separate documentation PR; no runtime integration selected.
 

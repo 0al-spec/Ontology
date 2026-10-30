@@ -1,6 +1,7 @@
 # ONT-054 — Optional Local Package Sections
 
-Status: Planned; bounded implementation authorized by the operator on 2026-10-30.
+Status: Complete; bounded local validation passed on 2026-10-30. Hosted review,
+merge and release remain separate.
 
 ## Problem and source
 
