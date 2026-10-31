@@ -1,3 +1,9 @@
+# Selected: ONT-066 — Full import projection
+Branch: feature/ONT-066-full-imports.
+Workspace: .worktrees/Ontology-interactive-viewer, reused after the previous stack merged.
+Retain through PR review; the NormLab pilot sources and launch data live outside this tree.
+Next: implement the approved bounded full-import/counts slice; ONT-045 remains unselected.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
