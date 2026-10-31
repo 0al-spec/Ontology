@@ -52,3 +52,8 @@ This is a package schema diagram. It follows the compiler's existing validation
 contract, including its current imported-symbol resolution limitations. Instance
 graphs, remote import fetching, GUI editing and renderer bundling are separate
 slices. ONT-055 release packaging remains independently reviewable.
+
+---
+**Archived** 2026-10-31
+
+**Verdict** PASS for local gates; hosted checks and PR review pending.

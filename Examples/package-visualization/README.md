@@ -6,6 +6,8 @@ and an explicit approval transition.
 
 ![Proposal review package](ontology.svg)
 
+The checked-in preview uses `--direction TB` and Graphviz 16.1.0.
+
 ## Run
 
 Build with Swift 6.0 or later. Install Graphviz for SVG and PNG output.

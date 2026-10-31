@@ -1182,7 +1182,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Description:** Render one DomainOntologyPackage as an inspectable local graph using a standalone ontologyviz executable.
 - **Priority:** P1 — explicit operator request, 2026-10-31
 - **Dependencies:** Existing compiler package validation/normalization; Graphviz dot for SVG/PNG rendering.
-- **Status:** INPROGRESS
+- **Status:** Complete — local quality, real SVG/PNG rendering and generated-output baselines passed; hosted review pending.
 - **Acceptance Criteria:** Deterministic DOT projection, SVG and PNG exports on macOS/Linux, typed and external nodes, relation cardinalities, policy targets, lifecycle transitions, clear argument/renderer errors, real rendering tests and a focused PR.
 
 ## Task Status Legend

@@ -1,13 +1,4 @@
-# Current Task — ONT-056 Package Visualization CLI
-
-Selected by the operator on 2026-10-31. Workspace `.worktrees/Ontology-visualization`,
-branch `feature/ONT-056-package-visualization`, based on main `d831e25`.
-
-Build the standalone `ontologyviz` product through the existing compiler library,
-then verify real SVG/PNG rendering with Graphviz and publish a focused PR.
-Keep this worktree active through review and retire it after merge.
-
-## Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
@@ -41,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-056 package visualization. Local tests/rendering/quality PASS. Worktree `.worktrees/Ontology-visualization` remains active for the focused PR review. Next slice can add a selected-concept neighborhood view for large packages. Retire this worktree after merge.
 
 - ONT-054: optional policies/stateMachines, retained structural checks and Ruby class-field parity. Local quality: 166 Swift tests, 10 Ruby fixtures; the actual SpecGraph model passes without dummy declarations. Next: review the focused PR, then select a stable compiler revision for downstream adoption. No release or pin update performed.
 
