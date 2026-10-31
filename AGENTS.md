@@ -48,6 +48,8 @@ swift test
 
 ---
 
+For package authoring, enable the [staged package advisory](SPECS/ontology/ontologyc.md#commit-time-package-advice) once per clone. When using RTK, verify once per installation that ordinary `rtk git commit` displays the advisory using the client smoke test in the linked instructions. Fix unexpected findings or record the known gap when keeping a draft. Use `ontologyc check` whenever a strict result is required.
+
 ## Specification pattern (SpecificationCore)
 
 **The central architectural pattern throughout `OntologyRules` is the Specification pattern**,

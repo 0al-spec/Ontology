@@ -12,6 +12,8 @@ output="$(mktemp -d "${TMPDIR:-/tmp}/ontology-portable.XXXXXX")"
 trap 'rm -rf "$output"' EXIT
 export LLVM_PROFILE_FILE="$output/portable-%p.profraw"
 
+bash tools/staged-package-advice-smoke.sh "$compiler"
+
 # Compare complete compiler output with tracked baselines on each platform.
 # These are package/structural checks, not proof of source truth or causation.
 for name in examcalc specgraph-core events-core events-core/versions/0.2.0 responsibility-core motivation-core agency-core image-encoding-pilot; do

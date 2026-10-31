@@ -20,7 +20,7 @@ Behavior:
 
 1. Parse YAML as inert data.
 2. Validate against `domain-ontology-package.schema.yaml`.
-3. Resolve imports.
+3. Bind declared import namespaces and resolve available versioned export tables.
 4. Validate class inheritance and protocol references.
 5. Validate relation domain/range and cardinality.
 6. Validate policy applicability.
@@ -38,6 +38,59 @@ Normalization represents absent or empty sections as `policies: []` and
 `stateMachines: []`. Compilation still emits the policy and state-machine SDK
 files and registry exports, with empty definitions and ref maps. This shape
 does not imply any runtime policy or lifecycle behavior.
+
+Use `ontologyc check <package.yaml> --format json` for a machine-readable
+stdout array of diagnostics, including warnings. Errors return exit 1; accepted
+input returns 0. Consumers can use `code`, `severity` and the source field
+`path` directly. Invalid command arguments return 2. For example,
+`sg:Typo` as the base of `Entry` produces `class.extends.unresolved` at
+`spec.classes.Entry.extends`. Relative to a YAML document, dots select keys
+and bracketed integers select array elements.
+
+### Commit-time package advice
+
+Enable this once in a repository where people or agents author ontology packages. With `ontologyc` on PATH and Git 2.54 or newer, run:
+
+```bash
+git config --local hook.ontology-package-advice.command 'ontologyc advise-staged || echo "[ontology advice] compiler unavailable; packages were not checked" >&2'
+git config --local hook.ontology-package-advice.event pre-commit
+git hook list pre-commit
+```
+
+A pinned absolute path to the executable also works. Confirm `ontologyc advise-staged --help` succeeds with your chosen binary. Git stores this setup in the local clone and runs its configured hook alongside existing hook scripts. For older Git, add the same `ontologyc advise-staged || echo ... >&2` command to an existing pre-commit script, before its checks. A hook manager must show output from successful commands (e.g. `verbose: true` for the pre-commit framework). [Git hook configuration](https://git-scm.com/docs/git-hook/2.54.0)
+
+`ontologyc advise-staged` reads changed regular `.yaml` and `.yml` blobs from the active Git index. It recognizes a top-level `kind: DomainOntologyPackage` in either the staged or previous version. The names `domain-ontology-package.yaml`, `domain-ontology-package-draft.yaml` and `*.ontology.yaml` (also `.yml`) identify new packages even with a broken header. For a new custom filename, keep the `kind` header recognizable or use one of these naming conventions.
+
+Commit output includes the staged filename and each compiler diagnostic, for example:
+
+```text
+[ontology advice] "models/member.yaml" error class.extends.unresolved at "spec.classes.Entry.extends": "Class base reference sg:Typo cannot be resolved"
+```
+
+For agents using RTK, verify the actual commit command after installing or upgrading RTK. From the Ontology source checkout, run:
+
+```bash
+bash tools/staged-package-advice-smoke.sh "$(command -v ontologyc)" --rtk
+```
+
+The smoke test makes disposable commits with `rtk git commit`. It fails if the package diagnostic disappears or the client ignores a hook veto. Stock RTK 0.37.2 and 1.1.0 discard stderr on successful commits. Use a build with the [RTK hook-output fix](https://github.com/rtk-ai/rtk/pull/4386) or an equivalent backport that passes the smoke test. On an affected installation, `rtk proxy git commit` is a fallback.
+
+Read the findings, correct the package and stage the fix, or keep the draft for later review. A clean check is quiet. The advisory reports and skips blobs over 4 MiB to bound the work on the commit path. Run the strict check for these files. Package errors, warnings and an unavailable advisory allow the commit to proceed. Existing project hooks keep their own exit codes. `ontologyc check` remains the strict command. To disable this notification in a configured clone, run `git config --local hook.ontology-package-advice.enabled false`; use `true` to re-enable it.
+
+### `ontologyc export-foundation`
+
+This command prints the [built-in export catalog](foundation/0.1.0/exports.json)
+for `specgraph.foundation@0.1.0` as JSON. The Swift library exposes the same
+inventory through `FoundationExports.version010`. Consumers can pin its bytes
+alongside the compiler. Changing the exports requires a new vocabulary version.
+
+An import of this package binds its declared namespace (default `sg`) to the
+catalog. Class bases, relation endpoints and policy targets resolve class
+names, `implements` resolves protocol names and a policy base resolves against
+`policyBases`. The compiler reports an unavailable foundation version at the
+import and rejects conflicting namespace bindings. Its standalone binary
+performs this check offline. Non-foundation imports currently retain declared
+namespace validation; verifying their exported symbols requires another catalog.
 
 ### `ontologyc compile`
 

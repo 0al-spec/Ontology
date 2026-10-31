@@ -1187,6 +1187,19 @@ This workplan tracks the specification work for the Ontology repository. The ini
   and Linux x86_64 binaries, record source identity, publish both archives and SHA-256 sums,
   and support a read-only PR preview and explicit backfill of an existing release.
 
+#### ONT-057: Resolve Foundation Exports
+- **Status:** ✅ Complete — [local validation](ARCHIVE/ONT-057_Resolve_Foundation_Exports/ONT-057_Validation_Report.md)
+- **Source:** SpecGraph #843 and the operator's reproduced false-positive report.
+- **Goal:** Own the versioned foundation export inventory in Ontology. Resolve imported
+  class, protocol and policy references by identity, version, namespace and role.
+- **Acceptance:** `check` and `compile` accept `sg:ValueObject` and reject `sg:Typo`
+  at its declaration. Make the catalog and field-level diagnostics available offline.
+
+#### ONT-059: Staged Package Advice
+- **Status:** ✅ Complete — [validation](ARCHIVE/ONT-059_Staged_Package_Advice/ONT-059_Validation_Report.md)
+- **Goal:** Show compiler findings for the staged package when the author commits. The advisory contributes no veto.
+- **Dependency:** ONT-057 foundation diagnostics.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

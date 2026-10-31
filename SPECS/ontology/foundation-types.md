@@ -4,6 +4,8 @@
 
 The foundation model defines the stable semantic target for product ontologies. YAML ontology packages declare semantic inheritance and protocol implementation; generated TypeScript projects those declarations into typed references, interfaces, relations, policies, state machines, and validators.
 
+For the compiler-owned names and their export roles, see the [versioned foundation catalog](foundation/0.1.0/exports.json) or run `ontologyc export-foundation`.
+
 ## Concept Kind Set
 
 ```ts

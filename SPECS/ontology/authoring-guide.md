@@ -114,6 +114,12 @@ spec:
 
 ## Mapping Draft Concepts to YAML
 
+When translating a draft category into `extends` or `implements`, select a symbol
+from the imported version's exports. For example, an audio segment classified
+as evidence in a product draft can be a `sg:DomainEntity` with its evidence role
+in the description and relationships. Check the available names with
+`ontologyc export-foundation`.
+
 | Draft Artifact | YAML Target | Notes |
 |---|---|---|
 | Actor | `spec.classes` with suitable foundation extension | Use actor classes only when they are domain-significant |
