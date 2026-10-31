@@ -1,3 +1,10 @@
+# Selected: ONT-070 — Viewer README showcase
+
+Add a real Viewer screenshot and a short launch entry before the problem section
+in the root README. Reuse `.worktrees/Ontology-interactive-viewer` on
+`feature/ONT-070-viewer-readme`; keep existing NormLab preview services and sources
+unchanged. Retain through PR review; live preview consumers still need this tree.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
