@@ -1225,7 +1225,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 - **Goal:** Let consumers render a saved diagram profile using the tools downloaded for their platform.
 - **Dependencies:** ONT-055 release archives and ONT-060 saved diagram profiles.
-- **Status:** In progress.
+- **Status:** Complete. [Validation report](ARCHIVE/ONT-061_Release_Ontologyviz/ONT-061_Validation_Report.md).
 - **Acceptance:** Both archives include the two executable products on revisions that provide them. A smoke test renders a saved profile from the extracted executable and verifies its output. Older release tags retain their source-defined toolset.
 
 ## Task Status Legend
