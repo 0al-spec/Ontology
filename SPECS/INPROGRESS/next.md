@@ -33,6 +33,8 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-061 packages the two release tools and exercises the extracted visualizer. [Validation report](../ARCHIVE/ONT-061_Release_Ontologyviz/ONT-061_Validation_Report.md).
+
 - ONT-060 saved JSON diagram profiles. Local verification PASS on the corrected ONT-058 base. Branch `feature/ONT-060-diagram-profiles` will be reviewed atop #82. Keep `.worktrees/Ontology-visualization` active through stack review and retire after merge. Next action is review of the three visualization layers.
 
 - ONT-059 adds optional staged package notifications. Local Ontology and SpecGraph probes passed.

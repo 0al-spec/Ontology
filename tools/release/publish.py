@@ -41,13 +41,27 @@ def sha256(path):
         return digest.hexdigest()
 
 
-def verify_archive(path, tag, commit, platform):
+def executable_inventory(value):
+    if value not in ("ontologyc", "ontologyc,ontologyviz"):
+        raise ValueError("unexpected executable inventory")
+    return value.split(",")
+
+
+def verify_archive(path, tag, commit, platform, executables):
     root = path.name.removesuffix(".tar.gz")
     with tarfile.open(path, "r:gz") as archive:
-        binary = archive.getmember(root + "/ontologyc")
+        expected = executable_inventory(executables)
+        for name in ("ontologyc", "ontologyviz"):
+            if name not in expected and any(member.name == root + "/" + name for member in archive.getmembers()):
+                raise ValueError(f"unexpected executable {name} in {path.name}")
+        for name in expected:
+            try:
+                binary = archive.getmember(root + "/" + name)
+            except KeyError as error:
+                raise ValueError(f"missing executable {name} in {path.name}") from error
+            if not binary.isfile() or not binary.size or not binary.mode & 0o111:
+                raise ValueError(f"invalid executable {name} in {path.name}")
         manifest = archive.getmember(root + "/BUILD.txt")
-        if not binary.isfile() or not binary.size or not binary.mode & 0o111:
-            raise ValueError(f"missing executable in {path.name}")
         if not manifest.isfile() or manifest.size > 4096:
             raise ValueError(f"invalid build metadata in {path.name}")
         with archive.extractfile(manifest) as data:
@@ -56,13 +70,13 @@ def verify_archive(path, tag, commit, platform):
         raise ValueError(f"archive identity mismatch: {path.name}")
 
 
-def expected_files(directory, tag, commit):
+def expected_files(directory, tag, commit, executables="ontologyc,ontologyviz"):
     archives = [directory / f"ontologyc-{tag}-{p}.tar.gz" for p in PLATFORMS]
     sums = directory / "ontologyc-SHA256SUMS"
     if set(directory.iterdir()) - {sums} != set(archives) or any(p.stat().st_size == 0 for p in archives):
         raise ValueError("expected exactly one nonempty archive per platform")
     for archive, platform in zip(archives, PLATFORMS):
-        verify_archive(archive, tag, commit, platform)
+        verify_archive(archive, tag, commit, platform, executables)
     content = "".join(f"{sha256(p)}  {p.name}\n" for p in archives)
     if sums.exists() and sums.read_bytes() != content.encode("ascii"):
         raise ValueError("stale local checksum list")
@@ -86,10 +100,10 @@ def missing(files, remote):
     return absent
 
 
-def publish(tag, release_id, commit, directory):
+def publish(tag, release_id, commit, directory, executables="ontologyc,ontologyviz"):
     if release_identity(tag) != (release_id, commit):
         raise ValueError("release or tagged commit changed during the build")
-    files = expected_files(directory, tag, commit)
+    files = expected_files(directory, tag, commit, executables)
     for path in missing(files, assets(release_id)):
         # Address the inspected release ID, including when a release is recreated.
         url = f"https://uploads.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/releases/{release_id}/assets"
@@ -104,8 +118,8 @@ if __name__ == "__main__":
         release_id, sha = release_identity(sys.argv[2])
         print(f"release_id={release_id}\nsha={sha}\nlabel={sys.argv[2]}")
     elif sys.argv[1] == "verify":
-        expected_files(Path(sys.argv[4]), sys.argv[2], sys.argv[3])
+        expected_files(Path(sys.argv[4]), sys.argv[2], sys.argv[3], sys.argv[5])
     elif sys.argv[1] == "publish":
-        publish(*sys.argv[2:5], Path(sys.argv[5]))
+        publish(*sys.argv[2:5], Path(sys.argv[5]), sys.argv[6])
     else:
         raise SystemExit("expected resolve, verify or publish")

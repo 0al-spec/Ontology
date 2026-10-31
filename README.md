@@ -179,7 +179,7 @@ proof coverage remain work to do.
 
 ## Try it
 
-Download the macOS arm64 or Linux x86_64 CLI from a [GitHub Release](https://github.com/0al-spec/Ontology/releases) with binary assets. See [installation and checksum verification](SPECS/ontology/binary-releases.md).
+Download the macOS arm64 or Linux x86_64 executables (`ontologyc` and, for tags containing it, `ontologyviz`) from a [GitHub Release](https://github.com/0al-spec/Ontology/releases) with binary assets. See [installation and checksum verification](SPECS/ontology/binary-releases.md).
 
 For the compiler, use **Swift 6.0+** on macOS 13+ or a supported Linux Swift
 environment. A source-built Linux executable needs its Swift runtime libraries.

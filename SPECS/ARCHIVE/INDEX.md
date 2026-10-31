@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-061 | [ONT-061_Release_Ontologyviz/](ONT-061_Release_Ontologyviz/) | 2026-10-31 | PASS (local current and legacy archives) |
 | ONT-060 | [ONT-060_Saved_Diagram_Profiles/](ONT-060_Saved_Diagram_Profiles/) | 2026-10-31 | PASS (local saved profiles and rendering parity) |
 | ONT-059 | [ONT-059_Staged_Package_Advice/](ONT-059_Staged_Package_Advice/) | 2026-10-31 | PASS (local Git commits and consumer probes) |
 | ONT-058 | [ONT-058_Relations_View_And_Selected_Imports/](ONT-058_Relations_View_And_Selected_Imports/) | 2026-10-31 | PASS (local relations/import projection and rendering) |
@@ -68,6 +69,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-061 | Archived [release review](ONT-061_Release_Ontologyviz/REVIEW_ONT-061.md) |
+| 2026-10-31 | ONT-061 | Archived release packaging task and validation |
 | 2026-10-31 | ONT-060 | Archived self-review; FOLLOW-UP skipped with no unresolved findings |
 | 2026-10-31 | ONT-060 | Archived Saved_Diagram_Profiles with local verification PASS |
 | 2026-10-31 | ONT-059 | Archived [implementation review](_Historical/REVIEW_ONT-059.md) |

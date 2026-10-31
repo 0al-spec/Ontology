@@ -65,6 +65,12 @@ swift run ontologyc compile \
 
 ## Local Package Diagrams
 
+Prebuilt `ontologyc` and `ontologyviz` executables are available for macOS arm64
+and Linux x86_64 when the selected source tag contains both products. See
+[binary releases](binary-releases.md) for installation, checksum verification and
+older tag support. Graphviz remains an external dependency for SVG/PNG rendering;
+DOT-only output does not require it.
+
 The separate `ontologyviz` executable uses the same package loader and validator
 and projects the normalized declarations into DOT. Install Graphviz to render
 SVG and PNG locally.
