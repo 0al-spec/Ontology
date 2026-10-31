@@ -1,3 +1,18 @@
+# Selected: ONT-064 — Source-Preserving Ontology Editing
+
+**Priority:** P1 — user-selected follow-up to ONT-063.
+**Status:** INPROGRESS
+**Dependency:** ONT-063 / PR #87.
+**Workspace:** `.worktrees/Ontology-interactive-viewer`, branch `feature/ONT-064-source-editing`.
+**Disposition:** retain through stack review; retire after merge and verification
+that no local state or running service remains.
+
+Add a local workspace service and exact-text YAML editor to the standalone
+viewer. Observe external changes, validate and refresh the graph, and reject
+stale saves. Source files remain the shared interface for humans and agents.
+
+---
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1

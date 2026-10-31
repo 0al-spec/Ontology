@@ -1257,7 +1257,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
   original YAML structure and comments and reconciling external file changes.
 - **Priority:** P1 — user request, after ONT-063.
 - **Dependency:** ONT-063.
-- **Status:** Not Started.
+- **Status:** INPROGRESS in `.worktrees/Ontology-interactive-viewer`.
 
 ## Task Status Legend
 
