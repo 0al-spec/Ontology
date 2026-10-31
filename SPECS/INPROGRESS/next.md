@@ -1,3 +1,8 @@
+# Selected: ONT-067 — Package filters
+Branch: feature/ONT-067-package-filters, stacked on feature/ONT-066-full-imports (#91).
+Workspace: .worktrees/Ontology-interactive-viewer (reused). Retain through review.
+Next: implement package classification, filters and real-browser verification.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
