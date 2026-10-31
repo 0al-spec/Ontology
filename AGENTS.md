@@ -48,6 +48,8 @@ swift test
 
 ---
 
+For package authoring, enable the [staged package advisory](SPECS/ontology/ontologyc.md#commit-time-package-advice) once per clone. Use `git commit`, or `rtk proxy git commit` when using RTK, so advisory messages are visible in the transcript. Fix unexpected findings or record the known gap when keeping a draft. Use `ontologyc check` whenever a strict result is required.
+
 ## Specification pattern (SpecificationCore)
 
 **The central architectural pattern throughout `OntologyRules` is the Specification pattern**,

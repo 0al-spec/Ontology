@@ -8,6 +8,7 @@ Usage:
 
 Commands:
   check               Validate a package YAML.
+  advise-staged       Report package diagnostics for the active Git index.
   export-foundation   Print the versioned built-in foundation export catalog as JSON.
   compile             Compile a package YAML to TypeScript artifacts.
   validate-specgraph  Validate SpecGraph semantic bindings against ontology IR.
@@ -34,6 +35,7 @@ Run `ontologyc <command> --help` for command-specific usage.
 
 let commandUsage: [String: String] = [
     "check": "Usage:\n  ontologyc check <package.yaml> [--format text|json]",
+    "advise-staged": "Usage:\n  ontologyc advise-staged",
     "export-foundation": "Usage:\n  ontologyc export-foundation",
     "compile": "Usage:\n  ontologyc compile <package.yaml> --target typescript --out <directory>",
     "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory> [--source-uri <uri>] [--source-ref <ref>]",
