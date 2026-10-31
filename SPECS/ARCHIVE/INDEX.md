@@ -70,6 +70,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-062 | Archived [self-review](ONT-062_Shared_Graph_Projection/REVIEW_ONT-062.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-062 | Archived shared graph projection and validation |
 | 2026-10-31 | ONT-061 | Archived [release review](ONT-061_Release_Ontologyviz/REVIEW_ONT-061.md) |
 | 2026-10-31 | ONT-061 | Archived release packaging task and validation |
