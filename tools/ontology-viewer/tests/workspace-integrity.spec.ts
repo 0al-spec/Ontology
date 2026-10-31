@@ -316,3 +316,48 @@ test('full imports expose policies, lifecycles and nonzero relationship counts',
     await expect(node).toHaveAttribute('style', position || '');
   } finally { await stop(server.child); await fs.rm(directory, { recursive: true, force: true }); }
 });
+
+test('package hide and dim preserve imported selection, positions and choices through refresh', async ({ page }) => {
+  const directory = await fs.mkdtemp(path.join(tempRoot, 'ontology-package-filter-'));
+  const source = path.join(directory, 'package.yaml'), profile = path.join(directory, 'full.json');
+  const original = await fs.readFile(path.resolve('../../SPECS/ontology/packages/motivation-core/domain-ontology-package.yaml'), 'utf8');
+  await fs.writeFile(source, original);
+  await fs.writeFile(profile, JSON.stringify({ schemaVersion: 1, view: 'full', package: source,
+    imports: [path.resolve('../../SPECS/ontology/packages/events-core/versions/0.2.0/domain-ontology-package.yaml')] }));
+  const server = await launch(profile, '--profile');
+  try {
+    await page.goto(server.url);
+    await page.getByLabel('Search graph').fill('eventcore:SnapshotOriginAdmission');
+    await page.getByRole('button', { name: /eventcore:SnapshotOriginAdmission/ }).click();
+    const node = page.locator('[data-id="policies/eventcore:SnapshotOriginAdmission"]');
+    const inspector = page.getByLabel('Inspector');
+    await expect(inspector).toContainText('org.0al.events.core');
+    await expect.poll(() => page.locator('.react-flow__viewport').evaluate((element) => Math.round(new DOMMatrixReadOnly(getComputedStyle(element).transform).a * 100))).toBe(100);
+    const position = await node.getAttribute('style');
+    const viewport = await page.locator('.react-flow__viewport').getAttribute('style');
+    await page.locator('.filter-panel summary').click();
+    const pkg = page.getByRole('checkbox', { name: 'Package org.0al.events.core@0.2.0', exact: true });
+    const counts = await pkg.getAttribute('aria-description');
+    await pkg.uncheck();
+    await expect(node).toHaveCount(0);
+    await expect(inspector.getByRole('status')).toContainText('outside the active filters');
+    await expect(page.getByRole('button', { name: /eventcore:SnapshotOriginAdmission/ })).toHaveCount(0);
+    await expect(page.locator('[data-id="classes/motivcore:MotivationHypothesis"]')).toHaveCount(1);
+    await expect(pkg).toHaveAttribute('aria-description', counts || '');
+    await pkg.check();
+    await expect(node).toHaveAttribute('style', position || '');
+    await expect(page.locator('.react-flow__viewport')).toHaveAttribute('style', viewport || '');
+    await page.getByRole('radio', { name: 'Dim', exact: true }).check();
+    await pkg.uncheck();
+    await expect(node).toHaveCSS('opacity', '0.15');
+    await fs.writeFile(source, original + '\n# package filter refresh\n');
+    await expect(page.getByLabel('Ontology YAML source')).toHaveValue(/package filter refresh/);
+    await expect(pkg).not.toBeChecked();
+    await expect(node).toHaveCSS('opacity', '0.15');
+    await expect(node).toHaveAttribute('style', position || '');
+    await page.getByRole('button', { name: 'Reset filters', exact: true }).click();
+    await expect(pkg).toBeChecked();
+    await expect(node).not.toHaveClass(/filter-dim/);
+    await expect(inspector.getByRole('status')).toHaveCount(0);
+  } finally { await stop(server.child); await fs.rm(directory, { recursive: true, force: true }); }
+});

@@ -87,3 +87,17 @@ test('filters imported and unresolved nodes independently on a narrow screen', a
   await expect(page.locator('.filter-panel summary')).toBeInViewport();
   await page.screenshot({ path: test.info().outputPath('filters-mobile.png'), fullPage: true });
 });
+
+test('opening another graph resets package choices', async ({ page }) => {
+  if (!fixture) throw new Error('Set ONTOLOGY_GRAPH_FIXTURE');
+  await page.goto('/');
+  await page.getByLabel('Open graph JSON').setInputFiles(fixture);
+  const imported = page.locator('[data-id="classes/eventcore:Interpretation"]');
+  await expect(imported).toBeVisible();
+  await page.locator('.filter-panel summary').click();
+  await page.getByRole('checkbox', { name: 'Package org.0al.events.core@0.2.0', exact: true }).uncheck();
+  await expect(imported).toHaveCount(0);
+  await page.getByLabel('Open graph JSON').setInputFiles(fixture);
+  await expect(imported).toBeVisible();
+  await expect(page.getByRole('checkbox', { name: 'Package org.0al.events.core@0.2.0', exact: true })).toBeChecked();
+});

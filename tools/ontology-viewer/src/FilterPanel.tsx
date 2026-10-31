@@ -1,16 +1,18 @@
 import { useId } from 'react';
+import type { PackageOption } from './packages';
 import { edgeKindOptions, nodeTypeOptions, originOptions, type FilterCounts, type GraphFilters } from './filters';
 
-export function FilterPanel({ filters, onChange, onReset, counts, view }: {
+export function FilterPanel({ filters, onChange, onReset, counts, view, packages = [] }: {
   filters: GraphFilters;
   counts?: FilterCounts;
+  packages?: PackageOption[];
   view?: string;
   onChange: (next: GraphFilters) => void;
   onReset: () => void;
 }) {
   const modeGroup = useId();
   const disabled = [...Object.values(filters.nodeTypes), ...Object.values(filters.origins), ...Object.values(filters.edgeKinds)]
-    .filter((enabled) => !enabled).length;
+    .filter((enabled) => !enabled).length + packages.filter((item) => filters.packages[item.key] === false).length;
   return <details className="filter-panel">
     <summary>Filters {disabled > 0 && <span>{disabled} off</span>}</summary>
     <fieldset className="filter-mode"><legend>Filtered elements</legend>
@@ -22,6 +24,17 @@ export function FilterPanel({ filters, onChange, onReset, counts, view }: {
     <div className="filter-body">
     <p>Node counts include unloaded references. Relationships count visual links.</p>
     {view === 'relations' && <p>Relations view includes classes and ontology relations only. Use a full profile for other categories.</p>}
+    {packages.length > 0 && <fieldset><legend>Packages</legend>
+      <p>Links require their owning package and both endpoints enabled.</p>
+      {packages.map((item) => <label className="package-filter" key={item.key}>
+        <input type="checkbox" aria-label={`Package ${item.label}`}
+          aria-description={`${item.nodeCount} nodes, ${item.edgeCount} visual links; ${item.loaded ? 'loaded' : 'declarations not loaded'}`}
+          checked={filters.packages[item.key] !== false}
+          onChange={(event) => onChange({ ...filters, packages: { ...filters.packages, [item.key]: event.target.checked } })} />
+        <span className="package-filter-label">{item.label}{!item.loaded && <small>Declarations not loaded</small>}</span>
+        <span className="filter-count" aria-hidden="true" title="Nodes / owned visual links">{item.nodeCount} / {item.edgeCount}</span>
+      </label>)}
+    </fieldset>}
     <fieldset><legend>Node types</legend>
       {nodeTypeOptions.map(([key, label]) => <label key={key}>
         <input type="checkbox" aria-description={counts ? `${counts.nodeTypes[key]} in the loaded graph` : undefined} checked={filters.nodeTypes[key]} onChange={(event) =>
