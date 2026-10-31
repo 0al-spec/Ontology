@@ -3,14 +3,14 @@ import OntologyCompiler
 import OntologyRules
 
 enum VizFormat: String {
-    case both, svg, png, dot
+    case both, svg, png, dot, json
 
     var renderedFormats: [String] {
         switch self {
         case .both: return ["svg", "png"]
         case .svg: return ["svg"]
         case .png: return ["png"]
-        case .dot: return []
+        case .dot, .json: return []
         }
     }
 }
@@ -48,7 +48,7 @@ struct VizArguments {
         }
         guard let output = options["--out"]?.first else { throw VizFailure(description: "Missing required option --out") }
         guard let format = VizFormat(rawValue: options["--format"]?.first ?? "both") else {
-            throw VizFailure(description: "Expected --format both, svg, png or dot")
+            throw VizFailure(description: "Expected --format both, svg, png, dot or json")
         }
         let direction = try parseDiagramDirection(options["--direction"]?.first ?? "LR")
         let view = try parseDiagramView(options["--view"]?.first ?? "full")
@@ -105,7 +105,7 @@ struct VizArguments {
 
     Render a DomainOntologyPackage locally as a graph.
 
-      --format both|svg|png|dot   Default: both. DOT is always retained.
+      --format both|svg|png|dot|json   Default: both. Image modes retain DOT.
       --direction LR|TB          Left-to-right (default) or top-to-bottom.
       --dot <executable>         Graphviz dot path; otherwise search PATH.
       --view full|relations      Default: full. Relations hides scaffolding.
@@ -114,7 +114,8 @@ struct VizArguments {
       --profile <profile.json>   Saved package and selection; paths relative to profile.
       --help                     Show this help.
 
-    Writes ontology.dot and the selected ontology.svg / ontology.png files.
+    Writes ontology.dot and the selected ontology.svg / ontology.png files;
+    JSON mode writes ontology.graph.json without Graphviz.
     SVG/PNG require Graphviz: brew install graphviz / apt-get install graphviz.
     Import expansion requires relations view and an exact declared id/version.
     Unselected external references remain unloaded placeholders.

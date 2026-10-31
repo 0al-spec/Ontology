@@ -57,6 +57,7 @@ struct DiagramImportedPackage {
             result["domain"] = domain
             result["range"] = definition["range"] is String ? targets[0] : ["oneOf": targets]
             result["id"] = "\(namespace):\(definition["id"] as? String ?? "")"
+            result["fqid"] = result["id"]
             return result
         }
     }

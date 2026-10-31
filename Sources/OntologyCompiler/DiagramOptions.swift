@@ -30,6 +30,15 @@ public struct OntologyDiagramOptions: Sendable {
 extension OntologyCompiler {
     /// Projects a validated package and explicitly selected direct local imports.
     public func diagramDOT(path: OntologySourcePath, options: OntologyDiagramOptions) throws -> String {
+        let projection = try diagramProjection(path: path, options: options)
+        var diagram = PackageDiagram(ir: projection, view: options.view)
+        return diagram.render(direction: options.direction)
+    }
+
+    /// Returns a declaration-oriented graph with source identities and logical YAML pointers.
+    public func diagramProjection(
+        path: OntologySourcePath, options: OntologyDiagramOptions = OntologyDiagramOptions()
+    ) throws -> [String: Any] {
         diagnostics = []
         let decision = DiagramSelectionSpec().decide(DiagramSelectionContext(
             view: options.view.rawValue, hasImports: !options.imports.isEmpty, expandedTypes: options.expandedTypes
@@ -47,18 +56,52 @@ extension OntologyCompiler {
             }
             imported.append(try DiagramImportedPackage(namespace: namespace, ir: ir, root: root))
         }
-        let projection = try options.view == .relations
+        var projection = try options.view == .relations
             ? DiagramRelationsProjection(root: root, imported: imported).select(options.expandedTypes)
             : root
-        var diagram = PackageDiagram(ir: projection, view: options.view)
-        return diagram.render(direction: options.direction)
+        if options.view == .relations {
+            for section in ["protocols", "policies", "stateMachines"] { projection[section] = [JSONObject]() }
+        }
+        projection["schemaVersion"] = "ontology.diagram-projection/v1"
+        projection["view"] = options.view.rawValue
+        // Normalized IR's empty diagnostics field is not the result of checking
+        // every source for warnings. Consumers should use the compiler report.
+        projection.removeValue(forKey: "diagnostics")
+        projection["sources"] = [diagramSource(root, alias: root["namespace"] as? String ?? "")]
+            + imported.sorted { $0.namespace < $1.namespace }.map { diagramSource($0.ir, alias: $0.namespace) }
+        return projection
+    }
+
+    /// Serializes the same projection used by DOT in a stable, portable JSON form.
+    public func diagramJSON(
+        path: OntologySourcePath, options: OntologyDiagramOptions = OntologyDiagramOptions()
+    ) throws -> String {
+        let graph = try diagramProjection(path: path, options: options)
+        let data = try JSONSerialization.data(withJSONObject: graph, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
+        return String(decoding: data, as: UTF8.self) + "\n"
     }
 
     private func diagramIR(path: OntologySourcePath) throws -> JSONObject {
-        guard let package = load(path: path.path) else { throw OntologyCompilerError.packageError(diagnostics) }
+        let data: Data
+        do {
+            data = try Data(contentsOf: path.url)
+        } catch {
+            add("io.read", path.path, "Cannot read file: \(error.localizedDescription)")
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
+        guard var source = String(data: data, encoding: .utf8) else {
+            add("io.read", path.path, "Cannot read file: invalid UTF-8")
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
+        // Match the compiler's String(contentsOf:encoding:) behavior while
+        // retaining the raw bytes for exact editor concurrency checks.
+        if source.hasPrefix("\u{feff}") { source.removeFirst() }
+        guard let package = load(source: source, path: path.path) else { throw OntologyCompilerError.packageError(diagnostics) }
         validate(package)
         guard !hasErrors(diagnostics) else { throw OntologyCompilerError.packageError(diagnostics) }
-        return normalize(package)
+        var ir = normalize(package)
+        ir["sourceByteDigest"] = sha256(data)
+        return diagramAttachSources(ir)
     }
 
     private func diagramImportNamespace(ir: JSONObject, root: JSONObject) throws -> String {
