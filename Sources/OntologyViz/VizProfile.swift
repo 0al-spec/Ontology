@@ -14,12 +14,8 @@ struct VizProfile {
             guard document.schemaVersion == 1 else {
                 throw VizFailure(description: "Unsupported schemaVersion \(document.schemaVersion); expected 1")
             }
-            guard let view = OntologyDiagramView(rawValue: document.view) else {
-                throw VizFailure(description: "Expected profile view full or relations")
-            }
-            guard let direction = OntologyDiagramDirection(rawValue: document.direction) else {
-                throw VizFailure(description: "Expected profile direction LR or TB")
-            }
+            let view = try parseDiagramView(document.view)
+            let direction = try parseDiagramDirection(document.direction)
             let paths = [document.package] + document.imports
             guard paths.allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else {
                 throw VizFailure(description: "Profile package and import paths must be nonempty")

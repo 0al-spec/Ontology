@@ -50,12 +50,8 @@ struct VizArguments {
         guard let format = VizFormat(rawValue: options["--format"]?.first ?? "both") else {
             throw VizFailure(description: "Expected --format both, svg, png or dot")
         }
-        guard let direction = OntologyDiagramDirection(rawValue: options["--direction"]?.first ?? "LR") else {
-            throw VizFailure(description: "Expected --direction LR or TB")
-        }
-        guard let view = OntologyDiagramView(rawValue: options["--view"]?.first ?? "full") else {
-            throw VizFailure(description: "Expected --view full or relations")
-        }
+        let direction = try parseDiagramDirection(options["--direction"]?.first ?? "LR")
+        let view = try parseDiagramView(options["--view"]?.first ?? "full")
         let imports = options["--import"] ?? []
         let expanded = (options["--expand"] ?? []).flatMap { $0.components(separatedBy: ",") }
         let decision = DiagramSelectionSpec().decide(DiagramSelectionContext(
@@ -126,4 +122,18 @@ struct VizArguments {
     CLI --direction overrides profile direction; --format / --out / --dot stay runtime options.
     Exit codes: 0 success, 1 package/render/I/O failure, 2 invalid arguments.
     """
+}
+
+func parseDiagramDirection(_ value: String) throws -> OntologyDiagramDirection {
+    guard let direction = OntologyDiagramDirection(rawValue: value) else {
+        throw VizFailure(description: "Expected direction LR or TB")
+    }
+    return direction
+}
+
+func parseDiagramView(_ value: String) throws -> OntologyDiagramView {
+    guard let view = OntologyDiagramView(rawValue: value) else {
+        throw VizFailure(description: "Expected view full or relations")
+    }
+    return view
 }
