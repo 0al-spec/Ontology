@@ -33,6 +33,10 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-065 adds hide/dim filters without relayout. Local model, build and browser
+  checks passed; hosted review/CI pending. Keep `.worktrees/Ontology-interactive-viewer`
+  through stack review and retire after merge once local state is accounted for.
+
 - ONT-064 adds a local workspace and source-preserving YAML editor above the
   standalone viewer. Local checks passed; hosted review/CI pending. Keep
   `.worktrees/Ontology-interactive-viewer` through review and retire after merge

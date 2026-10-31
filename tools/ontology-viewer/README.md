@@ -30,10 +30,20 @@ are tinted blue; unresolved external references are gray and never presented as
 loaded declarations. The inspector shows the owning package, logical YAML pointer
 and byte digest where a declaration is available.
 
+Open **Filters** to enable or disable node types, their origin (local, imported,
+unresolved), and relationship kinds independently. **Hide** removes inactive
+elements from the canvas and keyboard navigation; **Dim** keeps them visible as
+context. An edge is inactive when its kind or either endpoint is inactive.
+Search covers enabled elements, and the inspector marks a filtered selection.
+Filtering preserves manually positioned nodes, zoom and pan; use the existing
+canvas controls only when you want to change the view. Filter state lasts until
+the page is reloaded and does not modify YAML. Only elements in the loaded
+projection can be enabled: a `relations` view omits other declarations.
+
 ## Reuse and boundaries
 
-`src/index.ts` exposes `parseProjection`, `buildGraph`, `GraphCanvas`, `Inspector`
-and related TypeScript types to a host in this source tree; import `src/style.css`
+`src/index.ts` exposes `parseProjection`, `buildGraph`, `GraphCanvas`, `Inspector`,
+the filter component/model and related TypeScript types to a host in this source tree; import `src/style.css`
 for this application's styling. This is source-level reuse, not a published npm
 package or a SpecSpace integration. The projection contains type declarations,
 not runtime instances, proof of factual truth or approval of manual policies.

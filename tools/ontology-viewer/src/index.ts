@@ -1,5 +1,8 @@
 export { GraphCanvas } from './GraphCanvas';
+export { FilterPanel } from './FilterPanel';
 export { Inspector } from './Inspector';
+export { defaultFilters, graphVisibility, nodeFilterType, nodeOrigin } from './filters';
 export { buildGraph, parseProjection } from './graph';
+export type { FilterMode, GraphFilters, GraphVisibility } from './filters';
 export type { Projection, SourceLocation } from './projection';
 export type { Selection } from './selection';

@@ -129,6 +129,24 @@ test('keeps the selected unresolved protocol when a same-named class also exists
     await fs.writeFile(source, original.replace('A proposal submitted for review.', 'Updated description.'));
     await expect(page.getByLabel('Ontology YAML source')).toHaveValue(/Updated description/);
     await expect(inspector).toContainText('unloaded reference (protocol)');
+
+    // Both placeholders have the same label, origin and kind. Only their IDs
+    // distinguish the class filter from the protocol filter.
+    await page.locator('.filter-panel summary').click();
+    const protocols = page.getByRole('checkbox', { name: 'Protocols', exact: true });
+    const classes = page.getByRole('checkbox', { name: 'Classes', exact: true });
+    await protocols.uncheck();
+    await expect(page.locator('[data-id="external/classes/ext:Shared"]')).toBeVisible();
+    await expect(inspector.getByRole('status')).toContainText('outside the active filters');
+    await classes.uncheck();
+    await protocols.check();
+    await expect(page.locator('[data-id="external/protocols/ext:Shared"]')).toBeVisible();
+    await expect(inspector.getByRole('status')).toHaveCount(0);
+
+    await page.getByLabel('Search graph').fill('ext:Shared');
+    await page.getByRole('button', { name: /ext:Shared/ }).click();
+    await protocols.uncheck();
+    await expect(inspector.getByRole('status')).toContainText('outside the active filters');
   } finally { await stop(server.child); await fs.rm(directory, { recursive: true, force: true }); }
 });
 

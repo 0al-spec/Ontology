@@ -29,6 +29,18 @@ button { cursor: pointer; }
 .search-label { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
 .search { width: 100%; min-width: 0; border: 1px solid #d6e4db; border-radius: 9px; padding: 10px 11px; color: #253c31; outline: none; }
 .search:focus { border-color: #4e9a70; box-shadow: 0 0 0 3px #e0f3e7; }
+.filter-search-note { color: #71877a; font-size: 10px; margin-top: 7px; }
+.filter-panel { margin-top: 18px; border: 1px solid #e3eee7; border-radius: 9px; padding: 10px 11px; color: #395b48; }
+.filter-panel summary { font-size: 12px; color: #285440; }
+.filter-panel summary span { color: #80968a; font-weight: 500; }
+.filter-body { max-height: 230px; overflow-y: auto; }
+.filter-panel p { color: #72877b; font-size: 11px; line-height: 1.4; }
+.filter-panel fieldset { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; padding: 0; border: 0; }
+.filter-panel fieldset.filter-mode { flex-direction: row; gap: 12px; margin: 10px 0; }
+.filter-panel legend { margin-bottom: 6px; color: #788e81; font-size: 10px; font-weight: 800; letter-spacing: .05em; }
+.filter-panel label { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.filter-panel input { margin: 0; accent-color: #39805a; }
+.filter-panel button { border: 1px solid #d6e4db; background: #fff; border-radius: 7px; color: #285440; padding: 7px 9px; font-size: 11px; }
 .legend { margin-top: 26px; color: #6f8378; font-size: 12px; }
 .legend div { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; }
 .legend i { width: 10px; height: 10px; border-radius: 3px; background: #9fcfb2; }
@@ -48,6 +60,7 @@ button { cursor: pointer; }
 .react-flow__node.node--imported { border-color: #a8c9e8; background: #f7fbff; color: #315775; }
 .react-flow__node.node--protocol, .react-flow__node.node--policy { border-color: #cfc4e5; background: #fcfaff; }
 .react-flow__node.node--machine, .react-flow__node.node--state { border-color: #a4d5d1; background: #f6fffd; }
+.react-flow__node.filter-dim, .react-flow__edge.filter-dim, .react-flow__minimap-node.filter-dim { opacity: .15; }
 .ontology-node .node-kind { display: block; text-transform: uppercase; letter-spacing: .1em; color: #819c8d; font-size: 9px; font-weight: 800; margin-bottom: 7px; }
 .ontology-node strong { display: block; overflow-wrap: anywhere; font-size: 12px; }
 .ontology-node small { display: block; margin-top: 4px; color: #92a49a; font-size: 10px; }
@@ -82,4 +95,4 @@ pre { overflow: auto; font-size: 10px; line-height: 1.5; background: #f5f8f6; bo
 .editor-bar button:disabled { opacity: .45; cursor: not-allowed; }.editor-error, .diagnostic { font-size: 12px; padding: 6px 0; overflow-wrap: anywhere; }
 .workspace-editor textarea { display: block; width: 100%; height: 260px; resize: vertical; border: 1px solid #d6e4db; border-radius: 9px; padding: 12px; background: #fbfdfb; color: #244233; font: 12px/1.55 ui-monospace, SFMono-Regular, monospace; white-space: pre; }
 @media (max-width: 900px) { .workspace { grid-template-columns: 190px minmax(0, 1fr); }.inspector { grid-column: 1 / -1; border-left: 0; border-top: 1px solid #e1e9e4; }.empty-inspector { min-height: 190px; } }
-@media (max-width: 620px) { .topbar { padding: 0 14px; gap: 9px; }.topbar-divider, .readonly-badge { display: none; }.file-name { margin-left: auto; max-width: 120px; }.workspace { grid-template-columns: 1fr; grid-template-rows: auto minmax(420px, 55vh) auto; }.sidebar { border-right: 0; border-bottom: 1px solid #e1e9e4; padding: 18px; }.sidebar-rule, .legend, .sidebar-footer { display: none; }.search-label { margin-top: 14px; }.search-results { max-height: 150px; }.canvas { min-height: 420px; }.inspector { grid-column: 1; }.react-flow__minimap { display: none; } }
+@media (max-width: 620px) { .topbar { padding: 0 14px; gap: 9px; }.topbar-divider, .readonly-badge { display: none; }.file-name { margin-left: auto; max-width: 120px; }.workspace { grid-template-columns: 1fr; grid-template-rows: auto minmax(420px, 55vh) auto; }.sidebar { border-right: 0; border-bottom: 1px solid #e1e9e4; padding: 18px; }.sidebar-rule, .legend { display: none; }.search-label { margin-top: 14px; }.search-results { max-height: 150px; }.canvas { min-height: 420px; }.inspector { grid-column: 1; }.react-flow__minimap { display: none; } }

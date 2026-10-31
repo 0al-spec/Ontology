@@ -1,7 +1,9 @@
 import { useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { GraphCanvas } from './GraphCanvas';
+import { FilterPanel } from './FilterPanel';
 import { Inspector } from './Inspector';
 import { WorkspaceEditor, type WorkspaceSnapshot } from './WorkspaceEditor';
+import { defaultFilters, graphVisibility } from './filters';
 import { buildGraph, parseProjection } from './graph';
 import type { Projection } from './projection';
 import type { Selection } from './selection';
@@ -13,27 +15,34 @@ export default function App() {
   const [fileName, setFileName] = useState('');
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
+  const [filters, setFilters] = useState(defaultFilters);
   const [selection, setSelection] = useState<Selection | null>(null);
   // A new request is needed even when the same result is selected twice.
   const [focusNode, setFocusNode] = useState<{ id: string } | null>(null);
   const input = useRef<HTMLInputElement>(null);
   const graphKey = useRef('');
   const graph = useMemo(() => projection ? buildGraph(projection) : null, [projection]);
+  const visibility = useMemo(() => graph && projection ? graphVisibility(graph, filters, projection.id) : null, [graph, filters, projection]);
   const matches = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query || !graph) return [];
-    const nodes = graph.nodes.filter((node) => node.data.label.toLowerCase().includes(query))
+    if (!query || !graph || !visibility) return [];
+    const nodes = graph.nodes.filter((node) => visibility.nodeIds.has(node.id) && node.data.label.toLowerCase().includes(query))
       .map((node) => ({ id: node.id, label: node.data.label, kind: node.data.kind, focusNode: node.id, selection: { type: 'node', id: node.id, data: node.data } as Selection }));
     const seen = new Set<string>();
     const relations = graph.edges.filter((edge) => {
       const data = edge.data;
-      if (!data || data.kind !== 'relation' || !data.semanticId.toLowerCase().includes(query) || seen.has(data.semanticId)) return false;
+      if (!data || !visibility.edgeIds.has(edge.id) || data.kind !== 'relation' || !data.semanticId.toLowerCase().includes(query) || seen.has(data.semanticId)) return false;
       seen.add(data.semanticId);
       return true;
     }).map((edge) => ({ id: edge.id, label: edge.data!.semanticId, kind: 'relation', focusNode: edge.source,
       selection: { type: 'edge', id: edge.id, source: edge.source, target: edge.target, data: edge.data! } as Selection }));
     return [...nodes, ...relations].slice(0, 50);
-  }, [graph, search]);
+  }, [graph, search, visibility]);
+  const selectionFiltered = useMemo(() => {
+    if (!selection || !graph || !visibility) return false;
+    if (selection.type === 'edge') return !visibility.edgeIds.has(selection.id);
+    return !visibility.nodeIds.has(selection.id);
+  }, [selection, graph, visibility]);
 
   async function openFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -98,7 +107,10 @@ export default function App() {
         <p className="package-version">{projection.version} <span>·</span> {projection.view} view</p>
         <div className="sidebar-rule" />
         <label className="search-label" htmlFor="graph-search">Search graph</label>
-        <input id="graph-search" className="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Type a name…" />
+        <input id="graph-search" className="search" value={search} onChange={(event) => setSearch(event.target.value)}
+          placeholder="Type a name…" aria-describedby="filter-search-note" />
+        <small id="filter-search-note" className="filter-search-note">Search includes enabled elements.</small>
+        <FilterPanel filters={filters} onChange={setFilters} onReset={() => setFilters(defaultFilters())} />
         {search.trim() ? <div className="search-results" aria-label="Search results">
           <span className="section-label">{matches.length} MATCHES</span>
           {matches.map((match) => <button key={match.id} onClick={() => { setSelection(match.selection); setFocusNode({ id: match.focusNode }); }}>
@@ -110,10 +122,11 @@ export default function App() {
           <div><i className="legend-external" /> Unloaded reference</div>
           <p>Drag nodes to arrange the view. Select a line to inspect its relation.</p>
         </div>}
-        <div className="sidebar-footer">{graph.nodes.length} nodes <span>·</span> {graph.edges.length} visual links</div>
+        <div className="sidebar-footer">Enabled: {visibility?.nodeIds.size} / {graph.nodes.length} nodes <span>·</span> {visibility?.edgeIds.size} / {graph.edges.length} visual links</div>
       </section>
-      <GraphCanvas graph={graph} identity={`${projection.id}@${projection.version}`} search={search} focusNode={focusNode} onSelect={setSelection} />
-      <Inspector selection={selection} />
+      <GraphCanvas graph={graph} identity={`${projection.id}@${projection.version}`} search={search} focusNode={focusNode}
+        visibility={visibility || undefined} filterMode={filters.mode} onSelect={setSelection} />
+      <Inspector selection={selection} filtered={selectionFiltered} />
     </main> : <main className="welcome">
       <div className="welcome-symbol">◈</div>
       <div className="section-label">LOCAL GRAPH WORKSPACE</div>
