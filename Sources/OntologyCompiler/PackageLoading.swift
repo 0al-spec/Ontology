@@ -13,6 +13,27 @@ extension OntologyCompiler {
             return nil
         }
 
+        return load(source: source, path: path)
+    }
+
+    /// Detect the declared package kind without treating nested examples as packages.
+    public func declaresPackage(_ source: String) -> Bool {
+        func hasKind(_ document: Any?) -> Bool {
+            let value = (document as? JSONObject)?["kind"] as? String ?? ""
+            return ExpectedDomainOntologyPackageKindSpec().isSatisfiedBy(OntologyPackageKind(rawValue: value))
+        }
+        do {
+            return try hasKind(Yams.load(yaml: source))
+        } catch {
+            // A broken body can still have a readable, unindented kind declaration.
+            return source.split(whereSeparator: \.isNewline).contains { line in
+                guard line.hasPrefix("kind:") else { return false }
+                return hasKind(try? Yams.load(yaml: String(line)))
+            }
+        }
+    }
+
+    func load(source: String, path: String) -> LoadedPackage? {
         scanUnsafeSource(source, filePath: path)
 
         let parsed: Any?

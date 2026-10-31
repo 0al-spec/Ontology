@@ -7,8 +7,11 @@
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
 | ONT-060 | [ONT-060_Saved_Diagram_Profiles/](ONT-060_Saved_Diagram_Profiles/) | 2026-10-31 | PASS (local saved profiles and rendering parity) |
+| ONT-059 | [ONT-059_Staged_Package_Advice/](ONT-059_Staged_Package_Advice/) | 2026-10-31 | PASS (local Git commits and consumer probes) |
 | ONT-058 | [ONT-058_Relations_View_And_Selected_Imports/](ONT-058_Relations_View_And_Selected_Imports/) | 2026-10-31 | PASS (local relations/import projection and rendering) |
+| ONT-057 | [ONT-057_Resolve_Foundation_Exports/](ONT-057_Resolve_Foundation_Exports/) | 2026-10-31 | PASS (compiler, fixtures and downstream reproduction) |
 | ONT-056 | [ONT-056_Package_Visualization_CLI/](ONT-056_Package_Visualization_CLI/) | 2026-10-31 | PASS (local package diagrams and real rendering) |
+| ONT-055 | [ONT-055_Release_Binaries/](ONT-055_Release_Binaries/) | 2026-10-31 | PASS (local macOS packaging and publication controls) |
 | ONT-054 | [ONT-054_Optional_Local_Package_Sections/](ONT-054_Optional_Local_Package_Sections/) | 2026-10-30 | PASS (local compiler/fixture and downstream checks) |
 | ONT-053 | [ONT-053_Reader_Oriented_Project_Story/](ONT-053_Reader_Oriented_Project_Story/) | 2026-10-29 | PASS (documentation) |
 | ONT-052 | [ONT-052_Intent_Preservation_Contract/](ONT-052_Intent_Preservation_Contract/) | 2026-10-29 | PASS (bounded contract and two profiles) |
@@ -67,10 +70,15 @@
 |------|---------|--------|
 | 2026-10-31 | ONT-060 | Archived self-review; FOLLOW-UP skipped with no unresolved findings |
 | 2026-10-31 | ONT-060 | Archived Saved_Diagram_Profiles with local verification PASS |
+| 2026-10-31 | ONT-059 | Archived [implementation review](_Historical/REVIEW_ONT-059.md) |
+| 2026-10-31 | ONT-059 | Archived task and staged-authoring validation |
 | 2026-10-31 | ONT-058 | Archived self-review; FOLLOW-UP skipped with no unresolved findings |
 | 2026-10-31 | ONT-058 | Archived Relations_View_And_Selected_Imports with local verification PASS |
+| 2026-10-31 | ONT-057 | Archived [implementation self-review](_Historical/REVIEW_ONT-057.md) |
+| 2026-10-31 | ONT-057 | Archived PRD and compiler/consumer validation |
 | 2026-10-31 | ONT-056 | Archived self-review; FOLLOW-UP skipped with no unresolved findings |
 | 2026-10-31 | ONT-056 | Archived Package_Visualization_CLI with local verification PASS |
+| 2026-10-31 | ONT-055 | Archived [release validation and retry review](_Historical/REVIEW_ONT-055.md) |
 | 2026-10-30 | ONT-054 | Archived independent implementation/consumer review; FOLLOW-UP skipped (no unresolved findings) |
 | 2026-10-30 | ONT-054 | Archived PRD, validation report and bounded SpecGraph consumer observation |
 | 2026-10-29 | ONT-053 | Archived independent review; FOLLOW-UP skipped (no unresolved findings) |

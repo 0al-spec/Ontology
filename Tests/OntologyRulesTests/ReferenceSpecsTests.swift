@@ -2,6 +2,16 @@ import OntologyRules
 import XCTest
 
 final class ReferenceSpecsTests: XCTestCase {
+    func testKnownNamespaceWithEmptyExportsDoesNotGrantArbitraryNames() {
+        let context = ConceptRefResolutionContext(
+            ref: "base:Typo", localNames: [], packageNamespace: "sample", importNamespaces: ["base"],
+            exportsByNamespace: ["base": []]
+        )
+        XCTAssertFalse(ImportedConceptRefSpec().isSatisfiedBy(context))
+        XCTAssertFalse(ResolvableConceptRefSpec().isSatisfiedBy(context))
+        XCTAssertEqual(ConceptRefResolutionDecisionSpec().decide(context), .unresolved)
+    }
+
     func testConceptRefResolutionContextStoresTypedInputs() {
         let context = ConceptRefResolutionContext(
             reference: OntologyConceptReferenceLiteral(rawValue: "foundation:Policy"),
