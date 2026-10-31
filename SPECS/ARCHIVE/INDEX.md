@@ -63,6 +63,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-057 | Archived [implementation self-review](_Historical/REVIEW_ONT-057.md) |
 | 2026-10-31 | ONT-057 | Archived PRD and compiler/consumer validation |
 | 2026-10-30 | ONT-054 | Archived independent implementation/consumer review; FOLLOW-UP skipped (no unresolved findings) |
 | 2026-10-30 | ONT-054 | Archived PRD, validation report and bounded SpecGraph consumer observation |
