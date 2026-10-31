@@ -63,6 +63,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-055 | Archived [release validation and retry review](_Historical/REVIEW_ONT-055.md) |
 | 2026-10-30 | ONT-054 | Archived independent implementation/consumer review; FOLLOW-UP skipped (no unresolved findings) |
 | 2026-10-30 | ONT-054 | Archived PRD, validation report and bounded SpecGraph consumer observation |
 | 2026-10-29 | ONT-053 | Archived independent review; FOLLOW-UP skipped (no unresolved findings) |
