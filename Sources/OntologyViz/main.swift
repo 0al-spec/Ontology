@@ -20,7 +20,7 @@ do {
 }
 
 do {
-    let dot = try OntologyCompiler().diagramDOT(path: arguments.input, direction: arguments.direction)
+    let dot = try OntologyCompiler().diagramDOT(path: arguments.input, options: arguments.diagram)
     let files = try GraphvizRenderer().render(dot: dot, arguments: arguments)
     for file in files {
         print(arguments.output.appendingPathComponent(file).path)

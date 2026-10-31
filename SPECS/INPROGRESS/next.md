@@ -35,6 +35,8 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 - ONT-059 adds optional staged package notifications. Local Ontology and SpecGraph probes passed.
 
+- ONT-058 relations view and selected local imports. Local verification PASS. Branch `feature/ONT-058-relations-view` depends on ONT-056 PR #81. Retain `.worktrees/Ontology-visualization` through stack review and retire it after merge. A later ergonomic slice can save reusable selection profiles.
+
 - ONT-057 validates foundation symbol membership by version and role. The archived report records the SpecGraph #843 reproduction and the SDK comparison.
 
 - ONT-056 package visualization. Local tests/rendering/quality PASS. Worktree `.worktrees/Ontology-visualization` remains active for the focused PR review. Next slice can add a selected-concept neighborhood view for large packages. Retire this worktree after merge.

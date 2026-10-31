@@ -13,6 +13,10 @@ final class OntologyVizCLITests: XCTestCase {
             [], [example.path], [example.path, "--out"],
             [example.path, "--out", "x", "--format", "jpeg"],
             [example.path, "--out", "x", "--direction", "sideways"],
+            [example.path, "--out", "x", "--view", "unknown"],
+            [example.path, "--out", "x", "--view", "relations", "--import", "missing.yaml"],
+            [example.path, "--out", "x", "--import", "missing.yaml", "--expand", "ev:Example"],
+            [example.path, "--out", "x", "--view", "relations", "--import", "missing.yaml", "--expand", "ev:Example,"],
             [example.path, "--out", "x", "--out", "y"],
             [example.path, "--out", "x", "--unknown", "value"],
             [example.path, example.path, "--out", "x"]
@@ -62,6 +66,41 @@ final class OntologyVizCLITests: XCTestCase {
                 let files = try FileManager.default.contentsOfDirectory(atPath: output.path)
                 XCTAssertEqual(Set(files), Set(["ontology.dot", "ontology.\(format)"]))
             }
+        }
+    }
+
+    func testRelationsViewExpandsSelectedLocalImportsWithRealSVGAndPNG() throws {
+        try inTemporaryDirectory { output in
+            let result = try run([
+                motivation.path, "--view", "relations", "--out", output.path, "--import", events.path,
+                "--expand", "eventcore:Interpretation", "--expand", "eventcore:RecordedEvent,eventcore:Delta"
+            ])
+            XCTAssertEqual(result.status, 0, result.stderr)
+            let svg = try Data(contentsOf: output.appendingPathComponent("ontology.svg"))
+            XCTAssertTrue(XMLParser(data: svg).parse())
+            let text = String(decoding: svg, as: UTF8.self)
+            XCTAssertTrue(text.contains("eventcore:interpretsRecord"))
+            XCTAssertTrue(text.contains("eventcore:deltaOfRecord"))
+            XCTAssertFalse(text.contains("appliesTo"))
+            let png = try Data(contentsOf: output.appendingPathComponent("ontology.png"))
+            XCTAssertEqual(Array(png.prefix(8)), [137, 80, 78, 71, 13, 10, 26, 10])
+        }
+    }
+
+    func testImportSourceIsProtectedAndRepeatedImportArgumentsReachBindingValidation() throws {
+        try inTemporaryDirectory { output in
+            let imported = output.appendingPathComponent("ontology.dot")
+            let original = try Data(contentsOf: events)
+            try original.write(to: imported)
+            let arguments = [motivation.path, "--view", "relations", "--out", output.path, "--format", "dot",
+                             "--import", imported.path, "--expand", "eventcore:Interpretation"]
+            let result = try run(arguments)
+            XCTAssertEqual(result.status, 1)
+            XCTAssertTrue(result.stderr.contains("overwrite input"))
+            XCTAssertEqual(try Data(contentsOf: imported), original)
+            let duplicate = try run(arguments + ["--import", imported.path])
+            XCTAssertEqual(duplicate.status, 1)
+            XCTAssertTrue(duplicate.stderr.contains("Duplicate supplied import"))
         }
     }
 
@@ -157,6 +196,8 @@ final class OntologyVizCLITests: XCTestCase {
     }
 
     private var example: URL { root.appendingPathComponent("Examples/package-visualization/domain-ontology-package.yaml") }
+    private var motivation: URL { root.appendingPathComponent("SPECS/ontology/packages/motivation-core/domain-ontology-package.yaml") }
+    private var events: URL { root.appendingPathComponent("SPECS/ontology/packages/events-core/versions/0.2.0/domain-ontology-package.yaml") }
 
     private var root: URL {
         URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()

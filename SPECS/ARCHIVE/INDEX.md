@@ -7,6 +7,7 @@
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
 | ONT-059 | [ONT-059_Staged_Package_Advice/](ONT-059_Staged_Package_Advice/) | 2026-10-31 | PASS (local Git commits and consumer probes) |
+| ONT-058 | [ONT-058_Relations_View_And_Selected_Imports/](ONT-058_Relations_View_And_Selected_Imports/) | 2026-10-31 | PASS (local relations/import projection and rendering) |
 | ONT-057 | [ONT-057_Resolve_Foundation_Exports/](ONT-057_Resolve_Foundation_Exports/) | 2026-10-31 | PASS (compiler, fixtures and downstream reproduction) |
 | ONT-056 | [ONT-056_Package_Visualization_CLI/](ONT-056_Package_Visualization_CLI/) | 2026-10-31 | PASS (local package diagrams and real rendering) |
 | ONT-055 | [ONT-055_Release_Binaries/](ONT-055_Release_Binaries/) | 2026-10-31 | PASS (local macOS packaging and publication controls) |
@@ -68,6 +69,8 @@
 |------|---------|--------|
 | 2026-10-31 | ONT-059 | Archived [implementation review](_Historical/REVIEW_ONT-059.md) |
 | 2026-10-31 | ONT-059 | Archived task and staged-authoring validation |
+| 2026-10-31 | ONT-058 | Archived self-review; FOLLOW-UP skipped with no unresolved findings |
+| 2026-10-31 | ONT-058 | Archived Relations_View_And_Selected_Imports with local verification PASS |
 | 2026-10-31 | ONT-057 | Archived [implementation self-review](_Historical/REVIEW_ONT-057.md) |
 | 2026-10-31 | ONT-057 | Archived PRD and compiler/consumer validation |
 | 2026-10-31 | ONT-056 | Archived self-review; FOLLOW-UP skipped with no unresolved findings |

@@ -37,7 +37,7 @@ let package = Package(
         ),
         .executableTarget(
             name: "OntologyViz",
-            dependencies: ["OntologyCompiler"]
+            dependencies: ["OntologyCompiler", "OntologyRules"]
         ),
         .testTarget(
             name: "OntologyRulesTests",

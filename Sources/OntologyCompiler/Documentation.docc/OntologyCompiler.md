@@ -83,6 +83,13 @@ swift run ontologyviz \
 
 Install Graphviz for image formats. `--format dot` needs only the Swift executable.
 
+Use ``OntologyDiagramOptions`` with ``OntologyCompiler/diagramDOT(path:options:)``
+to select ``OntologyDiagramView/relations`` and explicitly supplied local imports.
+Selected class names use the root import aliases. Imported relations appear when
+all their endpoints are in the selected class set or the root's class set.
+The binding requires exact direct-import id/version and a unique namespace.
+External unselected references remain placeholders.
+
 ### SpecGraph Owner Decisions
 
 `export-specgraph-owner-decisions` validates an Ontology-owned owner decision
@@ -108,6 +115,8 @@ data-only, and executable-looking YAML content is validated as inert data.
 - ``RegistryBaseURL``
 - ``OntologyPackageReference``
 - ``OntologyDiagramDirection``
+- ``OntologyDiagramOptions``
+- ``OntologyDiagramView``
 
 ### Compiler Entry Point
 

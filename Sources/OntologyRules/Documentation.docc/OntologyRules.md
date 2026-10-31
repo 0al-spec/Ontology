@@ -22,6 +22,10 @@ testable, and reusable:
 
 ## Rule Ownership
 
+Diagram dependency selection uses ``DiagramImportBindingSpec`` for exact
+identity/version and unique alias binding, plus ``DiagramImportScopeSpec`` to
+reject namespace shadowing in supplied local packages.
+
 Every domain predicate should be a named `Specification` type. Every
 classification that returns a typed result should be a named `DecisionSpec`.
 Compiler phases should call these rules instead of embedding domain decisions
