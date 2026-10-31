@@ -1,3 +1,8 @@
+# Selected: ONT-055 — Release Binaries
+
+Build and verify downloadable CLI archives for the existing GitHub Releases process.
+The preceding NormLab candidate remains queued below.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1

@@ -1178,6 +1178,15 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Existing nonempty packages retain deterministic output, and meaningful regression/quality checks pass.
   - Publish a focused PR; no merge, release, global ontology change or universal instance validator.
 
+#### ONT-055: Release Binaries
+- **Description:** Publish downloadable ontologyc CLI archives on GitHub Releases.
+- **Priority:** P1 — operator request, 2026-10-31
+- **Dependencies:** ONT-046 Linux portability and the existing release tag convention.
+- **Status:** INPROGRESS
+- **Acceptance Criteria:** Build from the release tag commit, smoke the extracted macOS arm64
+  and Linux x86_64 binaries, record source identity, publish both archives and SHA-256 sums,
+  and support a read-only PR preview and explicit backfill of an existing release.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
