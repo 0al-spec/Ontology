@@ -1185,6 +1185,13 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Status:** Complete — local quality, real SVG/PNG rendering and generated-output baselines passed; hosted review pending.
 - **Acceptance Criteria:** Deterministic DOT projection, SVG and PNG exports on macOS/Linux, typed and external nodes, relation cardinalities, policy targets, lifecycle transitions, clear argument/renderer errors, real rendering tests and a focused PR.
 
+#### ONT-058: Relations View and Selected Imports
+- **Description:** Inspect domain relations independently of inheritance/policy/lifecycle scaffolding, with explicitly selected classes from local imported packages.
+- **Priority:** P1 — operator approval, 2026-10-31
+- **Dependencies:** ONT-056 package visualization, PR #81.
+- **Status:** INPROGRESS
+- **Acceptance Criteria:** Preserve default diagrams, explicit relations view, exact declared id/version import bindings, qualified selectors and honest omitted alternatives, deterministic DOT, local SVG/PNG regression and motivation-core example.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

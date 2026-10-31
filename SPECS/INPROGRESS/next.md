@@ -1,4 +1,14 @@
-# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Current Task — ONT-058 Relations View and Selected Imports
+
+Continue the existing `.worktrees/Ontology-visualization` on branch
+`feature/ONT-058-relations-view`. This task depends on ONT-056 PR #81 and will
+form a focused PR based on `feature/ONT-056-package-visualization`.
+
+Implement the relations view and explicit local package selection. Verify the
+motivation-core path to event records and Delta, then retain this worktree for
+stack review and retire it after both layers land.
+
+## Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
