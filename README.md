@@ -131,7 +131,9 @@ swift run ontologyviz \
 ```
 
 For interactive local browsing, use the standalone [Ontology Viewer](tools/ontology-viewer/README.md)
-with a JSON projection from `ontologyviz`. It does not require SpecSpace.
+with a JSON projection from `ontologyviz`. Start with the
+[complete launch manual](tools/ontology-viewer/LAUNCH.md), including tool
+builds, a full example and a copied-YAML workspace. It does not require SpecSpace.
 
 ## Where Lean fits—and what a green result means
 
