@@ -1192,6 +1192,13 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Status:** Complete — 195 local tests, quality, TypeScript, DocC and real rendering passed; PR review pending.
 - **Acceptance Criteria:** Preserve default diagrams, explicit relations view, exact declared id/version import bindings, qualified selectors and honest omitted alternatives, deterministic DOT, local SVG/PNG regression and motivation-core example.
 
+#### ONT-060: Saved Diagram Profiles
+- **Description:** Persist repeatable ontologyviz package/import/type selections in a portable, versioned JSON profile.
+- **Priority:** P1 — explicit operator approval, 2026-10-31
+- **Dependencies:** ONT-058 relations view, PR #82.
+- **Status:** INPROGRESS
+- **Acceptance Criteria:** Short --profile command, paths relative to the profile, strict versioned JSON shape, documented CLI precedence/conflicts, source overwrite protection, real rendering parity and a focused stacked PR.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

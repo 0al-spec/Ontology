@@ -1,4 +1,13 @@
-# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Current Task — ONT-060 Saved Diagram Profiles
+
+Reusing `.worktrees/Ontology-visualization` on `feature/ONT-060-diagram-profiles`.
+This layer starts at PR #82 head `e2ad26b` and will target
+`feature/ONT-058-relations-view`. The active dependency chain is #81 → #82 → this task.
+
+Implement versioned local JSON profiles and a portable motivation-core preset.
+Retain this worktree through stack review and retire it after the stack merges.
+
+## Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
