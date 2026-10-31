@@ -73,6 +73,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-065 | Archived [self-review](ONT-065_Interactive_Graph_Filters/REVIEW_ONT-065.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-065 | Archived interactive filters and local validation |
 | 2026-10-31 | ONT-064 | Archived [self-review](ONT-064_Source_Preserving_Editing/REVIEW_ONT-064.md); test-command finding corrected |
 | 2026-10-31 | ONT-064 | Archived source-preserving editor and local validation |
