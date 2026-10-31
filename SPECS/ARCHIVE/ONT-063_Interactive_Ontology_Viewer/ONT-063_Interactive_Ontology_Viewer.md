@@ -37,3 +37,7 @@ the compiler remain independent of the UI.
 This slice edits display state only. It does not mutate YAML, invoke agents,
 approve ontology content, automatically resolve unloaded references, or alter
 SpecSpace. Source-preserving editing and live shared files are ONT-064.
+
+---
+**Archived:** 2026-10-31
+**Verdict:** PASS locally; hosted CI and review pending.

@@ -1246,7 +1246,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
   with reusable canvas/model components and no SpecSpace dependency.
 - **Priority:** P1 — user request, 2026-10-31.
 - **Dependency:** ONT-062 / PR #86.
-- **Status:** INPROGRESS in `.worktrees/Ontology-interactive-viewer`.
+- **Status:** Complete locally — [validation](ARCHIVE/ONT-063_Interactive_Ontology_Viewer/ONT-063_Validation_Report.md); hosted review/CI pending.
 - **Acceptance:** Load local projection JSON; navigate, search and inspect the
   graph; preserve imported references and grouped alternatives; run standalone
   locally; cover real examples, invalid input and browser interaction.

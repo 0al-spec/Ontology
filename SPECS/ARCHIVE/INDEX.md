@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-063 | [ONT-063_Interactive_Ontology_Viewer/](ONT-063_Interactive_Ontology_Viewer/) | 2026-10-31 | PASS (local interactive viewer) |
 | ONT-062 | [ONT-062_Shared_Graph_Projection/](ONT-062_Shared_Graph_Projection/) | 2026-10-31 | PASS (local graph projection) |
 | ONT-061 | [ONT-061_Release_Ontologyviz/](ONT-061_Release_Ontologyviz/) | 2026-10-31 | PASS (local current and legacy archives) |
 | ONT-060 | [ONT-060_Saved_Diagram_Profiles/](ONT-060_Saved_Diagram_Profiles/) | 2026-10-31 | PASS (local saved profiles and rendering parity) |
@@ -70,6 +71,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-063 | Archived interactive viewer and local validation |
 | 2026-10-31 | ONT-062 | Archived [self-review](ONT-062_Shared_Graph_Projection/REVIEW_ONT-062.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-062 | Archived shared graph projection and validation |
 | 2026-10-31 | ONT-061 | Archived [release review](ONT-061_Release_Ontologyviz/REVIEW_ONT-061.md) |
