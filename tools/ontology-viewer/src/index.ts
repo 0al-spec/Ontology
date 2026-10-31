@@ -6,3 +6,5 @@ export { buildGraph, parseProjection } from './graph';
 export type { FilterMode, GraphFilters, GraphVisibility } from './filters';
 export type { Projection, SourceLocation } from './projection';
 export type { Selection } from './selection';
+export { graphPackages, nodePackage, edgePackage, packageIdentity } from './packages';
+export type { PackageOption } from './packages';

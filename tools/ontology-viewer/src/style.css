@@ -98,3 +98,8 @@ pre { overflow: auto; font-size: 10px; line-height: 1.5; background: #f5f8f6; bo
 @media (max-width: 620px) { .topbar { padding: 0 14px; gap: 9px; }.topbar-divider, .readonly-badge { display: none; }.file-name { margin-left: auto; max-width: 120px; }.workspace { grid-template-columns: 1fr; grid-template-rows: auto minmax(420px, 55vh) auto; }.sidebar { border-right: 0; border-bottom: 1px solid #e1e9e4; padding: 18px; }.sidebar-rule, .legend { display: none; }.search-label { margin-top: 14px; }.search-results { max-height: 150px; }.canvas { min-height: 420px; }.inspector { grid-column: 1; }.react-flow__minimap { display: none; } }
 
 .filter-count { margin-left: auto; padding: 0 0.35rem; color: #526b60; font-variant-numeric: tabular-nums; }
+
+.package-filter { align-items: flex-start !important; }
+.package-filter-label { min-width: 0; overflow-wrap: anywhere; }
+.package-filter-label small { display: block; font-size: 0.68rem; color: #61786c; }
+.package-filter .filter-count { white-space: nowrap; font-size: 0.7rem; }
