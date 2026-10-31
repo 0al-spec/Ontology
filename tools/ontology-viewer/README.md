@@ -36,7 +36,20 @@ elements from the canvas and keyboard navigation; **Dim** keeps them visible as
 context. An edge is inactive when its kind or either endpoint is inactive.
 Search covers enabled elements, and the inspector marks a filtered selection.
 Filtering preserves manually positioned nodes, zoom and pan; use the existing
-canvas controls only when you want to change the view. Category counts describe the entire canvas, including unloaded placeholders and
+canvas controls only when you want to change the view. The **Packages** group selects exact `id@version` identities independently of
+namespace aliases. Rows show **nodes / owned visual links** from the complete
+canvas. Loaded packages and declared dependencies are listed; unloaded
+dependencies are marked explicitly. Unattributed references have their own
+bucket when present. State nodes belong to their machine's source package.
+
+A node requires its package, type and origin enabled. A link also requires its
+owning package, link kind and both endpoints enabled, so hiding a package can
+hide links declared by other packages that point into it. Package filters compose
+with Hide/Dim, search and inspector state without changing layout or YAML.
+Workspace refresh keeps choices for known identities and enables new ones.
+Opening another graph resets package choices; Reset filters enables everything.
+
+Category counts describe the entire canvas, including unloaded placeholders and
 state nodes; relationship counts count visual links, including oneOf branches.
 Counts remain unchanged while toggling filters. Filter state lasts until
 the page is reloaded and does not modify YAML. Only elements in the loaded

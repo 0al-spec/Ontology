@@ -1,4 +1,5 @@
 import type { ViewerEdge, ViewerNode } from './graph';
+import { edgePackage, nodePackage } from './packages';
 
 export const nodeTypeOptions = [
   ['class', 'Classes'], ['protocol', 'Protocols'], ['policy', 'Policies'],
@@ -19,6 +20,7 @@ export type EdgeFilterKind = typeof edgeKindOptions[number][0];
 export type FilterMode = 'hide' | 'dim';
 export type GraphFilters = {
   mode: FilterMode;
+  packages: Record<string, boolean>;
   nodeTypes: Record<NodeFilterType, boolean>;
   origins: Record<OriginFilter, boolean>;
   edgeKinds: Record<EdgeFilterKind, boolean>;
@@ -29,7 +31,7 @@ function allEnabled<T extends string>(options: readonly (readonly [T, string])[]
 }
 
 export function defaultFilters(): GraphFilters {
-  return { mode: 'hide', nodeTypes: allEnabled(nodeTypeOptions), origins: allEnabled(originOptions), edgeKinds: allEnabled(edgeKindOptions) };
+  return { mode: 'hide', packages: {}, nodeTypes: allEnabled(nodeTypeOptions), origins: allEnabled(originOptions), edgeKinds: allEnabled(edgeKindOptions) };
 }
 
 /** An unloaded placeholder still has an expected declaration type in its ID. */
@@ -56,12 +58,12 @@ export function graphVisibility(
   graph: { nodes: ViewerNode[]; edges: ViewerEdge[] }, filters: GraphFilters, packageId: string,
 ): GraphVisibility {
   const nodeIds = new Set(graph.nodes.filter((node) =>
-    filters.nodeTypes[nodeFilterType(node)] && filters.origins[nodeOrigin(node, packageId)],
+    filters.packages[nodePackage(node)] !== false && filters.nodeTypes[nodeFilterType(node)] && filters.origins[nodeOrigin(node, packageId)],
   ).map((node) => node.id));
   const edgeIds = new Set(graph.edges.filter((edge) => {
     const kind = edge.data?.kind as EdgeFilterKind | undefined;
     const enabled = !kind || !(kind in filters.edgeKinds) || filters.edgeKinds[kind];
-    return enabled && nodeIds.has(edge.source) && nodeIds.has(edge.target);
+    return filters.packages[edgePackage(edge)] !== false && enabled && nodeIds.has(edge.source) && nodeIds.has(edge.target);
   }).map((edge) => edge.id));
   return { nodeIds, edgeIds };
 }
