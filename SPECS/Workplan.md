@@ -1280,6 +1280,6 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - Result: full diagrams include explicit direct import declarations; viewer counts expose empty categories.
 
 ## ONT-067: Package filters
-- Status: selected
+- Status: ✅ PASS locally; hosted CI and review pending
 - Dependency: ONT-066 / PR #91
 - Result: package identity filters, with fixed counts and preserved canvas state.

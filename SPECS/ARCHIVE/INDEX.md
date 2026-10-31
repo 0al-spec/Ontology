@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-067 | [ONT-067_Package_Filters/](ONT-067_Package_Filters/) | 2026-10-31 | PASS (local package filters) |
 | ONT-066 | [ONT-066_Full_Import_Projection/](ONT-066_Full_Import_Projection/) | 2026-10-31 | PASS (local full imports and counts) |
 | ONT-065 | [ONT-065_Interactive_Graph_Filters/](ONT-065_Interactive_Graph_Filters/) | 2026-10-31 | PASS (local interactive filters) |
 | ONT-064 | [ONT-064_Source_Preserving_Editing/](ONT-064_Source_Preserving_Editing/) | 2026-10-31 | PASS (local source editing) |
@@ -74,6 +75,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-067 | Archived package filters and validation |
 | 2026-10-31 | ONT-066 | Archived [self-review](ONT-066_Full_Import_Projection/REVIEW_ONT-066.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-066 | Archived full import projection and validation |
 | 2026-10-31 | ONT-065 | Archived [self-review](ONT-065_Interactive_Graph_Filters/REVIEW_ONT-065.md); FOLLOW-UP skipped |

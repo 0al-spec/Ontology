@@ -1,8 +1,3 @@
-# Selected: ONT-067 — Package filters
-Branch: feature/ONT-067-package-filters, stacked on feature/ONT-066-full-imports (#91).
-Workspace: .worktrees/Ontology-interactive-viewer (reused). Retain through review.
-Next: implement package classification, filters and real-browser verification.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -37,6 +32,11 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-067 adds package identity filters and fixed ownership counts above #91.
+  Local build/unit/browser checks PASS. Keep .worktrees/Ontology-interactive-viewer
+  through dependent PR review; NormLab pilot data lives outside the worktree.
+
 
 - ONT-066 adds full direct import projection and filter counts; local quality
   and browser checks PASS. Keep .worktrees/Ontology-interactive-viewer active
