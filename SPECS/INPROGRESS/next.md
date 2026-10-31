@@ -1,3 +1,7 @@
+# Selected: ONT-057 — Resolve Foundation Exports
+
+Implement the bounded upstream repair for SpecGraph #843. ONT-056 is reserved by the visualization worktree.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1

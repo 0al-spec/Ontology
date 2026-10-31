@@ -1178,6 +1178,14 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Existing nonempty packages retain deterministic output, and meaningful regression/quality checks pass.
   - Publish a focused PR; no merge, release, global ontology change or universal instance validator.
 
+#### ONT-057: Resolve Foundation Exports
+- **Status:** INPROGRESS
+- **Source:** SpecGraph #843 and the operator's reproduced false-positive report.
+- **Goal:** Own the versioned foundation export inventory in Ontology. Resolve imported
+  class, protocol and policy references by identity, version, namespace and role.
+- **Acceptance:** `check` and `compile` accept `sg:ValueObject` and reject `sg:Typo`
+  at its declaration. Make the catalog and field-level diagnostics available offline.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
