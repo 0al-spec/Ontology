@@ -140,6 +140,10 @@ public struct ConceptRefResolutionContext: Equatable, Sendable {
     public let namespace: OntologyNamespace
     public let importedNamespaces: Set<OntologyNamespace>
 
+    /// Known exports for the requested role, keyed by the import's local namespace.
+    /// A missing table retains declared-namespace compatibility for external packages.
+    public let exportsByNamespace: [String: Set<String>]
+
     public var ref: String { reference.rawValue }
     public var localNames: Set<String> { Set(localSymbols.map(\.rawValue)) }
     public var packageNamespace: String { namespace.rawValue }
@@ -149,13 +153,15 @@ public struct ConceptRefResolutionContext: Equatable, Sendable {
         ref: String,
         localNames: Set<String>,
         packageNamespace: String,
-        importNamespaces: Set<String>
+        importNamespaces: Set<String>,
+        exportsByNamespace: [String: Set<String>] = [:]
     ) {
         self.init(
             reference: OntologyConceptReferenceLiteral(rawValue: ref),
             localSymbols: Set(localNames.map(OntologySymbolName.init(rawValue:))),
             namespace: OntologyNamespace(rawValue: packageNamespace),
-            importedNamespaces: Set(importNamespaces.map(OntologyNamespace.init(rawValue:)))
+            importedNamespaces: Set(importNamespaces.map(OntologyNamespace.init(rawValue:))),
+            exportsByNamespace: exportsByNamespace
         )
     }
 
@@ -163,12 +169,14 @@ public struct ConceptRefResolutionContext: Equatable, Sendable {
         reference: OntologyConceptReferenceLiteral,
         localSymbols: Set<OntologySymbolName>,
         namespace: OntologyNamespace,
-        importedNamespaces: Set<OntologyNamespace>
+        importedNamespaces: Set<OntologyNamespace>,
+        exportsByNamespace: [String: Set<String>] = [:]
     ) {
         self.reference = reference
         self.localSymbols = localSymbols
         self.namespace = namespace
         self.importedNamespaces = importedNamespaces
+        self.exportsByNamespace = exportsByNamespace
     }
 }
 

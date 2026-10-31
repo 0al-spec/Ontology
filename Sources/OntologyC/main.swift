@@ -1,5 +1,6 @@
 import Foundation
 import OntologyCompiler
+import OntologyRules
 
 let args = Array(CommandLine.arguments.dropFirst())
 
@@ -26,11 +27,22 @@ switch command {
 case "validate-instances", "export-instance-contract":
     runInstanceGraphCommand(command, arguments: commandArgs, compiler: compiler)
 
-case "check":
+case "export-foundation":
     let parsed = parseArguments(commandArgs, allowedOptions: [], command: command)
+    requirePositionals(0, in: parsed, command: command)
+    printJSON(FoundationExports.version010)
+
+case "check":
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--format"], command: command)
     requirePositionals(1, in: parsed, command: command)
     let path = parsed.positional[0]
+    let format = parsed.options["--format"] ?? "text"
+    guard ["text", "json"].contains(format) else { usageError("expected --format text or json", command: command) }
     let diagnostics = compiler.check(path: OntologySourcePath(path: path))
+    if format == "json" {
+        printJSON(diagnostics)
+        exit(compiler.hasErrors(diagnostics) ? 1 : 0)
+    }
     if compiler.hasErrors(diagnostics) {
         compiler.printDiagnostics(diagnostics)
         exit(1)

@@ -1,11 +1,12 @@
 # Tasks Archive
 
-**Last Updated:** 2026-10-30
+**Last Updated:** 2026-10-31
 
 ## Archived Tasks
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-057 | [ONT-057_Resolve_Foundation_Exports/](ONT-057_Resolve_Foundation_Exports/) | 2026-10-31 | PASS (compiler, fixtures and downstream reproduction) |
 | ONT-054 | [ONT-054_Optional_Local_Package_Sections/](ONT-054_Optional_Local_Package_Sections/) | 2026-10-30 | PASS (local compiler/fixture and downstream checks) |
 | ONT-053 | [ONT-053_Reader_Oriented_Project_Story/](ONT-053_Reader_Oriented_Project_Story/) | 2026-10-29 | PASS (documentation) |
 | ONT-052 | [ONT-052_Intent_Preservation_Contract/](ONT-052_Intent_Preservation_Contract/) | 2026-10-29 | PASS (bounded contract and two profiles) |
@@ -62,6 +63,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-057 | Archived [implementation self-review](_Historical/REVIEW_ONT-057.md) |
+| 2026-10-31 | ONT-057 | Archived PRD and compiler/consumer validation |
 | 2026-10-30 | ONT-054 | Archived independent implementation/consumer review; FOLLOW-UP skipped (no unresolved findings) |
 | 2026-10-30 | ONT-054 | Archived PRD, validation report and bounded SpecGraph consumer observation |
 | 2026-10-29 | ONT-053 | Archived independent review; FOLLOW-UP skipped (no unresolved findings) |

@@ -20,7 +20,7 @@ Behavior:
 
 1. Parse YAML as inert data.
 2. Validate against `domain-ontology-package.schema.yaml`.
-3. Resolve imports.
+3. Bind declared import namespaces and resolve available versioned export tables.
 4. Validate class inheritance and protocol references.
 5. Validate relation domain/range and cardinality.
 6. Validate policy applicability.
@@ -38,6 +38,29 @@ Normalization represents absent or empty sections as `policies: []` and
 `stateMachines: []`. Compilation still emits the policy and state-machine SDK
 files and registry exports, with empty definitions and ref maps. This shape
 does not imply any runtime policy or lifecycle behavior.
+
+Use `ontologyc check <package.yaml> --format json` for a machine-readable
+stdout array of diagnostics, including warnings. Errors return exit 1; accepted
+input returns 0. Consumers can use `code`, `severity` and the source field
+`path` directly. Invalid command arguments return 2. For example,
+`sg:Typo` as the base of `Entry` produces `class.extends.unresolved` at
+`spec.classes.Entry.extends`. Relative to a YAML document, dots select keys
+and bracketed integers select array elements.
+
+### `ontologyc export-foundation`
+
+This command prints the [built-in export catalog](foundation/0.1.0/exports.json)
+for `specgraph.foundation@0.1.0` as JSON. The Swift library exposes the same
+inventory through `FoundationExports.version010`. Consumers can pin its bytes
+alongside the compiler. Changing the exports requires a new vocabulary version.
+
+An import of this package binds its declared namespace (default `sg`) to the
+catalog. Class bases, relation endpoints and policy targets resolve class
+names, `implements` resolves protocol names and a policy base resolves against
+`policyBases`. The compiler reports an unavailable foundation version at the
+import and rejects conflicting namespace bindings. Its standalone binary
+performs this check offline. Non-foundation imports currently retain declared
+namespace validation; verifying their exported symbols requires another catalog.
 
 ### `ontologyc compile`
 

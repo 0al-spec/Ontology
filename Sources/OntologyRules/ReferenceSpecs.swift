@@ -1,6 +1,6 @@
 import SpecificationCore
 
-/// Checks whether a namespace-qualified concept reference points at an imported ontology namespace.
+/// Checks imported namespace membership and, when supplied, the slot's export inventory.
 public struct ImportedConceptRefSpec: Specification {
     public typealias T = ConceptRefResolutionContext
 
@@ -8,7 +8,8 @@ public struct ImportedConceptRefSpec: Specification {
 
     public func isSatisfiedBy(_ candidate: ConceptRefResolutionContext) -> Bool {
         guard let namespace = refNamespace(candidate.ref) else { return false }
-        return candidate.importNamespaces.contains(namespace)
+        guard candidate.importNamespaces.contains(namespace) else { return false }
+        return candidate.exportsByNamespace[namespace]?.contains(refName(candidate.ref)) ?? true
     }
 }
 
