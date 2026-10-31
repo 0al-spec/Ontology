@@ -20,8 +20,16 @@ do {
 }
 
 do {
-    let dot = try OntologyCompiler().diagramDOT(path: arguments.input, options: arguments.diagram)
-    let files = try GraphvizRenderer().render(dot: dot, arguments: arguments)
+    let compiler = OntologyCompiler()
+    let renderer = GraphvizRenderer()
+    let files: [String]
+    if arguments.format == .json {
+        let json = try compiler.diagramJSON(path: arguments.input, options: arguments.diagram)
+        files = try renderer.writeJSON(json, arguments: arguments)
+    } else {
+        let dot = try compiler.diagramDOT(path: arguments.input, options: arguments.diagram)
+        files = try renderer.render(dot: dot, arguments: arguments)
+    }
     for file in files {
         print(arguments.output.appendingPathComponent(file).path)
     }

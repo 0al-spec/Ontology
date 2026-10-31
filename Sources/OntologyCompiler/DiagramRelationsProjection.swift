@@ -57,6 +57,7 @@ struct DiagramImportedPackage {
             result["domain"] = domain
             result["range"] = definition["range"] is String ? targets[0] : ["oneOf": targets]
             result["id"] = "\(namespace):\(definition["id"] as? String ?? "")"
+            result["fqid"] = result["id"]
             return result
         }
     }
@@ -76,7 +77,8 @@ struct DiagramRelationsProjection {
         }
         let rootClasses = root["classes"] as? [JSONObject] ?? []
         let visible = Set(rootClasses.compactMap { $0["fqid"] as? String }).union(selected)
-        let relations = (root["relations"] as? [JSONObject] ?? []) + imported.flatMap { $0.relations(visible: visible) }
+        let relations = (root["relations"] as? [JSONObject] ?? [])
+            + imported.sorted { $0.namespace < $1.namespace }.flatMap { $0.relations(visible: visible) }
         let incident = Set(relations.flatMap { [$0["domain"] as? String ?? ""] + diagramRangeReferences($0["range"]) })
         var result = root
         result["classes"] = (rootClasses.filter { incident.contains($0["fqid"] as? String ?? "") }

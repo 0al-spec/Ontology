@@ -29,7 +29,8 @@ swift run ontologyviz \
 The default produces `diagrams/ontology.dot`, `diagrams/ontology.svg` and
 `diagrams/ontology.png`. Output paths are printed to stdout and errors to stderr.
 Select a single image format or export DOT on its own with `--format svg`,
-`--format png` or `--format dot`. Every mode retains the DOT source.
+`--format png` or `--format dot`. Image modes retain the DOT source; the separate
+`--format json` mode exports the source-linked declaration graph without Graphviz.
 
 ```sh
 swift run ontologyviz --direction TB --format svg \
@@ -166,6 +167,25 @@ inputs. Profiles can be committed alongside the code/specifications they describ
 
 The schema provides structural validation for editors. Runtime checks also enforce
 option combinations, reference selection and exact imported package identity/version.
+
+## Machine-readable graph
+
+The same validated declaration selection that feeds DOT is available as a
+versioned JSON graph for other tools. This is a declaration-oriented graph:
+class, protocol, policy and lifecycle records are nodes; relation records retain
+their domain and full range. Consumers may derive presentation nodes and edges
+without extracting labels from a rendered diagram.
+
+```sh
+ontologyviz --profile Examples/package-visualization/motivation-relations.profile.json \
+  --format json --out diagrams/motivation-graph
+```
+
+This writes only `ontology.graph.json` and does not invoke Graphviz. The
+[projection contract](../../SPECS/ontology/diagram-projection.md) describes source
+identities, logical YAML locations, selection and the limits of the graph. The
+Swift library exposes the same selection via `diagramProjection` and
+`diagramJSON`. `--direction` controls DOT layout and does not alter JSON.
 
 Unexpanded external placeholders carry no claim of successful symbol resolution in the
 imported package. Package loading and validation reuse the compiler's current

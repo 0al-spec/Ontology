@@ -1228,6 +1228,18 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Status:** Complete. [Validation report](ARCHIVE/ONT-061_Release_Ontologyviz/ONT-061_Validation_Report.md).
 - **Acceptance:** Both archives include the two executable products on revisions that provide them. A smoke test renders a saved profile from the extracted executable and verifies its output. Older release tags retain their source-defined toolset.
 
+#### ONT-062: Shared Ontology Graph Projection
+
+- **Description:** Expose a versioned, source-linked machine-readable package
+  graph using the same declaration selection as the existing visualization.
+- **Priority:** P1 — user-selected editor foundation, 2026-10-31.
+- **Dependencies:** ONT-058 selected imports and ONT-060 saved profiles.
+- **Status:** Complete locally — [validation](ARCHIVE/ONT-062_Shared_Graph_Projection/ONT-062_Validation_Report.md); hosted review/CI pending.
+- **Acceptance:** Preserve DOT and rendering behavior; export deterministic JSON
+  with package identities, source digests and logical declaration locations;
+  retain relation alternatives and selected import provenance; cover real and
+  negative cases. Defer UI, writes and downstream integration.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

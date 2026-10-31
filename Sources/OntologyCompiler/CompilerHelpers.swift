@@ -201,7 +201,11 @@ extension OntologyCompiler {
     }
 
     func sha256(_ source: String) -> String {
-        let digest = SHA256.hash(data: Data(source.utf8))
+        sha256(Data(source.utf8))
+    }
+
+    func sha256(_ source: Data) -> String {
+        let digest = SHA256.hash(data: source)
         return "sha256:" + digest.map { String(format: "%02x", $0) }.joined()
     }
 

@@ -37,6 +37,44 @@ final class OntologyVizCLITests: XCTestCase {
         }
     }
 
+    func testJSONProfileNeedsNoGraphvizAndKeepsSelectedSources() throws {
+        try inTemporaryDirectory { output in
+            let profile = root.appendingPathComponent("Examples/package-visualization/motivation-relations.profile.json")
+            let result = try run(["--profile", profile.path, "--out", output.path, "--format", "json"], path: "")
+            XCTAssertEqual(result.status, 0, result.stderr)
+            let data = try Data(contentsOf: output.appendingPathComponent("ontology.graph.json"))
+            let graph = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+            XCTAssertEqual(graph["schemaVersion"] as? String, "ontology.diagram-projection/v1")
+            XCTAssertEqual((graph["sources"] as? [[String: Any]])?.count, 2)
+            XCTAssertEqual(Set(try FileManager.default.contentsOfDirectory(atPath: output.path)), ["ontology.graph.json"])
+        }
+    }
+
+    func testJSONCannotOverwriteItsSource() throws {
+        try inTemporaryDirectory { output in
+            let source = output.appendingPathComponent("ontology.graph.json")
+            let original = try Data(contentsOf: example)
+            try original.write(to: source)
+            let result = try run([source.path, "--out", output.path, "--format", "json"], path: "")
+            XCTAssertEqual(result.status, 1)
+            XCTAssertTrue(result.stderr.contains("overwrite input"), result.stderr)
+            XCTAssertEqual(try Data(contentsOf: source), original)
+        }
+    }
+
+    func testJSONCannotOverwriteItsProfile() throws {
+        try inTemporaryDirectory { output in
+            let profile = output.appendingPathComponent("ontology.graph.json")
+            let document: [String: Any] = ["schemaVersion": 1, "package": example.path]
+            let original = try JSONSerialization.data(withJSONObject: document)
+            try original.write(to: profile)
+            let result = try run(["--profile", profile.path, "--out", output.path, "--format", "json"], path: "")
+            XCTAssertEqual(result.status, 1)
+            XCTAssertTrue(result.stderr.contains("overwrite input"), result.stderr)
+            XCTAssertEqual(try Data(contentsOf: profile), original)
+        }
+    }
+
     func testRealRendererProducesSVGAndPNGWithConsistentGraphLabels() throws {
         try inTemporaryDirectory { output in
             let result = try run([example.path, "--out", output.path])

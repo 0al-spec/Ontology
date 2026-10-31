@@ -3,6 +3,16 @@ import Foundation
 struct GraphvizRenderer {
     private let fileManager = FileManager.default
 
+    func writeJSON(_ json: String, arguments: VizArguments) throws -> [String] {
+        let staging = fileManager.temporaryDirectory.appendingPathComponent("ontologyviz-\(UUID().uuidString)")
+        try fileManager.createDirectory(at: staging, withIntermediateDirectories: true)
+        defer { try? fileManager.removeItem(at: staging) }
+        let name = "ontology.graph.json"
+        try json.write(to: staging.appendingPathComponent(name), atomically: true, encoding: .utf8)
+        try publish([name], from: staging, arguments: arguments)
+        return [name]
+    }
+
     func render(dot: String, arguments: VizArguments) throws -> [String] {
         let formats = arguments.format.renderedFormats
         let executable = try formats.isEmpty ? nil : resolveExecutable(arguments.dotPath)
