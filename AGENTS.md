@@ -9,11 +9,12 @@ and policy constants, state-machine definitions, a unified registry, and ref val
 A secondary `validate-specgraph` command checks that SpecGraph binding documents reference
 only concepts that exist in a compiled ontology.
 
-The project is a Swift package (macOS 13+, Swift 6.0) with three targets:
+The project is a Swift package (macOS 13+, Swift 6.0) with these production targets:
 
 | Target | Role |
 |--------|------|
 | `OntologyC` | Thin CLI entry point (`Sources/OntologyC/main.swift`) |
+| `OntologyViz` | Package diagram CLI with local Graphviz SVG/PNG rendering |
 | `OntologyCompiler` | Compiler phases: loading, validation, normalization, emit, diff |
 | `OntologyRules` | All validation predicates and decision logic as named specifications |
 
@@ -37,6 +38,7 @@ swift run ontologyc validate-specgraph <binding.yaml> \
 swift run ontologyc diff --from <old.yaml> --to <new.yaml> --out <report.yaml>
 
 # Full quality gate (format + lint + tests)
+# Install Graphviz first for real SVG/PNG regression tests.
 bash tools/swift-quality.sh
 
 # With coverage

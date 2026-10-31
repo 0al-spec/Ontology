@@ -63,6 +63,23 @@ swift run ontologyc compile \
   --out SPECS/ontology/packages/specgraph-core/generated
 ```
 
+## Local Package Diagrams
+
+The separate `ontologyviz` executable uses the same package loader and validator
+and projects the normalized declarations into DOT. Install Graphviz to render
+SVG and PNG locally.
+
+```sh
+swift run ontologyviz \
+  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml --out diagrams
+```
+
+The default writes `ontology.dot`, `ontology.svg` and `ontology.png`. Select
+`--format svg`, `--format png` or `--format dot`, and `--direction LR|TB`.
+DOT-only mode has no Graphviz dependency. Imported symbols are labeled external
+references with the declared package version. See the
+[worked example and dependency instructions](../../Examples/package-visualization/README.md).
+
 ## SpecSpace Viewer Archive Manifest
 
 SpecSpace `/ontology` can consume local Ontology package folders or archives.

@@ -29,6 +29,9 @@ jobs:
       - name: Show Swift version
         run: swift --version
 
+      - name: Install diagram renderer
+        run: apt-get update && apt-get install -y --no-install-recommends graphviz
+
       - name: Restore Linux SwiftPM cache
         uses: actions/cache@v5
         with:

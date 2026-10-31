@@ -1187,6 +1187,13 @@ This workplan tracks the specification work for the Ontology repository. The ini
   and Linux x86_64 binaries, record source identity, publish both archives and SHA-256 sums,
   and support a read-only PR preview and explicit backfill of an existing release.
 
+#### ONT-056: Package Visualization CLI
+- **Description:** Render one DomainOntologyPackage as an inspectable local graph using a standalone ontologyviz executable.
+- **Priority:** P1 — explicit operator request, 2026-10-31
+- **Dependencies:** Existing compiler package validation/normalization; Graphviz dot for SVG/PNG rendering.
+- **Status:** Complete — local quality, real SVG/PNG rendering and generated-output baselines passed; hosted review pending.
+- **Acceptance Criteria:** Deterministic DOT projection, SVG and PNG exports on macOS/Linux, typed and external nodes, relation cardinalities, policy targets, lifecycle transitions, clear argument/renderer errors, real rendering tests and a focused PR.
+
 #### ONT-057: Resolve Foundation Exports
 - **Status:** ✅ Complete — [local validation](ARCHIVE/ONT-057_Resolve_Foundation_Exports/ONT-057_Validation_Report.md)
 - **Source:** SpecGraph #843 and the operator's reproduced false-positive report.

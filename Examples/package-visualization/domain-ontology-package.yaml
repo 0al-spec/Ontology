@@ -1,0 +1,51 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: example.review
+  namespace: review
+  version: 0.1.0
+  approvalStatus: draft
+spec:
+  imports:
+    - id: specgraph.foundation
+      namespace: sg
+      version: 0.1.0
+  classes:
+    Proposal:
+      extends: sg:DomainEntity
+      implements: [Reviewable]
+      description: A proposal submitted for review.
+      central: true
+      lifecycle: ReviewState
+      fields:
+        title:
+          type: string
+          required: true
+    Evidence:
+      extends: sg:DomainEntity
+      description: Evidence cited by a proposal.
+    Approve:
+      extends: sg:Command
+      description: An explicit request to approve a proposal.
+  protocols:
+    Reviewable:
+      description: A proposal provides supporting evidence.
+      requiredRelations: [cites]
+  relations:
+    cites:
+      domain: Proposal
+      range: Evidence
+      cardinality: {min: 1, max: "*"}
+  policies:
+    EvidenceRequired:
+      extends: sg:Policy
+      appliesTo: [Proposal]
+      enforceability: design
+      text: A proposal must cite evidence before approval.
+  stateMachines:
+    ReviewState:
+      states: [draft, approved]
+      transitions:
+        - from: draft
+          to: approved
+          command: Approve

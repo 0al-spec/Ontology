@@ -68,6 +68,21 @@ swift run ontologyc validate-specgraph \
 `diff` compares package versions and emits an
 `OntologyCompatibilityReport` describing compatible and breaking changes.
 
+### Package Visualization
+
+`ontologyviz` validates one YAML package and renders its classes, protocols,
+relations, policy targets and lifecycle transitions locally with Graphviz.
+The library method ``OntologyCompiler/diagramDOT(path:direction:)`` produces a
+deterministic DOT projection. SVG and PNG rendering lives in the executable.
+Imported symbols appear as external references with their declared package version.
+
+```bash
+swift run ontologyviz \
+  Examples/package-visualization/domain-ontology-package.yaml --out diagrams
+```
+
+Install Graphviz for image formats. `--format dot` needs only the Swift executable.
+
 ### SpecGraph Owner Decisions
 
 `export-specgraph-owner-decisions` validates an Ontology-owned owner decision
@@ -92,6 +107,7 @@ data-only, and executable-looking YAML content is validated as inert data.
 - ``OntologyOutputPath``
 - ``RegistryBaseURL``
 - ``OntologyPackageReference``
+- ``OntologyDiagramDirection``
 
 ### Compiler Entry Point
 
