@@ -64,6 +64,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-059 | Archived [implementation review](_Historical/REVIEW_ONT-059.md) |
 | 2026-10-31 | ONT-059 | Archived task and staged-authoring validation |
 | 2026-10-31 | ONT-057 | Archived [implementation self-review](_Historical/REVIEW_ONT-057.md) |
 | 2026-10-31 | ONT-057 | Archived PRD and compiler/consumer validation |
