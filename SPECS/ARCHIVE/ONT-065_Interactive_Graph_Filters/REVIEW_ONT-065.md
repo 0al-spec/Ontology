@@ -20,4 +20,8 @@ Hidden elements are not rendered; dimmed elements remain interactive. No YAML or
 compiler semantics are changed. Saved filter/layout state and named-relation
 filters are separate future work, as are independent hosted review and CI.
 
-FOLLOW-UP is skipped: no unresolved actionable finding from this self-review.
+### Subsequent review follow-up
+
+The inspector now checks visibility by the selected graph ID. A browser
+regression covers two unresolved references that share their label and origin
+but have different expected types, including graph refresh and search selection.

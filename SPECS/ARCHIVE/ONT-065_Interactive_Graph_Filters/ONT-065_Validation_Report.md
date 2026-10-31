@@ -41,3 +41,12 @@ Filtering applies only to declarations already present in a loaded projection;
 it does not restore items omitted by a CLI profile. Individual named relations,
 saved filter/layout profiles, graphical ontology editing and SpecSpace
 integration remain outside this slice.
+
+## Review follow-up
+
+The filter inspector uses the selected graph node ID, including for search
+results, rather than matching a potentially ambiguous label and origin. A real
+browser regression selects an unloaded protocol and a same-named unloaded class,
+refreshes the source, then filters the two types separately. On the rebased
+stack, 12 unit tests, the production build and 15 Chromium tests passed locally.
+Hosted CI and review of the updated head remain separate.
