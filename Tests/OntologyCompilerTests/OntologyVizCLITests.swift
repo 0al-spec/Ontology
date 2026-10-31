@@ -160,7 +160,7 @@ final class OntologyVizCLITests: XCTestCase {
         return try XCTUnwrap(urls.first { FileManager.default.isExecutableFile(atPath: $0.path) }, "Install Graphviz for real rendering tests")
     }
 
-    private func run(_ arguments: [String], path: String? = nil) throws -> (status: Int32, stdout: String, stderr: String) {
+    func run(_ arguments: [String], path: String? = nil, directory: URL? = nil) throws -> (status: Int32, stdout: String, stderr: String) {
         try inTemporaryDirectory { temp in
             let stdout = temp.appendingPathComponent("stdout")
             let stderr = temp.appendingPathComponent("stderr")
@@ -175,7 +175,7 @@ final class OntologyVizCLITests: XCTestCase {
             let process = Process()
             process.executableURL = try ontologycTestBinary(in: root).deletingLastPathComponent().appendingPathComponent("ontologyviz")
             process.arguments = arguments
-            process.currentDirectoryURL = root
+            process.currentDirectoryURL = directory ?? root
             var environment = ProcessInfo.processInfo.environment
             if let path { environment["PATH"] = path }
             process.environment = environment
@@ -188,18 +188,18 @@ final class OntologyVizCLITests: XCTestCase {
         }
     }
 
-    private func inTemporaryDirectory<Result>(_ body: (URL) throws -> Result) throws -> Result {
+    func inTemporaryDirectory<Result>(_ body: (URL) throws -> Result) throws -> Result {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("ontologyviz-test-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: url) }
         return try body(url)
     }
 
-    private var example: URL { root.appendingPathComponent("Examples/package-visualization/domain-ontology-package.yaml") }
+    var example: URL { root.appendingPathComponent("Examples/package-visualization/domain-ontology-package.yaml") }
     private var motivation: URL { root.appendingPathComponent("SPECS/ontology/packages/motivation-core/domain-ontology-package.yaml") }
     private var events: URL { root.appendingPathComponent("SPECS/ontology/packages/events-core/versions/0.2.0/domain-ontology-package.yaml") }
 
-    private var root: URL {
+    var root: URL {
         URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
     }
 }

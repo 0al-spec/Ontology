@@ -83,6 +83,15 @@ swift run ontologyviz \
 
 ![Selected motivation-core relations](motivation-relations.svg)
 
+The same selection is saved in
+[motivation-relations.profile.json](motivation-relations.profile.json).
+
+```sh
+swift run ontologyviz \
+  --profile Examples/package-visualization/motivation-relations.profile.json \
+  --out diagrams/motivation-relations
+```
+
 `--import` and `--expand` can be repeated. Each supplied package must match one
 direct root import by exact id/version, with an unambiguous namespace. Use the
 root import alias in selectors, even when the supplied package uses a different
@@ -105,6 +114,54 @@ actor bindings, snapshot instances, truth and causal validity require their own
 instance representation and validation. Local identity/version matching identifies
 the supplied files and does not authenticate their source or enforce a separate
 consumer's digest pin.
+
+## Saved profiles
+
+Profiles are local JSON files using the
+[diagram profile schema](../../SPECS/ontology/diagram-profile.schema.json).
+A minimal full-package profile needs two fields.
+
+```json
+{
+  "schemaVersion": 1,
+  "package": "../packages/example/domain-ontology-package.yaml"
+}
+```
+
+| Field | Meaning |
+|---|---|
+| `schemaVersion` | Required integer `1` |
+| `package` | Required local YAML path |
+| `view` | `full` by default, or `relations` |
+| `direction` | `LR` by default, or `TB` |
+| `imports` | Local package paths, default `[]` |
+| `expand` | Selectors with the same syntax as repeated `--expand`, default `[]` |
+| `$schema` | Optional editor hint, consumed as a string without fetching it |
+
+Package/import paths resolve relative to the profile's actual directory. A
+symlink to a profile uses the target file's directory. Absolute local paths also
+work. The profile path itself is looked up from the invocation directory.
+Output paths supplied by `--out` remain relative to that invocation directory.
+
+`--profile` excludes a positional package and `--view`, `--import`, `--expand`.
+CLI `--direction` overrides a valid profile direction. Choose `--format`, `--out`
+and `--dot` at runtime. The profile stores the repeatable diagram selection;
+the output destination is explicitly required for each invocation.
+
+```sh
+ontologyviz --profile motivation-relations.profile.json --format svg --out diagrams
+ontologyviz --profile motivation-relations.profile.json --direction TB --out diagrams
+```
+
+Unknown fields, explicit nulls, wrong types and unsupported schema versions are
+configuration errors with exit code `2`. The same runtime selection/import checks
+apply after loading a profile. For relations view, local imports and expanded
+selectors must be supplied together. Invalid package or dependency content retains
+exit code `1`. Output replacement protection covers the profile and all package
+inputs. Profiles can be committed alongside the code/specifications they describe.
+
+The schema provides structural validation for editors. Runtime checks also enforce
+option combinations, reference selection and exact imported package identity/version.
 
 Unexpanded external placeholders carry no claim of successful symbol resolution in the
 imported package. Package loading and validation reuse the compiler's current

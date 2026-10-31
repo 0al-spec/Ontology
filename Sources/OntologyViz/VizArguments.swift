@@ -25,9 +25,22 @@ struct VizArguments {
     let format: VizFormat
     let dotPath: String?
     let diagram: OntologyDiagramOptions
+    let profileURL: URL?
+
+    var sourceURLs: [URL] {
+        ([input] + diagram.imports).map(\.url) + (profileURL.map { [$0] } ?? [])
+    }
 
     init(_ arguments: [String]) throws {
-        let parsed = try Self.parse(arguments)
+        var parsed = try Self.parse(arguments)
+        let profileURL: URL?
+        if let path = parsed.options["--profile"]?.first {
+            let profile = try VizProfile(path: path)
+            parsed = try profile.applying(options: parsed.options, positionals: parsed.positionals)
+            profileURL = profile.source
+        } else {
+            profileURL = nil
+        }
         let options = parsed.options
         let positionals = parsed.positionals
         guard positionals.count == 1, !positionals[0].isEmpty else {
@@ -57,6 +70,7 @@ struct VizArguments {
         self.dotPath = options["--dot"]?.first
         self.diagram = OntologyDiagramOptions(direction: direction, view: view,
                                               imports: imports.map(OntologySourcePath.init(path:)), expandedTypes: expanded)
+        self.profileURL = profileURL
     }
 
     private static func parse(_ arguments: [String]) throws -> (options: [String: [String]], positionals: [String]) {
@@ -70,7 +84,7 @@ struct VizArguments {
                 break
             }
             if value.hasPrefix("--") {
-                guard ["--out", "--format", "--direction", "--dot", "--view", "--import", "--expand"].contains(value) else {
+                guard ["--out", "--format", "--direction", "--dot", "--view", "--import", "--expand", "--profile"].contains(value) else {
                     throw VizFailure(description: "Unknown option \(value)")
                 }
                 guard options[value] == nil || ["--import", "--expand"].contains(value) else {
@@ -91,6 +105,7 @@ struct VizArguments {
 
     static let help = """
     Usage: ontologyviz <package.yaml> --out <directory> [options]
+           ontologyviz --profile <profile.json> --out <directory> [options]
 
     Render a DomainOntologyPackage locally as a graph.
 
@@ -100,12 +115,15 @@ struct VizArguments {
       --view full|relations      Default: full. Relations hides scaffolding.
       --import <package.yaml>    Explicit local direct import (repeatable).
       --expand <ns:Class,...>     Selected imported classes (repeatable).
+      --profile <profile.json>   Saved package and selection; paths relative to profile.
       --help                     Show this help.
 
     Writes ontology.dot and the selected ontology.svg / ontology.png files.
     SVG/PNG require Graphviz: brew install graphviz / apt-get install graphviz.
     Import expansion requires relations view and an exact declared id/version.
     Unselected external references remain unloaded placeholders.
+    Profile excludes positional package / --view / --import / --expand.
+    CLI --direction overrides profile direction; --format / --out / --dot stay runtime options.
     Exit codes: 0 success, 1 package/render/I/O failure, 2 invalid arguments.
     """
 }
