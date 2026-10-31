@@ -1,9 +1,3 @@
-# Selected: ONT-066 — Full import projection
-Branch: feature/ONT-066-full-imports.
-Workspace: .worktrees/Ontology-interactive-viewer, reused after the previous stack merged.
-Retain through PR review; the NormLab pilot sources and launch data live outside this tree.
-Next: implement the approved bounded full-import/counts slice; ONT-045 remains unselected.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -38,6 +32,11 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-066 adds full direct import projection and filter counts; local quality
+  and browser checks PASS. Keep .worktrees/Ontology-interactive-viewer active
+  through PR review. NormLab pilot data and services live outside that tree.
+
 
 - ONT-065 adds hide/dim filters without relayout. Local model, build and browser
   checks passed; hosted review/CI pending. Keep `.worktrees/Ontology-interactive-viewer`
