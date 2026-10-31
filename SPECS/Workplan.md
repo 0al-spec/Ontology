@@ -1288,3 +1288,14 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - Status: ✅ PASS for local startup walkthrough; CI and review pending
 - Dependency: ONT-066 / #91 and ONT-067 / #92
 - Result: self-contained pinned-source first-run and repeat-run instructions.
+
+## ONT-069: Investigate viewer dependency advisories
+- Status: backlog
+- Priority: P2
+- Source: ONT-068 isolated installation; npm audit on the existing pinned viewer lockfile.
+- Dependencies: none known; coordinate with the current viewer stack.
+- Acceptance: reproduce current advisory results, assess affected direct/transitive
+  development tools and reachable modes, choose compatible upgrades or explicitly
+  justified remaining exceptions, and run the affected build/unit/browser checks.
+- Do not apply npm audit fix --force automatically; no upgrade was authorized
+  or executed as part of the manual task.
