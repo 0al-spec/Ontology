@@ -1,8 +1,3 @@
-# Selected: ONT-068 — Viewer launch manual
-Branch: feature/ONT-068-viewer-manual, stacked on #92.
-Workspace: .worktrees/Ontology-interactive-viewer, reused through review.
-Next: write manual and exercise its commands on an isolated source snapshot.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -37,6 +32,11 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-068 adds a pinned first-run/restart manual above #92. Local source-snapshot
+  build and startup/API checks passed; Linux/new visual validation not performed.
+  Keep .worktrees/Ontology-interactive-viewer through stack review.
+
 
 - ONT-067 adds package identity filters and fixed ownership counts above #91.
   Local build/unit/browser checks PASS. Keep .worktrees/Ontology-interactive-viewer
