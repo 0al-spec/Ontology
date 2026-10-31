@@ -37,6 +37,8 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 - ONT-057 validates foundation symbol membership by version and role. The archived report records the SpecGraph #843 reproduction and the SDK comparison.
 
+- ONT-055: release archive automation and read-only PR previews. After merge, backfill the existing 0.3.0 release with the documented dispatch.
+
 - ONT-054: optional policies/stateMachines, retained structural checks and Ruby class-field parity. Local quality: 166 Swift tests, 10 Ruby fixtures; the actual SpecGraph model passes without dummy declarations. Next: review the focused PR, then select a stable compiler revision for downstream adoption. No release or pin update performed.
 
 - ONT-053: reader-oriented README, action and review diagrams, explicit Lean/NormLab boundaries and separate tooling guide. Documentation checks and independent review pass. Next: review the separate documentation PR; no runtime integration selected.
