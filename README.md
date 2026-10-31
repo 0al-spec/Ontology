@@ -121,6 +121,15 @@ The compiler also supports versioned imports, candidate/trusted registry channel
 SpecGraph bindings, draft imports from Hypercode and viewer archives for SpecSpace.
 See the [compiler and integration workflows](SPECS/ontology/tooling-guide.md).
 
+Inspect any package with the local [`ontologyviz` CLI](Examples/package-visualization/README.md).
+It produces SVG and PNG diagrams of types, relations, policies and lifecycles,
+and retains the DOT source. Image rendering requires Graphviz.
+
+```sh
+swift run ontologyviz \
+  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml --out diagrams
+```
+
 ## Where Lean fits—and what a green result means
 
 There are several different claims to check. A well-formed model, a successful test

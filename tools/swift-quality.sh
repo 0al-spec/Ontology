@@ -48,6 +48,7 @@ run_coverage() {
 
 require_tool swiftformat "Install with: brew install swiftformat"
 require_tool swiftlint "Install with: brew install swiftlint"
+require_tool dot "Install Graphviz with: brew install graphviz"
 
 bash tools/check-github-actions-node24.sh
 swiftformat Sources Tests --lint

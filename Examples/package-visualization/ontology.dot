@@ -1,0 +1,35 @@
+digraph ontology {
+  graph [rankdir=TB, bgcolor="#ffffff", pad=0.35, nodesep=0.35, ranksep=0.7,
+    fontname="Helvetica", fontsize=18, labelloc=t, label="example.review@0.1.0"];
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11,
+    color="#94a3b8", fontcolor="#0f172a", fillcolor="#eff6ff", margin="0.16,0.1"];
+  edge [fontname="Helvetica", fontsize=9, color="#64748b", fontcolor="#334155", arrowsize=0.7];
+  "classes/review:Approve" [label="«class»\nreview:Approve", fillcolor="#dbeafe"];
+  "classes/review:Evidence" [label="«class»\nreview:Evidence", fillcolor="#dbeafe"];
+  "classes/review:Proposal" [label="«class · central»\nreview:Proposal\ntitle: string", fillcolor="#dbeafe", penwidth=2];
+  "protocols/review:Reviewable" [label="«protocol»\nreview:Reviewable\nrequiredRelations: cites", fillcolor="#ede9fe"];
+  "policies/review:EvidenceRequired" [label="«policy · design»\nreview:EvidenceRequired", fillcolor="#fef3c7"];
+  subgraph "cluster/stateMachines/review:ReviewState" {
+    label="ReviewState";
+    color="#99f6e4"; style=rounded;
+  "stateMachines/review:ReviewState" [label="«lifecycle»\nreview:ReviewState", fillcolor="#ccfbf1"];
+  "stateMachines/review:ReviewState/states/approved" [label="approved", fillcolor="#f0fdfa", shape=ellipse];
+  "stateMachines/review:ReviewState/states/draft" [label="draft", fillcolor="#f0fdfa", shape=ellipse];
+  }
+  "classes/review:Approve" -> "external/classes/sg:Command" [label="extends", style=solid, arrowhead=empty];
+  "classes/review:Evidence" -> "external/classes/sg:DomainEntity" [label="extends", style=solid, arrowhead=empty];
+  "classes/review:Proposal" -> "classes/review:Evidence" [label="cites [1..*]", style=solid, arrowhead=normal];
+  "classes/review:Proposal" -> "external/classes/sg:DomainEntity" [label="extends", style=solid, arrowhead=empty];
+  "classes/review:Proposal" -> "protocols/review:Reviewable" [label="implements", style=dashed, arrowhead=empty];
+  "classes/review:Proposal" -> "stateMachines/review:ReviewState" [label="lifecycle", style=dotted, arrowhead=normal];
+  "policies/review:EvidenceRequired" -> "classes/review:Proposal" [label="appliesTo", style=dashed, arrowhead=normal];
+  "policies/review:EvidenceRequired" -> "external/policies/sg:Policy" [label="extends", style=solid, arrowhead=empty];
+  "stateMachines/review:ReviewState/states/draft" -> "stateMachines/review:ReviewState/states/approved" [label="command: review:Approve", style=solid, arrowhead=normal];
+  subgraph cluster_external {
+    label="External references (declarations not loaded)";
+    fontsize=11; color="#cbd5e1"; style=dashed;
+  "external/classes/sg:Command" [label="«external reference»\nsg:Command\nspecgraph.foundation@0.1.0", fillcolor="#f1f5f9", style="rounded,dashed,filled"];
+  "external/classes/sg:DomainEntity" [label="«external reference»\nsg:DomainEntity\nspecgraph.foundation@0.1.0", fillcolor="#f1f5f9", style="rounded,dashed,filled"];
+  "external/policies/sg:Policy" [label="«external reference»\nsg:Policy\nspecgraph.foundation@0.1.0", fillcolor="#f1f5f9", style="rounded,dashed,filled"];
+  }
+}
