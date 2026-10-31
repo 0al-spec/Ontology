@@ -27,6 +27,11 @@ switch command {
 case "validate-instances", "export-instance-contract":
     runInstanceGraphCommand(command, arguments: commandArgs, compiler: compiler)
 
+case "advise-staged":
+    let parsed = parseArguments(commandArgs, allowedOptions: [], command: command)
+    requirePositionals(0, in: parsed, command: command)
+    runStagedPackageAdvice(compiler)
+
 case "export-foundation":
     let parsed = parseArguments(commandArgs, allowedOptions: [], command: command)
     requirePositionals(0, in: parsed, command: command)

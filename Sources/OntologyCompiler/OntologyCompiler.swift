@@ -28,9 +28,17 @@ public final class OntologyCompiler {
     /// Parses and validates one ontology package, returning sorted diagnostics without writing output files.
     public func check(path: OntologySourcePath) -> [Diagnostic] {
         diagnostics = []
-        if let package = load(path: path.path) {
-            validate(package)
-        }
+        return checked(load(path: path.path))
+    }
+
+    /// Validate supplied bytes decoded as UTF-8, using their source path for diagnostics.
+    public func check(source: String, path: OntologySourcePath) -> [Diagnostic] {
+        diagnostics = []
+        return checked(load(source: source, path: path.path))
+    }
+
+    private func checked(_ package: LoadedPackage?) -> [Diagnostic] {
+        if let package { validate(package) }
         return diagnostics.sorted {
             [$0.path, $0.code, $0.message].joined(separator: "\u{1f}") <
                 [$1.path, $1.code, $1.message].joined(separator: "\u{1f}")

@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-059 | [ONT-059_Staged_Package_Advice/](ONT-059_Staged_Package_Advice/) | 2026-10-31 | PASS (local Git commits and consumer probes) |
 | ONT-057 | [ONT-057_Resolve_Foundation_Exports/](ONT-057_Resolve_Foundation_Exports/) | 2026-10-31 | PASS (compiler, fixtures and downstream reproduction) |
 | ONT-054 | [ONT-054_Optional_Local_Package_Sections/](ONT-054_Optional_Local_Package_Sections/) | 2026-10-30 | PASS (local compiler/fixture and downstream checks) |
 | ONT-053 | [ONT-053_Reader_Oriented_Project_Story/](ONT-053_Reader_Oriented_Project_Story/) | 2026-10-29 | PASS (documentation) |
@@ -63,6 +64,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-059 | Archived [implementation review](_Historical/REVIEW_ONT-059.md) |
+| 2026-10-31 | ONT-059 | Archived task and staged-authoring validation |
 | 2026-10-31 | ONT-057 | Archived [implementation self-review](_Historical/REVIEW_ONT-057.md) |
 | 2026-10-31 | ONT-057 | Archived PRD and compiler/consumer validation |
 | 2026-10-30 | ONT-054 | Archived independent implementation/consumer review; FOLLOW-UP skipped (no unresolved findings) |
