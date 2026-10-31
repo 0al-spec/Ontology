@@ -1301,7 +1301,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
   or executed as part of the manual task.
 
 ## ONT-070: Viewer README showcase
-- Status: selected
+- Status: ✅ PASS locally; hosted CI/review pending
 - Source: operator request to show the Viewer before the README problem section.
 - Dependency: merged ONT-062 through ONT-068.
 - Acceptance: real inspected screenshot, concise capability summary and launch

@@ -1,10 +1,3 @@
-# Selected: ONT-070 — Viewer README showcase
-
-Add a real Viewer screenshot and a short launch entry before the problem section
-in the root README. Reuse `.worktrees/Ontology-interactive-viewer` on
-`feature/ONT-070-viewer-readme`; keep existing NormLab preview services and sources
-unchanged. Retain through PR review; live preview consumers still need this tree.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -39,6 +32,11 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-070 makes the Viewer visible before the README problem section with a real
+  inspected screenshot and launch links. Documentation checks PASS; hosted review
+  pending. Reused Ontology-interactive-viewer; retain through review and while its
+  preview consumers are active.
 
 - ONT-068 adds a pinned first-run/restart manual above #92. Local source-snapshot
   build and startup/API checks passed; Linux/new visual validation not performed.
