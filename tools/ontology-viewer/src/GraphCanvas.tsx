@@ -19,8 +19,9 @@ function OntologyNode({ data }: NodeProps<ViewerNode>) {
 
 const nodeTypes = { ontology: OntologyNode };
 
-export function GraphCanvas({ graph, search, focusNode, onSelect }: {
+export function GraphCanvas({ graph, identity, search, focusNode, onSelect }: {
   graph: { nodes: ViewerNode[]; edges: ViewerEdge[] };
+  identity: string;
   search: string;
   focusNode: { id: string } | null;
   onSelect: (selection: Selection) => void;
@@ -28,7 +29,22 @@ export function GraphCanvas({ graph, search, focusNode, onSelect }: {
   const [nodes, setNodes, onNodesChange] = useNodesState(graph.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(graph.edges);
   const instance = useRef<ReactFlowInstance<ViewerNode, ViewerEdge> | null>(null);
-  useEffect(() => { setNodes(graph.nodes); setEdges(graph.edges); }, [graph, setNodes, setEdges]);
+  const previousIdentity = useRef(identity);
+  useEffect(() => {
+    const samePackage = previousIdentity.current === identity;
+    previousIdentity.current = identity;
+    setNodes((current) => {
+      const previous = new Map(current.map((node) => [node.id, node]));
+      return graph.nodes.map((node) => {
+        const old = samePackage ? previous.get(node.id) : undefined;
+        return old ? { ...node, position: old.position, selected: old.selected, dragging: old.dragging } : node;
+      });
+    });
+    setEdges((current) => {
+      const previous = new Map(current.map((edge) => [edge.id, edge]));
+      return graph.edges.map((edge) => ({ ...edge, selected: samePackage ? previous.get(edge.id)?.selected : edge.selected }));
+    });
+  }, [graph, identity, setNodes, setEdges]);
   useEffect(() => {
     const node = focusNode ? instance.current?.getNode(focusNode.id) : undefined;
     if (node) void instance.current?.setCenter(node.position.x + 110, node.position.y + 38, { zoom: 1, duration: 300 });

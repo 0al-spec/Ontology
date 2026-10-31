@@ -1,12 +1,14 @@
 import { useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { GraphCanvas } from './GraphCanvas';
 import { Inspector } from './Inspector';
+import { WorkspaceEditor, type WorkspaceSnapshot } from './WorkspaceEditor';
 import { buildGraph, parseProjection } from './graph';
 import type { Projection } from './projection';
 import type { Selection } from './selection';
 import './style.css';
 
 export default function App() {
+  const token = document.querySelector<HTMLMetaElement>('meta[name="ontology-session"]')?.content || '';
   const [projection, setProjection] = useState<Projection | null>(null);
   const [fileName, setFileName] = useState('');
   const [error, setError] = useState('');
@@ -15,6 +17,7 @@ export default function App() {
   // A new request is needed even when the same result is selected twice.
   const [focusNode, setFocusNode] = useState<{ id: string } | null>(null);
   const input = useRef<HTMLInputElement>(null);
+  const graphKey = useRef('');
   const graph = useMemo(() => projection ? buildGraph(projection) : null, [projection]);
   const matches = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -50,14 +53,36 @@ export default function App() {
     }
   }
 
-  return <div className="app">
+  function updateWorkspace(snapshot: WorkspaceSnapshot) {
+    if (!snapshot.graph || snapshot.graphKey === graphKey.current) return;
+    try {
+      const parsed = parseProjection(snapshot.graph);
+      const updatedGraph = buildGraph(parsed);
+      graphKey.current = snapshot.graphKey;
+      setProjection(parsed);
+      setFileName(snapshot.source.name);
+      setSelection((current) => {
+        if (!current) return null;
+        if (current.type === 'node') {
+          const match = updatedGraph.nodes.find((node) => node.data.label === current.data.label &&
+            (!current.data.source || (node.data.source?.id === current.data.source.id && node.data.source.pointer === current.data.source.pointer)));
+          return match ? { type: 'node', data: match.data } : null;
+        }
+        const match = updatedGraph.edges.find((edge) => edge.data?.semanticId === current.data.semanticId && edge.data.kind === current.data.kind);
+        return match?.data ? { type: 'edge', data: match.data } : null;
+      });
+      setError('');
+    } catch (reason) { setError(reason instanceof Error ? reason.message : 'Could not open graph'); }
+  }
+
+  return <div className={`app${token ? ' has-editor' : ''}`}>
     <header className="topbar">
       <div className="brand-mark">◈</div>
       <div className="brand"><strong>Ontology</strong><span>GRAPH VIEWER</span></div>
       <span className="topbar-divider" />
       <span className="file-name">{fileName || 'No graph open'}</span>
-      <span className="readonly-badge">READ ONLY</span>
-      <button className="primary-button" onClick={() => input.current?.click()}>Open graph <span>↗</span></button>
+      <span className="readonly-badge">{token ? 'LOCAL WORKSPACE' : 'READ ONLY'}</span>
+      {!token && <button className="primary-button" onClick={() => input.current?.click()}>Open graph <span>↗</span></button>}
       <input ref={input} className="file-input" type="file" accept=".json,application/json" aria-label="Open graph JSON" onChange={openFile} />
     </header>
     {error && <div className="error-bar" role="alert"><strong>Could not open graph.</strong> {error}</div>}
@@ -82,15 +107,16 @@ export default function App() {
         </div>}
         <div className="sidebar-footer">{graph.nodes.length} nodes <span>·</span> {graph.edges.length} visual links</div>
       </section>
-      <GraphCanvas graph={graph} search={search} focusNode={focusNode} onSelect={setSelection} />
+      <GraphCanvas graph={graph} identity={`${projection.id}@${projection.version}`} search={search} focusNode={focusNode} onSelect={setSelection} />
       <Inspector selection={selection} />
     </main> : <main className="welcome">
       <div className="welcome-symbol">◈</div>
       <div className="section-label">LOCAL GRAPH WORKSPACE</div>
-      <h1>Make your ontology<br /><em>visible.</em></h1>
-      <p>Open a graph projection to explore its concepts, relationships and source locations.</p>
-      <button className="primary-button large" onClick={() => input.current?.click()}>Open graph JSON <span>↗</span></button>
+      <h1>{token ? <>Waiting for a<br /><em>valid graph.</em></> : <>Make your ontology<br /><em>visible.</em></>}</h1>
+      <p>{token ? 'The graph appears when the workspace can read and validate the selected source.' : 'Open a graph projection to explore its concepts, relationships and source locations.'}</p>
+      {!token && <button className="primary-button large" onClick={() => input.current?.click()}>Open graph JSON <span>↗</span></button>}
       <code>ontologyviz --format json --out diagrams</code>
     </main>}
+    {token && <WorkspaceEditor token={token} onSnapshot={updateWorkspace} />}
   </div>;
 }

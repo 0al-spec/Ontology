@@ -31,6 +31,7 @@ jobs:
       - name: Build visualizer and export real example
         run: |
           swift build --product ontologyviz --scratch-path "$RUNNER_TEMP/ontology-viewer-swift"
+          swift build --product ontologyc --scratch-path "$RUNNER_TEMP/ontology-viewer-swift"
           "$RUNNER_TEMP/ontology-viewer-swift/debug/ontologyviz" \
             --profile Examples/package-visualization/motivation-relations.profile.json \
             --format json --out "$RUNNER_TEMP/ontology-viewer-fixture"
@@ -41,4 +42,8 @@ jobs:
         working-directory: tools/ontology-viewer
         env:
           ONTOLOGY_GRAPH_FIXTURE: ${{ runner.temp }}/ontology-viewer-fixture/ontology.graph.json
+          ONTOLOGY_COMPILER: ${{ runner.temp }}/ontology-viewer-swift/debug/ontologyc
+          ONTOLOGY_VIZ: ${{ runner.temp }}/ontology-viewer-swift/debug/ontologyviz
+          ONTOLOGY_VIEWER_DIST: ${{ github.workspace }}/tools/ontology-viewer/dist
+          ONTOLOGY_VIEWER_TEST_TMP: ${{ runner.temp }}
         run: npm run test:e2e
