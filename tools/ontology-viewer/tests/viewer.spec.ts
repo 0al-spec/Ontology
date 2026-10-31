@@ -13,6 +13,13 @@ test('opens a real package projection, searches, inspects and retains the graph 
   await page.getByRole('button', { name: /motivcore:MotivationHypothesis/i }).click();
   await expect(page.getByLabel('Inspector')).toContainText('/spec/classes/MotivationHypothesis');
   await expect(page.getByLabel('Inspector')).toContainText('org.0al.motivation.core');
+  const zoom = async () => page.locator('.react-flow__viewport').evaluate((element) =>
+    Math.round(new DOMMatrixReadOnly(getComputedStyle(element).transform).a * 100));
+  await expect.poll(zoom).toBe(100);
+  await page.locator('.react-flow__controls-zoomout').click();
+  await expect.poll(zoom).toBeLessThan(100);
+  await page.getByRole('button', { name: /motivcore:MotivationHypothesis/i }).click();
+  await expect.poll(zoom).toBe(100);
   const node = page.locator('[data-id="classes/motivcore:MotivationHypothesis"]');
   await expect(node).toBeVisible();
   const before = await node.getAttribute('style');

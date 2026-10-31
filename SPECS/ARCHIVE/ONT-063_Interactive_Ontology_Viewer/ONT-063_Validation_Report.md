@@ -21,7 +21,8 @@ single `oneOf` retain the same semantic record and source pointer.
 - `npm run test:e2e` with the real motivation-core/events-core JSON projection:
   two Chromium tests PASS at desktop and 390 px widths. They exercise file
   loading, node dragging, node/relation search, source inspection, unloaded
-  references and preservation of the existing view after invalid input.
+  references and preservation of the existing view after invalid input. A
+  repeat activation of the same search result after zooming also refocuses it.
 - The desktop and mobile screenshots were inspected. Build, dependency and
   browser-test artifacts were placed on the verified TB5 volume.
 - The parent ONT-062 full Swift quality gate passed after its BOM and import-order

@@ -12,7 +12,8 @@ export default function App() {
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [selection, setSelection] = useState<Selection | null>(null);
-  const [focusNode, setFocusNode] = useState<string | null>(null);
+  // A new request is needed even when the same result is selected twice.
+  const [focusNode, setFocusNode] = useState<{ id: string } | null>(null);
   const input = useRef<HTMLInputElement>(null);
   const graph = useMemo(() => projection ? buildGraph(projection) : null, [projection]);
   const matches = useMemo(() => {
@@ -70,7 +71,7 @@ export default function App() {
         <input id="graph-search" className="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Type a name…" />
         {search.trim() ? <div className="search-results" aria-label="Search results">
           <span className="section-label">{matches.length} MATCHES</span>
-          {matches.map((match) => <button key={match.id} onClick={() => { setSelection(match.selection); setFocusNode(match.focusNode); }}>
+          {matches.map((match) => <button key={match.id} onClick={() => { setSelection(match.selection); setFocusNode({ id: match.focusNode }); }}>
             <span>{match.label}</span><small>{match.kind}</small>
           </button>)}
         </div> : <div className="legend">

@@ -22,7 +22,7 @@ const nodeTypes = { ontology: OntologyNode };
 export function GraphCanvas({ graph, search, focusNode, onSelect }: {
   graph: { nodes: ViewerNode[]; edges: ViewerEdge[] };
   search: string;
-  focusNode: string | null;
+  focusNode: { id: string } | null;
   onSelect: (selection: Selection) => void;
 }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(graph.nodes);
@@ -30,7 +30,7 @@ export function GraphCanvas({ graph, search, focusNode, onSelect }: {
   const instance = useRef<ReactFlowInstance<ViewerNode, ViewerEdge> | null>(null);
   useEffect(() => { setNodes(graph.nodes); setEdges(graph.edges); }, [graph, setNodes, setEdges]);
   useEffect(() => {
-    const node = focusNode ? instance.current?.getNode(focusNode) : undefined;
+    const node = focusNode ? instance.current?.getNode(focusNode.id) : undefined;
     if (node) void instance.current?.setCenter(node.position.x + 110, node.position.y + 38, { zoom: 1, duration: 300 });
   }, [focusNode]);
   const shownNodes = useMemo<ViewerNode[]>(() => {
