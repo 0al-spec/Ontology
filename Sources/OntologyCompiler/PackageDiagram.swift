@@ -13,30 +13,24 @@ extension OntologyCompiler {
         path: OntologySourcePath,
         direction: OntologyDiagramDirection = .leftToRight
     ) throws -> String {
-        diagnostics = []
-        guard let package = load(path: path.path) else {
-            throw OntologyCompilerError.packageError(diagnostics)
-        }
-        validate(package)
-        guard !hasErrors(diagnostics) else {
-            throw OntologyCompilerError.packageError(diagnostics)
-        }
-        var diagram = PackageDiagram(ir: normalize(package))
-        return diagram.render(direction: direction)
+        try diagramDOT(path: path, options: OntologyDiagramOptions(direction: direction))
     }
 }
 
 struct PackageDiagram {
     let ir: JSONObject
+    private let view: OntologyDiagramView
     private var externalNodes: [String: String] = [:]
     private var edges: [String] = []
 
-    init(ir: JSONObject) {
+    init(ir: JSONObject, view: OntologyDiagramView = .full) {
         self.ir = ir
+        self.view = view
     }
 
     mutating func render(direction: OntologyDiagramDirection) -> String {
-        let title = "\(text(ir, "id"))@\(text(ir, "version"))"
+        let identity = "\(text(ir, "id"))@\(text(ir, "version"))"
+        let title = view == .full ? identity : identity + "\nRelations · selected imported subgraph"
         var lines = [
             "digraph ontology {",
             "  graph [rankdir=\(direction.rawValue), bgcolor=\"#ffffff\", pad=0.35, nodesep=0.35, ranksep=0.7,",
@@ -46,20 +40,26 @@ struct PackageDiagram {
             "  edge [fontname=\"Helvetica\", fontsize=9, color=\"#64748b\", fontcolor=\"#334155\", arrowsize=0.7];"
         ]
         lines += classNodes()
-        lines += protocolNodes()
-        lines += policyNodes()
-        lines += machineNodes()
+        if view == .full {
+            lines += protocolNodes()
+            lines += policyNodes()
+            lines += machineNodes()
+        }
         relationEdges()
         lines += edges.sorted()
-        lines += ["  subgraph cluster_external {", "    label=\"External references (declarations not loaded)\";",
-                  "    fontsize=11; color=\"#cbd5e1\"; style=dashed;"]
-        lines += externalNodes.keys.sorted().compactMap { externalNodes[$0] }
-        lines += ["  }", "}"]
+        if view == .full || !externalNodes.isEmpty {
+            lines += ["  subgraph cluster_external {", "    label=\"External references (declarations not loaded)\";",
+                      "    fontsize=11; color=\"#cbd5e1\"; style=dashed;"]
+            lines += externalNodes.keys.sorted().compactMap { externalNodes[$0] }
+            lines.append("  }")
+        }
+        lines.append("}")
         return lines.joined(separator: "\n") + "\n"
     }
 
     private mutating func classNodes() -> [String] {
         records("classes").map { definition in
+            if view == .relations { return relationClassNode(definition) }
             let id = text(definition, "fqid")
             let central = definition["central"] as? Bool == true
             let heading = central ? "«class · central»" : "«class»"
@@ -78,6 +78,15 @@ struct PackageDiagram {
             }
             return node(source, label: label, fill: "#dbeafe", extra: central ? ", penwidth=2" : "")
         }
+    }
+
+    private func relationClassNode(_ definition: JSONObject) -> String {
+        let origin = definition["diagramOrigin"] as? String
+        let heading = origin == nil ? "«class»" : "«imported class»"
+        let label = ([heading, text(definition, "fqid")] + (origin.map { [$0] } ?? [])).joined(separator: "\n")
+        let central = definition["central"] as? Bool == true
+        return node(nodeID("classes", text(definition, "fqid")), label: label,
+                    fill: origin == nil ? "#dbeafe" : "#d1fae5", extra: central ? ", penwidth=2" : "")
     }
 
     private func protocolNodes() -> [String] {
@@ -129,7 +138,7 @@ struct PackageDiagram {
             let source = reference(text(definition, "domain"), kind: "classes")
             let range = definition["range"]
             let alternatives = (range as? JSONObject)?["oneOf"] as? [String]
-            let targets = alternatives ?? (range as? String).map { [$0] } ?? []
+            let targets = diagramRangeReferences(range)
             let cardinality = definition["cardinality"] as? JSONObject ?? [:]
             let bounds = cardinality.isEmpty ? "" : " [\(cardinality["min"] ?? "?")..\(cardinality["max"] ?? "?")]"
             let choice = alternatives == nil ? "" : " · oneOf"

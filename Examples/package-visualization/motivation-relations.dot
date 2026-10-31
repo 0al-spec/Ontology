@@ -1,0 +1,47 @@
+digraph ontology {
+  graph [rankdir=LR, bgcolor="#ffffff", pad=0.35, nodesep=0.35, ranksep=0.7,
+    fontname="Helvetica", fontsize=18, labelloc=t, label="org.0al.motivation.core@0.1.0\nRelations · selected imported subgraph"];
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11,
+    color="#94a3b8", fontcolor="#0f172a", fillcolor="#eff6ff", margin="0.16,0.1"];
+  edge [fontname="Helvetica", fontsize=9, color="#64748b", fontcolor="#334155", arrowsize=0.7];
+  "classes/eventcore:CausalHypothesis" [label="«imported class»\neventcore:CausalHypothesis\norg.0al.events.core@0.2.0", fillcolor="#d1fae5"];
+  "classes/eventcore:Delta" [label="«imported class»\neventcore:Delta\norg.0al.events.core@0.2.0", fillcolor="#d1fae5"];
+  "classes/eventcore:Entity" [label="«imported class»\neventcore:Entity\norg.0al.events.core@0.2.0", fillcolor="#d1fae5"];
+  "classes/eventcore:Interpretation" [label="«imported class»\neventcore:Interpretation\norg.0al.events.core@0.2.0", fillcolor="#d1fae5"];
+  "classes/eventcore:InterpretationCandidate" [label="«imported class»\neventcore:InterpretationCandidate\norg.0al.events.core@0.2.0", fillcolor="#d1fae5"];
+  "classes/eventcore:RecordedEvent" [label="«imported class»\neventcore:RecordedEvent\norg.0al.events.core@0.2.0", fillcolor="#d1fae5", penwidth=2];
+  "classes/eventcore:RoleBinding" [label="«imported class»\neventcore:RoleBinding\norg.0al.events.core@0.2.0", fillcolor="#d1fae5"];
+  "classes/eventcore:StateSnapshot" [label="«imported class»\neventcore:StateSnapshot\norg.0al.events.core@0.2.0", fillcolor="#d1fae5"];
+  "classes/motivcore:MotivationHypothesis" [label="«class»\nmotivcore:MotivationHypothesis", fillcolor="#dbeafe"];
+  "classes/motivcore:Motive" [label="«class»\nmotivcore:Motive", fillcolor="#dbeafe", penwidth=2];
+  "classes/motivcore:OperatorMotivationSupport" [label="«class»\nmotivcore:OperatorMotivationSupport", fillcolor="#dbeafe"];
+  "classes/eventcore:CausalHypothesis" -> "classes/eventcore:Interpretation" [label="eventcore:hypothesisCauseView [1..1]", style=solid, arrowhead=normal];
+  "classes/eventcore:CausalHypothesis" -> "classes/eventcore:Interpretation" [label="eventcore:hypothesisEffectView [1..1]", style=solid, arrowhead=normal];
+  "classes/eventcore:Delta" -> "classes/eventcore:RecordedEvent" [label="eventcore:deltaOfRecord [1..1]", style=solid, arrowhead=normal];
+  "classes/eventcore:Interpretation" -> "classes/eventcore:RecordedEvent" [label="eventcore:interpretsRecord [1..1]", style=solid, arrowhead=normal];
+  "classes/eventcore:Interpretation" -> "classes/eventcore:RoleBinding" [label="eventcore:interpretationBindsRole [0..*]", style=solid, arrowhead=normal];
+  "classes/eventcore:InterpretationCandidate" -> "classes/eventcore:Interpretation" [label="eventcore:candidateResolvedAsInterpretation [0..*]", style=solid, arrowhead=normal];
+  "classes/eventcore:InterpretationCandidate" -> "classes/eventcore:RoleBinding" [label="eventcore:candidateBindsRole [0..*]", style=solid, arrowhead=normal];
+  "classes/eventcore:RecordedEvent" -> "classes/eventcore:StateSnapshot" [label="eventcore:recordAfterSnapshot [1..1]", style=solid, arrowhead=normal];
+  "classes/eventcore:RecordedEvent" -> "classes/eventcore:StateSnapshot" [label="eventcore:recordBeforeSnapshot [1..1]", style=solid, arrowhead=normal];
+  "classes/eventcore:RoleBinding" -> "classes/eventcore:Entity" [label="eventcore:roleBoundEntity [1..1]", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "classes/eventcore:Entity" [label="hypothesisPromptingEntity [0..*]", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "classes/eventcore:Interpretation" [label="hypothesisPromptingView [0..*] · oneOf", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "classes/eventcore:Interpretation" [label="hypothesisView [1..1] · oneOf", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "classes/eventcore:InterpretationCandidate" [label="hypothesisPromptingView [0..*] · oneOf", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "classes/eventcore:InterpretationCandidate" [label="hypothesisView [1..1] · oneOf", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "classes/eventcore:RoleBinding" [label="hypothesisActorRole [0..1]", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "classes/motivcore:Motive" [label="hypothesisMotive [1..1]", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "classes/motivcore:OperatorMotivationSupport" [label="hypothesisNegativeSupport [0..*] · oneOf", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "classes/motivcore:OperatorMotivationSupport" [label="hypothesisPositiveSupport [0..*] · oneOf", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "external/classes/eventcore:Fact" [label="hypothesisPromptingFact [0..*]", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "external/classes/eventcore:SourceAssertion" [label="hypothesisNegativeSupport [0..*] · oneOf", style=solid, arrowhead=normal];
+  "classes/motivcore:MotivationHypothesis" -> "external/classes/eventcore:SourceAssertion" [label="hypothesisPositiveSupport [0..*] · oneOf", style=solid, arrowhead=normal];
+  "classes/motivcore:OperatorMotivationSupport" -> "classes/eventcore:Entity" [label="operatorSupportAuthor [1..1]", style=solid, arrowhead=normal];
+  subgraph cluster_external {
+    label="External references (declarations not loaded)";
+    fontsize=11; color="#cbd5e1"; style=dashed;
+  "external/classes/eventcore:Fact" [label="«external reference»\neventcore:Fact\norg.0al.events.core@0.2.0", fillcolor="#f1f5f9", style="rounded,dashed,filled"];
+  "external/classes/eventcore:SourceAssertion" [label="«external reference»\neventcore:SourceAssertion\norg.0al.events.core@0.2.0", fillcolor="#f1f5f9", style="rounded,dashed,filled"];
+  }
+}

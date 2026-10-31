@@ -80,6 +80,12 @@ DOT-only mode has no Graphviz dependency. Imported symbols are labeled external
 references with the declared package version. See the
 [worked example and dependency instructions](../../Examples/package-visualization/README.md).
 
+`--view relations` retains domain relation edges and their endpoint classes.
+Supply `--import <local-package.yaml>` and `--expand <alias:Class,...>` to include
+a selected subgraph from exact direct import identities/versions. Both flags are
+repeatable. The worked example documents a motivation-core / events-core slice
+and the induced-subgraph rule for imported `oneOf` relations.
+
 ## SpecSpace Viewer Archive Manifest
 
 SpecSpace `/ontology` can consume local Ontology package folders or archives.

@@ -59,10 +59,10 @@ struct GraphvizRenderer {
     }
 
     private func publish(_ names: [String], from staging: URL, arguments: VizArguments) throws {
-        let source = arguments.input.url.resolvingSymlinksInPath().standardizedFileURL
+        let sources = ([arguments.input] + arguments.diagram.imports).map { $0.url.resolvingSymlinksInPath().standardizedFileURL }
         for name in names {
             let target = arguments.output.appendingPathComponent(name).resolvingSymlinksInPath().standardizedFileURL
-            guard target != source else { throw VizFailure(description: "Output would overwrite input package \(source.path)") }
+            guard !sources.contains(target) else { throw VizFailure(description: "Output would overwrite input package \(target.path)") }
         }
         let artifacts = try names.map { try Data(contentsOf: staging.appendingPathComponent($0)) }
         try fileManager.createDirectory(at: arguments.output, withIntermediateDirectories: true)

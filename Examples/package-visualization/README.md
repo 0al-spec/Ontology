@@ -55,10 +55,58 @@ transaction.
 | Several arrows labeled `oneOf` | Alternative relation ranges |
 | Teal group | Lifecycle states and transitions labeled with command/event refs |
 | Dashed gray box | External concept reference with the declared import version |
+| Green box | Explicitly selected class loaded from a supplied local import |
 
 An omitted cardinality bound is shown as `?` when the other bound is present.
 
-External placeholders carry no claim of successful symbol resolution in the
+## Relations view and selected imports
+
+Use `--view relations` to inspect domain relations. This view shows root classes
+incident to the root's relations and retains every root relation. Class fields,
+inheritance, protocols, policies and lifecycle declarations are outside this view.
+The default `--view full` retains the complete package diagram.
+
+To inspect a path across package boundaries, explicitly supply local YAML files
+and select the imported classes to expand. This motivation-core example exposes
+the interpretation, actor role, causal view, registered record, snapshots and Delta.
+
+```sh
+swift run ontologyviz \
+  SPECS/ontology/packages/motivation-core/domain-ontology-package.yaml \
+  --view relations \
+  --import SPECS/ontology/packages/events-core/versions/0.2.0/domain-ontology-package.yaml \
+  --expand eventcore:Interpretation,eventcore:InterpretationCandidate \
+  --expand eventcore:RoleBinding,eventcore:Entity,eventcore:CausalHypothesis \
+  --expand eventcore:RecordedEvent,eventcore:StateSnapshot,eventcore:Delta \
+  --out diagrams/motivation-relations
+```
+
+![Selected motivation-core relations](motivation-relations.svg)
+
+`--import` and `--expand` can be repeated. Each supplied package must match one
+direct root import by exact id/version, with an unambiguous namespace. Use the
+root import alias in selectors, even when the supplied package uses a different
+canonical namespace. Unknown classes, duplicate supplied imports, wrong versions
+and ambiguous aliases are errors. These options require relations view and must
+be supplied together. Inputs are explicit local files; no network or sibling
+directory discovery occurs.
+
+For imported packages, the displayed relations form the induced subgraph of the
+selected classes and known root classes. A relation appears only when its domain
+and **every** range alternative are in that set. A partially selected `oneOf`
+relation is omitted as a whole. Root relations stay complete and unselected root
+targets remain gray external references. All explicitly selected imported classes
+appear, including isolated selections. Green nodes show the actual loaded
+declarations and source id/version. A caption identifies the selected view.
+
+The diagram shows types. The own record and downstream effect record in the
+README's example share the `RecordedEvent` type here. Different occurrences,
+actor bindings, snapshot instances, truth and causal validity require their own
+instance representation and validation. Local identity/version matching identifies
+the supplied files and does not authenticate their source or enforce a separate
+consumer's digest pin.
+
+Unexpanded external placeholders carry no claim of successful symbol resolution in the
 imported package. Package loading and validation reuse the compiler's current
 checks. The diagram is a schema view, including declared behavior structure;
 policy text and actual runtime observations require their own review.
