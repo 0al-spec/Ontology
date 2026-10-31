@@ -1259,6 +1259,14 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Dependency:** ONT-063.
 - **Status:** Complete locally — [validation](ARCHIVE/ONT-064_Source_Preserving_Editing/ONT-064_Validation_Report.md); hosted review/CI pending.
 
+#### ONT-065: Interactive Graph Filters
+
+- **Description:** Filter node types, origins and relationship kinds in the
+  standalone viewer, with hide/dim modes and stable canvas positioning.
+- **Priority:** P1 — user request, 2026-10-31.
+- **Dependency:** ONT-064 / PR #88.
+- **Status:** INPROGRESS in `.worktrees/Ontology-interactive-viewer`.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.

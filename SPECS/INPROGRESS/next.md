@@ -1,3 +1,17 @@
+# Selected: ONT-065 — Interactive Graph Filters
+
+**Priority:** P1 — user-selected follow-up to ONT-064.
+**Status:** INPROGRESS
+**Dependency:** ONT-064 / PR #88, stacked above #87 and #86.
+**Workspace:** `.worktrees/Ontology-interactive-viewer`, branch `feature/ONT-065-graph-filters`.
+**Disposition:** retain for stack review; retire after merge and verification
+that no local state or running service remains.
+
+Add interactive node and edge visibility filters with hide and dim modes while
+preserving canvas coordinates and the viewport. Filtering is presentation-only.
+
+---
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
