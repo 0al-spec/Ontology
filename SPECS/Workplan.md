@@ -1182,7 +1182,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Description:** Publish downloadable ontologyc CLI archives on GitHub Releases.
 - **Priority:** P1 — operator request, 2026-10-31
 - **Dependencies:** ONT-046 Linux portability and the existing release tag convention.
-- **Status:** INPROGRESS
+- **Status:** Complete — archived, local packaging and publication controls passed; live release upload follows adoption.
 - **Acceptance Criteria:** Build from the release tag commit, smoke the extracted macOS arm64
   and Linux x86_64 binaries, record source identity, publish both archives and SHA-256 sums,
   and support a read-only PR preview and explicit backfill of an existing release.

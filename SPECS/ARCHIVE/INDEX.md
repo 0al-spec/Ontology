@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-055 | [ONT-055_Release_Binaries/](ONT-055_Release_Binaries/) | 2026-10-31 | PASS (local macOS packaging and publication controls) |
 | ONT-054 | [ONT-054_Optional_Local_Package_Sections/](ONT-054_Optional_Local_Package_Sections/) | 2026-10-30 | PASS (local compiler/fixture and downstream checks) |
 | ONT-053 | [ONT-053_Reader_Oriented_Project_Story/](ONT-053_Reader_Oriented_Project_Story/) | 2026-10-29 | PASS (documentation) |
 | ONT-052 | [ONT-052_Intent_Preservation_Contract/](ONT-052_Intent_Preservation_Contract/) | 2026-10-29 | PASS (bounded contract and two profiles) |

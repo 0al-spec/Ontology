@@ -1,8 +1,3 @@
-# Selected: ONT-055 — Release Binaries
-
-Build and verify downloadable CLI archives for the existing GitHub Releases process.
-The preceding NormLab candidate remains queued below.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -37,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-055: release archive automation and read-only PR previews. After merge, backfill the existing 0.3.0 release with the documented dispatch.
 
 - ONT-054: optional policies/stateMachines, retained structural checks and Ruby class-field parity. Local quality: 166 Swift tests, 10 Ruby fixtures; the actual SpecGraph model passes without dummy declarations. Next: review the focused PR, then select a stable compiler revision for downstream adoption. No release or pin update performed.
 
