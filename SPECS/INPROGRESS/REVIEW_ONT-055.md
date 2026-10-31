@@ -11,3 +11,6 @@ Review finding: the verifier should accept its own exact checksum file when
 restarted in the same directory, and reject stale local checksum contents.
 Add a regression before closing FLOW. The platform previews validate runner
 behavior; real release publication is only exercised after workflow adoption.
+
+Follow-up resolved: the verifier accepts its matching checksum file and fails
+on conflicting contents before upload. All seven publication tests pass.

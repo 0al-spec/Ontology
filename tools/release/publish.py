@@ -58,12 +58,15 @@ def verify_archive(path, tag, commit, platform):
 
 def expected_files(directory, tag, commit):
     archives = [directory / f"ontologyc-{tag}-{p}.tar.gz" for p in PLATFORMS]
-    if set(directory.iterdir()) != set(archives) or any(p.stat().st_size == 0 for p in archives):
+    sums = directory / "ontologyc-SHA256SUMS"
+    if set(directory.iterdir()) - {sums} != set(archives) or any(p.stat().st_size == 0 for p in archives):
         raise ValueError("expected exactly one nonempty archive per platform")
     for archive, platform in zip(archives, PLATFORMS):
         verify_archive(archive, tag, commit, platform)
-    sums = directory / "ontologyc-SHA256SUMS"
-    sums.write_text("".join(f"{sha256(p)}  {p.name}\n" for p in archives), encoding="ascii")
+    content = "".join(f"{sha256(p)}  {p.name}\n" for p in archives)
+    if sums.exists() and sums.read_bytes() != content.encode("ascii"):
+        raise ValueError("stale local checksum list")
+    sums.write_text(content, encoding="ascii")
     return [*archives, sums]
 
 

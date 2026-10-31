@@ -37,6 +37,14 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(sums.read_text().splitlines(), [
             f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}" for p in archives])
 
+    def test_repeat_verification_accepts_only_matching_local_checksums(self):
+        files = publish.expected_files(self.area, self.tag, self.sha)
+        self.assertEqual(files, publish.expected_files(self.area, self.tag, self.sha))
+        files[-1].write_text("stale")
+        with self.assertRaisesRegex(ValueError, "stale local"):
+            publish.expected_files(self.area, self.tag, self.sha)
+        self.assertEqual(files[-1].read_text(), "stale")
+
     def test_wrong_revision_or_absent_platform_does_not_create_checksums(self):
         self.archive("macos-arm64", sha="b"*40)
         with self.assertRaisesRegex(ValueError, "identity mismatch"):
