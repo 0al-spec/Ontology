@@ -1,4 +1,13 @@
-# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Current Task — ONT-056 Package Visualization CLI
+
+Selected by the operator on 2026-10-31. Workspace `.worktrees/Ontology-visualization`,
+branch `feature/ONT-056-package-visualization`, based on main `d831e25`.
+
+Build the standalone `ontologyviz` product through the existing compiler library,
+then verify real SVG/PNG rendering with Graphviz and publish a focused PR.
+Keep this worktree active through review and retire it after merge.
+
+## Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core

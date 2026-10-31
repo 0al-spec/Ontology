@@ -1178,6 +1178,13 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Existing nonempty packages retain deterministic output, and meaningful regression/quality checks pass.
   - Publish a focused PR; no merge, release, global ontology change or universal instance validator.
 
+#### ONT-056: Package Visualization CLI
+- **Description:** Render one DomainOntologyPackage as an inspectable local graph using a standalone ontologyviz executable.
+- **Priority:** P1 — explicit operator request, 2026-10-31
+- **Dependencies:** Existing compiler package validation/normalization; Graphviz dot for SVG/PNG rendering.
+- **Status:** INPROGRESS
+- **Acceptance Criteria:** Deterministic DOT projection, SVG and PNG exports on macOS/Linux, typed and external nodes, relation cardinalities, policy targets, lifecycle transitions, clear argument/renderer errors, real rendering tests and a focused PR.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
