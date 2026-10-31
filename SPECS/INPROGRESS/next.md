@@ -1,3 +1,7 @@
+# Selected: ONT-059 — Staged Package Advice
+
+Deliver an advisory hook using the ONT-057 package checker.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
