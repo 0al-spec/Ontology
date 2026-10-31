@@ -23,7 +23,7 @@ export default function App() {
     const query = search.trim().toLowerCase();
     if (!query || !graph) return [];
     const nodes = graph.nodes.filter((node) => node.data.label.toLowerCase().includes(query))
-      .map((node) => ({ id: node.id, label: node.data.label, kind: node.data.kind, focusNode: node.id, selection: { type: 'node', data: node.data } as Selection }));
+      .map((node) => ({ id: node.id, label: node.data.label, kind: node.data.kind, focusNode: node.id, selection: { type: 'node', id: node.id, data: node.data } as Selection }));
     const seen = new Set<string>();
     const relations = graph.edges.filter((edge) => {
       const data = edge.data;
@@ -65,9 +65,8 @@ export default function App() {
       setSelection((current) => {
         if (!current) return null;
         if (current.type === 'node') {
-          const match = updatedGraph.nodes.find((node) => node.data.label === current.data.label &&
-            (!current.data.source || (node.data.source?.id === current.data.source.id && node.data.source.pointer === current.data.source.pointer)));
-          return match ? { type: 'node', data: match.data } : null;
+          const match = updatedGraph.nodes.find((node) => node.id === current.id);
+          return match ? { type: 'node', id: match.id, data: match.data } : null;
         }
         const match = updatedGraph.edges.find((edge) => edge.id === current.id && edge.source === current.source && edge.target === current.target &&
           edge.data?.semanticId === current.data.semanticId && edge.data.kind === current.data.kind);

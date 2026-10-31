@@ -26,3 +26,12 @@ Five model/source-text tests, the production TypeScript build and five desktop/
 mobile Chromium tests passed locally with real compiler and visualizer binaries.
 These checks do not substitute for hosted CI, independent review or graphical
 declaration editing. The latter remains a possible later layer.
+
+### Subsequent review follow-up
+
+Addressed the reported retry and Unicode cases, along with retargeted input
+symlinks, transient visualization failures and ambiguous mixed-line-ending
+edits. Selection now retains the graph node ID instead of matching its label.
+The focused regressions exercise real browser editing and process-level races;
+the validation report records their boundaries. Re-review and current-head CI
+remain separate from this author follow-up.

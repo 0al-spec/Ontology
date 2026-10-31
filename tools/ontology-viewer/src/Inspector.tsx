@@ -15,7 +15,8 @@ export function Inspector({ selection }: { selection: Selection | null }) {
     <div className="section-label">INSPECTOR <span className="kind-pill">{kind}</span></div>
     <h2>{label}</h2>
     {selection.type === 'node' && selection.data.kind === 'external' && <p className="notice">
-      This is an unloaded reference{selection.data.origin ? ` from ${selection.data.origin}` : ''}. Its declaration has not been loaded.
+      This is an unloaded reference{selection.id.startsWith('external/classes/') ? ' (class)' : selection.id.startsWith('external/protocols/') ? ' (protocol)' : ''}
+      {selection.data.origin ? ` from ${selection.data.origin}` : ''}. Its declaration has not been loaded.
     </p>}
     {description && <p>{description}</p>}
     {selection.type === 'edge' && record && <dl>

@@ -17,7 +17,7 @@ It retains untouched comments, BOM and line endings, detects stale source digest
 and preserves an unsaved draft on external change. A no-op save does not rewrite
 the file. Only the selected root package is writable through the local API.
 
-## Checks
+## Initial checks
 
 - `npm test`: five model/source-text tests PASS, including mixed line endings,
   BOM, comment preservation and projection validation.
@@ -41,3 +41,18 @@ reject stale saves, but there is no filesystem-wide compare-and-swap: an
 uncooperative writer may race between the final check and rename. File mode is
 preserved; ACLs, extended attributes and hard-link identity are not guaranteed.
 The local workspace does not authenticate a person or approve an ontology.
+
+## Review follow-up
+
+The workspace checks that selected root, import and profile symlinks still resolve
+to their startup targets, compares graph source digests with the captured inputs,
+retries transient visualization errors and reports concurrent snapshot changes
+as retryable. Unpaired Unicode surrogates are rejected before saving. An
+ambiguous browser edit or undo keeps the draft visible and disables saving rather
+than guessing its original line endings. Node selection follows graph IDs even
+when unloaded class and protocol references have the same label.
+
+The follow-up passed nine model/source-text unit tests, the production build,
+13 browser tests with the real compiler and visualizer, and a deterministic
+29,602-case line-edit probe. The digest check and atomic rename still do not
+provide a filesystem-wide CAS; current-head CI remains separate.

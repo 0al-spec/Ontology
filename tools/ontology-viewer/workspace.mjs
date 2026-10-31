@@ -15,6 +15,9 @@ const run = (command, args) => new Promise((resolve) => {
   });
 });
 
+class InputPathChanged extends Error {}
+class SnapshotChanged extends Error {}
+
 function optionsFromArgs(args) {
   const options = {};
   for (let index = 0; index < args.length; index += 2) {
@@ -32,16 +35,22 @@ function optionsFromArgs(args) {
 }
 
 async function resolveInputs(options) {
-  if (options.package) return { root: await fs.realpath(options.package), imports: [], profile: null, profileDigest: null };
-  const profile = await fs.realpath(options.profile);
+  if (options.package) {
+    const rootPath = path.resolve(options.package);
+    return { rootPath, root: await fs.realpath(rootPath), importPaths: [], imports: [], profilePath: null, profile: null, profileDigest: null };
+  }
+  const profilePath = path.resolve(options.profile);
+  const profile = await fs.realpath(profilePath);
   const bytes = await fs.readFile(profile);
   const doc = JSON.parse(decode(bytes));
   if (typeof doc.package !== 'string' || !Array.isArray(doc.imports || []) || (doc.imports || []).some((item) => typeof item !== 'string')) {
     throw new Error('Invalid profile package or imports');
   }
-  const root = await fs.realpath(path.resolve(path.dirname(profile), doc.package));
-  const imports = await Promise.all((doc.imports || []).map((item) => fs.realpath(path.resolve(path.dirname(profile), item))));
-  return { root, imports, profile, profileDigest: hash(bytes) };
+  const rootPath = path.resolve(path.dirname(profile), doc.package);
+  const importPaths = (doc.imports || []).map((item) => path.resolve(path.dirname(profile), item));
+  const root = await fs.realpath(rootPath);
+  const imports = await Promise.all(importPaths.map((item) => fs.realpath(item)));
+  return { rootPath, root, importPaths, imports, profilePath, profile, profileDigest: hash(bytes) };
 }
 
 async function readBody(request) {
@@ -72,8 +81,16 @@ export async function startWorkspace(options) {
   let saveQueue = Promise.resolve();
 
   async function readInputs() {
+    const paths = [[inputs.rootPath, inputs.root], ...inputs.importPaths.map((item, index) => [item, inputs.imports[index]])];
+    if (inputs.profile) paths.push([inputs.profilePath, inputs.profile]);
+    for (const [selected, pinned] of paths) {
+      let resolved;
+      try { resolved = await fs.realpath(selected); }
+      catch { throw new InputPathChanged('A selected input path is unavailable; restore it or restart the workspace'); }
+      if (resolved !== pinned) throw new InputPathChanged('A selected input path now points elsewhere; restore it or restart the workspace');
+    }
     const [root, ...imports] = await Promise.all([inputs.root, ...inputs.imports].map((item) => fs.readFile(item)));
-    if (inputs.profile && hash(await fs.readFile(inputs.profile)) !== inputs.profileDigest) throw new Error('Profile changed; restart the workspace');
+    if (inputs.profile && hash(await fs.readFile(inputs.profile)) !== inputs.profileDigest) throw new InputPathChanged('Profile changed; restart the workspace');
     return { root, imports, key: [hash(root), ...imports.map(hash), inputs.profileDigest || ''].join('|') };
   }
 
@@ -87,7 +104,7 @@ export async function startWorkspace(options) {
     try {
       diagnostics = JSON.parse(checked.stdout);
       if (!Array.isArray(diagnostics) || ![0, 1].includes(checked.code)) throw new Error('Unexpected compiler response');
-    } catch { toolError = `Compiler unavailable: ${checked.error || checked.stderr || 'invalid diagnostics'}`; }
+    } catch { diagnostics = []; toolError = `Compiler unavailable: ${checked.error || checked.stderr || 'invalid diagnostics'}`; }
     const args = inputs.profile ? ['--profile', inputs.profile] : [inputs.root];
     const rendered = await run(options.viz, [...args, '--format', 'json', '--out', scratch]);
     let graph = null;
@@ -97,11 +114,19 @@ export async function startWorkspace(options) {
       catch { graphError = 'Visualizer did not produce a valid graph'; }
     } else graphError = rendered.stderr || rendered.error || 'Visualizer failed';
     const current = await readInputs();
-    if (current.key !== input.key || (graph && graph.sourceByteDigest !== source.digest)) {
-      throw new Error('Source changed while checking; retrying');
+    if (current.key !== input.key) throw new SnapshotChanged('Source changed while checking; waiting for a stable snapshot');
+    if (graph) {
+      const expected = input.imports.map(hash).sort();
+      const actual = Array.isArray(graph.sources) ? graph.sources.slice(1).map((item) => item?.sourceByteDigest).sort() : [];
+      if (graph.sourceByteDigest !== source.digest || !Array.isArray(graph.sources) || graph.sources[0]?.sourceByteDigest !== source.digest ||
+          actual.length !== expected.length || actual.some((digest, index) => digest !== expected[index])) {
+        graph = null;
+        graphError = 'Visualizer output does not match the selected source bytes';
+      }
     }
     const value = { source, diagnostics, toolError, graph, graphError, graphKey: input.key };
-    if (!toolError && rendered.code !== -1) cache = { key: input.key, value };
+    const invalidSource = diagnostics.some((item) => item?.severity === 'error');
+    if (!toolError && ((rendered.code === 0 && graph) || (rendered.code === 1 && invalidSource))) cache = { key: input.key, value };
     return value;
   }
 
@@ -112,6 +137,7 @@ export async function startWorkspace(options) {
 
   async function save(body) {
     if (typeof body?.content !== 'string' || typeof body?.expectedDigest !== 'string') return { status: 400, value: { error: 'Expected content and digest' } };
+    if (!body.content.isWellFormed()) return { status: 400, value: { error: 'Content contains an unpaired UTF-16 surrogate' } };
     const before = (await readInputs()).root;
     if (hash(before) !== body.expectedDigest) return { status: 409, value: { error: 'Source changed on disk' } };
     const next = Buffer.from(body.content, 'utf8');
@@ -160,7 +186,11 @@ export async function startWorkspace(options) {
       const type = asset.endsWith('.js') ? 'text/javascript' : asset.endsWith('.css') ? 'text/css' : 'application/octet-stream';
       response.writeHead(200, { 'content-type': type, 'x-content-type-options': 'nosniff' });
       return response.end(await fs.readFile(asset));
-    } catch (error) { return json(response, 500, { error: error instanceof Error ? error.message : 'Workspace error' }); }
+    } catch (error) {
+      if (error instanceof InputPathChanged) return json(response, 409, { code: 'input_changed', error: error.message });
+      if (error instanceof SnapshotChanged) return json(response, 409, { code: 'snapshot_changed', retryable: true, error: error.message });
+      return json(response, 500, { error: error instanceof Error ? error.message : 'Workspace error' });
+    }
   });
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(options.port || 0, '127.0.0.1', resolve); });
   return { url: `http://127.0.0.1:${server.address().port}/`, token, close: async () => {

@@ -56,7 +56,7 @@ export function GraphCanvas({ graph, identity, search, focusNode, onSelect }: {
       className: `${node.className || ''}${query && node.data.label.toLowerCase().includes(query) ? ' search-match' : ''}`,
     }));
   }, [nodes, search]);
-  const onNodeClick: NodeMouseHandler<ViewerNode> = (_, node) => onSelect({ type: 'node', data: node.data });
+  const onNodeClick: NodeMouseHandler<ViewerNode> = (_, node) => onSelect({ type: 'node', id: node.id, data: node.data });
   const onEdgeClick: EdgeMouseHandler<ViewerEdge> = (_, edge) => {
     if (edge.data) onSelect({ type: 'edge', id: edge.id, source: edge.source, target: edge.target, data: edge.data });
   };

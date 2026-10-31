@@ -61,11 +61,21 @@ a loopback port (default: a free port).
 
 The editor works on the original text instead of serializing YAML. Unchanged
 regions, comments and the UTF-8 BOM remain as written. Existing line terminators
-are retained in order during a text replacement; new lines use a neighboring
-line-ending style. A save compares the last loaded byte digest against disk and
-rejects stale writes. If an agent changes a clean buffer it refreshes; if the
-human has unsaved changes, those remain visible and saving is disabled until the
-conflict is reconciled. Reload asks before discarding an unsaved draft.
+are retained around a text replacement; new lines use a neighboring line-ending
+style. The browser's edit range distinguishes identical-looking lines with
+different terminators. If the range or an undo state is ambiguous, the draft
+remains visible and saving is disabled: undo the edit or copy the draft before
+reloading. A save compares the last loaded byte digest against disk and rejects
+stale writes and unpaired Unicode surrogates. If an agent changes a clean buffer
+it refreshes; if the human has unsaved changes, those remain visible and saving
+is disabled until the conflict is reconciled. Reload asks before discarding an
+unsaved draft.
+
+The workspace pins the resolved root, import and profile paths at startup. If a
+selected symlink is retargeted or the profile changes, it stops saving and marks
+the graph stale; restore the original input or restart the workspace to select
+the new one. A snapshot interrupted by a concurrent edit is retried, as is a
+transient visualizer failure. The editor keeps the draft during these events.
 
 The workspace runs `ontologyc check --format json` and refreshes the graph with
 `ontologyviz`. Invalid draft text may be saved and corrected: diagnostics appear
