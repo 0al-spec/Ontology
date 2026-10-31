@@ -1189,7 +1189,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Description:** Inspect domain relations independently of inheritance/policy/lifecycle scaffolding, with explicitly selected classes from local imported packages.
 - **Priority:** P1 — operator approval, 2026-10-31
 - **Dependencies:** ONT-056 package visualization, PR #81.
-- **Status:** INPROGRESS
+- **Status:** Complete — 195 local tests, quality, TypeScript, DocC and real rendering passed; PR review pending.
 - **Acceptance Criteria:** Preserve default diagrams, explicit relations view, exact declared id/version import bindings, qualified selectors and honest omitted alternatives, deterministic DOT, local SVG/PNG regression and motivation-core example.
 
 ## Task Status Legend

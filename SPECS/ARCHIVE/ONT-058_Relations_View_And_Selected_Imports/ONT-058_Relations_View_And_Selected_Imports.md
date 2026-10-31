@@ -48,3 +48,8 @@ unknown/missing selectors, partial oneOf omission, source overwrite protection,
 determinism and real SVG/PNG CLI rendering. Run the repository quality gate,
 generated-output contracts, TypeScript and DocC checks. Save and inspect the
 motivation-core render. Follow FLOW checkpoints and open a focused PR atop #81.
+
+---
+**Archived** 2026-10-31
+
+**Verdict** PASS for local checks; external review and hosted CI pending.

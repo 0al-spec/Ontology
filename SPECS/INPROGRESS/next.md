@@ -1,14 +1,4 @@
-# Current Task — ONT-058 Relations View and Selected Imports
-
-Continue the existing `.worktrees/Ontology-visualization` on branch
-`feature/ONT-058-relations-view`. This task depends on ONT-056 PR #81 and will
-form a focused PR based on `feature/ONT-056-package-visualization`.
-
-Implement the relations view and explicit local package selection. Verify the
-motivation-core path to event records and Delta, then retain this worktree for
-stack review and retire it after both layers land.
-
-## Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
@@ -42,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-058 relations view and selected local imports. Local verification PASS. Branch `feature/ONT-058-relations-view` depends on ONT-056 PR #81. Retain `.worktrees/Ontology-visualization` through stack review and retire it after merge. A later ergonomic slice can save reusable selection profiles.
 
 - ONT-056 package visualization. Local tests/rendering/quality PASS. Worktree `.worktrees/Ontology-visualization` remains active for the focused PR review. Next slice can add a selected-concept neighborhood view for large packages. Retire this worktree after merge.
 
