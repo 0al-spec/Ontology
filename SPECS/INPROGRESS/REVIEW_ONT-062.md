@@ -1,0 +1,36 @@
+## REVIEW REPORT — ONT-062 shared graph projection
+
+**Scope:** `origin/main..5fbb7f2` and the Linux decoding probe recorded in the validation report.
+**Method:** author self-review; independent hosted review remains pending.
+
+### Summary verdict
+
+- [x] Approve locally with the documented scope
+- [ ] Request changes
+
+### Critical and secondary issues
+
+No unresolved implementation findings in this bounded slice. During development
+the raw-byte digest for BOM input was corrected and independently distinguished
+from the existing normalized compiler digest. The compiler reads and hashes one
+snapshot per selected file; callers must still compare the byte digest again
+before any future edit. No editing operation is added here.
+
+### Architecture and tests
+
+- DOT and JSON consume one selection; imported identities, aliases, oneOf,
+  unloaded references, source pointers and overwrite protection are covered.
+- The projection is a versioned declaration graph, not a lossless YAML AST or
+  a ready-made layout. Its arrays and normalized fields still require an adapter
+  for a particular interactive canvas. No independent UI or downstream contract
+  is claimed to have adopted this version.
+- Local Swift quality, coverage, golden image-source parity, TypeScript smoke,
+  generated-output baselines and both DocC builds passed. The Linux Foundation
+  probe is narrower than the hosted Linux matrix, which remains pending.
+
+### Next steps
+
+Publish the focused PR and retain its task worktree through review. A subsequent
+slice can consume this graph in a standalone read-only interactive canvas,
+then design source-preserving edits and live file updates. FOLLOW-UP is skipped:
+these are the already-agreed next slices, not defects found in ONT-062.

@@ -35,6 +35,9 @@ loaded text. Both source parsing and the byte digest use one input snapshot.
   and compared all eight existing package baselines and passed its positive and
   negative structural controls.
 - OntologyCompiler and OntologyRules DocC build PASS; `git diff --check` PASS.
+- A read-only, offline `swift:6.3.3-bookworm` Linux/arm64 container probe
+  confirmed that Foundation strips a UTF-8 BOM the same way as the projection
+  loader. This is a decoding probe, not a Linux project build or full test run.
 - Builds, caches, generated diagrams and DocC outputs were routed to the
   verified per-worktree TB5 paths. Swift 6.4 defaults to Swift Build, so the
   unchanged quality wrapper was run with a local shim selecting its expected
@@ -44,6 +47,6 @@ loaded text. Both source parsing and the byte digest use one input snapshot.
 
 ## Limits
 
-No UI, YAML rewrite, editor state, agent integration, Linux local run or
+No UI, YAML rewrite, editor state, agent integration, full Linux project run or
 SpecSpace/SpecGraph change is claimed. A successful graph is not a diagnostics
 report, an instance graph or evidence that manual policies are satisfied.
