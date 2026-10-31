@@ -5,6 +5,16 @@ set -euo pipefail
 compiler="$(cd "$(dirname "${1:?supply ontologyc}")" && pwd)/$(basename "$1")"
 base="$(mktemp -d "${TMPDIR:-/tmp}/ontology-advice.XXXXXXXX")"
 trap 'rm -rf "$base"' EXIT
+commit_cmd=(git commit)
+case "${2:-}" in
+    "") ;;
+    --rtk)
+        command -v rtk >/dev/null || { echo 'RTK smoke requires rtk on PATH' >&2; exit 1; }
+        commit_cmd=(rtk git commit)
+        export RTK_DB_PATH="$base/rtk.db" RTK_TELEMETRY_DISABLED=1
+        ;;
+    *) echo 'usage: staged-package-advice-smoke.sh <ontologyc> [--rtk]' >&2; exit 2 ;;
+esac
 export GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null ADVICE_TEST_BINARY="$compiler"
 # A caller can itself be a Git hook or a CI checkout.
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE
@@ -41,7 +51,7 @@ spec:
     contains: {domain: Entry, range: Entry, cardinality: {min: 0, max: 1}}
 EOF
 }
-commit() { git commit -qm "$1" >"$base/log" 2>&1 || { cat "$base/log" >&2; return 1; }; }
+commit() { "${commit_cmd[@]}" -qm "$1" >"$base/log" 2>&1 || { cat "$base/log" >&2; return 1; }; }
 quiet() { if grep -F '[ontology advice]' "$base/log"; then return 1; fi; }
 
 # The working copy is valid but the first commit (unborn HEAD) contains a typo.
@@ -49,7 +59,11 @@ package Typo '' > "$model"
 git add -- "$model"
 package ValueObject '' > "$model"
 commit 'bad index, good worktree'
-grep -F "$model" "$base/log" | grep -F 'class.extends.unresolved' | grep -F 'spec.classes.Entry.extends' >/dev/null
+if ! grep -F "$model" "$base/log" | grep -F 'class.extends.unresolved' | grep -F 'spec.classes.Entry.extends' >/dev/null; then
+    echo "The successful commit did not display the staged package diagnostic (${commit_cmd[*]})." >&2
+    cat "$base/log" >&2
+    exit 1
+fi
 git show "HEAD:$model" | grep -F 'sg:Typo' >/dev/null
 
 git add -- "$model"
@@ -109,10 +123,10 @@ commit 'large YAML'
 grep -F 'large.yaml' "$base/log" | grep -F '4 MiB' >/dev/null
 
 touch veto
-if git commit --allow-empty -qm 'independent hook must block'; then exit 1; fi
+if "${commit_cmd[@]}" --allow-empty -qm 'independent hook must block'; then exit 1; fi
 rm veto
 
 # A missing executable is an advisory failure too.
-ADVICE_TEST_BINARY="$base/missing" git commit --allow-empty -qm 'advice unavailable' > "$base/log" 2>&1
+ADVICE_TEST_BINARY="$base/missing" "${commit_cmd[@]}" --allow-empty -qm 'advice unavailable' > "$base/log" 2>&1
 grep -F 'check unavailable' "$base/log" >/dev/null
 echo 'Staged package advice and independent hook behavior: PASS'

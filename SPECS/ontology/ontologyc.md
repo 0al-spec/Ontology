@@ -67,7 +67,13 @@ Commit output includes the staged filename and each compiler diagnostic, for exa
 [ontology advice] "models/member.yaml" error class.extends.unresolved at "spec.classes.Entry.extends": "Class base reference sg:Typo cannot be resolved"
 ```
 
-Keep Git output visible in the agent transcript. In an RTK environment use `rtk proxy git commit` for package changes. Its filtered `rtk git commit` can reduce a successful commit to `ok` and hide the advisory.
+For agents using RTK, verify the actual commit command after installing or upgrading RTK. From the Ontology source checkout, run:
+
+```bash
+bash tools/staged-package-advice-smoke.sh "$(command -v ontologyc)" --rtk
+```
+
+The smoke test makes disposable commits with `rtk git commit`. It fails if the package diagnostic disappears or the client ignores a hook veto. Stock RTK 0.37.2 and 1.1.0 discard stderr on successful commits. Use a build with the [RTK hook-output fix](https://github.com/rtk-ai/rtk/pull/4386) or an equivalent backport that passes the smoke test. On an affected installation, `rtk proxy git commit` is a fallback.
 
 Read the findings, correct the package and stage the fix, or keep the draft for later review. A clean check is quiet. The advisory reports and skips blobs over 4 MiB to bound the work on the commit path. Run the strict check for these files. Package errors, warnings and an unavailable advisory allow the commit to proceed. Existing project hooks keep their own exit codes. `ontologyc check` remains the strict command. To disable this notification in a configured clone, run `git config --local hook.ontology-package-advice.enabled false`; use `true` to re-enable it.
 
