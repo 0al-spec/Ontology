@@ -75,6 +75,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-067 | Archived [self-review](ONT-067_Package_Filters/REVIEW_ONT-067.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-067 | Archived package filters and validation |
 | 2026-10-31 | ONT-066 | Archived [self-review](ONT-066_Full_Import_Projection/REVIEW_ONT-066.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-066 | Archived full import projection and validation |
