@@ -50,3 +50,16 @@ loaded text. Both source parsing and the byte digest use one input snapshot.
 No UI, YAML rewrite, editor state, agent integration, full Linux project run or
 SpecSpace/SpecGraph change is claimed. A successful graph is not a diagnostics
 report, an instance graph or evidence that manual policies are satisfied.
+
+## Review and CI follow-up
+
+Two hosted jobs exposed a BOM parsing discrepancy on older Swift runtimes. The
+common compiler loader now removes an optional BOM before parsing for both file
+and string inputs, while the projection retains the original byte digest. The
+original regression was reproduced and fixed with Swift 6.0 in a Linux/arm64
+container. Nine focused projection tests passed there and on local macOS.
+
+An external review also identified nondeterministic relation ordering when two
+supplied imports both contribute visible relations. Import namespaces are now
+sorted before relation selection. A regression exercises both contributing
+packages in both input orders and confirms byte-identical JSON on both platforms.

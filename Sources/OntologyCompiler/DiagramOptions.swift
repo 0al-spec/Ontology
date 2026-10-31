@@ -89,13 +89,10 @@ extension OntologyCompiler {
             add("io.read", path.path, "Cannot read file: \(error.localizedDescription)")
             throw OntologyCompilerError.packageError(diagnostics)
         }
-        guard var source = String(data: data, encoding: .utf8) else {
+        guard let source = String(data: data, encoding: .utf8) else {
             add("io.read", path.path, "Cannot read file: invalid UTF-8")
             throw OntologyCompilerError.packageError(diagnostics)
         }
-        // Match the compiler's String(contentsOf:encoding:) behavior while
-        // retaining the raw bytes for exact editor concurrency checks.
-        if source.hasPrefix("\u{feff}") { source.removeFirst() }
         guard let package = load(source: source, path: path.path) else { throw OntologyCompilerError.packageError(diagnostics) }
         validate(package)
         guard !hasErrors(diagnostics) else { throw OntologyCompilerError.packageError(diagnostics) }

@@ -15,7 +15,7 @@ source contains its own `id`, `version`, canonical `namespace`, root-scoped
 prefix. `sourceDigest` matches the existing compiler IR's digest of loaded UTF-8
 text. `sourceByteDigest` hashes the exact input bytes and should be used for
 detecting changes before editing; these values differ for a UTF-8 BOM because
-the existing compiler loader strips it from text.
+the compiler loader removes it from text across supported Swift versions.
 Paths are not embedded: a caller associates those identities and digests with
 the local input paths it supplied. An identity/version match does not authenticate
 the provenance of supplied content.

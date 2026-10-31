@@ -69,13 +69,16 @@ final class DiagramProjectionTests: XCTestCase {
         try bytes.write(to: input)
         let compiler = OntologyCompiler()
         let graph = try compiler.diagramProjection(path: OntologySourcePath(url: input))
+        let rawSource = try XCTUnwrap(String(data: bytes, encoding: .utf8))
+        XCTAssertFalse(compiler.check(source: rawSource, path: OntologySourcePath(url: input)).contains { $0.severity == "error" })
+        XCTAssertFalse(compiler.check(path: OntologySourcePath(url: input)).contains { $0.severity == "error" })
         let expected = "sha256:" + SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
         XCTAssertEqual(graph["sourceByteDigest"] as? String, expected)
         let proposal = try record("review:Proposal", in: graph, section: "classes")
         XCTAssertEqual((proposal["source"] as? [String: Any])?["sourceByteDigest"] as? String, expected)
         let output = directory.appendingPathComponent("compiled")
         let diagnostics = try compiler.compile(path: OntologySourcePath(url: input), outDirectory: OntologyOutputDirectory(url: output))
-        XCTAssertFalse(diagnostics.contains { $0.severity == "error" })
+        XCTAssertFalse(diagnostics.contains { $0.severity == "error" }, "\(diagnostics)")
         let irData = try Data(contentsOf: output.appendingPathComponent("ontology.normalized.json"))
         let ir = try XCTUnwrap(JSONSerialization.jsonObject(with: irData) as? [String: Any])
         XCTAssertEqual(graph["sourceDigest"] as? String, ir["sourceDigest"] as? String)
@@ -103,6 +106,33 @@ final class DiagramProjectionTests: XCTestCase {
                        try compiler.diagramJSON(path: motivation, options: reversed))
         let invalid = OntologyDiagramOptions(view: .relations, imports: [events], expandedTypes: ["eventcore:Missing"])
         XCTAssertThrowsError(try compiler.diagramProjection(path: motivation, options: invalid))
+    }
+
+    func testMultipleImportsContributingRelationsAreOrderIndependent() throws {
+        let original = try String(contentsOf: example.url, encoding: .utf8)
+        let source = original.replacingOccurrences(of: "  classes:", with: """
+            - id: org.0al.events.core
+              namespace: ev
+              version: 0.2.0
+            - id: org.0al.motivation.core
+              namespace: motives
+              version: 0.1.0
+          classes:
+        """)
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let input = directory.appendingPathComponent("package.yaml")
+        try source.write(to: input, atomically: true, encoding: .utf8)
+        let selected = ["motives:MotivationHypothesis", "ev:Interpretation", "ev:InterpretationCandidate", "ev:RecordedEvent"]
+        let first = OntologyDiagramOptions(view: .relations, imports: [motivation, events], expandedTypes: selected)
+        let second = OntologyDiagramOptions(view: .relations, imports: [events, motivation], expandedTypes: selected.reversed())
+        let compiler = OntologyCompiler()
+        let path = OntologySourcePath(url: input)
+        let graph = try compiler.diagramProjection(path: path, options: first)
+        _ = try record("motives:hypothesisView", in: graph, section: "relations")
+        _ = try record("ev:interpretsRecord", in: graph, section: "relations")
+        XCTAssertEqual(try compiler.diagramJSON(path: path, options: first), try compiler.diagramJSON(path: path, options: second))
     }
 
     func testImportAliasKeepsOriginalSourceIdentityAndRebasesGraphReferences() throws {

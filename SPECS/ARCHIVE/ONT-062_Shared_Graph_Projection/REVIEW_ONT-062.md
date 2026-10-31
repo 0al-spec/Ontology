@@ -34,3 +34,13 @@ Publish the focused PR and retain its task worktree through review. A subsequent
 slice can consume this graph in a standalone read-only interactive canvas,
 then design source-preserving edits and live file updates. FOLLOW-UP is skipped:
 these are the already-agreed next slices, not defects found in ONT-062.
+
+### External review follow-up
+
+An external reviewer found unstable ordering with two contributing imports. The
+implementation now sorts by root-scoped import alias before collecting relations;
+the regression confirms that reversing the actual imports preserves JSON bytes.
+Hosted CI also exposed BOM parsing on older Swift versions; the shared loader now
+normalizes the BOM before parsing and both file and string paths are covered.
+The focused suite passed on macOS and in Linux/arm64 Swift 6.0. The original
+thread remains available for reviewer verification of the updated PR.

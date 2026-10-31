@@ -33,7 +33,11 @@ extension OntologyCompiler {
         }
     }
 
-    func load(source: String, path: String) -> LoadedPackage? {
+    func load(source rawSource: String, path: String) -> LoadedPackage? {
+        var source = rawSource
+        // Foundation's UTF-8 file decoding differs across supported Swift versions.
+        // Normalize the optional BOM once before parsing and computing IR digests.
+        if source.hasPrefix("\u{feff}") { source.removeFirst() }
         scanUnsafeSource(source, filePath: path)
 
         let parsed: Any?
