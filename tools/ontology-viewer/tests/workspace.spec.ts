@@ -79,12 +79,24 @@ test('edits shared YAML, keeps comments and line endings, refreshes external cha
     await page.mouse.move(bounds.x + bounds.width / 2 + 20, bounds.y + bounds.height / 2 + 16, { steps: 5 });
     await page.mouse.up();
     const position = await selectedNode.evaluate((node) => getComputedStyle(node).transform);
+    await page.locator('.filter-panel summary').click();
+    await page.getByRole('checkbox', { name: 'Classes', exact: true }).uncheck();
+    await expect(selectedNode).toHaveCount(0);
 
     const external = expected.replace('Evidence cited by a proposal.', 'Evidence changed externally.');
     await fs.writeFile(source, external);
     await expect(editor).toHaveValue(/Evidence changed externally\./);
+    await page.getByRole('checkbox', { name: 'Classes', exact: true }).check();
+    await expect(selectedNode).toBeVisible();
     await expect(page.getByLabel('Inspector')).toContainText('A proposal with an improved description.');
     await expect.poll(() => selectedNode.evaluate((node) => getComputedStyle(node).transform)).toBe(position);
+    const conformance = page.locator('[data-id="implements/review:Proposal/0"]');
+    await expect(conformance).toHaveCount(1);
+    await page.getByRole('checkbox', { name: 'Conformance' }).uncheck();
+    await expect(conformance).toHaveCount(0);
+    await expect(selectedNode).toBeVisible();
+    await page.getByRole('checkbox', { name: 'Conformance' }).check();
+    await expect(conformance).toHaveCount(1);
     await editor.fill((await editor.inputValue()).replace('A proposal with an improved description.', 'Unsaved human draft.'));
     const secondExternal = external.replace('Evidence changed externally.', 'Evidence changed again.');
     await fs.writeFile(source, secondExternal);

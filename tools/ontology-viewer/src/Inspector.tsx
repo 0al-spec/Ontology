@@ -1,6 +1,6 @@
 import type { Selection } from './selection';
 
-export function Inspector({ selection }: { selection: Selection | null }) {
+export function Inspector({ selection, filtered = false }: { selection: Selection | null; filtered?: boolean }) {
   if (!selection) return <aside className="inspector empty-inspector">
     <div className="inspector-icon">◈</div>
     <h2>Explore the model</h2>
@@ -14,6 +14,7 @@ export function Inspector({ selection }: { selection: Selection | null }) {
   return <aside className="inspector" aria-label="Inspector">
     <div className="section-label">INSPECTOR <span className="kind-pill">{kind}</span></div>
     <h2>{label}</h2>
+    {filtered && <p className="notice" role="status">This selection is outside the active filters.</p>}
     {selection.type === 'node' && selection.data.kind === 'external' && <p className="notice">
       This is an unloaded reference{selection.id.startsWith('external/classes/') ? ' (class)' : selection.id.startsWith('external/protocols/') ? ' (protocol)' : ''}
       {selection.data.origin ? ` from ${selection.data.origin}` : ''}. Its declaration has not been loaded.
