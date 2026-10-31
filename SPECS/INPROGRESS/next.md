@@ -31,6 +31,10 @@ manual policies. Review, evidence and truth stay distinct; motives do not alter
 the saved norm result or imply physical observations. ONT-046 delivers Linux source portability separately; pin a version containing
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
+## Selected task
+
+ONT-061 packages `ontologyviz` alongside `ontologyc` and exercises the extracted tools on both supported platforms.
+
 ## Recently Archived
 
 - ONT-060 saved JSON diagram profiles. Local verification PASS on the corrected ONT-058 base. Branch `feature/ONT-060-diagram-profiles` will be reviewed atop #82. Keep `.worktrees/Ontology-visualization` active through stack review and retire after merge. Next action is review of the three visualization layers.

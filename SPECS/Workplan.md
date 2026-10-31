@@ -1221,6 +1221,13 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Status:** Complete — 205 tests, quality, schema validation and CLI parity passed; hosted review pending.
 - **Acceptance Criteria:** Short --profile command, paths relative to the profile, strict versioned JSON shape, documented CLI precedence/conflicts, source overwrite protection, real rendering parity and a focused stacked PR.
 
+#### ONT-061: Distribute ontologyviz with ontologyc
+
+- **Goal:** Let consumers render a saved diagram profile using the tools downloaded for their platform.
+- **Dependencies:** ONT-055 release archives and ONT-060 saved diagram profiles.
+- **Status:** In progress.
+- **Acceptance:** Both archives include the two executable products on revisions that provide them. A smoke test renders a saved profile from the extracted executable and verifies its output. Older release tags retain their source-defined toolset.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
