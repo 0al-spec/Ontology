@@ -69,6 +69,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-061 | Archived [release review](ONT-061_Release_Ontologyviz/REVIEW_ONT-061.md) |
 | 2026-10-31 | ONT-061 | Archived release packaging task and validation |
 | 2026-10-31 | ONT-060 | Archived self-review; FOLLOW-UP skipped with no unresolved findings |
 | 2026-10-31 | ONT-060 | Archived Saved_Diagram_Profiles with local verification PASS |
