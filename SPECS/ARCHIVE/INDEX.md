@@ -74,6 +74,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-066 | Archived [self-review](ONT-066_Full_Import_Projection/REVIEW_ONT-066.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-066 | Archived full import projection and validation |
 | 2026-10-31 | ONT-065 | Archived [self-review](ONT-065_Interactive_Graph_Filters/REVIEW_ONT-065.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-065 | Archived interactive filters and local validation |
