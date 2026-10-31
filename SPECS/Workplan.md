@@ -1283,3 +1283,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - Status: ✅ PASS locally; hosted CI and review pending
 - Dependency: ONT-066 / PR #91
 - Result: package identity filters, with fixed counts and preserved canvas state.
+
+## ONT-068: Viewer launch manual
+- Status: selected
+- Dependency: ONT-066 / #91 and ONT-067 / #92
+- Result: self-contained pinned-source first-run and repeat-run instructions.

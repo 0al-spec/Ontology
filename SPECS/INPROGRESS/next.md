@@ -1,3 +1,8 @@
+# Selected: ONT-068 — Viewer launch manual
+Branch: feature/ONT-068-viewer-manual, stacked on #92.
+Workspace: .worktrees/Ontology-interactive-viewer, reused through review.
+Next: write manual and exercise its commands on an isolated source snapshot.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
