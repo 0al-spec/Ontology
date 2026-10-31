@@ -32,3 +32,9 @@ Use disposable source/profile copies; cover untouched comments and bytes,
 successful saves, stale writes, external edits, invalid drafts and loopback API
 checks with real compiler/visualizer binaries and desktop Chromium. The scope is
 source-text editing; graphical creation of declarations is a later layer.
+
+## Archive
+
+Implemented and validated locally on 2026-10-31. The validation report records
+the tested conflict and filesystem boundaries. Hosted CI and independent review
+remain separate; retain the worktree for stack review.

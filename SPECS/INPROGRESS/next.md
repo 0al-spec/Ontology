@@ -1,18 +1,3 @@
-# Selected: ONT-064 — Source-Preserving Ontology Editing
-
-**Priority:** P1 — user-selected follow-up to ONT-063.
-**Status:** INPROGRESS
-**Dependency:** ONT-063 / PR #87.
-**Workspace:** `.worktrees/Ontology-interactive-viewer`, branch `feature/ONT-064-source-editing`.
-**Disposition:** retain through stack review; retire after merge and verification
-that no local state or running service remains.
-
-Add a local workspace service and exact-text YAML editor to the standalone
-viewer. Observe external changes, validate and refresh the graph, and reject
-stale saves. Source files remain the shared interface for humans and agents.
-
----
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -47,6 +32,11 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-064 adds a local workspace and source-preserving YAML editor above the
+  standalone viewer. Local checks passed; hosted review/CI pending. Keep
+  `.worktrees/Ontology-interactive-viewer` through review and retire after merge
+  once its local state and any running workspace service are accounted for.
 
 - ONT-063 adds a standalone interactive graph viewer. Local model, build and
   browser checks passed; hosted review/CI pending. Reuse
