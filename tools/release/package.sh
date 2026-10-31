@@ -16,7 +16,12 @@ case "$platform:$(uname -sm)" in
   linux-x86_64:Linux\ x86_64) build+=(--static-swift-stdlib) ;;
   *) echo "Runner does not match $platform" >&2; exit 1 ;;
 esac
+helpers=$(cd "$(dirname "$0")" && pwd)
+executables=$(bash "$helpers/inventory.sh" "$source_dir" "$scratch")
 swift build "${build[@]}" --product ontologyc
+if [[ $executables == ontologyc,ontologyviz ]]; then
+  swift build "${build[@]}" --product ontologyviz
+fi
 bin_dir=$(swift build "${build[@]}" --show-bin-path)
 
 name="ontologyc-$BUILD_LABEL-$platform"
@@ -26,6 +31,9 @@ trap 'rm -rf "$stage"' EXIT
 root="$stage/$name"
 mkdir -p "$root/licenses"
 install -m 755 "$bin_dir/ontologyc" "$root/ontologyc"
+if [[ $executables == ontologyc,ontologyviz ]]; then
+  install -m 755 "$bin_dir/ontologyviz" "$root/ontologyviz"
+fi
 cp "$source_dir/LICENSE" "$root/LICENSE"
 cp "$scratch/checkouts/Yams/LICENSE" "$root/licenses/Yams.txt"
 cp "$(dirname "$0")/notices/libyaml.txt" "$root/licenses/libyaml.txt"
@@ -50,7 +58,4 @@ fi
 COPYFILE_DISABLE=1 tar -C "$stage" -czf "$out/$name.tar.gz" "$name"
 mkdir "$stage/smoke"
 tar -xzf "$out/$name.tar.gz" -C "$stage/smoke"
-fixture="$source_dir/SPECS/ontology/packages/examcalc/domain-ontology-package.yaml"
-"$stage/smoke/$name/ontologyc" check "$fixture"
-"$stage/smoke/$name/ontologyc" compile "$fixture" --target typescript --out "$stage/generated"
-cmp "$stage/generated/ontology.normalized.json" "$source_dir/SPECS/ontology/packages/examcalc/generated/ontology.normalized.json"
+bash "$helpers/smoke.sh" "$stage/smoke/$name" "$source_dir" "$stage/work" "$executables"

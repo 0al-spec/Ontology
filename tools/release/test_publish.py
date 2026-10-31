@@ -20,17 +20,45 @@ class PublicationTests(unittest.TestCase):
         self.area = Path(scratch.name)
         self.archives = [self.archive(p) for p in publish.PLATFORMS]
 
-    def archive(self, platform, sha=None):
+    def archive(self, platform, sha=None, executables=("ontologyc", "ontologyviz"), mode=0o755):
         root = f"ontologyc-{self.tag}-{platform}"
         path = self.area / (root + ".tar.gz")
         with tarfile.open(path, "w:gz") as tar:
-            for name, content in [("ontologyc", b"test binary"),
-                                  ("BUILD.txt", f"ref={self.tag}\ncommit={sha or self.sha}\nplatform={platform}\n".encode())]:
+            contents = [(name, b"test binary") for name in executables]
+            contents.append(("BUILD.txt", f"ref={self.tag}\ncommit={sha or self.sha}\nplatform={platform}\n".encode()))
+            for name, content in contents:
                 info = tarfile.TarInfo(f"{root}/{name}")
                 info.size = len(content)
-                info.mode = 0o755 if name == "ontologyc" else 0o644
+                info.mode = mode if name in executables else 0o644
                 tar.addfile(info, io.BytesIO(content))
         return path
+
+    def test_missing_visualizer_fails_independent_of_archive_metadata(self):
+        self.archive("macos-arm64", executables=("ontologyc",))
+        with self.assertRaisesRegex(ValueError, "missing executable ontologyviz"):
+            publish.expected_files(self.area, self.tag, self.sha)
+        self.assertFalse((self.area / "ontologyc-SHA256SUMS").exists())
+
+    def test_selected_older_source_can_explicitly_require_compiler_only(self):
+        for platform in publish.PLATFORMS:
+            self.archive(platform, executables=("ontologyc",))
+        self.assertEqual(len(publish.expected_files(self.area, self.tag, self.sha, "ontologyc")), 3)
+
+    def test_compiler_only_inventory_rejects_extra_managed_visualizer(self):
+        # Both fixture archives contain ontologyviz; a selected older tag must
+        # reject that content even though its compiler and metadata are valid.
+        with self.assertRaisesRegex(ValueError, "unexpected executable ontologyviz"):
+            publish.expected_files(self.area, self.tag, self.sha, "ontologyc")
+        self.assertFalse((self.area / "ontologyc-SHA256SUMS").exists())
+
+    def test_expected_binaries_must_be_executable(self):
+        self.archive("linux-x86_64", mode=0o644)
+        with self.assertRaisesRegex(ValueError, "invalid executable"):
+            publish.expected_files(self.area, self.tag, self.sha)
+
+    def test_unknown_inventory_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "unexpected executable inventory"):
+            publish.expected_files(self.area, self.tag, self.sha, "")
 
     def test_checksums_match_downloadable_names_and_bytes(self):
         *archives, sums = publish.expected_files(self.area, self.tag, self.sha)

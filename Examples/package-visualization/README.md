@@ -10,7 +10,11 @@ The checked-in preview uses `--direction TB` and Graphviz 16.1.0.
 
 ## Run
 
-Build with Swift 6.0 or later. Install Graphviz for SVG and PNG output.
+Download `ontologyviz` alongside `ontologyc` from a supported
+[binary release](../../SPECS/ontology/binary-releases.md), or build with Swift 6.0
+or later. Install Graphviz for SVG and PNG output. With a downloaded executable,
+replace `swift run ontologyviz` below with its absolute path. Profiles and their
+package inputs are supplied separately; they are not bundled into the archive.
 
 ```sh
 # macOS

@@ -30,6 +30,7 @@ jobs:
       sha: ${{ steps.target.outputs.sha }}
       label: ${{ steps.target.outputs.label }}
       release_id: ${{ steps.target.outputs.release_id }}
+      executables: ${{ steps.inventory.outputs.executables }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -58,6 +59,17 @@ jobs:
             fi
             cat "$RUNNER_TEMP/release-target" >> "$GITHUB_OUTPUT"
           fi
+      - name: Inspect selected source executable inventory
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.target.outputs.sha }}
+          path: selected-source
+          persist-credentials: false
+      - name: Record expected executable inventory
+        id: inventory
+        run: |
+          executables=$(bash tools/release/inventory.sh "$PWD/selected-source" "$RUNNER_TEMP/inventory")
+          echo "executables=$executables" >> "$GITHUB_OUTPUT"
 
   build:
     needs: source
@@ -72,6 +84,7 @@ jobs:
     env:
       BUILD_LABEL: ${{ needs.source.outputs.label }}
       SOURCE_SHA: ${{ needs.source.outputs.sha }}
+      EXPECTED_EXECUTABLES: ${{ needs.source.outputs.executables }}
     steps:
       - name: Checkout packaging tools
         uses: actions/checkout@v6
@@ -85,28 +98,34 @@ jobs:
           ref: ${{ needs.source.outputs.sha }}
           path: source
           persist-credentials: false
-      - name: Build and exercise extracted macOS CLI
+      - name: Install external Graphviz for macOS rendering smoke
+        if: runner.os == 'macOS' && needs.source.outputs.executables == 'ontologyc,ontologyviz'
+        run: brew list graphviz >/dev/null 2>&1 || brew install graphviz
+      - name: Build and exercise extracted macOS CLIs
         if: runner.os == 'macOS'
         run: bash pipeline/tools/release/package.sh "$PWD/source" "$RUNNER_TEMP/build" "$RUNNER_TEMP/dist" macos-arm64
       - name: Build Linux CLI on the Ubuntu 22.04 baseline
         if: runner.os == 'Linux'
         run: |
           mkdir "$RUNNER_TEMP/dist"
-          docker run --rm -e BUILD_LABEL -e SOURCE_SHA \
+          docker run --rm -e BUILD_LABEL -e SOURCE_SHA -e EXPECTED_EXECUTABLES \
             -v "$PWD/source:/source:ro" -v "$PWD/pipeline/tools/release:/tools:ro" \
             -v "$RUNNER_TEMP/dist:/dist" swift:6.0.3-jammy \
-            bash /tools/package.sh /source /tmp/build /dist linux-x86_64
+            bash -euc 'packages=(python3)
+            if [[ $EXPECTED_EXECUTABLES == ontologyc,ontologyviz ]]; then packages+=(graphviz); fi
+            apt-get -qq update && apt-get -qq install --no-install-recommends -y "${packages[@]}"
+            bash /tools/package.sh /source /tmp/build /dist linux-x86_64'
       - name: Exercise downloaded layout without an installed Swift toolchain
         if: runner.os == 'Linux'
         run: |
-          docker run --rm -e BUILD_LABEL -v "$RUNNER_TEMP/dist:/dist:ro" \
-            -v "$PWD/source/SPECS/ontology/packages/examcalc:/example:ro" ubuntu:22.04 bash -euc '
-            apt-get -qq update && apt-get -qq install --no-install-recommends -y libcurl4 libxml2 libicu70
+          docker run --rm -e BUILD_LABEL -e EXPECTED_EXECUTABLES -v "$RUNNER_TEMP/dist:/dist:ro" \
+            -v "$PWD/source:/source:ro" -v "$PWD/pipeline/tools/release:/tools:ro" ubuntu:22.04 bash -euc '
+            packages=(libcurl4 libxml2 libicu70)
+            if [[ $EXPECTED_EXECUTABLES == ontologyc,ontologyviz ]]; then packages+=(graphviz); fi
+            apt-get -qq update && apt-get -qq install --no-install-recommends -y "${packages[@]}"
             name=ontologyc-$BUILD_LABEL-linux-x86_64
             tar -xzf "/dist/$name.tar.gz" -C /tmp
-            "/tmp/$name/ontologyc" check /example/domain-ontology-package.yaml
-            "/tmp/$name/ontologyc" compile /example/domain-ontology-package.yaml --target typescript --out /tmp/generated
-            cmp /tmp/generated/ontology.normalized.json /example/generated/ontology.normalized.json'
+            bash /tools/smoke.sh "/tmp/$name" /source /tmp/smoke "$EXPECTED_EXECUTABLES"'
       - uses: actions/upload-artifact@v7
         with:
           name: release-${{ matrix.platform }}
@@ -132,7 +151,8 @@ jobs:
         env:
           LABEL: ${{ needs.source.outputs.label }}
           SOURCE_SHA: ${{ needs.source.outputs.sha }}
-        run: python3 tools/release/publish.py verify "$LABEL" "$SOURCE_SHA" dist
+          EXPECTED_EXECUTABLES: ${{ needs.source.outputs.executables }}
+        run: python3 tools/release/publish.py verify "$LABEL" "$SOURCE_SHA" dist "$EXPECTED_EXECUTABLES"
       - uses: actions/upload-artifact@v7
         with:
           name: release-preview-checksums
@@ -161,4 +181,5 @@ jobs:
           TAG: ${{ needs.source.outputs.label }}
           RELEASE_ID: ${{ needs.source.outputs.release_id }}
           SOURCE_SHA: ${{ needs.source.outputs.sha }}
-        run: python3 tools/release/publish.py publish "$TAG" "$RELEASE_ID" "$SOURCE_SHA" dist
+          EXPECTED_EXECUTABLES: ${{ needs.source.outputs.executables }}
+        run: python3 tools/release/publish.py publish "$TAG" "$RELEASE_ID" "$SOURCE_SHA" dist "$EXPECTED_EXECUTABLES"
