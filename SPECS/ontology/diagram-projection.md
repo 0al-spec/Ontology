@@ -35,7 +35,15 @@ line/column span, editable syntax tree or guarantee of round-trip preservation.
 Normalized fields may omit source metadata and comments; do not regenerate YAML
 from the projection. Recheck `sourceByteDigest` before applying edits to a source file.
 
-`full` shows the root package's declaration families. `relations` follows the
+`full` shows every declaration family of the root and explicitly supplied exact
+direct imports. It loads entire supplied packages without `expand`. Semantic
+references (including lifecycle and transition triggers) are rebased to root
+aliases, while source identities/pointers remain those of the original package.
+A referenced nested dependency must have a matching identity/version binding in
+the root scope, even when its declarations remain unloaded; otherwise full
+projection fails instead of guessing a namespace. No recursive loading occurs.
+
+`relations` follows the
 existing visualizer selection: root relations and incident root classes plus
 explicitly selected classes from exact direct local imports; imported relations
 are included only when their entire domain and range are selected/visible.

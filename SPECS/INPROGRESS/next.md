@@ -33,6 +33,11 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-066 adds full direct import projection and filter counts; local quality
+  and browser checks PASS. Keep .worktrees/Ontology-interactive-viewer active
+  through PR review. NormLab pilot data and services live outside that tree.
+
+
 - ONT-065 adds hide/dim filters without relayout. Local model, build and browser
   checks passed; hosted review/CI pending. Keep `.worktrees/Ontology-interactive-viewer`
   through stack review and retire after merge once local state is accounted for.

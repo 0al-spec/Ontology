@@ -1273,3 +1273,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **INPROGRESS** — Task currently being planned or executed.
 - **PRD Ready** — Implementation-ready PRD exists in `SPECS/INPROGRESS/`.
 - **Complete** — Task finished and archived.
+
+## ONT-066: Full import projection and filter counts
+- Status: ✅ PASS locally; hosted CI and review pending
+- Dependencies: ONT-062 through ONT-065 merged
+- Result: full diagrams include explicit direct import declarations; viewer counts expose empty categories.

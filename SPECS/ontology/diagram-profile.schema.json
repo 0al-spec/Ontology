@@ -16,7 +16,7 @@
       "default": []
     },
     "expand": {
-      "description": "Selectors using the same syntax as repeated --expand arguments.",
+      "description": "Relations-only class selectors using repeated --expand syntax; omit for full import loading.",
       "type": "array",
       "items": {"type": "string", "minLength": 1},
       "default": []

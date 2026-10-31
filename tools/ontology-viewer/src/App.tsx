@@ -3,7 +3,7 @@ import { GraphCanvas } from './GraphCanvas';
 import { FilterPanel } from './FilterPanel';
 import { Inspector } from './Inspector';
 import { WorkspaceEditor, type WorkspaceSnapshot } from './WorkspaceEditor';
-import { defaultFilters, graphVisibility } from './filters';
+import { defaultFilters, graphFilterCounts, graphVisibility } from './filters';
 import { buildGraph, parseProjection } from './graph';
 import type { Projection } from './projection';
 import type { Selection } from './selection';
@@ -23,6 +23,7 @@ export default function App() {
   const graphKey = useRef('');
   const graph = useMemo(() => projection ? buildGraph(projection) : null, [projection]);
   const visibility = useMemo(() => graph && projection ? graphVisibility(graph, filters, projection.id) : null, [graph, filters, projection]);
+  const filterCounts = useMemo(() => graph && projection ? graphFilterCounts(graph, projection.id) : undefined, [graph, projection]);
   const matches = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query || !graph || !visibility) return [];
@@ -110,7 +111,7 @@ export default function App() {
         <input id="graph-search" className="search" value={search} onChange={(event) => setSearch(event.target.value)}
           placeholder="Type a name…" aria-describedby="filter-search-note" />
         <small id="filter-search-note" className="filter-search-note">Search includes enabled elements.</small>
-        <FilterPanel filters={filters} onChange={setFilters} onReset={() => setFilters(defaultFilters())} />
+        <FilterPanel counts={filterCounts} view={projection.view} filters={filters} onChange={setFilters} onReset={() => setFilters(defaultFilters())} />
         {search.trim() ? <div className="search-results" aria-label="Search results">
           <span className="section-label">{matches.length} MATCHES</span>
           {matches.map((match) => <button key={match.id} onClick={() => { setSelection(match.selection); setFocusNode({ id: match.focusNode }); }}>
