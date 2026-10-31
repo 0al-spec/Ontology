@@ -71,6 +71,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-063 | Archived [self-review](ONT-063_Interactive_Ontology_Viewer/REVIEW_ONT-063.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-063 | Archived interactive viewer and local validation |
 | 2026-10-31 | ONT-062 | Archived [self-review](ONT-062_Shared_Graph_Projection/REVIEW_ONT-062.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-062 | Archived shared graph projection and validation |
