@@ -1,5 +1,6 @@
 import Foundation
 import OntologyCompiler
+import OntologyRules
 
 enum VizFormat: String {
     case both, svg, png, dot
@@ -44,10 +45,12 @@ struct VizArguments {
         }
         let imports = options["--import"] ?? []
         let expanded = (options["--expand"] ?? []).flatMap { $0.components(separatedBy: ",") }
-        guard !expanded.contains(where: \.isEmpty), imports.isEmpty == expanded.isEmpty else {
-            throw VizFailure(description: "Supply --import and nonempty --expand selectors together")
+        let decision = DiagramSelectionSpec().decide(DiagramSelectionContext(
+            view: view.rawValue, hasImports: !imports.isEmpty, expandedTypes: expanded
+        ))
+        guard decision == .valid else {
+            throw VizFailure(description: decision?.message ?? "Unknown diagram selection")
         }
-        guard view == .relations || imports.isEmpty else { throw VizFailure(description: "Import expansion requires --view relations") }
         self.input = OntologySourcePath(path: positionals[0])
         self.output = URL(fileURLWithPath: output, isDirectory: true)
         self.format = format

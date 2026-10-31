@@ -64,3 +64,13 @@ whole. The full package view and external references are available separately.
 This task reuses `.worktrees/Ontology-visualization`, branch
 `feature/ONT-058-relations-view`, atop ONT-056 PR #81. Keep it active for stack review
 and retire it after the stack lands. ONT-055/057 primary work is independent.
+
+## Review follow-up on 2026-10-31
+
+Addressed the P1 thread on duplicated diagram-selection predicates.
+`DiagramSelectionSpec` now owns expansion-mode, paired inputs and empty-selector
+decisions. Both CLI and library consume that rule and its shared messages.
+OntologyViz declares its direct OntologyRules dependency. Three independent
+rule tests cover the acceptance matrix. The complete quality gate passed with
+198 tests, strict lint/format/build and coverage. This fix precedes ONT-060
+profiles so their effective selection uses the shared rule as well.

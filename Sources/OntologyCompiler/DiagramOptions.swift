@@ -31,11 +31,11 @@ extension OntologyCompiler {
     /// Projects a validated package and explicitly selected direct local imports.
     public func diagramDOT(path: OntologySourcePath, options: OntologyDiagramOptions) throws -> String {
         diagnostics = []
-        guard options.view == .relations || (options.imports.isEmpty && options.expandedTypes.isEmpty) else {
-            throw OntologyCompilerError.invalidArgument("Import expansion requires relations view")
-        }
-        guard options.imports.isEmpty == options.expandedTypes.isEmpty else {
-            throw OntologyCompilerError.invalidArgument("Supply local imports and expanded types together")
+        let decision = DiagramSelectionSpec().decide(DiagramSelectionContext(
+            view: options.view.rawValue, hasImports: !options.imports.isEmpty, expandedTypes: options.expandedTypes
+        ))
+        guard decision == .valid else {
+            throw OntologyCompilerError.invalidArgument(decision?.message ?? "Unknown diagram selection")
         }
         let root = try diagramIR(path: path)
         var imported = [DiagramImportedPackage]()
