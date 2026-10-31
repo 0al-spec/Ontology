@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-060 | [ONT-060_Saved_Diagram_Profiles/](ONT-060_Saved_Diagram_Profiles/) | 2026-10-31 | PASS (local saved profiles and rendering parity) |
 | ONT-058 | [ONT-058_Relations_View_And_Selected_Imports/](ONT-058_Relations_View_And_Selected_Imports/) | 2026-10-31 | PASS (local relations/import projection and rendering) |
 | ONT-056 | [ONT-056_Package_Visualization_CLI/](ONT-056_Package_Visualization_CLI/) | 2026-10-31 | PASS (local package diagrams and real rendering) |
 | ONT-054 | [ONT-054_Optional_Local_Package_Sections/](ONT-054_Optional_Local_Package_Sections/) | 2026-10-30 | PASS (local compiler/fixture and downstream checks) |
@@ -64,6 +65,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-060 | Archived Saved_Diagram_Profiles with local verification PASS |
 | 2026-10-31 | ONT-058 | Archived self-review; FOLLOW-UP skipped with no unresolved findings |
 | 2026-10-31 | ONT-058 | Archived Relations_View_And_Selected_Imports with local verification PASS |
 | 2026-10-31 | ONT-056 | Archived self-review; FOLLOW-UP skipped with no unresolved findings |

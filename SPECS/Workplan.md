@@ -1196,7 +1196,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Description:** Persist repeatable ontologyviz package/import/type selections in a portable, versioned JSON profile.
 - **Priority:** P1 — explicit operator approval, 2026-10-31
 - **Dependencies:** ONT-058 relations view, PR #82.
-- **Status:** INPROGRESS
+- **Status:** Complete — 205 tests, quality, schema validation and CLI parity passed; hosted review pending.
 - **Acceptance Criteria:** Short --profile command, paths relative to the profile, strict versioned JSON shape, documented CLI precedence/conflicts, source overwrite protection, real rendering parity and a focused stacked PR.
 
 ## Task Status Legend

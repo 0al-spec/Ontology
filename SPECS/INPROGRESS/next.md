@@ -1,13 +1,4 @@
-# Current Task — ONT-060 Saved Diagram Profiles
-
-Reusing `.worktrees/Ontology-visualization` on `feature/ONT-060-diagram-profiles`.
-This layer starts at PR #82 head `e2ad26b` and will target
-`feature/ONT-058-relations-view`. The active dependency chain is #81 → #82 → this task.
-
-Implement versioned local JSON profiles and a portable motivation-core preset.
-Retain this worktree through stack review and retire it after the stack merges.
-
-## Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
+# Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
 **Phase:** Event and Responsibility Core
@@ -41,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-060 saved JSON diagram profiles. Local verification PASS on the corrected ONT-058 base. Branch `feature/ONT-060-diagram-profiles` will be reviewed atop #82. Keep `.worktrees/Ontology-visualization` active through stack review and retire after merge. Next action is review of the three visualization layers.
 
 - ONT-058 relations view and selected local imports. Local verification PASS. Branch `feature/ONT-058-relations-view` depends on ONT-056 PR #81. Retain `.worktrees/Ontology-visualization` through stack review and retire it after merge. A later ergonomic slice can save reusable selection profiles.
 

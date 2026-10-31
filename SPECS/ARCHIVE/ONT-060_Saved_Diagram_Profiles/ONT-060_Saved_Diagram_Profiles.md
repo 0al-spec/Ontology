@@ -44,3 +44,8 @@ explicit invocation. Run from another working directory and via a symlink. Check
 JSON type/version/key failures, invalid view/direction/selector/import identity,
 flag conflicts, output-relative behavior, profile overwrite rejection and actual
 SVG/PNG artifacts. Preserve existing direct CLI behavior and compiler baselines.
+
+---
+**Archived** 2026-10-31
+
+**Verdict** PASS locally; hosted CI and external review pending.
