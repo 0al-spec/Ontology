@@ -166,12 +166,13 @@ extension OntologyCompiler {
         }
     }
 
-    func resolves(_ ref: String, localNames: Set<String>, packageNamespace: String, importNamespaces: Set<String>) -> Bool {
+    func resolves(_ ref: String, localNames: Set<String>, packageNamespace: String, bindings: PackageImportBindings, role: OntologyReferenceRole = .classType) -> Bool {
         let context = ConceptRefResolutionContext(
             ref: ref,
             localNames: localNames,
             packageNamespace: packageNamespace,
-            importNamespaces: importNamespaces
+            importNamespaces: bindings.namespaces,
+            exportsByNamespace: bindings.exports(for: role)
         )
         return ConceptRefResolutionDecisionSpec().decide(context)?.resolves == true
     }

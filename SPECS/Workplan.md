@@ -1178,12 +1178,34 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Existing nonempty packages retain deterministic output, and meaningful regression/quality checks pass.
   - Publish a focused PR; no merge, release, global ontology change or universal instance validator.
 
+#### ONT-055: Release Binaries
+- **Description:** Publish downloadable ontologyc CLI archives on GitHub Releases.
+- **Priority:** P1 — operator request, 2026-10-31
+- **Dependencies:** ONT-046 Linux portability and the existing release tag convention.
+- **Status:** Complete — archived, local packaging and publication controls passed; live release upload follows adoption.
+- **Acceptance Criteria:** Build from the release tag commit, smoke the extracted macOS arm64
+  and Linux x86_64 binaries, record source identity, publish both archives and SHA-256 sums,
+  and support a read-only PR preview and explicit backfill of an existing release.
+
 #### ONT-056: Package Visualization CLI
 - **Description:** Render one DomainOntologyPackage as an inspectable local graph using a standalone ontologyviz executable.
 - **Priority:** P1 — explicit operator request, 2026-10-31
 - **Dependencies:** Existing compiler package validation/normalization; Graphviz dot for SVG/PNG rendering.
 - **Status:** Complete — local quality, real SVG/PNG rendering and generated-output baselines passed; hosted review pending.
 - **Acceptance Criteria:** Deterministic DOT projection, SVG and PNG exports on macOS/Linux, typed and external nodes, relation cardinalities, policy targets, lifecycle transitions, clear argument/renderer errors, real rendering tests and a focused PR.
+
+#### ONT-057: Resolve Foundation Exports
+- **Status:** ✅ Complete — [local validation](ARCHIVE/ONT-057_Resolve_Foundation_Exports/ONT-057_Validation_Report.md)
+- **Source:** SpecGraph #843 and the operator's reproduced false-positive report.
+- **Goal:** Own the versioned foundation export inventory in Ontology. Resolve imported
+  class, protocol and policy references by identity, version, namespace and role.
+- **Acceptance:** `check` and `compile` accept `sg:ValueObject` and reject `sg:Typo`
+  at its declaration. Make the catalog and field-level diagnostics available offline.
+
+#### ONT-059: Staged Package Advice
+- **Status:** ✅ Complete — [validation](ARCHIVE/ONT-059_Staged_Package_Advice/ONT-059_Validation_Report.md)
+- **Goal:** Show compiler findings for the staged package when the author commits. The advisory contributes no veto.
+- **Dependency:** ONT-057 foundation diagnostics.
 
 ## Task Status Legend
 

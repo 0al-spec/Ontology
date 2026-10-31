@@ -1,0 +1,21 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: test.local-model
+  namespace: localmodel
+  version: 0.1.0
+spec:
+  imports:
+    - {id: specgraph.foundation, namespace: sg, version: 0.1.0}
+  classes:
+    Scenario:
+      extends: sg:Typo
+      description: A local test declaration.
+    CheckResult:
+      extends: sg:ValueObject
+      description: An expected check result.
+  relations:
+    includesCheck:
+      domain: Scenario
+      range: CheckResult
+      cardinality: {min: 1, max: 1}

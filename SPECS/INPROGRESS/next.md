@@ -33,7 +33,13 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-059 adds optional staged package notifications. Local Ontology and SpecGraph probes passed.
+
+- ONT-057 validates foundation symbol membership by version and role. The archived report records the SpecGraph #843 reproduction and the SDK comparison.
+
 - ONT-056 package visualization. Local tests/rendering/quality PASS. Worktree `.worktrees/Ontology-visualization` remains active for the focused PR review. Next slice can add a selected-concept neighborhood view for large packages. Retire this worktree after merge.
+
+- ONT-055: release archive automation and read-only PR previews. After merge, backfill the existing 0.3.0 release with the documented dispatch.
 
 - ONT-054: optional policies/stateMachines, retained structural checks and Ruby class-field parity. Local quality: 166 Swift tests, 10 Ruby fixtures; the actual SpecGraph model passes without dummy declarations. Next: review the focused PR, then select a stable compiler revision for downstream adoption. No release or pin update performed.
 
