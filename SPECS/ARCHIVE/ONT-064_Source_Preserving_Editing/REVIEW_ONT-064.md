@@ -6,8 +6,8 @@
 ### Findings
 
 The initial README test command omitted the compiler, visualizer and frontend
-paths required by the new workspace browser tests. Follow-up: make those inputs
-explicit in the example command.
+paths required by the new workspace browser tests. Resolved in the follow-up:
+the example command now names those inputs.
 
 No further in-scope findings were identified. The service binds to loopback,
 restricts writes to the chosen root, rejects stale digests and preserves a dirty

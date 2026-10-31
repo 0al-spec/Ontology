@@ -72,6 +72,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-064 | Archived [self-review](ONT-064_Source_Preserving_Editing/REVIEW_ONT-064.md); test-command finding corrected |
 | 2026-10-31 | ONT-064 | Archived source-preserving editor and local validation |
 | 2026-10-31 | ONT-063 | Archived [self-review](ONT-063_Interactive_Ontology_Viewer/REVIEW_ONT-063.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-063 | Archived interactive viewer and local validation |
