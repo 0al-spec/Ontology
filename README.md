@@ -130,6 +130,9 @@ swift run ontologyviz \
   SPECS/ontology/packages/examcalc/domain-ontology-package.yaml --out diagrams
 ```
 
+For interactive local browsing, use the standalone [Ontology Viewer](tools/ontology-viewer/README.md)
+with a JSON projection from `ontologyviz`. It does not require SpecSpace.
+
 ## Where Lean fits—and what a green result means
 
 There are several different claims to check. A well-formed model, a successful test

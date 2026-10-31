@@ -1,0 +1,44 @@
+name: Ontology Viewer
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  viewer:
+    name: Viewer build and browser smoke
+    runs-on: ubuntu-latest
+    container: swift:6.3.3-bookworm
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: tools/ontology-viewer/package-lock.json
+      - name: Install viewer dependencies
+        working-directory: tools/ontology-viewer
+        run: npm ci --no-audit --no-fund
+      - name: Test projection adapter and build viewer
+        working-directory: tools/ontology-viewer
+        run: |
+          npm test
+          npm run build
+      - name: Build visualizer and export real example
+        run: |
+          swift build --product ontologyviz --scratch-path "$RUNNER_TEMP/ontology-viewer-swift"
+          "$RUNNER_TEMP/ontology-viewer-swift/debug/ontologyviz" \
+            --profile Examples/package-visualization/motivation-relations.profile.json \
+            --format json --out "$RUNNER_TEMP/ontology-viewer-fixture"
+      - name: Install browser
+        working-directory: tools/ontology-viewer
+        run: npx playwright install --with-deps chromium
+      - name: Exercise browser viewer
+        working-directory: tools/ontology-viewer
+        env:
+          ONTOLOGY_GRAPH_FIXTURE: ${{ runner.temp }}/ontology-viewer-fixture/ontology.graph.json
+        run: npm run test:e2e

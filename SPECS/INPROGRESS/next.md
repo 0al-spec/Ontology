@@ -33,6 +33,11 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-063 adds a standalone interactive graph viewer. Local model, build and
+  browser checks passed; hosted review/CI pending. Reuse
+  `.worktrees/Ontology-interactive-viewer` for ONT-064, then retain it through
+  stack review and retire after merge once its local state is accounted for.
+
 - ONT-062 exposes the source-linked diagram projection as JSON. Local verification
   PASS; hosted review/CI pending. Branch `feature/ONT-062-graph-projection` lives
   in `.worktrees/Ontology-graph-projection`; retain through PR review and retire

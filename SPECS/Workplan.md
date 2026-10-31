@@ -1240,6 +1240,25 @@ This workplan tracks the specification work for the Ontology repository. The ini
   retain relation alternatives and selected import provenance; cover real and
   negative cases. Defer UI, writes and downstream integration.
 
+#### ONT-063: Standalone Interactive Ontology Viewer
+
+- **Description:** Inspect the ONT-062 graph in an independent browser application,
+  with reusable canvas/model components and no SpecSpace dependency.
+- **Priority:** P1 — user request, 2026-10-31.
+- **Dependency:** ONT-062 / PR #86.
+- **Status:** Complete locally — [validation](ARCHIVE/ONT-063_Interactive_Ontology_Viewer/ONT-063_Validation_Report.md); hosted review/CI pending.
+- **Acceptance:** Load local projection JSON; navigate, search and inspect the
+  graph; preserve imported references and grouped alternatives; run standalone
+  locally; cover real examples, invalid input and browser interaction.
+
+#### ONT-064: Source-Preserving Ontology Editing
+
+- **Description:** Add a local editing layer over the standalone viewer, keeping
+  original YAML structure and comments and reconciling external file changes.
+- **Priority:** P1 — user request, after ONT-063.
+- **Dependency:** ONT-063.
+- **Status:** Not Started.
+
 ## Task Status Legend
 
 - **Not Started** — Task defined but not yet begun.
