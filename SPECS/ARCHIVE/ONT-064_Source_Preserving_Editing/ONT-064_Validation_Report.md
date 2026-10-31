@@ -22,11 +22,12 @@ the file. Only the selected root package is writable through the local API.
 - `npm test`: five model/source-text tests PASS, including mixed line endings,
   BOM, comment preservation and projection validation.
 - `npm run build`: TypeScript checking and production build PASS.
-- `npm run test:e2e`: four Chromium tests PASS using real `ontologyc` and
+- `npm run test:e2e`: five Chromium tests PASS using real `ontologyc` and
   `ontologyviz` binaries and disposable YAML/profile copies. They exercise the
   desktop and narrow viewer, exact-byte editing, stale and no-op saves, compiler
   diagnostics and invalid-draft recovery, external edits, selected node/position
-  retention, imported-package refresh, and token/origin rejection.
+  retention, imported-package refresh, transition identity on refresh, and
+  token/origin rejection.
 - The conflict screenshot was inspected. Build, dependency and browser-test
   artifacts were placed on the verified TB5 volume.
 - `node --check workspace.mjs`, workflow YAML parsing and a clean `npm ci`

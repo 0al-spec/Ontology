@@ -130,3 +130,39 @@ test('refreshes an imported package in a profile without rewriting the root sour
     await fs.rm(directory, { recursive: true, force: true });
   }
 });
+
+test('keeps the selected transition on refresh and clears it if that transition changes', async ({ page }) => {
+  const directory = await fs.mkdtemp(path.join(process.env.ONTOLOGY_VIEWER_TEST_TMP || os.tmpdir(), 'ontology-transition-test-'));
+  const source = path.join(directory, 'motivation.yaml');
+  const original = await fs.readFile(path.resolve('../../SPECS/ontology/packages/motivation-core/domain-ontology-package.yaml'), 'utf8');
+  await fs.writeFile(source, original);
+  const server = await start(source);
+  try {
+    await page.goto(server.url);
+    await expect(page.getByRole('heading', { name: 'org.0al.motivation.core' })).toBeVisible();
+    await page.getByLabel('Search graph').fill('MotivationReview');
+    await page.getByRole('button', { name: /motivcore:MotivationReview/i }).click();
+    await page.locator('[data-id="transition/motivcore:MotivationReview/1"]').dispatchEvent('click');
+    const inspector = page.getByLabel('Inspector');
+    await expect(inspector.locator('.kind-pill')).toHaveText('transition');
+    await inspector.getByText('Declaration data').click();
+    await expect(inspector).toContainText('ReviewMotivation');
+    const sourceDigest = inspector.locator('.source-box small');
+    const before = await sourceDigest.getAttribute('title');
+    const changed = original.replace('Record review of the attribution proposal', 'Record a review of the attribution proposal');
+    expect(changed).not.toBe(original);
+    await fs.writeFile(source, changed);
+    await expect(sourceDigest).not.toHaveAttribute('title', before || '');
+    await expect(inspector).toContainText('ReviewMotivation');
+    await expect(inspector).not.toContainText('RejectMotivation');
+
+    const changedTransition = changed.replace('to: reviewed, command: ReviewMotivation', 'to: rejected, command: ReviewMotivation');
+    expect(changedTransition).not.toBe(changed);
+    await fs.writeFile(source, changedTransition);
+    await expect(page.getByRole('heading', { name: 'Explore the model' })).toBeVisible();
+  } finally {
+    server.process.kill('SIGTERM');
+    await new Promise((resolve) => server.process.once('exit', resolve));
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+});

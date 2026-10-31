@@ -76,6 +76,10 @@ preserved. A direct external writer that ignores this service can still race in
 the small interval between the last digest check and rename; this is not an
 atomic filesystem compare-and-swap.
 
+The canvas retains its viewport, node positions and selection across refreshes.
+If the selected transition itself changes, the selection is cleared rather than
+silently identifying another transition in the same state machine.
+
 The service binds to `127.0.0.1`, checks the request host/origin and uses a
 per-session token for its API. It exposes no shell or arbitrary file picker. It
 is a local development tool, not a network service or an approval mechanism.

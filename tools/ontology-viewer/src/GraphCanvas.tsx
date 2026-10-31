@@ -58,7 +58,7 @@ export function GraphCanvas({ graph, identity, search, focusNode, onSelect }: {
   }, [nodes, search]);
   const onNodeClick: NodeMouseHandler<ViewerNode> = (_, node) => onSelect({ type: 'node', data: node.data });
   const onEdgeClick: EdgeMouseHandler<ViewerEdge> = (_, edge) => {
-    if (edge.data) onSelect({ type: 'edge', data: edge.data });
+    if (edge.data) onSelect({ type: 'edge', id: edge.id, source: edge.source, target: edge.target, data: edge.data });
   };
   return <div className="canvas" aria-label="Ontology graph">
     <ReactFlow

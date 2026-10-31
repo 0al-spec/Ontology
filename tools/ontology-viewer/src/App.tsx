@@ -30,7 +30,8 @@ export default function App() {
       if (!data || data.kind !== 'relation' || !data.semanticId.toLowerCase().includes(query) || seen.has(data.semanticId)) return false;
       seen.add(data.semanticId);
       return true;
-    }).map((edge) => ({ id: edge.id, label: edge.data!.semanticId, kind: 'relation', focusNode: edge.source, selection: { type: 'edge', data: edge.data! } as Selection }));
+    }).map((edge) => ({ id: edge.id, label: edge.data!.semanticId, kind: 'relation', focusNode: edge.source,
+      selection: { type: 'edge', id: edge.id, source: edge.source, target: edge.target, data: edge.data! } as Selection }));
     return [...nodes, ...relations].slice(0, 50);
   }, [graph, search]);
 
@@ -68,8 +69,13 @@ export default function App() {
             (!current.data.source || (node.data.source?.id === current.data.source.id && node.data.source.pointer === current.data.source.pointer)));
           return match ? { type: 'node', data: match.data } : null;
         }
-        const match = updatedGraph.edges.find((edge) => edge.data?.semanticId === current.data.semanticId && edge.data.kind === current.data.kind);
-        return match?.data ? { type: 'edge', data: match.data } : null;
+        const match = updatedGraph.edges.find((edge) => edge.id === current.id && edge.source === current.source && edge.target === current.target &&
+          edge.data?.semanticId === current.data.semanticId && edge.data.kind === current.data.kind);
+        if (!match?.data) return null;
+        // Transition IDs include a position in the YAML array. If that slot is
+        // repurposed, clear the selection instead of showing another transition.
+        if (current.data.kind === 'transition' && JSON.stringify(match.data.record) !== JSON.stringify(current.data.record)) return null;
+        return { type: 'edge', id: match.id, source: match.source, target: match.target, data: match.data };
       });
       setError('');
     } catch (reason) { setError(reason instanceof Error ? reason.message : 'Could not open graph'); }
