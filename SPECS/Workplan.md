@@ -1265,7 +1265,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
   standalone viewer, with hide/dim modes and stable canvas positioning.
 - **Priority:** P1 — user request, 2026-10-31.
 - **Dependency:** ONT-064 / PR #88.
-- **Status:** INPROGRESS in `.worktrees/Ontology-interactive-viewer`.
+- **Status:** Complete locally — [validation](ARCHIVE/ONT-065_Interactive_Graph_Filters/ONT-065_Validation_Report.md); hosted review/CI pending.
 
 ## Task Status Legend
 

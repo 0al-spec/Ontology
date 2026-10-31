@@ -34,3 +34,8 @@ tests. Cover desktop and narrow layouts. Use the verified TB5 build paths.
 
 This slice does not add graphical source editing, persist display state across
 browser restarts, alter CLI profile semantics or integrate SpecSpace.
+
+## Archive
+
+Implemented and validated locally on 2026-10-31. Hosted CI and independent
+review remain separate. Retain the worktree until the PR stack is reviewed.
