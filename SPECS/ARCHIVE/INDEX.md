@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-064 | [ONT-064_Source_Preserving_Editing/](ONT-064_Source_Preserving_Editing/) | 2026-10-31 | PASS (local source editing) |
 | ONT-063 | [ONT-063_Interactive_Ontology_Viewer/](ONT-063_Interactive_Ontology_Viewer/) | 2026-10-31 | PASS (local interactive viewer) |
 | ONT-062 | [ONT-062_Shared_Graph_Projection/](ONT-062_Shared_Graph_Projection/) | 2026-10-31 | PASS (local graph projection) |
 | ONT-061 | [ONT-061_Release_Ontologyviz/](ONT-061_Release_Ontologyviz/) | 2026-10-31 | PASS (local current and legacy archives) |
@@ -71,6 +72,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-10-31 | ONT-064 | Archived [self-review](ONT-064_Source_Preserving_Editing/REVIEW_ONT-064.md); test-command finding corrected |
+| 2026-10-31 | ONT-064 | Archived source-preserving editor and local validation |
 | 2026-10-31 | ONT-063 | Archived [self-review](ONT-063_Interactive_Ontology_Viewer/REVIEW_ONT-063.md); FOLLOW-UP skipped |
 | 2026-10-31 | ONT-063 | Archived interactive viewer and local validation |
 | 2026-10-31 | ONT-062 | Archived [self-review](ONT-062_Shared_Graph_Projection/REVIEW_ONT-062.md); FOLLOW-UP skipped |

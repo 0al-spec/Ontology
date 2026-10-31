@@ -33,6 +33,11 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-064 adds a local workspace and source-preserving YAML editor above the
+  standalone viewer. Local checks passed; hosted review/CI pending. Keep
+  `.worktrees/Ontology-interactive-viewer` through review and retire after merge
+  once its local state and any running workspace service are accounted for.
+
 - ONT-063 adds a standalone interactive graph viewer. Local model, build and
   browser checks passed; hosted review/CI pending. Reuse
   `.worktrees/Ontology-interactive-viewer` for ONT-064, then retain it through

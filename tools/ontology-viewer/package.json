@@ -9,7 +9,8 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
     "test": "vitest run src",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "workspace": "node workspace.mjs"
   },
   "dependencies": {
     "@dagrejs/dagre": "1.1.5",
