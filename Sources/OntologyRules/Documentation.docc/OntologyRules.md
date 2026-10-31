@@ -35,6 +35,10 @@ let decision = spec.decide(SpecGraphRefDecisionContext(
 ))
 ```
 
+An imported reference can carry a per-namespace set of exported symbols for
+its requested role. An empty supplied set resolves no names. The compiler
+binds foundation imports to ``FoundationExports`` by package identity and version.
+
 ## Typed Inputs
 
 Rule inputs should use semantic value types instead of raw Foundation

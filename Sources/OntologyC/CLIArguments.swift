@@ -8,6 +8,7 @@ Usage:
 
 Commands:
   check               Validate a package YAML.
+  export-foundation   Print the versioned built-in foundation export catalog as JSON.
   compile             Compile a package YAML to TypeScript artifacts.
   validate-specgraph  Validate SpecGraph semantic bindings against ontology IR.
   validate-instances Validate an explicitly pinned InstanceGraph profile (default eventcore-v1).
@@ -32,7 +33,8 @@ Run `ontologyc <command> --help` for command-specific usage.
 """
 
 let commandUsage: [String: String] = [
-    "check": "Usage:\n  ontologyc check <package.yaml>",
+    "check": "Usage:\n  ontologyc check <package.yaml> [--format text|json]",
+    "export-foundation": "Usage:\n  ontologyc export-foundation",
     "compile": "Usage:\n  ontologyc compile <package.yaml> --target typescript --out <directory>",
     "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory> [--source-uri <uri>] [--source-ref <ref>]",
     "validate-instances": "Usage:\n  ontologyc validate-instances <graph.json> --ontology-ir <ontology.normalized.json> [--profile eventcore-v1|eventcore-provenance-v1] [--provenance-authority <trusted-authority.json>] [--out <report.json>]",
