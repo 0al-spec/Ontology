@@ -39,3 +39,19 @@ No automatic fixes or dependency changes were applied. npm 12 also reported
 blocked install scripts; both launch modes still succeeded.
 Track dependency investigation separately as a follow-up, not as an assertion
 that successful startup is security acceptance.
+
+## Review correction: new-terminal restart
+
+The initial walkthrough did not execute the abbreviated restart paragraph from
+the checkout root. Review thread PRRT_kwDOStULqM6yT-hi identified the missing
+package-directory change. The manual now includes the explicit directory change
+and the complete workspace command instead of referring to an earlier command.
+
+Executed the revised restart shell block in a new Bash process starting from the
+isolated checkout root, with restored path variables and recomputed CLI bin path.
+HTTP HTML and the session API returned a full graph without compiler/graph errors.
+The existing copied YAML and customized profile remained byte-identical; the
+test server was stopped. All six current shell blocks pass bash syntax checking.
+Receipt: launch-manual/restart-review-fix-receipt.json in the TB5 build directory.
+No dependency install, compiler rebuild or new visual browser walkthrough was
+needed for this documentation correction.

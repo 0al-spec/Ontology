@@ -164,8 +164,17 @@ command if a fixed free port is useful.
 
 In a new terminal, change to your checkout root, restore the path variables from
 step 2 (including any custom build/data overrides), and recompute/export
-`VIEWER_BIN` with the `--show-bin-path` command. Then run just the last workspace
-command. Rebuild the frontend after pulling frontend changes; rebuild both CLI
+`VIEWER_BIN` with the `--show-bin-path` command. Then change to the viewer
+package and launch the existing workspace:
+
+```sh
+cd "$VIEWER_REPO/tools/ontology-viewer"
+npm run workspace -- --profile "$VIEWER_DATA/full.profile.json" \
+  --ontologyc "$VIEWER_BIN/ontologyc" --ontologyviz "$VIEWER_BIN/ontologyviz" \
+  --dist "$VIEWER_DIST"
+```
+
+Rebuild the frontend after pulling frontend changes; rebuild both CLI
 products after compiler changes. Dependency-lockfile changes require `npm ci`.
 No rebuild is needed for ordinary edits to the copied YAML.
 

@@ -19,3 +19,10 @@ advisories (including two critical labels). Compatibility and reachability need
 investigation; no automatic force upgrade is appropriate in this documentation
 change. Record ONT-069 during FOLLOW-UP. This finding does not invalidate the
 tested launch instructions or establish a security acceptance decision.
+
+## Hosted review correction
+
+PR #93 thread PRRT_kwDOStULqM6yT-hi found that the abbreviated restart omitted
+the viewer working directory. Replaced it with a complete shell block and
+executed that exact block from the checkout root. The startup/session API passed
+and copied source/profile bytes were preserved. See the validation addendum.
