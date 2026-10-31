@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require "json"
 require "set"
 require "yaml"
 
 ROOT = File.expand_path("../../..", __dir__)
+
+FOUNDATION = JSON.parse(File.read(File.join(ROOT, "SPECS/ontology/foundation/0.1.0/exports.json"))).freeze
 
 API_VERSION = "ontology.specgraph.io/v1alpha1"
 KIND = "DomainOntologyPackage"
@@ -41,6 +44,7 @@ VALID_FIXTURES = [
 
 INVALID_FIXTURES = {
   "missing-metadata.yaml" => /metadata\.version/,
+  "unknown-foundation-export.yaml" => [/spec\.classes\.Scenario\.extends has unknown class reference sg:Typo/],
   "invalid-inheritance.yaml" => /extends must be scalar string/,
   "unknown-relation-ref.yaml" => /unknown relation domain reference/,
   "invalid-class-fields.yaml" => [
@@ -161,9 +165,12 @@ def ref_name(ref)
   ref.split(":", 2).last
 end
 
-def imported_ref?(ref, import_namespaces)
+def imported_ref?(ref, bindings, role = "classes")
   namespace = ref_namespace(ref)
-  namespace && import_namespaces.include?(namespace)
+  return false unless namespace && bindings.key?(namespace)
+
+  exports = bindings.fetch(namespace)
+  exports.nil? || exports.fetch(role).include?(ref_name(ref))
 end
 
 def local_ref?(ref, local_names, package_namespace)
@@ -211,13 +218,13 @@ def validate_metadata(metadata, errors)
   [namespace, version]
 end
 
-def validate_imports(imports, errors)
+def validate_imports(imports, package_namespace, errors)
   imports = require_array(imports, "spec.imports", errors)
-  return Set.new unless imports
+  return {} unless imports
 
   errors << "spec.imports must contain at least one import" if imports.empty?
 
-  namespaces = Set.new
+  namespaces = {}
   imports.each_with_index do |entry, index|
     path = "spec.imports[#{index}]"
     next unless require_hash(entry, path, errors)
@@ -225,11 +232,16 @@ def validate_imports(imports, errors)
     unknown_keys(entry, %w[id namespace version], path, errors)
     require_string(require_key(entry, "id", path, errors), "#{path}.id", errors)
     require_string(require_key(entry, "version", path, errors), "#{path}.version", errors)
-    namespace = entry["namespace"]
-    next unless namespace
+    foundation = entry["id"] == FOUNDATION.fetch("id")
+    if foundation && entry["version"] != FOUNDATION.fetch("version")
+      errors << "#{path}.version has no supported foundation export catalog"
+    end
+    namespace = entry.fetch("namespace") { FOUNDATION.fetch("namespace") if foundation }
+    next unless namespace || entry.key?("namespace")
 
-    require_string(namespace, "#{path}.namespace", errors)
-    namespaces.add(namespace)
+    next unless require_string(namespace, "#{path}.namespace", errors)
+    errors << "#{path}.namespace is ambiguous" if namespace == package_namespace || namespaces.key?(namespace)
+    namespaces[namespace] = foundation && entry["version"] == FOUNDATION.fetch("version") ? FOUNDATION : nil
   end
   namespaces
 end
@@ -263,7 +275,7 @@ def validate_classes(classes, state_machine_names, package_namespace, import_nam
     implements = definition.key?("implements") ? require_array(definition["implements"], "#{path}.implements", errors) : []
     Array(implements).each_with_index do |ref, index|
       unless scalar_string?(ref) && ref.match?(CONCEPT_RE) &&
-             (imported_ref?(ref, import_namespaces) || local_ref?(ref, class_names, package_namespace))
+             (imported_ref?(ref, import_namespaces, "protocols") || local_ref?(ref, class_names, package_namespace))
         errors << "#{path}.implements[#{index}] has unknown protocol/class reference #{ref.inspect}"
       end
     end
@@ -273,8 +285,12 @@ def validate_classes(classes, state_machine_names, package_namespace, import_nam
       errors << "#{path}.lifecycle references unknown state machine #{lifecycle}"
     end
 
-    command_names.add(name) if extends == "sg:Command" || extends == "Command"
-    event_names.add(name) if extends == "sg:Event" || extends == "Event"
+    next unless scalar_string?(extends)
+    namespace = ref_namespace(extends)
+    if namespace.nil? || namespace == "sg" || import_namespaces[namespace] == FOUNDATION
+      command_names.add(name) if ref_name(extends) == "Command"
+      event_names.add(name) if ref_name(extends) == "Event"
+    end
   end
 
   [class_names, command_names, event_names]
@@ -340,7 +356,8 @@ def validate_relations(relations, class_names, package_namespace, import_namespa
     refs.each_with_index do |ref, index|
       next if resolve_ref?(ref, class_names, package_namespace, import_namespaces)
 
-      errors << "#{path}.range[#{index}] has unknown relation range reference #{ref.inspect}"
+      site = range.is_a?(Hash) ? "#{path}.range.oneOf[#{index}]" : "#{path}.range"
+      errors << "#{site} has unknown relation range reference #{ref.inspect}"
     end
   end
 
@@ -362,7 +379,7 @@ def validate_policies(policies, class_names, package_namespace, import_namespace
     unknown_keys(definition, %w[extends enforceability appliesTo text], path, errors)
     extends = require_key(definition, "extends", path, errors)
     unless scalar_string?(extends) && extends.match?(CONCEPT_RE) &&
-           (imported_ref?(extends, import_namespaces) || local_ref?(extends, policy_names, package_namespace))
+           (imported_ref?(extends, import_namespaces, "policyBases") || local_ref?(extends, policy_names, package_namespace))
       errors << "#{path}.extends has unknown policy reference #{extends.inspect}"
     end
 
@@ -451,7 +468,7 @@ def validate_package(data, load_errors)
     require_key(spec, key, "spec", errors)
   end
 
-  import_namespaces = validate_imports(spec["imports"], errors)
+  import_namespaces = validate_imports(spec["imports"], package_namespace, errors)
   state_machine_names = spec["stateMachines"].is_a?(Hash) ? Set.new(spec["stateMachines"].keys) : Set.new
   class_names, command_names, event_names = validate_classes(
     spec["classes"],

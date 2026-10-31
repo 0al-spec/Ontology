@@ -18,7 +18,7 @@ spec:
       description: Session that captures audio and anchors transcript provenance.
       central: true
     AudioSegment:
-      extends: sg:Evidence
+      extends: sg:DomainEntity
       description: Time-bounded audio evidence captured during a recording session.
     Speaker:
       extends: sg:Actor

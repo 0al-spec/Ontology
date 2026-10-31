@@ -4,7 +4,7 @@ import OntologyRules
 struct ClassValidationContext {
     let classNames: Set<String>
     let stateMachineNames: Set<String>
-    let importNamespaces: Set<String>
+    let bindings: PackageImportBindings
     let packageNamespace: String
 }
 
@@ -23,7 +23,7 @@ extension OntologyCompiler {
         )
 
         let imports = requiredArray(spec, "imports", path: "spec.imports", code: "spec.required")
-        let importNamespaces = collectImportNamespaces(imports)
+        let bindings = collectImportBindings(imports, package: package)
         let classes = requiredObject(spec, "classes", path: "spec.classes", code: "spec.required") ?? [:]
         let relations = requiredObject(spec, "relations", path: "spec.relations", code: "spec.required") ?? [:]
         let policies = optionalDefinitionSection(spec, key: "policies")
@@ -44,27 +44,27 @@ extension OntologyCompiler {
         let classContext = ClassValidationContext(
             classNames: classNames,
             stateMachineNames: stateMachineNames,
-            importNamespaces: importNamespaces,
+            bindings: bindings,
             packageNamespace: package.namespace
         )
         let triggerNames = validateClasses(classes, context: classContext)
         validateImplementsRefs(
             classes,
             protocolNames: protocolNames,
-            importNamespaces: importNamespaces,
+            bindings: bindings,
             packageNamespace: package.namespace
         )
         validateRelations(
             relations,
             classNames: classNames,
-            importNamespaces: importNamespaces,
+            bindings: bindings,
             packageNamespace: package.namespace
         )
         validatePolicies(
             policies,
             policyNames: policyNames,
             classNames: classNames,
-            importNamespaces: importNamespaces,
+            bindings: bindings,
             packageNamespace: package.namespace
         )
         validateStateMachines(
@@ -86,24 +86,6 @@ extension OntologyCompiler {
     private func optionalDefinitionSection(_ spec: JSONObject, key: String) -> JSONObject {
         guard spec.keys.contains(key) else { return [:] }
         return requiredObject(spec, key, path: "spec.\(key)", code: "spec.required") ?? [:]
-    }
-
-    func collectImportNamespaces(_ imports: [Any]) -> Set<String> {
-        var namespaces = Set<String>()
-        for (index, item) in imports.enumerated() {
-            let path = "spec.imports[\(index)]"
-            guard let importObject = item as? JSONObject else {
-                add("imports.type", path, "Import entry must be an object")
-                continue
-            }
-            validateKnownKeys(importObject, allowed: ["id", "namespace", "version"], path: path)
-            _ = requiredString(importObject, "id", path: "\(path).id", code: "imports.required")
-            _ = requiredString(importObject, "version", path: "\(path).version", code: "imports.required")
-            if let namespace = string(importObject["namespace"]) {
-                namespaces.insert(namespace)
-            }
-        }
-        return namespaces
     }
 
     func validateClasses(
@@ -129,7 +111,7 @@ extension OntologyCompiler {
                     extends,
                     localNames: context.classNames,
                     packageNamespace: context.packageNamespace,
-                    importNamespaces: context.importNamespaces
+                    bindings: context.bindings
                 ) {
                     add("class.extends.unresolved", "\(path).extends", "Class base reference \(extends) cannot be resolved")
                 }
@@ -192,7 +174,7 @@ extension OntologyCompiler {
     func validateImplementsRefs(
         _ classes: JSONObject,
         protocolNames: Set<String>,
-        importNamespaces: Set<String>,
+        bindings: PackageImportBindings,
         packageNamespace: String
     ) {
         for name in classes.keys.sorted() {
@@ -205,7 +187,7 @@ extension OntologyCompiler {
             }
             for (index, refValue) in refs.enumerated() {
                 guard let ref = string(refValue),
-                      resolves(ref, localNames: protocolNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces)
+                      resolves(ref, localNames: protocolNames, packageNamespace: packageNamespace, bindings: bindings, role: .protocolType)
                 else {
                     add("protocol.unresolved", "\(path).implements[\(index)]", "Implemented protocol reference cannot be resolved")
                     continue
@@ -225,7 +207,7 @@ extension OntologyCompiler {
     func validateRelations(
         _ relations: JSONObject,
         classNames: Set<String>,
-        importNamespaces: Set<String>,
+        bindings: PackageImportBindings,
         packageNamespace: String
     ) {
         for name in relations.keys.sorted() {
@@ -239,7 +221,7 @@ extension OntologyCompiler {
             validateLayer(definition, path: path)
 
             if let domain = requiredString(definition, "domain", path: "\(path).domain", code: "relation.domain.required"),
-               !resolves(domain, localNames: classNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces) {
+               !resolves(domain, localNames: classNames, packageNamespace: packageNamespace, bindings: bindings) {
                 add("relation.domain.unresolved", "\(path).domain", "Relation domain reference \(domain) cannot be resolved")
             }
 
@@ -247,14 +229,30 @@ extension OntologyCompiler {
                 add("relation.range.required", "\(path).range", "Relation range is required")
                 continue
             }
-            let refs = relationRangeRefs(rangeValue)
-            if refs.isEmpty {
-                add("relation.range.type", "\(path).range", "Relation range must be a reference string or oneOf reference list")
+            validateRelationRange(rangeValue, path: "\(path).range", classes: classNames, namespace: packageNamespace, bindings: bindings)
+        }
+    }
+
+    private func validateRelationRange(_ value: Any, path: String, classes: Set<String>, namespace: String, bindings: PackageImportBindings) {
+        func validateRef(_ ref: String?, at site: String) {
+            guard let ref else {
+                add("relation.range.type", site, "Relation range member must be a reference string")
+                return
             }
-            for (index, ref) in refs.enumerated()
-            where !resolves(ref, localNames: classNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces) {
-                add("relation.range.unresolved", "\(path).range[\(index)]", "Relation range reference \(ref) cannot be resolved")
+            if !resolves(ref, localNames: classes, packageNamespace: namespace, bindings: bindings) {
+                add("relation.range.unresolved", site, "Relation range reference \(ref) cannot be resolved")
             }
+        }
+
+        switch RelationRangeShapeDecisionSpec().sourceShape(of: value) {
+        case .scalarRef(let ref):
+            validateRef(ref, at: path)
+        case .oneOfMembers(let members) where !members.isEmpty:
+            for (index, member) in members.enumerated() {
+                validateRef(member, at: "\(path).oneOf[\(index)]")
+            }
+        case .oneOfMembers, .invalid:
+            add("relation.range.type", path, "Relation range must be a reference string or oneOf reference list")
         }
     }
 
@@ -262,7 +260,7 @@ extension OntologyCompiler {
         _ policies: JSONObject,
         policyNames: Set<String>,
         classNames: Set<String>,
-        importNamespaces: Set<String>,
+        bindings: PackageImportBindings,
         packageNamespace: String
     ) {
         for name in policies.keys.sorted() {
@@ -276,7 +274,7 @@ extension OntologyCompiler {
             validateLayer(definition, path: path)
 
             if let extends = requiredString(definition, "extends", path: "\(path).extends", code: "policy.extends.required"),
-               !resolves(extends, localNames: policyNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces) {
+               !resolves(extends, localNames: policyNames, packageNamespace: packageNamespace, bindings: bindings, role: .policyBase) {
                 add("policy.extends.unresolved", "\(path).extends", "Policy base reference \(extends) cannot be resolved")
             }
 
@@ -291,7 +289,7 @@ extension OntologyCompiler {
             }
             for (index, refValue) in appliesTo.enumerated() {
                 guard let ref = string(refValue),
-                      resolves(ref, localNames: classNames, packageNamespace: packageNamespace, importNamespaces: importNamespaces)
+                      resolves(ref, localNames: classNames, packageNamespace: packageNamespace, bindings: bindings)
                 else {
                     add("policy.appliesTo.unresolved", "\(path).appliesTo[\(index)]", "Policy target cannot be resolved")
                     continue
