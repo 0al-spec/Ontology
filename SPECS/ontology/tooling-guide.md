@@ -86,6 +86,11 @@ a selected subgraph from exact direct import identities/versions. Both flags are
 repeatable. The worked example documents a motivation-core / events-core slice
 and the induced-subgraph rule for imported `oneOf` relations.
 
+Save repeated selections in a local versioned JSON profile and run
+`ontologyviz --profile profile.json --out diagrams`. Package/import paths are
+relative to that profile, while output is relative to the invocation directory.
+The example directory includes a motivation-core profile and the profile schema.
+
 ## SpecSpace Viewer Archive Manifest
 
 SpecSpace `/ontology` can consume local Ontology package folders or archives.

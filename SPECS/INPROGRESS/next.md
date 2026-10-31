@@ -33,6 +33,8 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-060 saved JSON diagram profiles. Local verification PASS on the corrected ONT-058 base. Branch `feature/ONT-060-diagram-profiles` will be reviewed atop #82. Keep `.worktrees/Ontology-visualization` active through stack review and retire after merge. Next action is review of the three visualization layers.
+
 - ONT-059 adds optional staged package notifications. Local Ontology and SpecGraph probes passed.
 
 - ONT-058 relations view and selected local imports. Local verification PASS. Branch `feature/ONT-058-relations-view` depends on ONT-056 PR #81. Retain `.worktrees/Ontology-visualization` through stack review and retire it after merge. A later ergonomic slice can save reusable selection profiles.

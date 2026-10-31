@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ontology diagram profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "package"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schemaVersion": {"type": "integer", "const": 1},
+    "package": {"type": "string", "pattern": "\\S"},
+    "view": {"type": "string", "enum": ["full", "relations"], "default": "full"},
+    "direction": {"type": "string", "enum": ["LR", "TB"], "default": "LR"},
+    "imports": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "\\S"},
+      "default": []
+    },
+    "expand": {
+      "description": "Selectors using the same syntax as repeated --expand arguments.",
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "default": []
+    }
+  }
+}
