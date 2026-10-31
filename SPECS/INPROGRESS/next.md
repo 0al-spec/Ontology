@@ -33,6 +33,11 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-070 makes the Viewer visible before the README problem section with a real
+  inspected screenshot and launch links. Documentation checks PASS; hosted review
+  pending. Reused Ontology-interactive-viewer; retain through review and while its
+  preview consumers are active.
+
 - ONT-068 adds a pinned first-run/restart manual above #92. Local source-snapshot
   build and startup/API checks passed; Linux/new visual validation not performed.
   Keep .worktrees/Ontology-interactive-viewer through stack review.

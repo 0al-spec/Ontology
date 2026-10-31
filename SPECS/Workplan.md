@@ -1299,3 +1299,10 @@ This workplan tracks the specification work for the Ontology repository. The ini
   justified remaining exceptions, and run the affected build/unit/browser checks.
 - Do not apply npm audit fix --force automatically; no upgrade was authorized
   or executed as part of the manual task.
+
+## ONT-070: Viewer README showcase
+- Status: ✅ PASS locally; hosted CI/review pending
+- Source: operator request to show the Viewer before the README problem section.
+- Dependency: merged ONT-062 through ONT-068.
+- Acceptance: real inspected screenshot, concise capability summary and launch
+  link before the problem section; no runtime/model edits; focused PR.

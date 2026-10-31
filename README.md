@@ -18,10 +18,27 @@ in [NormLab](https://github.com/SoundBlaster/NormLab), a laboratory for executab
 legal models. **Lean** supplies formal verification in NormLab; this repository
 supplies reusable vocabulary, structural checks and bounded review experiments.
 
+[Open the Viewer](tools/ontology-viewer/LAUNCH.md) ·
 [Try the image pilot](Examples/intent-preservation/README.md) ·
 [Model an action](skills/ontology-action-model/references/modeling.md) ·
 [Build the compiler](#try-it) ·
 [Read the review contract](SPECS/intent-preservation/0.1/README.md)
+
+## Explore the model in Ontology Viewer
+
+[![Ontology Viewer showing a zoomed fragment of the NormLab ontology, an imported Motive declaration in the inspector, and the local YAML workspace.](Examples/package-visualization/ontology-viewer.png)](tools/ontology-viewer/LAUNCH.md)
+
+**Browse the model, inspect its sources, and edit YAML with compiler feedback.**
+The standalone Viewer provides an interactive canvas, search, and filters for
+node types, relationships and packages. Hide or dim context without moving nodes.
+Open an exported JSON graph for read-only exploration, or use a local workspace
+to edit YAML and see compiler diagnostics.
+
+*Shown: a zoomed fragment of the NormLab full graph, with the imported
+`motivcore:Motive` declaration selected and the root YAML below.*
+
+[Launch the Viewer](tools/ontology-viewer/LAUNCH.md) ·
+[Viewer capabilities and editing behavior](tools/ontology-viewer/README.md)
 
 ## The problem: a correct implementation of the wrong idea
 

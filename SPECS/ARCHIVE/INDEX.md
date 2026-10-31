@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-070 | [ONT-070_Viewer_README_Showcase/](ONT-070_Viewer_README_Showcase/) | 2026-10-31 | PASS (documentation and inspected screenshot) |
 | ONT-068 | [ONT-068_Viewer_Launch_Manual/](ONT-068_Viewer_Launch_Manual/) | 2026-10-31 | PASS (local launch walkthrough) |
 | ONT-067 | [ONT-067_Package_Filters/](ONT-067_Package_Filters/) | 2026-10-31 | PASS (local package filters) |
 | ONT-066 | [ONT-066_Full_Import_Projection/](ONT-066_Full_Import_Projection/) | 2026-10-31 | PASS (local full imports and counts) |
@@ -193,3 +194,5 @@
 | 2026-06-01 | ONT-002 | Archived Ontology_Package_Schema_and_Fixtures (PASS) |
 | 2026-06-01 | ONT-001 | Archived REVIEW_ONT-001 report |
 | 2026-06-01 | ONT-001 | Archived Ontology_Layer_And_SpecGraph_Semantic_Import (PASS) |
+
+- 2026-10-31: archived ONT-070 author review with the README showcase task.
