@@ -1,3 +1,18 @@
+# Selected: ONT-062 — Shared Ontology Graph Projection
+
+**Priority:** P1 — user-selected foundation for an interactive ontology editor
+**Status:** INPROGRESS
+**Dependency:** Ontology 0.5.0, including ONT-058 and ONT-060
+**Workspace:** `.worktrees/Ontology-graph-projection`, branch `feature/ONT-062-graph-projection`
+**Disposition:** retain through review of its focused PR; retire after the task is merged and local state is accounted for.
+
+Provide one versioned machine-readable diagram projection from the same selected
+package declarations used by `ontologyviz`, retaining source identities and
+logical declaration paths for a future editor. Keep the existing DOT/SVG/PNG
+behavior and defer interactive editing and SpecSpace integration.
+
+---
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
