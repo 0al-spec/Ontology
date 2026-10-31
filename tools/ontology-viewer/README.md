@@ -86,7 +86,9 @@ is a local development tool, not a network service or an approval mechanism.
 npm test
 npm run build
 npx playwright install chromium
-ONTOLOGY_GRAPH_FIXTURE=/tmp/motivation-graph/ontology.graph.json npm run test:e2e
+ONTOLOGY_GRAPH_FIXTURE=/tmp/motivation-graph/ontology.graph.json \
+  ONTOLOGY_COMPILER=/path/to/ontologyc ONTOLOGY_VIZ=/path/to/ontologyviz \
+  ONTOLOGY_VIEWER_DIST="$PWD/dist" npm run test:e2e
 ```
 
 Browser tests use a real graph produced by `ontologyviz`. They verify desktop and
