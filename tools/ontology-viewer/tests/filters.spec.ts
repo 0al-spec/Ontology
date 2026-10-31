@@ -23,7 +23,11 @@ test('hides and dims categories without moving a dragged node or the viewport', 
   const transform = await node.evaluate((element) => getComputedStyle(element).transform);
   const viewport = await page.locator('.react-flow__viewport').evaluate((element) => getComputedStyle(element).transform);
   const classes = page.getByRole('checkbox', { name: 'Classes', exact: true });
+  await expect(page.getByTestId('filter-count-type-protocol')).toHaveText('0');
+  await expect(page.getByTestId('filter-count-edge-transition')).toHaveText('0');
+  const totalClasses = await page.getByTestId('filter-count-type-class').textContent();
   await classes.uncheck();
+  await expect(page.getByTestId('filter-count-type-class')).toHaveText(totalClasses || '');
   await expect(node).toHaveCount(0);
   await expect(page.getByRole('button', { name: /motivcore:MotivationHypothesis/i })).toHaveCount(0);
   await expect(page.getByLabel('Inspector').getByRole('status')).toContainText('outside the active filters');

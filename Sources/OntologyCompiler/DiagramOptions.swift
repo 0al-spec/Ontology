@@ -58,7 +58,7 @@ extension OntologyCompiler {
         }
         var projection = try options.view == .relations
             ? DiagramRelationsProjection(root: root, imported: imported).select(options.expandedTypes)
-            : root
+            : DiagramFullProjection(root: root, imported: imported).select()
         if options.view == .relations {
             for section in ["protocols", "policies", "stateMachines"] { projection[section] = [JSONObject]() }
         }

@@ -101,8 +101,7 @@ swift run ontologyviz \
 direct root import by exact id/version, with an unambiguous namespace. Use the
 root import alias in selectors, even when the supplied package uses a different
 canonical namespace. Unknown classes, duplicate supplied imports, wrong versions
-and ambiguous aliases are errors. These options require relations view and must
-be supplied together. Inputs are explicit local files; no network or sibling
+and ambiguous aliases are errors. In relations view these options must be supplied together. Inputs are explicit local files; no network or sibling
 directory discovery occurs.
 
 For imported packages, the displayed relations form the induced subgraph of the
@@ -216,3 +215,21 @@ Graphviz before `swift test` or `bash tools/swift-quality.sh`. The macOS and Lin
 CI jobs install it explicitly. With an external SwiftPM scratch directory, build
 the executables and set `ONTOLOGYC_TEST_BINARY_PATH` to that directory's
 `debug/ontologyc`; the CLI tests find `ontologyviz` beside it.
+
+
+## Full view with direct imports
+
+Use `--view full --import dependency.yaml` (repeatable) or a profile with
+`"view": "full"` and `"imports": [...]`. Full view includes every declaration
+family from each supplied direct package, including policies and state machines.
+Omit `expand`; it remains a relations-only class selector. Nothing is fetched
+or loaded recursively. Referenced nested namespaces must bind by exact
+identity/version in the root scope. Declaration sources retain their original
+package identities, pointers and digests.
+
+A ready-to-use [full motivation/events profile](motivation-full.profile.json):
+
+```sh
+ontologyviz --profile Examples/package-visualization/motivation-full.profile.json \
+  --format json --out diagrams/motivation-full
+```

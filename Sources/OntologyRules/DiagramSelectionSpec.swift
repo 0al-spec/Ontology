@@ -23,7 +23,7 @@ public enum DiagramSelectionDecision: Equatable {
     public var message: String {
         switch self {
         case .valid: return "Valid diagram selection"
-        case .requiresRelationsView: return "Import expansion requires relations view"
+        case .requiresRelationsView: return "Selective class expansion requires relations view; full view loads all supplied declarations"
         case .unpairedSelection: return "Supply local imports and expanded types together"
         case .emptySelector: return "Expanded type selectors must be nonempty"
         }
@@ -38,8 +38,8 @@ public struct DiagramSelectionSpec: DecisionSpec {
     public init() {}
 
     public func decide(_ context: Context) -> Result? {
-        if context.view != "relations", context.hasImports || !context.expandedTypes.isEmpty {
-            return .requiresRelationsView
+        if context.view != "relations" {
+            return context.expandedTypes.isEmpty ? .valid : .requiresRelationsView
         }
         if context.hasImports != !context.expandedTypes.isEmpty { return .unpairedSelection }
         if context.expandedTypes.contains(where: \.isEmpty) { return .emptySelector }

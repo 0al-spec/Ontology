@@ -36,9 +36,13 @@ elements from the canvas and keyboard navigation; **Dim** keeps them visible as
 context. An edge is inactive when its kind or either endpoint is inactive.
 Search covers enabled elements, and the inspector marks a filtered selection.
 Filtering preserves manually positioned nodes, zoom and pan; use the existing
-canvas controls only when you want to change the view. Filter state lasts until
+canvas controls only when you want to change the view. Category counts describe the entire canvas, including unloaded placeholders and
+state nodes; relationship counts count visual links, including oneOf branches.
+Counts remain unchanged while toggling filters. Filter state lasts until
 the page is reloaded and does not modify YAML. Only elements in the loaded
-projection can be enabled: a `relations` view omits other declarations.
+projection can be enabled: a `relations` view omits other declarations and the
+filter panel explains this. Use a `full` profile with explicit imports to load
+policies, protocols, inheritance and lifecycle from those packages too.
 
 ## Reuse and boundaries
 

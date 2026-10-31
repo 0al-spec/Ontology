@@ -289,3 +289,30 @@ test('preserves an ambiguous draft and disables save when no edit range is repor
     expect(await fs.readFile(source, 'utf8')).toBe(original);
   } finally { await stop(server.child); await fs.rm(directory, { recursive: true, force: true }); }
 });
+
+test('full imports expose policies, lifecycles and nonzero relationship counts', async ({ page }) => {
+  const directory = await fs.mkdtemp(path.join(tempRoot, 'ontology-full-imports-'));
+  const profile = path.join(directory, 'full.json');
+  await fs.writeFile(profile, JSON.stringify({ schemaVersion: 1, view: 'full',
+    package: path.resolve('../../SPECS/ontology/packages/motivation-core/domain-ontology-package.yaml'),
+    imports: [path.resolve('../../SPECS/ontology/packages/events-core/versions/0.2.0/domain-ontology-package.yaml')] }));
+  const server = await launch(profile, '--profile');
+  try {
+    await page.goto(server.url);
+    await page.getByLabel('Search graph').fill('eventcore:SnapshotOriginAdmission');
+    await page.getByRole('button', { name: /eventcore:SnapshotOriginAdmission/ }).click();
+    await expect(page.getByLabel('Inspector')).toContainText('/spec/policies/SnapshotOriginAdmission');
+    await expect(page.getByLabel('Inspector')).toContainText('org.0al.events.core');
+    const node = page.locator('[data-id="policies/eventcore:SnapshotOriginAdmission"]');
+    const position = await node.getAttribute('style');
+    await page.locator('.filter-panel summary').click();
+    await expect(page.getByTestId('filter-count-type-protocol')).toHaveText('0');
+    await expect(page.getByTestId('filter-count-type-policy')).not.toHaveText('0');
+    await expect(page.getByTestId('filter-count-edge-transition')).not.toHaveText('0');
+    await expect(page.getByTestId('filter-count-edge-lifecycle')).not.toHaveText('0');
+    await page.getByRole('checkbox', { name: 'Policies', exact: true }).uncheck();
+    await expect(node).toHaveCount(0);
+    await page.getByRole('checkbox', { name: 'Policies', exact: true }).check();
+    await expect(node).toHaveAttribute('style', position || '');
+  } finally { await stop(server.child); await fs.rm(directory, { recursive: true, force: true }); }
+});

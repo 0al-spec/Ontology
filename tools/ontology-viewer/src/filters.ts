@@ -65,3 +65,25 @@ export function graphVisibility(
   }).map((edge) => edge.id));
   return { nodeIds, edgeIds };
 }
+
+export type FilterCounts = {
+  nodeTypes: Record<NodeFilterType, number>;
+  origins: Record<OriginFilter, number>;
+  edgeKinds: Record<EdgeFilterKind, number>;
+};
+
+/** Counts describe the full loaded canvas, independently of enabled filters. */
+export function graphFilterCounts(graph: { nodes: ViewerNode[]; edges: ViewerEdge[] }, packageId: string): FilterCounts {
+  const zeros = <T extends string>(options: readonly (readonly [T, string])[]) =>
+    Object.fromEntries(options.map(([key]) => [key, 0])) as Record<T, number>;
+  const counts: FilterCounts = { nodeTypes: zeros(nodeTypeOptions), origins: zeros(originOptions), edgeKinds: zeros(edgeKindOptions) };
+  for (const node of graph.nodes) {
+    counts.nodeTypes[nodeFilterType(node)]++;
+    counts.origins[nodeOrigin(node, packageId)]++;
+  }
+  for (const edge of graph.edges) {
+    const kind = edge.data?.kind as EdgeFilterKind | undefined;
+    if (kind && kind in counts.edgeKinds) counts.edgeKinds[kind]++;
+  }
+  return counts;
+}

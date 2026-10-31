@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { defaultFilters, graphVisibility, nodeFilterType, nodeOrigin } from './filters';
+import { defaultFilters, graphFilterCounts, graphVisibility, nodeFilterType, nodeOrigin } from './filters';
 import type { ViewerEdge, ViewerNode } from './graph';
 
 const digest = `sha256:${'a'.repeat(64)}`;
@@ -49,4 +49,18 @@ describe('graph visibility', () => {
     filters.origins.unresolved = false;
     expect([...graphVisibility(graph, filters, 'example.root').nodeIds]).toEqual(['local']);
   });
+  it('counts complete canvas categories and oneOf links independently of filters', () => {
+    const graph = { nodes: [node('a', 'class', 'root'), node('p', 'policy', 'dep'), node('s', 'state', 'dep')],
+      edges: [edge('oneOf/0', 'a', 'p', 'relation'), edge('oneOf/1', 'a', 's', 'relation')] };
+    const counts = graphFilterCounts(graph, 'root');
+    expect(counts.nodeTypes).toEqual({ class: 1, protocol: 0, policy: 1, machine: 0, state: 1 });
+    expect(counts.origins).toEqual({ local: 1, imported: 2, unresolved: 0 });
+    expect(counts.edgeKinds.relation).toBe(2);
+    expect(counts.edgeKinds.transition).toBe(0);
+    const filters = defaultFilters();
+    filters.nodeTypes.class = false;
+    expect(graphVisibility(graph, filters, 'root').edgeIds.size).toBe(0);
+    expect(graphFilterCounts(graph, 'root')).toEqual(counts);
+  });
+
 });
