@@ -1234,7 +1234,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
   graph using the same declaration selection as the existing visualization.
 - **Priority:** P1 — user-selected editor foundation, 2026-10-31.
 - **Dependencies:** ONT-058 selected imports and ONT-060 saved profiles.
-- **Status:** INPROGRESS — isolated worktree based on Ontology 0.5.0.
+- **Status:** Complete locally — [validation](ARCHIVE/ONT-062_Shared_Graph_Projection/ONT-062_Validation_Report.md); hosted review/CI pending.
 - **Acceptance:** Preserve DOT and rendering behavior; export deterministic JSON
   with package identities, source digests and logical declaration locations;
   retain relation alternatives and selected import provenance; cover real and

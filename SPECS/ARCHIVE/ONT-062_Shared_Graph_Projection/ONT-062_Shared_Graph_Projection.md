@@ -42,3 +42,7 @@ presentation nodes and edges from the documented declarations.
 4. Existing default and saved-profile DOT golden output remains byte-identical;
    run repository Swift quality checks and relevant real rendering tests.
 5. Publish a focused PR and retain this task worktree through review.
+
+---
+**Archived:** 2026-10-31
+**Verdict:** PASS locally; hosted review and CI pending.
