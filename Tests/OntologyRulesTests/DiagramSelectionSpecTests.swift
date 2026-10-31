@@ -10,7 +10,7 @@ final class DiagramSelectionSpecTests: XCTestCase {
     }
 
     func testExpansionRequiresRelationsViewThroughEitherInput() {
-        XCTAssertEqual(decide("full", imports: true, expanded: []), .requiresRelationsView)
+        XCTAssertEqual(decide("full", imports: true, expanded: []), .valid)
         XCTAssertEqual(decide("full", imports: false, expanded: ["ev:Record"]), .requiresRelationsView)
         XCTAssertEqual(decide("full", imports: true, expanded: ["ev:Record"]), .requiresRelationsView)
     }

@@ -112,6 +112,23 @@ extension OntologyVizCLITests {
         }
     }
 
+    func testFullProfileLoadsImportedPoliciesAndStateMachinesWithoutExpand() throws {
+        try inTemporaryDirectory { temp in
+            let profile = temp.appendingPathComponent("full.json")
+            try writeProfile([
+                "schemaVersion": 1, "view": "full",
+                "package": root.appendingPathComponent("SPECS/ontology/packages/motivation-core/domain-ontology-package.yaml").path,
+                "imports": [root.appendingPathComponent("SPECS/ontology/packages/events-core/versions/0.2.0/domain-ontology-package.yaml").path]
+            ], to: profile)
+            let output = temp.appendingPathComponent("output")
+            let result = try run(["--profile", profile.path, "--format", "json", "--out", output.path])
+            XCTAssertEqual(result.status, 0, result.stderr)
+            let graph = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: output.appendingPathComponent("ontology.graph.json"))) as? [String: Any])
+            XCTAssertTrue((graph["policies"] as? [[String: Any]] ?? []).contains { ($0["fqid"] as? String ?? "").hasPrefix("eventcore:") })
+            XCTAssertTrue((graph["stateMachines"] as? [[String: Any]] ?? []).contains { ($0["fqid"] as? String ?? "").hasPrefix("eventcore:") })
+        }
+    }
+
     private func writeProfile(_ fields: [String: Any], to path: URL) throws {
         try JSONSerialization.data(withJSONObject: fields, options: [.sortedKeys]).write(to: path)
     }

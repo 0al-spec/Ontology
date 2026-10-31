@@ -110,14 +110,15 @@ struct VizArguments {
       --dot <executable>         Graphviz dot path; otherwise search PATH.
       --view full|relations      Default: full. Relations hides scaffolding.
       --import <package.yaml>    Explicit local direct import (repeatable).
-      --expand <ns:Class,...>     Selected imported classes (repeatable).
+      --expand <ns:Class,...>     Selected imported classes; relations view only.
       --profile <profile.json>   Saved package and selection; paths relative to profile.
       --help                     Show this help.
 
     Writes ontology.dot and the selected ontology.svg / ontology.png files;
     JSON mode writes ontology.graph.json without Graphviz.
     SVG/PNG require Graphviz: brew install graphviz / apt-get install graphviz.
-    Import expansion requires relations view and an exact declared id/version.
+    Full view loads all supplied direct imports; relations view requires --expand.
+    Each supplied import must match an exact declared id/version.
     Unselected external references remain unloaded placeholders.
     Profile excludes positional package / --view / --import / --expand.
     CLI --direction overrides profile direction; --format / --out / --dot stay runtime options.

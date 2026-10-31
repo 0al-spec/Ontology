@@ -74,7 +74,8 @@ struct PackageDiagram {
                 edge(source, reference(ref, kind: "protocols"), label: "implements", style: "dashed", arrow: "empty")
             }
             if let lifecycle = definition["lifecycle"] as? String {
-                edge(source, nodeID("stateMachines", "\(namespace):\(lifecycle)"), label: "lifecycle", style: "dotted")
+                let ref = lifecycle.contains(":") ? lifecycle : "\(namespace):\(lifecycle)"
+                edge(source, reference(ref, kind: "stateMachines"), label: "lifecycle", style: "dotted")
             }
             return node(source, label: label, fill: "#dbeafe", extra: central ? ", penwidth=2" : "")
         }
