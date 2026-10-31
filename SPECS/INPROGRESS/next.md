@@ -1,3 +1,19 @@
+# Selected: ONT-063 — Standalone Interactive Ontology Viewer
+
+**Priority:** P1 — user-selected bottom-up editor foundation
+**Status:** INPROGRESS
+**Dependency:** ONT-062 source-linked graph projection, PR #86.
+**Workspace:** `.worktrees/Ontology-interactive-viewer`, branch `feature/ONT-063-interactive-viewer`.
+**Disposition:** reuse this worktree for the following editable layer; retain it
+through PR review and retire after the stack is merged and local state is accounted for.
+
+Create a standalone browser viewer for projection JSON, with reusable graph
+projection and canvas components. Support meaningful interactive navigation,
+inspection, imported placeholders and grouped `oneOf` semantics without writing
+ontology files. The next layer adds source-preserving editing.
+
+---
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
