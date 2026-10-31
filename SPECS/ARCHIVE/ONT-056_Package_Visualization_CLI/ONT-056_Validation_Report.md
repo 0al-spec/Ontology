@@ -45,8 +45,10 @@ policies and lifecycle transitions are visible.
 
 All Swift build, test, documentation and temporary outputs were routed to the
 verified TB5 paths for `.worktrees/Ontology-visualization`. SwiftPM used the TB5
-cache. A temporary project `node_modules` symlink routed the TypeScript dependency
-installation to TB5 and was removed by the validation wrapper. The documentation
+cache. npm ci replaced the temporary project node_modules symlink with a local
+directory. After its smoke checks, the fresh task-created dependencies were moved
+to the TB5 build root and verified by SHA-256; the worktree has no node_modules.
+The documentation
 sample's DOT/SVG/PNG files were copied from the verified render output into the
 repository intentionally.
 
