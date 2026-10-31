@@ -1,7 +1,3 @@
-# Selected: ONT-059 — Staged Package Advice
-
-Deliver an advisory hook using the ONT-057 package checker.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -36,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-059 adds optional staged package notifications. Local Ontology and SpecGraph probes passed.
 
 - ONT-057 validates foundation symbol membership by version and role. The archived report records the SpecGraph #843 reproduction and the SDK comparison.
 

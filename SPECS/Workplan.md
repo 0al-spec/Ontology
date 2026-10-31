@@ -1187,7 +1187,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
   at its declaration. Make the catalog and field-level diagnostics available offline.
 
 #### ONT-059: Staged Package Advice
-- **Status:** INPROGRESS
+- **Status:** ✅ Complete — [validation](ARCHIVE/ONT-059_Staged_Package_Advice/ONT-059_Validation_Report.md)
 - **Goal:** Show compiler findings for the staged package when the author commits. The advisory contributes no veto.
 - **Dependency:** ONT-057 foundation diagnostics.
 
