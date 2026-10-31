@@ -33,6 +33,11 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-068 adds a pinned first-run/restart manual above #92. Local source-snapshot
+  build and startup/API checks passed; Linux/new visual validation not performed.
+  Keep .worktrees/Ontology-interactive-viewer through stack review.
+
+
 - ONT-067 adds package identity filters and fixed ownership counts above #91.
   Local build/unit/browser checks PASS. Keep .worktrees/Ontology-interactive-viewer
   through dependent PR review; NormLab pilot data lives outside the worktree.

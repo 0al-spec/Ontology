@@ -4,24 +4,19 @@ Explore an `ontology.diagram-projection/v1` JSON file locally. The canvas can be
 embedded by a future host; this application does not require SpecSpace, an agent
 or an API server. Opening a JSON graph never writes to its YAML sources.
 
-## Run
+## Start here
 
-Build or install an `ontologyviz` version containing ONT-062, then generate a
-projection from the saved motivation-core/events-core selection:
+Follow the [first-run and restart manual](LAUNCH.md). It gives the
+requirements, a pinned source checkout, complete build commands and two modes:
 
-```sh
-ontologyviz --profile Examples/package-visualization/motivation-relations.profile.json \
-  --format json --out /tmp/motivation-graph
+- **Read-only:** export JSON and open it in the frontend.
+- **YAML workspace:** open a full profile on copied sources, with compiler
+  diagnostics and source-preserving saving.
 
-cd tools/ontology-viewer
-npm ci
-npm run dev
-```
-
-Open the printed loopback URL and choose `/tmp/motivation-graph/ontology.graph.json`.
-After dependencies are installed the viewer works without an internet connection.
-The visualizer and browser app can also be used separately with an exchanged JSON
-file. `npm run build` creates a static `dist/` site for a local web server.
+The manual builds matching `ontologyc`/`ontologyviz` binaries explicitly, so
+neither must already be on PATH. It also explains full/relations profiles,
+ports, shutdown and troubleshooting. This directory contains the frontend;
+it is not a globally installed `npm` command.
 
 Search finds nodes and relations; select a result to focus the canvas and inspect
 its declaration. Drag nodes, zoom and pan to explore. Visual links from one
@@ -70,8 +65,9 @@ read-only; the optional local workspace below edits source text.
 
 ## Local YAML workspace
 
-Use an `ontologyc` and `ontologyviz` build containing ONT-062. After `npm ci`
-and `npm run build`, start a workspace for an explicit source file:
+For a complete setup on copies, use [the workspace recipe](LAUNCH.md#3b-shared-yaml-workspace-on-copies).
+After setup, this is the command shape for an explicit source file (run from
+`tools/ontology-viewer`):
 
 ```sh
 npm run workspace -- --package /path/to/domain-ontology-package.yaml \
@@ -121,15 +117,22 @@ The service binds to `127.0.0.1`, checks the request host/origin and uses a
 per-session token for its API. It exposes no shell or arbitrary file picker. It
 is a local development tool, not a network service or an approval mechanism.
 
-## Checks
+## Development checks (optional)
+
+These are not needed for normal viewing. After the manual's setup, generate the
+relations fixture expected by the browser tests and use explicit tool paths:
 
 ```sh
+"$VIEWER_BIN/ontologyviz" \
+  --profile "$VIEWER_REPO/Examples/package-visualization/motivation-relations.profile.json" \
+  --format json --out "$VIEWER_BUILD/test-graph"
+cd "$VIEWER_REPO/tools/ontology-viewer"
 npm test
-npm run build
+ONTOLOGY_VIEWER_DIST="$VIEWER_DIST" npm run build
 npx playwright install chromium
-ONTOLOGY_GRAPH_FIXTURE=/tmp/motivation-graph/ontology.graph.json \
-  ONTOLOGY_COMPILER=/path/to/ontologyc ONTOLOGY_VIZ=/path/to/ontologyviz \
-  ONTOLOGY_VIEWER_DIST="$PWD/dist" npm run test:e2e
+ONTOLOGY_GRAPH_FIXTURE="$VIEWER_BUILD/test-graph/ontology.graph.json" \
+  ONTOLOGY_COMPILER="$VIEWER_BIN/ontologyc" ONTOLOGY_VIZ="$VIEWER_BIN/ontologyviz" \
+  ONTOLOGY_VIEWER_DIST="$VIEWER_DIST" npm run test:e2e
 ```
 
 Browser tests use a real graph produced by `ontologyviz`. They verify desktop and
