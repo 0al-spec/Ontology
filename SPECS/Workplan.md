@@ -1179,7 +1179,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
   - Publish a focused PR; no merge, release, global ontology change or universal instance validator.
 
 #### ONT-057: Resolve Foundation Exports
-- **Status:** INPROGRESS
+- **Status:** ✅ Complete — [local validation](ARCHIVE/ONT-057_Resolve_Foundation_Exports/ONT-057_Validation_Report.md)
 - **Source:** SpecGraph #843 and the operator's reproduced false-positive report.
 - **Goal:** Own the versioned foundation export inventory in Ontology. Resolve imported
   class, protocol and policy references by identity, version, namespace and role.

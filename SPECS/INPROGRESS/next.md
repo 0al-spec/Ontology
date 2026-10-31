@@ -1,7 +1,3 @@
-# Selected: ONT-057 — Resolve Foundation Exports
-
-Implement the bounded upstream repair for SpecGraph #843. ONT-056 is reserved by the visualization worktree.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -36,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-057 validates foundation symbol membership by version and role. The archived report records the SpecGraph #843 reproduction and the SDK comparison.
 
 - ONT-054: optional policies/stateMachines, retained structural checks and Ruby class-field parity. Local quality: 166 Swift tests, 10 Ruby fixtures; the actual SpecGraph model passes without dummy declarations. Next: review the focused PR, then select a stable compiler revision for downstream adoption. No release or pin update performed.
 
