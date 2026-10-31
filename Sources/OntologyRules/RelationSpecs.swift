@@ -7,7 +7,8 @@ public struct ScalarRelationRangeSpec: Specification {
     public init() {}
 
     public func isSatisfiedBy(_ candidate: Any) -> Bool {
-        candidate is String
+        if case .scalarRef = RelationRangeShapeDecisionSpec().sourceShape(of: candidate) { return true }
+        return false
     }
 }
 
@@ -18,7 +19,7 @@ public struct OneOfRelationRangeSpec: Specification {
     public init() {}
 
     public func isSatisfiedBy(_ candidate: Any) -> Bool {
-        guard let object = candidate as? [String: Any] else { return false }
-        return object["oneOf"] is [Any]
+        if case .oneOfMembers = RelationRangeShapeDecisionSpec().sourceShape(of: candidate) { return true }
+        return false
     }
 }

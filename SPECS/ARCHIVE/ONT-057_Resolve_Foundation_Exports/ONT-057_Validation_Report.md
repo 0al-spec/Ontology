@@ -18,7 +18,7 @@ was built from `d831e25b46095dfea5e17befbc88c5fdcd03e031`.
 
 ## Local macOS checks
 
-- `RUN_COVERAGE=1 bash tools/swift-quality.sh` passed the format, lint, dependency-import, build and test gates. 46 rules tests and 125 compiler/CLI tests passed. Line coverage reported by the gate was 90.40%.
+- `RUN_COVERAGE=1 bash tools/swift-quality.sh` passed the format, lint, dependency-import, build and test gates. 47 rules tests and 125 compiler/CLI tests passed. Line coverage reported by the gate was 90.43%.
 - `ruby SPECS/ontology/fixtures/validate-fixtures.rb` passed all 11 fixtures. An additional run on the minimal state-machine package with the foundation alias changed to `base` accepted its command triggers.
 - `swift build -c release --product ontologyc` and `bash tools/portable-contract-smoke.sh` passed using the release executable.
 - Compiled each of the eight tracked package sources (including events-core 0.2.0). All 80 generated files matched both the 0.3.0 output and the checked-in baselines byte for byte.

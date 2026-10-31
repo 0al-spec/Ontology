@@ -234,8 +234,8 @@ extension OntologyCompiler {
     }
 
     private func validateRelationRange(_ value: Any, path: String, classes: Set<String>, namespace: String, bindings: PackageImportBindings) {
-        func validateRef(_ value: Any, at site: String) {
-            guard let ref = string(value) else {
+        func validateRef(_ ref: String?, at site: String) {
+            guard let ref else {
                 add("relation.range.type", site, "Relation range member must be a reference string")
                 return
             }
@@ -244,13 +244,14 @@ extension OntologyCompiler {
             }
         }
 
-        if let ref = value as? String {
+        switch RelationRangeShapeDecisionSpec().sourceShape(of: value) {
+        case .scalarRef(let ref):
             validateRef(ref, at: path)
-        } else if let members = (value as? JSONObject)?["oneOf"] as? [Any], !members.isEmpty {
+        case .oneOfMembers(let members) where !members.isEmpty:
             for (index, member) in members.enumerated() {
                 validateRef(member, at: "\(path).oneOf[\(index)]")
             }
-        } else {
+        case .oneOfMembers, .invalid:
             add("relation.range.type", path, "Relation range must be a reference string or oneOf reference list")
         }
     }
