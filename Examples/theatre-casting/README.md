@@ -51,3 +51,24 @@ domain records is part of describing the situation.
 The foundation design target is to let a domain declare both relationship
 types, reuse the same action and query its participants and motive. The
 executable replay above demonstrates the separate eventcore-v1 history check.
+
+### Compiler probe at eb223ba
+
+Run `python3 Examples/theatre-casting/probe_relationship.py /path/to/ontologyc`.
+Each input imports only foundation 0.2.0 and declares Person and Appoint once.
+Appoint extends Command for this intentional appointment example. The probe checks
+package declarations and inspects the compiled IR for each accepted input.
+
+| Input | CLI result | Meaning |
+| --- | --- | --- |
+| Two named Person → Person relations | 0 | Both compile. Neither IR relation references Appoint. |
+| Add action = Appoint to each relation | 1 | object.unknown_key at both action fields. |
+| Misspell the direct action as Appiont | 1 | Same unknown-field errors. Resolution never reaches the action name. |
+| Express appointments as two entity classes, each with subject, object and action edges | 0 | Both action edges resolve to pilot:Appoint in IR. |
+| Misspell the action edge range as Appiont | 1 | relation.range.unresolved for both edges. |
+| Use the existing Person class as both action edge ranges | 0 | The compiler accepts pilot:Person in both places. |
+
+The missing contract is a reference on the relationship that resolves specifically
+to an action. A future positive check should preserve the shared action identity
+in the two IR relations. Separate negative checks should reject both an unknown
+name and an existing concept of the wrong kind at the offending field.
