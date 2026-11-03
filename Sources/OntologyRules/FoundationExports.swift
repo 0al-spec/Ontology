@@ -5,7 +5,17 @@ public enum OntologyReferenceRole: Sendable {
 
 /// The compiler-owned, offline export surface of the terminal foundation vocabulary.
 public struct FoundationExports: Encodable, Sendable {
-    public static let version010 = FoundationExports()
+    public static let version010 = FoundationExports(version: "0.1.0", actorKinds: ["Actor", "SystemActor"])
+    public static let current = FoundationExports(version: "0.2.0", actorKinds: [])
+
+    public static func catalog(packageID: String?, version: String?) -> FoundationExports? {
+        switch (packageID, version) {
+        case (current.id, current.version): current
+        case (version010.id, version010.version), ("specgraph.foundation", version010.version): version010
+        default: nil
+        }
+    }
+
     public let schemaVersion: Int
     public let id: String
     public let version: String
@@ -14,17 +24,17 @@ public struct FoundationExports: Encodable, Sendable {
     public let protocols: [String]
     public let policyBases: [String]
 
-    private init() {
+    private init(version: String, actorKinds: [String]) {
         schemaVersion = 1
         id = "ontology.foundation"
-        version = "0.1.0"
+        self.version = version
         namespace = "ont"
-        classes = ["Actor", "Capability", "Command", "DomainEntity", "Event", "Invariant", "Policy", "StateMachine", "SystemActor", "ValueObject"]
+        classes = (["Capability", "Command", "DomainEntity", "Event", "Invariant", "Policy", "StateMachine", "ValueObject"] + actorKinds).sorted()
         protocols = ["Approvable", "Auditable", "DeviceBound", "RestrictableCapability", "Signable", "TimeBound", "Versioned"]
         policyBases = ["Policy"]
     }
 
-    /// Both package identities use this catalog. Keep the legacy default for
+    /// Use the historical namespace default for
     /// existing packages that omitted the namespace on their import.
     public func defaultNamespace(forPackageID packageID: String?) -> String? {
         switch packageID {

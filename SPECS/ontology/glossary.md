@@ -9,6 +9,7 @@ This glossary defines the terms used by the Ontology Layer and the SpecGraph sem
 | Term | Definition |
 |---|---|
 | ABox | Concrete facts or instances that conform to a TBox ontology, such as a signed exam policy document. ABox validation is deferred for ONT-001. |
+| Actor | The entity to which an action is attributed in a particular situation. People, systems and natural phenomena can each occupy this role. The domain relation or event interpretation identifies the participant. |
 | Bounded Context | A semantic boundary where terms, relations, and policies are internally consistent. |
 | Capability | A product ability that can be allowed, denied, constrained, or referenced by requirements. |
 | Command | An intentional action that requests a state transition or domain behavior. |
@@ -31,8 +32,6 @@ This glossary defines the terms used by the Ontology Layer and the SpecGraph sem
 
 | Kind | Meaning |
 |---|---|
-| Actor | Human, organization, role, or party acting in the domain. |
-| SystemActor | External system or managed runtime actor. |
 | DomainEntity | Object with identity and lifecycle. |
 | ValueObject | Structured value without independent identity. |
 | Capability | Something the product can do or expose. |

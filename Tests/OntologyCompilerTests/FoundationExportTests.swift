@@ -34,7 +34,7 @@ final class FoundationExportTests: XCTestCase {
     func testExecutableExportsReleaseCatalogAndHelp() throws {
         let result = try cli(["export-foundation"])
         XCTAssertEqual(result.status, 0)
-        let file = root.appendingPathComponent("SPECS/ontology/foundation/0.1.0/exports.json")
+        let file = root.appendingPathComponent("SPECS/ontology/foundation/0.2.0/exports.json")
         XCTAssertEqual(result.data, try Data(contentsOf: file))
         let catalog = try XCTUnwrap(JSONSerialization.jsonObject(with: result.data) as? [String: Any])
         XCTAssertEqual(catalog["id"] as? String, "ontology.foundation")
@@ -99,6 +99,17 @@ final class FoundationExportTests: XCTestCase {
                 let unavailable = try errors(package.replacingOccurrences(of: imported, with: imported.replacingOccurrences(of: "0.1.0", with: "9.0.0")))
                 XCTAssertEqual(unavailable.map(\.code), ["imports.foundation.version.unavailable"], imported)
             }
+        }
+    }
+
+    func testActorKindsAreScopedToHistoricalFoundationImports() throws {
+        let original = try String(contentsOf: root.appendingPathComponent("SPECS/ontology/examples/theatre.yaml"), encoding: .utf8)
+        XCTAssertTrue(try errors(original).isEmpty)
+        for kind in ["Actor", "SystemActor"] {
+            let source = original.replacingOccurrences(of: "ont:DomainEntity", with: "ont:\(kind)")
+            XCTAssertEqual(try errors(source).map(\.path).sorted(), ["spec.classes.CastSlot.extends", "spec.classes.Person.extends"])
+            let historical = source.replacingOccurrences(of: "version: 0.2.0}", with: "version: 0.1.0}")
+            XCTAssertTrue(try errors(historical).isEmpty)
         }
     }
 

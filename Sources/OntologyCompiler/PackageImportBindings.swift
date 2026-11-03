@@ -2,17 +2,15 @@ import OntologyRules
 
 struct PackageImportBindings {
     var namespaces = Set<String>()
-    var foundationAliases = Set<String>()
+    var foundations: [String: FoundationExports] = [:]
 
     func exports(for role: OntologyReferenceRole) -> [String: Set<String>] {
-        let names = FoundationExports.version010.names(for: role)
-        return Dictionary(uniqueKeysWithValues: foundationAliases.map { ($0, names) })
+        foundations.mapValues { $0.names(for: role) }
     }
 }
 
 extension OntologyCompiler {
     func collectImportBindings(_ imports: [Any], package: LoadedPackage) -> PackageImportBindings {
-        let catalog = FoundationExports.version010
         var bindings = PackageImportBindings()
         for (index, item) in imports.enumerated() {
             let path = "spec.imports[\(index)]"
@@ -23,9 +21,10 @@ extension OntologyCompiler {
             validateKnownKeys(entry, allowed: ["id", "namespace", "version"], path: path)
             let id = requiredString(entry, "id", path: "\(path).id", code: "imports.required")
             let version = requiredString(entry, "version", path: "\(path).version", code: "imports.required")
-            let defaultNamespace = catalog.defaultNamespace(forPackageID: id)
+            let catalog = FoundationExports.catalog(packageID: id, version: version)
+            let defaultNamespace = FoundationExports.current.defaultNamespace(forPackageID: id)
             let isFoundation = defaultNamespace != nil
-            if isFoundation, let version, version != catalog.version {
+            if isFoundation, let version, catalog == nil {
                 add("imports.foundation.version.unavailable", "\(path).version", "No foundation export catalog for version \(version)")
             }
             let alias: String?
@@ -38,8 +37,8 @@ extension OntologyCompiler {
             if alias == package.namespace || !bindings.namespaces.insert(alias).inserted {
                 add("imports.namespace.conflict", "\(path).namespace", "Ambiguous import namespace \(alias)")
             }
-            if isFoundation, version == catalog.version {
-                bindings.foundationAliases.insert(alias)
+            if let catalog {
+                bindings.foundations[alias] = catalog
             }
         }
         return bindings

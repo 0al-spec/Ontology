@@ -79,9 +79,9 @@ Read the findings, correct the package and stage the fix, or keep the draft for 
 
 ### `ontologyc export-foundation`
 
-This command prints the [built-in export catalog](foundation/0.1.0/exports.json)
-for `ontology.foundation@0.1.0` as JSON. The Swift library exposes the same
-inventory through `FoundationExports.version010`. Consumers can pin its bytes
+This command prints the [built-in export catalog](foundation/0.2.0/exports.json)
+for `ontology.foundation@0.2.0` as JSON. The Swift library exposes the same
+inventory through `FoundationExports.current`. Consumers can pin its bytes
 alongside the compiler. Changing the exported symbol set requires a new vocabulary version.
 
 An import of this package binds its declared namespace (default `ont`) to the
@@ -94,10 +94,10 @@ namespace validation; verifying their exported symbols requires another catalog.
 
 The foundation vocabulary has its own version, independent of the CLI release.
 A new package can refer to `ont:DomainEntity` under this import. The corresponding
-versioned concept URI is `ontology://ontology.foundation/0.1.0/classes/DomainEntity`.
+versioned concept URI is `ontology://ontology.foundation/0.2.0/classes/DomainEntity`.
 
 Existing packages can continue importing `specgraph.foundation@0.1.0` with its
-default namespace `sg`. The compiler applies the same version and symbol checks.
+default namespace `sg`. Both foundation identities pinned to 0.1.0 resolve against the archived 0.1.0 vocabulary. In 0.2.0, declare participants as domain entities and express acting through a relation.
 Consumers that verify the catalog byte-for-byte, including SpecGraph, must adopt
 the new package identity, CLI and catalog digest together. Keep old source, IR,
 URIs and digests when replaying historical reports.

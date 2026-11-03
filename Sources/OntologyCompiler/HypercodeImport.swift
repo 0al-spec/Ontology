@@ -12,7 +12,7 @@ private struct HypercodeDraftContext {
     let reviewCommand: String
 
     var foundationNamespace: String {
-        let preferred = FoundationExports.version010.namespace
+        let preferred = FoundationExports.current.namespace
         return namespace.rawValue == preferred ? "foundation" : preferred
     }
 }
@@ -96,7 +96,7 @@ extension OntologyCompiler {
     }
 
     private func hypercodeDraftSpec(_ context: HypercodeDraftContext) -> JSONObject {
-        let foundation = FoundationExports.version010
+        let foundation = FoundationExports.current
         return [
             "imports": [["id": foundation.id, "namespace": context.foundationNamespace, "version": foundation.version]],
             "classes": hypercodeDraftClasses(context),

@@ -14,6 +14,9 @@ cmp "$work/generated/ontology.normalized.json" "$source_dir/SPECS/ontology/packa
 # Exercise the foundation identity carried by the selected release, including
 # re-dispatches for historical releases built from their original checkouts.
 catalog="$source_dir/SPECS/ontology/foundation/0.1.0/exports.json"
+if [[ -f "$source_dir/SPECS/ontology/foundation/0.2.0/exports.json" ]]; then
+  catalog="$source_dir/SPECS/ontology/foundation/0.2.0/exports.json"
+fi
 if [[ -f "$catalog" ]]; then
   "$bin_dir/ontologyc" export-foundation > "$work/foundation.json"
   cmp "$catalog" "$work/foundation.json"

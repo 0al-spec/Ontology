@@ -4,14 +4,14 @@
 
 The foundation model defines the stable semantic target for product ontologies. YAML ontology packages declare semantic inheritance and protocol implementation; generated TypeScript projects those declarations into typed references, interfaces, relations, policies, state machines, and validators.
 
-New packages import `ontology.foundation@0.1.0` with the default namespace `ont`. For the compiler-owned names and their export roles, see the [versioned foundation catalog](foundation/0.1.0/exports.json) or run `ontologyc export-foundation`.
+New packages import `ontology.foundation@0.2.0` with the default namespace `ont`. For the compiler-owned names and their export roles, see the [versioned foundation catalog](foundation/0.2.0/exports.json) or run `ontologyc export-foundation`.
+
+An entity takes the actor role in an action through a named domain relation or an event interpretation. For example, Ivan appoints Anna and Anna plays Hamlet. Both people have the same entity type. The respective actions determine who acted.
 
 ## Concept Kind Set
 
 ```ts
 export type ConceptKind =
-  | "Actor"
-  | "SystemActor"
   | "DomainEntity"
   | "ValueObject"
   | "Capability"
@@ -38,14 +38,6 @@ export interface OntologyNode {
 ## Foundation Interfaces
 
 ```ts
-export interface Actor extends OntologyNode {
-  readonly kind: "Actor";
-}
-
-export interface SystemActor extends OntologyNode {
-  readonly kind: "SystemActor";
-}
-
 export interface DomainEntity extends OntologyNode {
   readonly kind: "DomainEntity";
   readonly lifecycle?: StateMachineRef;

@@ -1,0 +1,706 @@
+{
+  "apiVersion": "ontology.specgraph.io/instance-graph/v1alpha1",
+  "edges": [
+    {
+      "relation": "eventcore:snapshotContainsFact",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "s-vacant",
+        "type": "eventcore:StateSnapshot"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "f-vacant",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "relation": "eventcore:snapshotContainsFact",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "s-anna",
+        "type": "eventcore:StateSnapshot"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "f-anna",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "relation": "eventcore:snapshotContainsFact",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "s-boris",
+        "type": "eventcore:StateSnapshot"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "f-boris",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "relation": "eventcore:recordInRegistry",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "registry",
+        "type": "eventcore:EventRegistry"
+      }
+    },
+    {
+      "relation": "eventcore:recordInEpisode",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "episode",
+        "type": "eventcore:Episode"
+      }
+    },
+    {
+      "relation": "eventcore:recordOfActionKind",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "appointment",
+        "type": "eventcore:ActionKind"
+      }
+    },
+    {
+      "relation": "eventcore:recordBeforeSnapshot",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "s-vacant",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "relation": "eventcore:recordAfterSnapshot",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "s-anna",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "relation": "eventcore:interpretsRecord",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "view-assign-1",
+        "type": "eventcore:Interpretation"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1",
+        "type": "eventcore:RecordedEvent"
+      }
+    },
+    {
+      "relation": "eventcore:roleBoundEntity",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1-actor",
+        "type": "eventcore:RoleBinding"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "ivan",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "relation": "eventcore:interpretationBindsRole",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "view-assign-1",
+        "type": "eventcore:Interpretation"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1-actor",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "relation": "eventcore:roleBoundEntity",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1-appointee",
+        "type": "eventcore:RoleBinding"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "anna",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "relation": "eventcore:interpretationBindsRole",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "view-assign-1",
+        "type": "eventcore:Interpretation"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1-appointee",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "relation": "eventcore:roleBoundEntity",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1-slot",
+        "type": "eventcore:RoleBinding"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "show-17-hamlet",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "relation": "eventcore:interpretationBindsRole",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "view-assign-1",
+        "type": "eventcore:Interpretation"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1-slot",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "relation": "eventcore:deltaOfRecord",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "delta-assign-1",
+        "type": "eventcore:Delta"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-1",
+        "type": "eventcore:RecordedEvent"
+      }
+    },
+    {
+      "relation": "eventcore:deltaAddsFact",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "delta-assign-1",
+        "type": "eventcore:Delta"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "f-anna",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "relation": "eventcore:deltaRemovesFact",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "delta-assign-1",
+        "type": "eventcore:Delta"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "f-vacant",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "relation": "eventcore:recordInRegistry",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "registry",
+        "type": "eventcore:EventRegistry"
+      }
+    },
+    {
+      "relation": "eventcore:recordInEpisode",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "episode",
+        "type": "eventcore:Episode"
+      }
+    },
+    {
+      "relation": "eventcore:recordOfActionKind",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "appointment",
+        "type": "eventcore:ActionKind"
+      }
+    },
+    {
+      "relation": "eventcore:recordBeforeSnapshot",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "s-anna",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "relation": "eventcore:recordAfterSnapshot",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2",
+        "type": "eventcore:RecordedEvent"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "s-boris",
+        "type": "eventcore:StateSnapshot"
+      }
+    },
+    {
+      "relation": "eventcore:interpretsRecord",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "view-assign-2",
+        "type": "eventcore:Interpretation"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2",
+        "type": "eventcore:RecordedEvent"
+      }
+    },
+    {
+      "relation": "eventcore:roleBoundEntity",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2-actor",
+        "type": "eventcore:RoleBinding"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "ivan",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "relation": "eventcore:interpretationBindsRole",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "view-assign-2",
+        "type": "eventcore:Interpretation"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2-actor",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "relation": "eventcore:roleBoundEntity",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2-appointee",
+        "type": "eventcore:RoleBinding"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "boris",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "relation": "eventcore:interpretationBindsRole",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "view-assign-2",
+        "type": "eventcore:Interpretation"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2-appointee",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "relation": "eventcore:roleBoundEntity",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2-slot",
+        "type": "eventcore:RoleBinding"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "show-17-hamlet",
+        "type": "eventcore:Entity"
+      }
+    },
+    {
+      "relation": "eventcore:interpretationBindsRole",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "view-assign-2",
+        "type": "eventcore:Interpretation"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2-slot",
+        "type": "eventcore:RoleBinding"
+      }
+    },
+    {
+      "relation": "eventcore:deltaOfRecord",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "delta-assign-2",
+        "type": "eventcore:Delta"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "assign-2",
+        "type": "eventcore:RecordedEvent"
+      }
+    },
+    {
+      "relation": "eventcore:deltaAddsFact",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "delta-assign-2",
+        "type": "eventcore:Delta"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "f-boris",
+        "type": "eventcore:Fact"
+      }
+    },
+    {
+      "relation": "eventcore:deltaRemovesFact",
+      "from": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "delta-assign-2",
+        "type": "eventcore:Delta"
+      },
+      "to": {
+        "graphKey": "casting-demo",
+        "revisionKey": "r1",
+        "nodeId": "f-anna",
+        "type": "eventcore:Fact"
+      }
+    }
+  ],
+  "graphKey": "casting-demo",
+  "kind": "InstanceGraph",
+  "nodes": [
+    {
+      "id": "registry",
+      "type": "eventcore:EventRegistry",
+      "fields": {
+        "registryKey": "theatre",
+        "revisionKey": "log-r2"
+      }
+    },
+    {
+      "id": "episode",
+      "type": "eventcore:Episode",
+      "fields": {
+        "scopeKey": "show-17-hamlet"
+      }
+    },
+    {
+      "id": "appointment",
+      "type": "eventcore:ActionKind",
+      "fields": {
+        "actionKey": "appoint-performer"
+      }
+    },
+    {
+      "id": "ivan",
+      "type": "eventcore:Entity",
+      "fields": {
+        "label": "ivan"
+      }
+    },
+    {
+      "id": "anna",
+      "type": "eventcore:Entity",
+      "fields": {
+        "label": "anna"
+      }
+    },
+    {
+      "id": "boris",
+      "type": "eventcore:Entity",
+      "fields": {
+        "label": "boris"
+      }
+    },
+    {
+      "id": "show-17-hamlet",
+      "type": "eventcore:Entity",
+      "fields": {
+        "label": "show-17-hamlet"
+      }
+    },
+    {
+      "id": "s-vacant",
+      "type": "eventcore:StateSnapshot",
+      "fields": {
+        "scopeKey": "show-17-hamlet",
+        "schemaKey": "cast-slot-v1",
+        "projectionKey": "occupancy"
+      }
+    },
+    {
+      "id": "f-vacant",
+      "type": "eventcore:Fact",
+      "fields": {
+        "propositionKey": "show-17-hamlet-occupancy-vacant",
+        "polarity": "positive"
+      }
+    },
+    {
+      "id": "s-anna",
+      "type": "eventcore:StateSnapshot",
+      "fields": {
+        "scopeKey": "show-17-hamlet",
+        "schemaKey": "cast-slot-v1",
+        "projectionKey": "occupancy"
+      }
+    },
+    {
+      "id": "f-anna",
+      "type": "eventcore:Fact",
+      "fields": {
+        "propositionKey": "show-17-hamlet-occupancy-anna",
+        "polarity": "positive"
+      }
+    },
+    {
+      "id": "s-boris",
+      "type": "eventcore:StateSnapshot",
+      "fields": {
+        "scopeKey": "show-17-hamlet",
+        "schemaKey": "cast-slot-v1",
+        "projectionKey": "occupancy"
+      }
+    },
+    {
+      "id": "f-boris",
+      "type": "eventcore:Fact",
+      "fields": {
+        "propositionKey": "show-17-hamlet-occupancy-boris",
+        "polarity": "positive"
+      }
+    },
+    {
+      "id": "assign-1",
+      "type": "eventcore:RecordedEvent",
+      "fields": {
+        "recordKey": "assign-1",
+        "clockKey": "unix-utc-seconds",
+        "intervalStart": 1793696400,
+        "intervalFinish": 1793696400
+      }
+    },
+    {
+      "id": "view-assign-1",
+      "type": "eventcore:Interpretation",
+      "fields": {
+        "interpretationKey": "view-assign-1"
+      }
+    },
+    {
+      "id": "assign-1-actor",
+      "type": "eventcore:RoleBinding",
+      "fields": {
+        "roleName": "actor"
+      }
+    },
+    {
+      "id": "assign-1-appointee",
+      "type": "eventcore:RoleBinding",
+      "fields": {
+        "roleName": "appointee"
+      }
+    },
+    {
+      "id": "assign-1-slot",
+      "type": "eventcore:RoleBinding",
+      "fields": {
+        "roleName": "slot"
+      }
+    },
+    {
+      "id": "delta-assign-1",
+      "type": "eventcore:Delta",
+      "fields": {}
+    },
+    {
+      "id": "assign-2",
+      "type": "eventcore:RecordedEvent",
+      "fields": {
+        "recordKey": "assign-2",
+        "clockKey": "unix-utc-seconds",
+        "intervalStart": 1793700000,
+        "intervalFinish": 1793700000
+      }
+    },
+    {
+      "id": "view-assign-2",
+      "type": "eventcore:Interpretation",
+      "fields": {
+        "interpretationKey": "view-assign-2"
+      }
+    },
+    {
+      "id": "assign-2-actor",
+      "type": "eventcore:RoleBinding",
+      "fields": {
+        "roleName": "actor"
+      }
+    },
+    {
+      "id": "assign-2-appointee",
+      "type": "eventcore:RoleBinding",
+      "fields": {
+        "roleName": "appointee"
+      }
+    },
+    {
+      "id": "assign-2-slot",
+      "type": "eventcore:RoleBinding",
+      "fields": {
+        "roleName": "slot"
+      }
+    },
+    {
+      "id": "delta-assign-2",
+      "type": "eventcore:Delta",
+      "fields": {}
+    }
+  ],
+  "ontology": {
+    "id": "org.0al.events.core",
+    "namespace": "eventcore",
+    "sourceDigest": "sha256:be771a8caa40e1ac23cb11fdb2f12a6ef7f8e166b12ef46f9d7d022a23944424",
+    "version": "0.1.0"
+  },
+  "profile": "eventcore-v1",
+  "projections": [
+    {
+      "domain": "observation",
+      "projectionKey": "occupancy",
+      "schemaKey": "cast-slot-v1"
+    }
+  ],
+  "revisionKey": "r1"
+}

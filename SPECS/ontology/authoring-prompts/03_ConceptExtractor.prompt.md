@@ -19,7 +19,8 @@ Extract candidate domain concepts using the ontology induction meta-model.
 
 ## Must
 
-- Distinguish actors, domain entities, value objects, capabilities, commands, events, policies,
+- Record who acts in each action and propose a domain relation for that participation.
+- Distinguish domain entities, value objects, capabilities, commands, events, policies,
   invariants, risks, and evidence requirements.
 - Include rationale and confidence for each concept.
 - Mark implementation details as excluded candidates when relevant.
@@ -39,7 +40,7 @@ kind: CandidateConceptSet
 concepts:
   - id: string
     label: string
-    metaClass: Actor | DomainEntity | ValueObject | Capability | Command | Event | Policy | Invariant | Risk | EvidenceRequirement
+    metaClass: DomainEntity | ValueObject | Capability | Command | Event | Policy | Invariant | Risk | EvidenceRequirement
     boundedContext: string
     rationale: string
     confidence: 0.0

@@ -105,8 +105,7 @@ quote relevance, interval order, immutable observations, or exact Delta.
 All five policies use `enforceability: manual`; their text is inert review data.
 No checked physical-event graph, causal claim, human attribution, duty or sanction
 is produced by this package. ONT-043 owns InstanceGraph and executable integrity
-checks; ONT-044 owns responsibility profiles. Existing foundation Actor kinds
-and existing packages remain unchanged.
+checks; ONT-044 owns responsibility profiles. The actor of a recorded appointment is the entity bound to the actor role in its interpretation. See the [casting replay](../../../../Examples/theatre-casting/README.md).
 
 ## Examples and reproduction
 

@@ -7,7 +7,10 @@ require "yaml"
 
 ROOT = File.expand_path("../../..", __dir__)
 
-FOUNDATION = JSON.parse(File.read(File.join(ROOT, "SPECS/ontology/foundation/0.1.0/exports.json"))).freeze
+FOUNDATIONS = Dir[File.join(ROOT, "SPECS/ontology/foundation/*/exports.json")].to_h do |path|
+  catalog = JSON.parse(File.read(path))
+  [catalog.fetch("version"), catalog]
+end.freeze
 
 API_VERSION = "ontology.specgraph.io/v1alpha1"
 KIND = "DomainOntologyPackage"
@@ -38,6 +41,7 @@ UNSAFE_VALUE_RE = /(\$\(|`|<%|eval\(|child_process|subprocess|os\.system|Runtime
 UNSAFE_TAG_RE = /!!(ruby|python|perl|js)|!<.*(ruby|python|perl|js)/i.freeze
 
 VALID_FIXTURES = [
+  File.join(ROOT, "SPECS/ontology/examples/theatre.yaml"),
   File.join(ROOT, "SPECS/ontology/examples/examcalc.ontology.yaml"),
   File.join(ROOT, "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml")
 ] + Dir[File.join(ROOT, "SPECS/ontology/fixtures/valid/*.yaml")].sort
@@ -232,16 +236,18 @@ def validate_imports(imports, package_namespace, errors)
     unknown_keys(entry, %w[id namespace version], path, errors)
     require_string(require_key(entry, "id", path, errors), "#{path}.id", errors)
     require_string(require_key(entry, "version", path, errors), "#{path}.version", errors)
-    foundation = entry["id"] == FOUNDATION.fetch("id")
-    if foundation && entry["version"] != FOUNDATION.fetch("version")
+    default_namespace = { "ontology.foundation" => "ont", "specgraph.foundation" => "sg" }[entry["id"]]
+    catalog = FOUNDATIONS[entry["version"]] if default_namespace
+    catalog = nil if default_namespace == "sg" && entry["version"] != "0.1.0"
+    if default_namespace && !catalog
       errors << "#{path}.version has no supported foundation export catalog"
     end
-    namespace = entry.fetch("namespace") { FOUNDATION.fetch("namespace") if foundation }
+    namespace = entry.fetch("namespace") { default_namespace }
     next unless namespace || entry.key?("namespace")
 
     next unless require_string(namespace, "#{path}.namespace", errors)
     errors << "#{path}.namespace is ambiguous" if namespace == package_namespace || namespaces.key?(namespace)
-    namespaces[namespace] = foundation && entry["version"] == FOUNDATION.fetch("version") ? FOUNDATION : nil
+    namespaces[namespace] = catalog
   end
   namespaces
 end
@@ -287,7 +293,7 @@ def validate_classes(classes, state_machine_names, package_namespace, import_nam
 
     next unless scalar_string?(extends)
     namespace = ref_namespace(extends)
-    if namespace.nil? || namespace == "sg" || import_namespaces[namespace] == FOUNDATION
+    if namespace.nil? || import_namespaces[namespace]
       command_names.add(name) if ref_name(extends) == "Command"
       event_names.add(name) if ref_name(extends) == "Event"
     end
