@@ -1,5 +1,3 @@
-# In progress: ONT-073 — Typed action reference pilot
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -34,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-073 completed its typed repository-reference pilot. See the [validation](../ARCHIVE/ONT-073_Typed_References/Validation.md).
 
 - ONT-070 makes the Viewer visible before the README problem section with a real
   inspected screenshot and launch links. Documentation checks PASS; hosted review

@@ -1322,4 +1322,4 @@ This workplan tracks the specification work for the Ontology repository. The ini
   require the identified subject to implement the relationship's action on its object.
 
 ## ONT-073: Typed references in action parameters
-- Selected for the single-field repository membership pilot.
+- Local validation passed for both locator forms. See [ONT-073 validation](ARCHIVE/ONT-073_Typed_References/Validation.md).
