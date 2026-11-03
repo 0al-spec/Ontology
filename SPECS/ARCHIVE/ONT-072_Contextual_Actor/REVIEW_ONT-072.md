@@ -22,3 +22,11 @@ class or a foundation class. Four JSON round-trips preserved their values.
 Six malformed values produced the expected diagnostics, including a missing
 protocol field. The generated SDK passed strict TypeScript checking with
 exact optional properties.
+
+Reviewed the executable subject contract against the generated API. The actor
+is the identified subject. Its function parameter types bind the action and
+object of the named relationship. The strict negative consumer reports the
+missing or incompatible function at the subject. An independent consumer
+dispatched both members of a local/imported object union. The preinstalled
+advisory still uses the earlier grammar and flagged the new appointment YAML.
+The branch compiler's `advise-staged` on the same index produced no findings.
