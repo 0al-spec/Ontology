@@ -43,7 +43,7 @@ Use `ontologyc check <package.yaml> --format json` for a machine-readable
 stdout array of diagnostics, including warnings. Errors return exit 1; accepted
 input returns 0. Consumers can use `code`, `severity` and the source field
 `path` directly. Invalid command arguments return 2. For example,
-`sg:Typo` as the base of `Entry` produces `class.extends.unresolved` at
+`ont:Typo` as the base of `Entry` produces `class.extends.unresolved` at
 `spec.classes.Entry.extends`. Relative to a YAML document, dots select keys
 and bracketed integers select array elements.
 
@@ -64,7 +64,7 @@ A pinned absolute path to the executable also works. Confirm `ontologyc advise-s
 Commit output includes the staged filename and each compiler diagnostic, for example:
 
 ```text
-[ontology advice] "models/member.yaml" error class.extends.unresolved at "spec.classes.Entry.extends": "Class base reference sg:Typo cannot be resolved"
+[ontology advice] "models/member.yaml" error class.extends.unresolved at "spec.classes.Entry.extends": "Class base reference ont:Typo cannot be resolved"
 ```
 
 For agents using RTK, verify the actual commit command after installing or upgrading RTK. From the Ontology source checkout, run:
@@ -80,17 +80,27 @@ Read the findings, correct the package and stage the fix, or keep the draft for 
 ### `ontologyc export-foundation`
 
 This command prints the [built-in export catalog](foundation/0.1.0/exports.json)
-for `specgraph.foundation@0.1.0` as JSON. The Swift library exposes the same
+for `ontology.foundation@0.1.0` as JSON. The Swift library exposes the same
 inventory through `FoundationExports.version010`. Consumers can pin its bytes
-alongside the compiler. Changing the exports requires a new vocabulary version.
+alongside the compiler. Changing the exported symbol set requires a new vocabulary version.
 
-An import of this package binds its declared namespace (default `sg`) to the
+An import of this package binds its declared namespace (default `ont`) to the
 catalog. Class bases, relation endpoints and policy targets resolve class
 names, `implements` resolves protocol names and a policy base resolves against
 `policyBases`. The compiler reports an unavailable foundation version at the
 import and rejects conflicting namespace bindings. Its standalone binary
 performs this check offline. Non-foundation imports currently retain declared
 namespace validation; verifying their exported symbols requires another catalog.
+
+The foundation vocabulary has its own version, independent of the CLI release.
+A new package can refer to `ont:DomainEntity` under this import. The corresponding
+versioned concept URI is `ontology://ontology.foundation/0.1.0/classes/DomainEntity`.
+
+Existing packages can continue importing `specgraph.foundation@0.1.0` with its
+default namespace `sg`. The compiler applies the same version and symbol checks.
+Consumers that verify the catalog byte-for-byte, including SpecGraph, must adopt
+the new package identity, CLI and catalog digest together. Keep old source, IR,
+URIs and digests when replaying historical reports.
 
 ### `ontologyc compile`
 

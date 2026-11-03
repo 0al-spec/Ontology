@@ -102,8 +102,8 @@ metadata:
   approvalStatus: draft
 spec:
   imports:
-    - id: specgraph.foundation
-      namespace: sg
+    - id: ontology.foundation
+      namespace: ont
       version: 0.1.0
   classes: {}
   relations: {}
@@ -116,7 +116,7 @@ spec:
 
 When translating a draft category into `extends` or `implements`, select a symbol
 from the imported version's exports. For example, an audio segment classified
-as evidence in a product draft can be a `sg:DomainEntity` with its evidence role
+as evidence in a product draft can extend `ont:DomainEntity` with its evidence role
 in the description and relationships. Check the available names with
 `ontologyc export-foundation`.
 
@@ -125,9 +125,9 @@ in the description and relationships. Check the available names with
 | Actor | `spec.classes` with suitable foundation extension | Use actor classes only when they are domain-significant |
 | Domain entity | `spec.classes` | Prefer identity-bearing concepts |
 | Value object | `spec.classes` extending a value-object foundation type when available | Avoid primitive obsession in generated SDK semantics |
-| Capability | `spec.classes` extending `sg:Capability` | Useful for permission and policy domains |
-| Command | `spec.classes` extending `sg:Command` | Use for intentional state-changing actions |
-| Event | `spec.classes` extending `sg:Event` | Use for meaningful occurrences |
+| Capability | `spec.classes` extending `ont:Capability` | Useful for permission and policy domains |
+| Command | `spec.classes` extending `ont:Command` | Use for intentional state-changing actions |
+| Event | `spec.classes` extending `ont:Event` | Use for meaningful occurrences |
 | Policy | `spec.policies` | Include enforceability and affected concepts |
 | State model | `spec.stateMachines` | Link lifecycle classes via `lifecycle` |
 | Domain association | `spec.relations` | Use domain verbs, not generic links |

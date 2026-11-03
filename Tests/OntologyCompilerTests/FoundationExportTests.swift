@@ -36,6 +36,9 @@ final class FoundationExportTests: XCTestCase {
         XCTAssertEqual(result.status, 0)
         let file = root.appendingPathComponent("SPECS/ontology/foundation/0.1.0/exports.json")
         XCTAssertEqual(result.data, try Data(contentsOf: file))
+        let catalog = try XCTUnwrap(JSONSerialization.jsonObject(with: result.data) as? [String: Any])
+        XCTAssertEqual(catalog["id"] as? String, "ontology.foundation")
+        XCTAssertEqual(catalog["namespace"] as? String, "ont")
         XCTAssertEqual(try cli(["export-foundation", "--help"]).status, 0)
         XCTAssertEqual(try cli(["export-foundation", "extra"]).status, 2)
     }
@@ -80,6 +83,23 @@ final class FoundationExportTests: XCTestCase {
         let external = alias.replacingOccurrences(of: "specgraph.foundation", with: "org.example.other")
             .replacingOccurrences(of: "base:ValueObject", with: "base:ExternalType")
         XCTAssertTrue(try errors(external).isEmpty)
+    }
+
+    func testBothFoundationIDsBindTheirDefaultAndExplicitNamespacesStrictly() throws {
+        let legacy = try String(contentsOf: valid, encoding: .utf8)
+        for (id, defaultNamespace) in [("ontology.foundation", "ont"), ("specgraph.foundation", "sg")] {
+            for namespace in [nil, "custom"] as [String?] {
+                let binding = namespace ?? defaultNamespace
+                let imported = "id: \(id), " + (namespace.map { "namespace: \($0), " } ?? "") + "version: 0.1.0"
+                let package = legacy.replacingOccurrences(of: "id: specgraph.foundation, namespace: sg, version: 0.1.0", with: imported)
+                    .replacingOccurrences(of: "sg:ValueObject", with: "\(binding):ValueObject")
+                XCTAssertTrue(try errors(package).isEmpty, imported)
+                let typo = try errors(package.replacingOccurrences(of: "\(binding):ValueObject", with: "\(binding):Typo"))
+                XCTAssertTrue(typo.contains { $0.code == "class.extends.unresolved" && $0.path == "spec.classes.Scenario.extends" }, imported)
+                let unavailable = try errors(package.replacingOccurrences(of: imported, with: imported.replacingOccurrences(of: "0.1.0", with: "9.0.0")))
+                XCTAssertEqual(unavailable.map(\.code), ["imports.foundation.version.unavailable"], imported)
+            }
+        }
     }
 
     func testSlotRoleAndRangeMemberDetermineResolution() throws {

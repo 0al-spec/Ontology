@@ -10,6 +10,11 @@ private struct HypercodeDraftContext {
     let symbols: [String]
     let rootSymbol: String
     let reviewCommand: String
+
+    var foundationNamespace: String {
+        let preferred = FoundationExports.version010.namespace
+        return namespace.rawValue == preferred ? "foundation" : preferred
+    }
 }
 
 private let supportedHypercodeIRVersions = Set([
@@ -70,12 +75,7 @@ extension OntologyCompiler {
                 namespace: context.namespace,
                 version: context.version
             ),
-            "spec": hypercodeDraftSpec(
-                nodeTypes: context.nodeTypes,
-                symbols: context.symbols,
-                rootSymbol: context.rootSymbol,
-                reviewCommand: context.reviewCommand
-            )
+            "spec": hypercodeDraftSpec(context)
         ]
     }
 
@@ -95,49 +95,30 @@ extension OntologyCompiler {
         ]
     }
 
-    private func hypercodeDraftSpec(
-        nodeTypes: [String],
-        symbols: [String],
-        rootSymbol: String,
-        reviewCommand: String
-    ) -> JSONObject {
-        [
-            "imports": hypercodeDraftImports(),
-            "classes": hypercodeDraftClasses(nodeTypes: nodeTypes, symbols: symbols, rootSymbol: rootSymbol, reviewCommand: reviewCommand),
+    private func hypercodeDraftSpec(_ context: HypercodeDraftContext) -> JSONObject {
+        let foundation = FoundationExports.version010
+        return [
+            "imports": [["id": foundation.id, "namespace": context.foundationNamespace, "version": foundation.version]],
+            "classes": hypercodeDraftClasses(context),
             "protocols": JSONObject(),
-            "relations": hypercodeDraftRelations(symbols: symbols, rootSymbol: rootSymbol),
-            "policies": hypercodeDraftPolicies(rootSymbol: rootSymbol),
-            "stateMachines": hypercodeDraftStateMachines(reviewCommand: reviewCommand),
+            "relations": hypercodeDraftRelations(symbols: context.symbols, rootSymbol: context.rootSymbol),
+            "policies": hypercodeDraftPolicies(rootSymbol: context.rootSymbol, foundationNamespace: context.foundationNamespace),
+            "stateMachines": hypercodeDraftStateMachines(reviewCommand: context.reviewCommand),
             "compatibility": hypercodeDraftCompatibility()
         ]
     }
 
-    private func hypercodeDraftImports() -> [JSONObject] {
-        [
-            [
-                "id": "specgraph.foundation",
-                "namespace": "sg",
-                "version": "0.1.0"
-            ]
-        ]
-    }
-
-    private func hypercodeDraftClasses(
-        nodeTypes: [String],
-        symbols: [String],
-        rootSymbol: String,
-        reviewCommand: String
-    ) -> JSONObject {
+    private func hypercodeDraftClasses(_ context: HypercodeDraftContext) -> JSONObject {
         var classes = JSONObject()
-        for (index, symbol) in symbols.enumerated() {
+        for (index, symbol) in context.symbols.enumerated() {
             classes[symbol] = [
-                "extends": "sg:DomainEntity",
-                "description": "Draft ontology concept imported from Hypercode node type \(nodeTypes[index]).",
-                "central": symbol == rootSymbol
+                "extends": "\(context.foundationNamespace):DomainEntity",
+                "description": "Draft ontology concept imported from Hypercode node type \(context.nodeTypes[index]).",
+                "central": symbol == context.rootSymbol
             ]
         }
-        classes[reviewCommand] = [
-            "extends": "sg:Command",
+        classes[context.reviewCommand] = [
+            "extends": "\(context.foundationNamespace):Command",
             "description": "Synthetic review command for the generated Hypercode import draft."
         ]
         return classes
@@ -163,10 +144,10 @@ extension OntologyCompiler {
         return nonRoot.isEmpty ? [rootSymbol] : nonRoot
     }
 
-    private func hypercodeDraftPolicies(rootSymbol: String) -> JSONObject {
+    private func hypercodeDraftPolicies(rootSymbol: String, foundationNamespace: String) -> JSONObject {
         [
             "GeneratedDraftRequiresReview": [
-                "extends": "sg:Policy",
+                "extends": "\(foundationNamespace):Policy",
                 "enforceability": "manual",
                 "appliesTo": [rootSymbol],
                 "text": "Hypercode imports are ontology drafts and require review before approval."

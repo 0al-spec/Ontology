@@ -44,9 +44,9 @@ apiVersion: ontology.specgraph.io/v1alpha1
 kind: DomainOntologyPackage
 metadata: {id: test.staged, namespace: sample, version: 0.1.0}
 spec:
-  imports: [{id: specgraph.foundation, namespace: sg, version: 0.1.0}]
+  imports: [{id: ontology.foundation, namespace: ont, version: 0.1.0}]
   classes:
-    Entry: {extends: "sg:$1", description: A value.$2}
+    Entry: {extends: "ont:$1", description: A value.$2}
   relations:
     contains: {domain: Entry, range: Entry, cardinality: {min: 0, max: 1}}
 EOF
@@ -64,7 +64,7 @@ if ! grep -F "$model" "$base/log" | grep -F 'class.extends.unresolved' | grep -F
     cat "$base/log" >&2
     exit 1
 fi
-git show "HEAD:$model" | grep -F 'sg:Typo' >/dev/null
+git show "HEAD:$model" | grep -F 'ont:Typo' >/dev/null
 
 git add -- "$model"
 package Typo '' > "$model"
@@ -76,7 +76,7 @@ git add unrelated.yaml
 commit unrelated
 quiet
 
-package ValueObject ', implements: [sg:Auditable]' > "$model"
+package ValueObject ', implements: [ont:Auditable]' > "$model"
 git add -- "$model"
 commit 'package warning'
 grep -F 'warning protocol.imported.emit_unsupported' "$base/log" >/dev/null

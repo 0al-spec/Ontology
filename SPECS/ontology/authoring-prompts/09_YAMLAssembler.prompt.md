@@ -48,8 +48,8 @@ metadata:
   approvalStatus: draft
 spec:
   imports:
-    - id: specgraph.foundation
-      namespace: sg
+    - id: ontology.foundation
+      namespace: ont
       version: 0.1.0
   classes: {}
   relations: {}

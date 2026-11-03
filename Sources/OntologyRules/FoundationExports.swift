@@ -16,12 +16,22 @@ public struct FoundationExports: Encodable, Sendable {
 
     private init() {
         schemaVersion = 1
-        id = "specgraph.foundation"
+        id = "ontology.foundation"
         version = "0.1.0"
-        namespace = "sg"
+        namespace = "ont"
         classes = ["Actor", "Capability", "Command", "DomainEntity", "Event", "Invariant", "Policy", "StateMachine", "SystemActor", "ValueObject"]
         protocols = ["Approvable", "Auditable", "DeviceBound", "RestrictableCapability", "Signable", "TimeBound", "Versioned"]
         policyBases = ["Policy"]
+    }
+
+    /// Both package identities use this catalog. Keep the legacy default for
+    /// existing packages that omitted the namespace on their import.
+    public func defaultNamespace(forPackageID packageID: String?) -> String? {
+        switch packageID {
+        case id: namespace
+        case "specgraph.foundation": "sg"
+        default: nil
+        }
     }
 
     public func names(for role: OntologyReferenceRole) -> Set<String> {
