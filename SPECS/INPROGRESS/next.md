@@ -109,3 +109,5 @@ that port when adopting it. No paid inference or deployment is needed for this p
 - ONT-044: responsibility draft, merged PR #68.
 - ONT-047: snapshot provenance, merged PR #69.
 - ONT-043: structural event profile, merged PR #67.
+
+- ONT-071 selected for the foundation naming release.

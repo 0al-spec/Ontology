@@ -1306,3 +1306,6 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - Dependency: merged ONT-062 through ONT-068.
 - Acceptance: real inspected screenshot, concise capability summary and launch
   link before the problem section; no runtime/model edits; focused PR.
+
+## ONT-071: Neutral foundation package identity
+- Requested by the operator. Publish ontology.foundation with namespace ont and preserve checked legacy imports.
