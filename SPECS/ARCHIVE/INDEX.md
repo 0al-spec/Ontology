@@ -198,3 +198,4 @@
 - 2026-10-31: archived ONT-070 author review with the README showcase task.
 
 - [ONT-071 Foundation identity](ONT-071_Foundation_Identity/ONT-071_Foundation_Identity.md)
+- [ONT-072 Contextual actor and casting replay](ONT-072_Contextual_Actor/REVIEW_ONT-072.md)
