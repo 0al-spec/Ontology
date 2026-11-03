@@ -111,3 +111,5 @@ that port when adopting it. No paid inference or deployment is needed for this p
 - ONT-043: structural event profile, merged PR #67.
 
 - ONT-071 selected for the foundation naming release.
+
+- ONT-071 passed local validation and is archived for release.
