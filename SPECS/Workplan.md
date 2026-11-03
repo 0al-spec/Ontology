@@ -1311,3 +1311,6 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - Requested by the operator. Publish ontology.foundation with namespace ont and preserve checked legacy imports.
 
 - Status: complete. See [validation](ARCHIVE/ONT-071_Foundation_Identity/ONT-071_Validation_Report.md).
+
+## ONT-072: Contextual actor and theatre casting history
+- Selected. Define actor participation once and replay two appointments with the existing event profile.
