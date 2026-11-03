@@ -15,7 +15,7 @@ def verify(compiler, directory):
     subprocess.run([compiler, "compile", PACKAGE, "--target", "typescript", "--out", output],
                    check=True)
     ir = json.loads((output / "ontology.normalized.json").read_text())
-    actions = {relation["id"]: relation["action"] for relation in ir["relations"]}
+    actions = {relation["id"]: relation["action"] for relation in ir["relations"] if "action" in relation}
     expected = {"CastAppointment": "pilot:Appoint", "CrewAppointment": "pilot:Appoint",
                 "CastCancellation": "pilot:Cancel"}
     if actions != expected:

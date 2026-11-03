@@ -15,9 +15,10 @@ final class RelationActionDecisionSpecTests: XCTestCase {
         for ref in ["base:Action", "Appoint", "pilot:Nominate"] {
             XCTAssertEqual(spec.decide(ref), .action, ref)
         }
-        for ref in ["Action", "pilot:Action", "Person", "base:Command", "Loop"] {
+        for ref in ["Action", "pilot:Action", "Person", "base:Command"] {
             XCTAssertEqual(spec.decide(ref), .wrongKind, ref)
         }
+        XCTAssertEqual(spec.decide("Loop"), .cyclicAncestry)
         for ref in ["Unknown", "other:Action", "External", "old:Action", "base::Action", ""] {
             XCTAssertEqual(spec.decide(ref), .unresolved, ref)
         }

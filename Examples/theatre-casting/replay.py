@@ -29,6 +29,12 @@ def validate(compiler, graph, directory, expected_codes):
         raise ValueError("Unexpected source truth claim")
 
 
+def exactly_one(matches, subject, relation):
+    if len(matches) != 1:
+        raise ValueError(f"{subject}: expected one eventcore:{relation} edge, found {len(matches)}")
+    return matches[0]
+
+
 def appointments(graph):
     nodes = {node["id"]: node for node in graph["nodes"]}
 
@@ -36,17 +42,20 @@ def appointments(graph):
         return [edge["to"]["nodeId"] for edge in graph["edges"]
                 if edge["relation"] == "eventcore:" + relation and edge["from"]["nodeId"] == subject]
 
+    def one_target(subject, relation):
+        return exactly_one(targets(subject, relation), subject, relation)
+
     history = []
     for view in graph["nodes"]:
         if view["type"] != "eventcore:Interpretation":
             continue
-        record, = targets(view["id"], "interpretsRecord")
+        record = one_target(view["id"], "interpretsRecord")
         roles = {}
         for binding in targets(view["id"], "interpretationBindsRole"):
-            entity, = targets(binding, "roleBoundEntity")
+            entity = one_target(binding, "roleBoundEntity")
             roles[nodes[binding]["fields"]["roleName"]] = entity
-        snapshot, = targets(record, "recordAfterSnapshot")
-        fact, = targets(snapshot, "snapshotContainsFact")
+        snapshot = one_target(record, "recordAfterSnapshot")
+        fact = one_target(snapshot, "snapshotContainsFact")
         history.append((nodes[record]["fields"]["intervalStart"], roles["actor"],
                         roles["appointee"], roles["slot"], nodes[fact]["fields"]["propositionKey"]))
     return sorted(history)
@@ -71,8 +80,9 @@ def main(compiler):
         validate(compiler, incomplete, directory, ["instanceGraph.delta.exact"])
 
         alternative = deepcopy(graph)
-        actor_edge, = [e for e in alternative["edges"] if e["from"]["nodeId"] == "assign-1-actor"
+        actor_edges = [e for e in alternative["edges"] if e["from"]["nodeId"] == "assign-1-actor"
                        and e["relation"] == "eventcore:roleBoundEntity"]
+        actor_edge = exactly_one(actor_edges, "assign-1-actor", "roleBoundEntity")
         actor_edge["to"]["nodeId"] = "ghost"
         validate(compiler, alternative, directory, ["instanceGraph.ref.missing"])
         actor_edge["to"]["nodeId"] = "boris"

@@ -10,11 +10,15 @@ struct ActionRelationshipEmitter {
     private let classes: [String: JSONObject]
     private let protocolFields: [String: [String]]
 
-    init(ir: JSONObject, compiler: OntologyCompiler) {
-        relations = (ir["relations"] as? [JSONObject] ?? []).compactMap { item in
-            guard let name = item["fqid"] as? String, let subject = item["domain"] as? String,
-                  let action = item["action"] as? String, let range = item["range"] else { return nil }
-            return Relation(name: name, subject: subject, action: action, objects: compiler.relationRangeRefs(range))
+    init(ir: JSONObject, compiler: OntologyCompiler) throws {
+        relations = try (ir["relations"] as? [JSONObject] ?? []).compactMap { item in
+            guard let action = item["action"] as? String else { return nil }
+            let name = item["fqid"] as? String ?? ""
+            let objects = item["range"].map(compiler.relationRangeRefs) ?? []
+            guard !name.isEmpty, let subject = item["domain"] as? String, !objects.isEmpty else {
+                throw OntologyCompilerError.invalidArgument("Invalid endpoint in normalized action relationship \(name)")
+            }
+            return Relation(name: name, subject: subject, action: action, objects: objects)
         }
         classes = (ir["classes"] as? [JSONObject] ?? []).reduce(into: [:]) { result, item in
             if let ref = item["fqid"] as? String { result[ref] = item }
@@ -41,8 +45,11 @@ struct ActionRelationshipEmitter {
 
     var schemaImports: String {
         guard !relations.isEmpty else { return "" }
-        let local = endpointRefs.contains { classes[$0] != nil }
-        return "import { z } from \"zod\";\n" + (local ? "import * as entities from \"./schemas\";\n" : "")
+        return "import { z } from \"zod\";\n"
+    }
+
+    var localSchemaImports: String {
+        endpointRefs.compactMap { classes[$0]?["id"] as? String }.map { ", \($0)Schema" }.joined()
     }
 
     private var endpointRefs: [String] {
@@ -87,7 +94,7 @@ struct ActionRelationshipEmitter {
         guard let item = classes[ref], let name = item["id"] as? String else {
             return "z.looseObject({ $type: z.literal(\"\(ref)\"), id: z.string().exactOptional() })"
         }
-        let schema = "entities.\(name)Schema"
+        let schema = "\(name)Schema"
         // JSON can omit an optional property, but it cannot contain undefined.
         let fields = item["fields"] as? [JSONObject] ?? []
         let optional = fields.filter { $0["required"] as? Bool != true }.compactMap { $0["id"] as? String }

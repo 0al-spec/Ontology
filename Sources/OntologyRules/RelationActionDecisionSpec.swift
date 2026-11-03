@@ -1,7 +1,7 @@
 import SpecificationCore
 
 public enum RelationActionResolution: Equatable {
-    case action, wrongKind, unresolved
+    case action, wrongKind, unresolved, cyclicAncestry
 }
 
 /// Resolves an action through local class ancestry to a verified foundation export.
@@ -27,7 +27,7 @@ public struct RelationActionDecisionSpec: DecisionSpec {
                 return name == "Action" ? .action : .wrongKind
             }
             guard let base = classBases[name] else { return .unresolved }
-            guard visited.insert(name).inserted else { return .wrongKind }
+            guard visited.insert(name).inserted else { return .cyclicAncestry }
             current = base
         }
         return .unresolved

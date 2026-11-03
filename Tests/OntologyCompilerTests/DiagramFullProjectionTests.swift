@@ -65,6 +65,24 @@ final class DiagramFullProjectionTests: XCTestCase {
         }
     }
 
+    func testVisibleRelationRejectsActionOutsideRootImportScope() throws {
+        try fixture { root, child in
+            let text = try String(contentsOf: child.url, encoding: .utf8)
+                .replacingOccurrences(of: "  classes:", with: """
+                    - id: ontology.foundation
+                      namespace: current
+                      version: 0.2.0
+                  classes:
+                """)
+                .replacingOccurrences(of: "      range: Evidence", with: "      range: Evidence\n      action: current:Action")
+            try text.write(to: child.url, atomically: true, encoding: .utf8)
+            let options = OntologyDiagramOptions(view: .relations, imports: [child], expandedTypes: ["dep:Proposal", "dep:Evidence"])
+            XCTAssertThrowsError(try OntologyCompiler().diagramProjection(path: root, options: options)) {
+                XCTAssertTrue(String(describing: $0).contains("Cannot bind imported reference current:Action"))
+            }
+        }
+    }
+
     func testFullProjectionIsIndependentOfImportOrder() throws {
         try fixture { root, child in
             let original = try String(contentsOf: root.url, encoding: .utf8)

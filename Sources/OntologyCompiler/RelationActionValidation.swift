@@ -8,6 +8,8 @@ extension OntologyCompiler {
         }
         switch spec.decide(ref) {
         case .action: break
+        case .cyclicAncestry:
+            add("relation.action.cyclic_ancestry", path, "Cannot resolve action \(ref): its class inheritance contains a cycle")
         case .wrongKind:
             add("relation.action.wrong_kind", path, "Expected an Action, but \(ref) does not derive from the foundation Action class")
         case .unresolved, nil:
