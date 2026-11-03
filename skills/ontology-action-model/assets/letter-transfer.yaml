@@ -1,0 +1,30 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: org.example.stage-letters
+  namespace: scene
+  version: 0.1.0
+spec:
+  imports:
+    - {id: ontology.foundation, namespace: ont, version: 0.2.0}
+  classes:
+    Character:
+      extends: ont:DomainEntity
+      description: A character in the story.
+    Letter:
+      extends: ont:DomainEntity
+      description: A particular letter that can pass between characters.
+    PassLetter:
+      extends: ont:Action
+      description: Hand the identified letter to the receiving character.
+      fields:
+        letterId:
+          type: string
+          required: true
+          description: ID resolved by the application to an existing Letter.
+    BurnLetter:
+      extends: ont:Action
+      description: Burn the letter identified as the object of this action.
+  relations:
+    handsLetterTo: {subject: Character, action: PassLetter, object: Character}
+    burnsLetter: {subject: Character, action: BurnLetter, object: Letter}
