@@ -1,3 +1,5 @@
+# In progress: ONT-073 — Typed action reference pilot
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
