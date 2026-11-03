@@ -20,38 +20,34 @@ The replay queries the [two synthetic records](appointments.json), validates eac
 
 ## Foundation design checkpoint (proposed)
 
-An action is a directed relationship in which one entity acts on another.
-Its subject is the actor by definition. The object is the entity acted upon.
-The same entity can be the object of one action and the actor of another.
-Composition such as a show containing a vacant cast slot is also a relationship.
-It describes structure and can be queried before anyone performs an action.
+Entities interact by acting on one another. A domain author can name the
+whole interaction by constructing a relationship from its subject, action and
+object. The subject fills the actor position for this action. Actor refers
+back to that same entity. A domain-specific relationship type gives the
+whole triple a meaning in the situation being described.
 
-Every action has a consequence. Describe it as a change to named properties of
-the participating entities. A motive may be attributed to the actor for that
-particular action. A missing attribution leaves the reason open. An instrument,
-when present, identifies what the actor used.
+Consider two appointments. The following is design notation:
 
-### Worked example for the proposed base vocabulary
+```text
+CastAppointment(subject: Ivan, action: Appoint(), object: Anna)
+    for: Hamlet in show 17
+CrewAppointment(subject: Ivan, action: Appoint(), object: Anna)
+    for: flight 42
+```
 
-On stage Anna hands Boris a letter. The domain declares the giver as subject
-and the recipient as object. The letter is the item transferred.
+Both relationships use the same kind of action and even the same people. Each
+occurrence can carry its own optional motive and an optional participating
+entity, for example an instrument when the domain calls for one. The show and
+flight identify what each appointment is for. Reading the triple through its
+relationship type tells a consumer whether to look for a cast member or a crew
+member. Reading the subject as actor answers who performed the appointment.
 
-| Query about this handover | Expected answer |
-| --- | --- |
-| Who is the subject? Who is the actor? | Both resolve to the same entity, Anna. |
-| Who is the object? | Boris. |
-| What changes for Anna? | Her held items include the letter before the handover and exclude it afterwards. |
-| What changes for Boris? | His held items exclude the letter before the handover and include it afterwards. |
-| Why did Anna do this? | The example supplies no motive. The action and its consequence are still expressible. |
+Entities have properties. In the show example the effect can be read from the
+performer of the Hamlet slot; in the flight example it can be read from crew
+membership. Another example is handing over a letter: changing its holder from
+Anna to Boris changes the held items of both people. Which properties the
+domain records is part of describing the situation.
 
-Both property changes can be read from a single update of the letter's holder
-from Anna to Boris. A consumer storing this relation once can derive both
-participants' held items. The model describes the effect independently of the
-storage layout.
-
-The foundation acceptance target is to express these queries with only a
-foundation import. The executable casting replay above currently checks the
-seat occupancy delta with eventcore-v1. It supplies no observation of a change
-to Ivan. One design question remains for actions where the model describes a
-change on only one side: must every action change an observable property of
-each participant, or may its effect on one participant be empty?
+The foundation design target is to let a domain declare both relationship
+types, reuse the same action and query its participants and motive. The
+executable replay above demonstrates the separate eventcore-v1 history check.
