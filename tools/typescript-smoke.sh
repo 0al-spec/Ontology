@@ -19,7 +19,10 @@ if [[ -n "$compiler" ]]; then
     trap 'rm -rf "$work"' EXIT
     "$compiler" compile "$smoke_dir/examples/appointments.yaml" --target typescript --out "$work/generated"
     cp "$root/Examples/theatre-casting/typed-appointments.ts" "$work/"
+    # Resolve the pinned Zod dependency from the freshly generated SDK on both hosts.
+    ln -s "$smoke_dir/node_modules" "$work/node_modules"
     cd "$work"
-    "$smoke_dir/node_modules/.bin/tsc" --strict --noEmit --target ES2022 \
+    "$smoke_dir/node_modules/.bin/tsc" --strict --exactOptionalPropertyTypes --noEmit --target ES2022 \
         --module ESNext --moduleResolution Bundler typed-appointments.ts
+    "$smoke_dir/node_modules/.bin/tsx" typed-appointments.ts
 fi

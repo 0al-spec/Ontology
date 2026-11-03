@@ -29,8 +29,8 @@ jobs:
       - name: Show Swift version
         run: swift --version
 
-      - name: Install diagram renderer
-        run: apt-get update && apt-get install -y --no-install-recommends graphviz
+      - name: Install diagram renderer and smoke test interpreter
+        run: apt-get update && apt-get install -y --no-install-recommends graphviz python3
 
       - name: Restore Linux SwiftPM cache
         uses: actions/cache@v5

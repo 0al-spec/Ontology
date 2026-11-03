@@ -69,6 +69,28 @@ relationships and checks that substituting Cancel in a CastAppointment fails.
 Changing the binding in the source package changes the contract itself;
 `ontologyc diff` reports it as breaking.
 
-This compiler check covers type declarations. The earlier casting replay
-exercises the event history. Motives, instruments and actual changes in a
+### Read an appointment from an API
+
+The generated SDK exposes the same contract for JSON. With the pinned Zod
+4.4.3 dependency, a consumer can check the parsed value before using it.
+
+```ts
+import { ActionRelationshipSchema } from "./generated/validators";
+
+const incoming: unknown = JSON.parse(responseBody);
+const result = ActionRelationshipSchema.safeParse(incoming);
+if (result.success) {
+  const appointment = result.data;
+  console.log(appointment.relation, appointment.action.$type);
+} else {
+  console.log(result.error.issues);
+}
+```
+
+If a cast appointment arrives with `action.$type` equal to `pilot:Cancel`,
+the issue points at `["action", "$type"]` and lists `pilot:Appoint` as the
+expected value. The same action is valid in a `pilot:CastCancellation`.
+
+The schema checks the structure of one incoming record. The earlier casting
+replay exercises the event history. Motives, instruments and actual changes in a
 particular show require data about that occurrence.

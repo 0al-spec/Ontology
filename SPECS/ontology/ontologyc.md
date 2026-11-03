@@ -109,6 +109,15 @@ It reports `relation.action.unresolved` for unavailable references and
 without a verified export catalog cannot establish action ancestry. Successful
 compilation retains the qualified action reference in the relationship's IR.
 
+When a package declares an action-bearing relationship, its TypeScript SDK
+exports `ActionRelationshipSchema` from `validators.ts` (tested with Zod
+4.4.3). Call `.safeParse(value)` on decoded JSON. The relationship name selects
+the schema for the subject, action and object. A mismatched action type is
+reported at `action.$type` with its expected qualified identifier. A local
+endpoint uses its class fields and the required string fields of its local
+protocols. For an imported endpoint, the SDK checks the declared type tag and
+optional string ID and passes additional fields through.
+
 ### `ontologyc compile`
 
 ```bash
