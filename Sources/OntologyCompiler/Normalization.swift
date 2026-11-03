@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 
 extension OntologyCompiler {
     func normalize(_ package: LoadedPackage) -> JSONObject {
@@ -86,14 +87,15 @@ extension OntologyCompiler {
 
     private func normalizeRelations(_ spec: JSONObject, package: LoadedPackage) -> [JSONObject] {
         let relationsObject = spec["relations"] as? JSONObject ?? [:]
-        return relationsObject.keys.sorted().map { name -> JSONObject in
+        return relationsObject.keys.sorted().compactMap { name -> JSONObject? in
             let definition = relationsObject[name] as? JSONObject ?? [:]
+            guard let fields = RelationEndpointNames.authored(in: definition) else { return nil }
             var normalized: JSONObject = [
                 "id": name,
                 "fqid": "\(package.namespace):\(name)",
                 "uri": "ontology://\(package.id)/\(package.version)/relations/\(name)",
-                "domain": normalizeRef(string(definition["domain"]) ?? "", namespace: package.namespace),
-                "range": normalizeRange(definition["range"], namespace: package.namespace)
+                "domain": normalizeRef(string(definition[fields.subject]) ?? "", namespace: package.namespace),
+                "range": normalizeRange(definition[fields.object], namespace: package.namespace)
             ]
             if let action = string(definition["action"]) {
                 normalized["action"] = normalizeRef(action, namespace: package.namespace)

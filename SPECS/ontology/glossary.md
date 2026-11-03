@@ -10,7 +10,7 @@ This glossary defines the terms used by the Ontology Layer and the SpecGraph sem
 |---|---|
 | Action | A reusable kind of interaction that can occupy the action position of a domain relationship. The acting subject can be any suitable entity, including a natural phenomenon. |
 | ABox | Concrete facts or instances that conform to a TBox ontology, such as a signed exam policy document. ABox validation is deferred for ONT-001. |
-| Actor | The entity to which an action is attributed in a particular situation. People, systems and natural phenomena can each occupy this role. The domain relation or event interpretation identifies the participant. |
+| Actor | The subject entity that can perform a relationship's action on its object. In an executable relationship the subject supplies `run(action, object)`. An event interpretation can attribute the action to a person, system or natural phenomenon. |
 | Bounded Context | A semantic boundary where terms, relations, and policies are internally consistent. |
 | Capability | A product ability that can be allowed, denied, constrained, or referenced by requirements. |
 | Command | An intentional action that requests a state transition or domain behavior. |

@@ -50,15 +50,14 @@ domain records is part of describing the situation.
 
 ### Compile the shared action
 
-In the [appointment declarations](../../SPECS/ontology/examples/appointments.yaml),
-the `domain` specifies the subject type and the `range` specifies the object type.
-The subject occupies the actor position. Both CastAppointment and CrewAppointment
-bind the same Appoint class. CastCancellation binds Cancel.
+The [appointment declarations](../../SPECS/ontology/examples/appointments.yaml)
+give the subject, action and object of each relationship. Both CastAppointment
+and CrewAppointment bind Appoint. CastCancellation binds Cancel.
 
 ```yaml
-CastAppointment: {domain: Person, action: Appoint, range: Person}
-CrewAppointment: {domain: Person, action: Appoint, range: Person}
-CastCancellation: {domain: Person, action: Cancel, range: Person}
+CastAppointment: {subject: Person, action: Appoint, object: Person}
+CrewAppointment: {subject: Person, action: Appoint, object: Person}
+CastCancellation: {subject: Person, action: Cancel, object: Person}
 ```
 
 Run `python3 Examples/theatre-casting/probe_relationship.py /path/to/ontologyc`
@@ -69,16 +68,43 @@ relationships and checks that substituting Cancel in a CastAppointment fails.
 Changing the binding in the source package changes the contract itself;
 `ontologyc diff` reports it as breaking.
 
+### Execute the appointment
+
+Ivan supplies the implementation of `Appoint`. Anna only needs her identity
+and her declared type. Here the effect is a change to the cast of show 17.
+
+```ts
+import { trigger, type ActionRelationship, type Actor, type Entity } from "./generated/relations";
+import type { Appoint, Person } from "./generated/types";
+
+const castOfShow17 = new Map<string, string>();
+const anna = { $type: "pilot:Person", id: "anna" } satisfies Person;
+const ivan = {
+  $type: "pilot:Person", id: "ivan",
+  run(_action, person) { castOfShow17.set("hamlet", person.id); },
+} satisfies Person & Actor<Appoint, Person & Entity>;
+const appointment = {
+  relation: "pilot:CastAppointment",
+  subject: ivan, action: { $type: "pilot:Appoint" }, object: anna,
+} satisfies ActionRelationship<"pilot:CastAppointment">;
+
+trigger(appointment);
+```
+
+Looking up `hamlet` now yields `anna`. Passing Anna as the subject would fail
+typechecking because she has no `run` implementation. A subject that only
+implements `Cancel` also fails this check.
+
 ### Read an appointment from an API
 
 The generated SDK exposes the same contract for JSON. With the pinned Zod
 4.4.3 dependency, a consumer can check the parsed value before using it.
 
 ```ts
-import { ActionRelationshipSchema } from "./generated/validators";
+import { ActionRelationshipRecordSchema } from "./generated/validators";
 
 const incoming: unknown = JSON.parse(responseBody);
-const result = ActionRelationshipSchema.safeParse(incoming);
+const result = ActionRelationshipRecordSchema.safeParse(incoming);
 if (result.success) {
   const appointment = result.data;
   console.log(appointment.relation, appointment.action.$type);

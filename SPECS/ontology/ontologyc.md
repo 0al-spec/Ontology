@@ -102,7 +102,11 @@ Consumers that verify the catalog byte-for-byte, including SpecGraph, must adopt
 the new package identity, CLI and catalog digest together. Keep old source, IR,
 URIs and digests when replaying historical reports.
 
-On a relation, `action: Appoint` selects a reusable action. The compiler
+An author writes `CastAppointment: {subject: Person, action: Appoint, object: Person}`.
+The compiler also reads the earlier `domain`/`range` pair and rejects a mix of
+the two spellings in a single declaration. Both pairs normalize to the same
+endpoint references. Diagnostics use the names in the input.
+The `action: Appoint` field selects a reusable action. The compiler
 follows local class inheritance to the imported foundation `Action` (0.2.0).
 It reports `relation.action.unresolved` for unavailable references and
 `relation.action.wrong_kind` for a resolved class of the wrong kind. Imports
@@ -110,13 +114,23 @@ without a verified export catalog cannot establish action ancestry. Successful
 compilation retains the qualified action reference in the relationship's IR.
 
 When a package declares an action-bearing relationship, its TypeScript SDK
-exports `ActionRelationshipSchema` from `validators.ts` (tested with Zod
-4.4.3). Call `.safeParse(value)` on decoded JSON. The relationship name selects
+exports `ActionRelationshipRecordSchema` from `validators.ts` (tested with Zod
+4.4.3). The earlier `ActionRelationshipSchema` name aliases that record schema.
+Call `.safeParse(value)` on decoded JSON. The relationship name selects
 the schema for the subject, action and object. A mismatched action type is
 reported at `action.$type` with its expected qualified identifier. A local
 endpoint uses its class fields and the required string fields of its local
 protocols. For an imported endpoint, the SDK checks the declared type tag and
 optional string ID and passes additional fields through.
+
+The result of a successful parse has the data shape `ActionRelationshipRecord`.
+For execution, `relations.ts` exports `ActionRelationship<Name>`, `Entity`,
+`Actor<A, O>` and `trigger`. The subject must be an identified instance of
+its declared type with a `run` function accepting the bound action and
+object type. The object is also identified. For an `object.oneOf` declaration
+the function accepts the declared union of object types. Each call to
+`trigger` invokes that subject once and returns its result, including an
+asynchronous completion. Parsing and construction perform no action.
 
 ### `ontologyc compile`
 

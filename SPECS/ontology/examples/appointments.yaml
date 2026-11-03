@@ -18,6 +18,6 @@ spec:
       extends: ont:Action
       description: Withdraw a previous assignment.
   relations:
-    CastAppointment: {domain: Person, action: Appoint, range: Person}
-    CrewAppointment: {domain: Person, action: Appoint, range: Person}
-    CastCancellation: {domain: Person, action: Cancel, range: Person}
+    CastAppointment: {subject: Person, action: Appoint, object: Person}
+    CrewAppointment: {subject: Person, action: Appoint, object: Person}
+    CastCancellation: {subject: Person, action: Cancel, object: Person}

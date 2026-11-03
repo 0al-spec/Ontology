@@ -50,3 +50,24 @@ property checks. Seven existing Node smoke modules, the portable CLI contracts
 and both Swift test suites (56 and 178 tests) passed locally. These checks
 establish the shape of a supplied record. The cast event replay separately
 checks its historical evidence.
+
+## Executable relationship subjects
+
+The public compiler generated the SDK from the authored subject/action/object
+triple. Reading the appointment as JSON left the cast vacant. Triggering it
+called the actual Ivan instance once with the original Appoint and Anna
+objects and set the performer to Anna's ID. An asynchronous implementation
+returned its original promise to the caller.
+
+Removing the six expected-error directives from the TypeScript consumer
+produced six diagnostics. They identify a wrong stored action, a missing
+subject capability, a Cancel-only subject, a wrong executable action, a
+stored record passed to trigger and an object missing its ID.
+An independent strict consumer exercised both members of a local/imported
+object union and rejected a subject that could only handle the local member.
+
+Local checks passed with 57 rules tests, 180 compiler tests, 13 Ruby fixtures,
+eight JSON Schema controls, the TypeScript SDK gate, portable contracts and
+the two-CLI release smoke. The public package probe compared normalized
+bindings and source digests for both spellings and exercised six endpoint
+diagnostics. The application supplied the behavior used in these runs.

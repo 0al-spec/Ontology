@@ -40,8 +40,37 @@ struct ActionRelationshipEmitter {
                 }
             """
         }
-        return "\nexport type ActionRelationship =\n" + variants.joined(separator: "\n") + ";\n"
+        return "\nexport type ActionRelationshipRecord =\n" + variants.joined(separator: "\n") + ";\n" + Self.executionContract
     }
+
+    private static let executionContract = """
+
+    type Records = { [R in ActionRelationshipRecord as R["relation"]]: R };
+
+    export interface Entity {
+      readonly id: import("./types").OntologyEntityId;
+    }
+
+    type ObjectOf<K extends keyof Records> = Records[K]["object"] & Entity;
+
+    export interface Actor<A, O extends Entity> extends Entity {
+      readonly run: (action: A, object: O) => void | Promise<void>;
+    }
+
+    export type ActionRelationship<K extends keyof Records = keyof Records> = {
+      [Name in K]: {
+        readonly relation: Name;
+        readonly subject: Records[Name]["subject"] & Actor<Records[Name]["action"], ObjectOf<Name>>;
+        readonly action: Records[Name]["action"];
+        readonly object: ObjectOf<Name>;
+      }
+    }[K];
+
+    export function trigger<K extends keyof Records>(relationship: ActionRelationship<K>): void | Promise<void> {
+      return relationship.subject.run(relationship.action, relationship.object);
+    }
+
+    """
 
     var schemaImports: String {
         guard !relations.isEmpty else { return "" }
@@ -78,9 +107,12 @@ struct ActionRelationshipEmitter {
         \(endpoints.joined(separator: "\n"))
         } as const;
 
-        export const ActionRelationshipSchema = z.discriminatedUnion("relation", [
+        export const ActionRelationshipRecordSchema = z.discriminatedUnion("relation", [
         \(variants.joined(separator: ",\n")),
-        ]) satisfies z.ZodType<import("./relations").ActionRelationship>;
+        ]) satisfies z.ZodType<import("./relations").ActionRelationshipRecord>;
+
+        /** @deprecated Use ActionRelationshipRecordSchema for stored data. */
+        export const ActionRelationshipSchema = ActionRelationshipRecordSchema;
 
         """
     }

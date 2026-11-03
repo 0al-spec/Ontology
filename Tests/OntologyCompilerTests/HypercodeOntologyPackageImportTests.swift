@@ -107,6 +107,17 @@ final class HypercodeOntologyPackageImportTests: XCTestCase {
         let relations = try XCTUnwrap(spec["relations"] as? [String: [String: Any]])
         XCTAssertEqual(relations["controls"]?["action"] as? String, "StartService")
 
+        let actingForm = base.replacingOccurrences(of: domain, with: jsonProperty("subject", "Service") + ",\n" + action)
+            .replacingOccurrences(of: jsonProperty("range", "StartService"), with: jsonProperty("object", "StartService"))
+        try actingForm.write(to: input, atomically: true, encoding: .utf8)
+        let authored = try ontologyc(arguments)
+        XCTAssertEqual(authored.status, 0, authored.combinedOutput)
+        let namedDraft = try XCTUnwrap(Yams.load(yaml: String(contentsOf: output)) as? [String: Any])
+        let namedSpec = try XCTUnwrap(namedDraft["spec"] as? [String: Any])
+        let namedRelations = try XCTUnwrap(namedSpec["relations"] as? [String: [String: Any]])
+        XCTAssertEqual(namedRelations["controls"]?["subject"] as? String, "Service")
+        XCTAssertEqual(namedRelations["controls"]?["object"] as? String, "StartService")
+
         try base.replacingOccurrences(of: domain, with: domain + #", "action": {"value": false}"#)
             .write(to: input, atomically: true, encoding: .utf8)
         let malformed = try ontologyc(arguments)

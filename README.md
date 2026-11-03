@@ -94,8 +94,9 @@ the design of the application.
 
 In the [theatre and spaceflight example](Examples/theatre-casting/README.md#compile-the-shared-action),
 `CastAppointment` and `CrewAppointment` both use one `Appoint` action.
-The generated TypeScript SDK rejects a `Cancel` action in a `CastAppointment`;
-`CastCancellation` explicitly accepts it.
+In an executable `CastAppointment`, Ivan must supply `run(Appoint, Person)`.
+Calling `trigger` runs that action on Ivan with Anna as its object. A stored
+appointment records their identities and can be read independently of execution.
 
 ```mermaid
 flowchart LR
