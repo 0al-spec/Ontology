@@ -1,7 +1,3 @@
-# Active: ONT-072 — Contextual actor and theatre casting history
-
-The operator selected the theatre slice. Resume the candidate below after archive.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
