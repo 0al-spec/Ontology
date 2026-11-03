@@ -1,0 +1,23 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: org.example.membership, namespace: membership, version: 0.1.0}
+spec:
+  imports:
+    - {id: ontology.foundation, namespace: ont, version: 0.2.0}
+  classes:
+    User:
+      extends: ont:DomainEntity
+      description: Operator changing a project.
+    Repository:
+      extends: ont:DomainEntity
+      description: A repository tracked by the application.
+    Project:
+      extends: ont:DomainEntity
+      description: A project containing repositories.
+    AddRepository:
+      extends: ont:Action
+      description: Include the referenced repository in a project.
+      fields:
+        repository: {type: ref, target: Repository, required: true}
+  relations:
+    addsRepositoryTo: {subject: User, action: AddRepository, object: Project}

@@ -263,6 +263,43 @@ final class PackageValidationTests: XCTestCase {
         XCTAssertTrue(diagnostics.contains { $0.code == "class.field.required.required.type" }, "\(diagnostics)")
     }
 
+    func testReferenceTargetResolutionAndCompatibility() throws {
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().appendingPathComponent("Examples/repository-membership/package.yaml")
+        let source = try String(contentsOf: url, encoding: .utf8)
+        let compiler = OntologyCompiler()
+        let targetPath = "spec.classes.AddRepository.fields.repository.target"
+        let cases = [
+            ("type: ref", "class.field.target.required"),
+            ("type: ref, target: Missing", "class.field.target.unresolved"),
+            ("type: ref, target: ont:DomainEntity", "class.field.target.unresolved"),
+            ("type: string, target: Repository", "object.unknown_key")
+        ]
+        for (field, code) in cases {
+            let modified = source.replacingOccurrences(of: "type: ref, target: Repository", with: field)
+            let diagnostics = compiler.check(source: modified, path: OntologySourcePath(url: url))
+            XCTAssertEqual(diagnostics.map(\.code), [code], field)
+            XCTAssertEqual(diagnostics.map(\.path), [targetPath], field)
+        }
+
+        func normalized(target: String) throws -> JSONObject {
+            let input = source.replacingOccurrences(of: "target: Repository", with: "target: \(target)")
+            XCTAssertTrue(compiler.check(source: input, path: OntologySourcePath(url: url)).isEmpty)
+            return try compiler.normalize(XCTUnwrap(compiler.load(source: input, path: url.path)))
+        }
+
+        let original = try normalized(target: "Repository")
+        let classes = try XCTUnwrap(original["classes"] as? [JSONObject])
+        let action = try XCTUnwrap(classes.first { $0["id"] as? String == "AddRepository" })
+        let fields = try XCTUnwrap(action["fields"] as? [JSONObject])
+        XCTAssertEqual(fields.first?["target"] as? String, "membership:Repository")
+        for (target, expected) in [("membership:Repository", []), ("Project", ["change field type membership:AddRepository.repository"])] {
+            let report = try compiler.compatibilityReport(fromIR: original, toIR: normalized(target: target))
+            let changes = try XCTUnwrap(report["changes"] as? JSONObject)
+            XCTAssertEqual(changes["breakingChanges"] as? [String], expected)
+        }
+    }
+
     private func writePackage(_ text: String) throws -> URL {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("ontology-package-\(UUID().uuidString)", isDirectory: true)

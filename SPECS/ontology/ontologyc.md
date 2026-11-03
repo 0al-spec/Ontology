@@ -132,6 +132,17 @@ the function accepts the declared union of object types. Each call to
 `trigger` invokes that subject once and returns its result, including an
 asynchronous completion. Parsing and construction perform no action.
 
+An action can carry a reference to another instance. Declare a class field
+such as `repository: {type: ref, target: Repository, required: true}`.
+The target must name a class declared in the same package. The normalized field
+retains its qualified target. Changing that target is a breaking field-type change.
+The SDK exposes the field as `Ref<Repository>`. Its record contains a `target`
+discriminator and a required JSON `locator`. The consumer chooses the locator
+format and resolves it before applying the action. A successful record parse
+checks the discriminator and JSON shape; it cannot establish instance existence.
+The [repository membership example](../../Examples/repository-membership/membership.ts)
+executes the same action with a database key and a revision-scoped graph address.
+
 ### `ontologyc compile`
 
 ```bash

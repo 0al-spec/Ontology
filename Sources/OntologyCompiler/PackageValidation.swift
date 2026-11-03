@@ -130,12 +130,12 @@ extension OntologyCompiler {
             if let lifecycle = string(definition["lifecycle"]), !context.stateMachineNames.contains(lifecycle) {
                 add("class.lifecycle.unresolved", "\(path).lifecycle", "Lifecycle state machine \(lifecycle) cannot be resolved")
             }
-            validateClassFields(definition["fields"], path: "\(path).fields")
+            validateClassFields(definition["fields"], path: "\(path).fields", context: context)
         }
         return triggerNames
     }
 
-    func validateClassFields(_ value: Any?, path: String) {
+    func validateClassFields(_ value: Any?, path: String, context: ClassValidationContext) {
         guard let value else { return }
         guard let fields = value as? JSONObject else {
             add("class.fields.type", path, "Class fields must be an object")
@@ -148,15 +148,29 @@ extension OntologyCompiler {
                 add("class.field.type", fieldPath, "Class field definition must be an object")
                 continue
             }
-            validateKnownKeys(definition, allowed: ["type", "required", "description"], path: fieldPath)
-            if let type = requiredString(definition, "type", path: "\(fieldPath).type", code: "class.field.type.required"),
-               !OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: type)) {
-                add("class.field.type.unsupported", "\(fieldPath).type", "Class field type \(type) is not supported")
-            }
+            validateFieldType(definition, path: fieldPath, context: context)
             _ = requiredBool(definition, "required", path: "\(fieldPath).required", code: "class.field.required.required")
             if definition.keys.contains("description"), string(definition["description"]) == nil {
                 add("class.field.description.type", "\(fieldPath).description", "Class field description must be a string")
             }
+        }
+    }
+
+    private func validateFieldType(_ field: JSONObject, path: String, context: ClassValidationContext) {
+        let keys: Set<String> = ["type", "required", "description"]
+        validateKnownKeys(field, allowed: field["type"] as? String == "ref" ? keys.union(["target"]) : keys, path: path)
+        guard let type = requiredString(field, "type", path: "\(path).type", code: "class.field.type.required") else { return }
+        guard OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: type)) else {
+            add("class.field.type.unsupported", "\(path).type", "Class field type \(type) is not supported")
+            return
+        }
+        guard type == "ref",
+              let target = requiredString(field, "target", path: "\(path).target", code: "class.field.target.required") else { return }
+        let reference = ConceptRefResolutionContext(
+            ref: target, localNames: context.classNames, packageNamespace: context.packageNamespace, importNamespaces: []
+        )
+        if ConceptRefResolutionDecisionSpec().decide(reference) != .local {
+            add("class.field.target.unresolved", "\(path).target", "Reference target \(target) must name a class in this package")
         }
     }
 

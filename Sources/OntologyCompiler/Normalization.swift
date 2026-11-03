@@ -61,7 +61,7 @@ extension OntologyCompiler {
                 normalized["lifecycle"] = lifecycle
             }
             copyLayer(from: definition, to: &normalized)
-            let fields = normalizeFields(definition["fields"])
+            let fields = normalizeFields(definition["fields"], namespace: package.namespace)
             if !fields.isEmpty {
                 normalized["fields"] = fields
             }
@@ -69,7 +69,7 @@ extension OntologyCompiler {
         }
     }
 
-    private func normalizeFields(_ value: Any?) -> [JSONObject] {
+    private func normalizeFields(_ value: Any?, namespace: String) -> [JSONObject] {
         guard let fieldsObject = value as? JSONObject else { return [] }
         return fieldsObject.keys.sorted().map { name -> JSONObject in
             let definition = fieldsObject[name] as? JSONObject ?? [:]
@@ -78,6 +78,9 @@ extension OntologyCompiler {
                 "type": string(definition["type"]) ?? "",
                 "required": (definition["required"] as? Bool) ?? false
             ]
+            if let target = string(definition["target"]) {
+                normalized["target"] = normalizeRef(target, namespace: namespace)
+            }
             if let description = string(definition["description"]) {
                 normalized["description"] = description
             }
