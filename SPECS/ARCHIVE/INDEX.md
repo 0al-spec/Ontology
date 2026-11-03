@@ -199,3 +199,4 @@
 
 - [ONT-071 Foundation identity](ONT-071_Foundation_Identity/ONT-071_Foundation_Identity.md)
 - [ONT-072 Contextual actor and casting replay](ONT-072_Contextual_Actor/REVIEW_ONT-072.md)
+- [ONT-072 Shared actions in named relationships](ONT-072_Contextual_Actor/ONT-072_Action_Relationships.md)
