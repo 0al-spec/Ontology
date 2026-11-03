@@ -23,7 +23,8 @@ extension OntologyCompiler {
             validateKnownKeys(entry, allowed: ["id", "namespace", "version"], path: path)
             let id = requiredString(entry, "id", path: "\(path).id", code: "imports.required")
             let version = requiredString(entry, "version", path: "\(path).version", code: "imports.required")
-            let isFoundation = id == catalog.id
+            let defaultNamespace = catalog.defaultNamespace(forPackageID: id)
+            let isFoundation = defaultNamespace != nil
             if isFoundation, let version, version != catalog.version {
                 add("imports.foundation.version.unavailable", "\(path).version", "No foundation export catalog for version \(version)")
             }
@@ -31,7 +32,7 @@ extension OntologyCompiler {
             if entry["namespace"] != nil {
                 alias = requiredString(entry, "namespace", path: "\(path).namespace", code: "imports.namespace.invalid")
             } else {
-                alias = isFoundation ? catalog.namespace : nil
+                alias = defaultNamespace
             }
             guard let alias else { continue }
             if alias == package.namespace || !bindings.namespaces.insert(alias).inserted {

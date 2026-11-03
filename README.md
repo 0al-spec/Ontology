@@ -223,6 +223,12 @@ expressions. The [Examcalc walkthrough](SPECS/ontology/packages/examcalc/README.
 provides a small golden package; the [tooling guide](SPECS/ontology/tooling-guide.md)
 covers platform setup, other commands, registries and quality checks.
 
+For a new domain package, import `ontology.foundation@0.1.0` and use
+`ont:DomainEntity` for an entity with identity. Ontology owns this vocabulary,
+and `ontologyc export-foundation` prints its catalog. Existing packages using
+`specgraph.foundation` and `sg:` can continue to compile. See the
+[foundation import and migration contract](SPECS/ontology/ontologyc.md#ontologyc-export-foundation).
+
 Choose the next step by what you want to inspect:
 
 - **A compact report instead of a large code diff:** run the

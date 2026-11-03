@@ -11,6 +11,16 @@ fixture="$source_dir/SPECS/ontology/packages/examcalc/domain-ontology-package.ya
 "$bin_dir/ontologyc" check "$fixture"
 "$bin_dir/ontologyc" compile "$fixture" --target typescript --out "$work/generated"
 cmp "$work/generated/ontology.normalized.json" "$source_dir/SPECS/ontology/packages/examcalc/generated/ontology.normalized.json"
+# Exercise the foundation identity carried by the selected release, including
+# re-dispatches for historical releases built from their original checkouts.
+catalog="$source_dir/SPECS/ontology/foundation/0.1.0/exports.json"
+if [[ -f "$catalog" ]]; then
+  "$bin_dir/ontologyc" export-foundation > "$work/foundation.json"
+  cmp "$catalog" "$work/foundation.json"
+fi
+if [[ -f "$source_dir/SPECS/ontology/examples/theatre.yaml" ]]; then
+  "$bin_dir/ontologyc" check "$source_dir/SPECS/ontology/examples/theatre.yaml"
+fi
 case "$executables" in
   ontologyc) echo 'Selected source predates ontologyviz; compiler-only smoke passed'; exit 0 ;;
   ontologyc,ontologyviz) ;;

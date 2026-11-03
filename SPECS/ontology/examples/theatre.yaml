@@ -1,0 +1,25 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: org.example.theatre
+  namespace: theatre
+  version: 0.1.0
+  publisher: TheatrePilot
+  source: SPECS/ontology/examples/theatre.yaml
+  approvalStatus: draft
+spec:
+  imports:
+    - {id: ontology.foundation, namespace: ont, version: 0.1.0}
+  classes:
+    CastSlot:
+      extends: ont:DomainEntity
+      description: One named place in the cast of one show.
+    Person:
+      extends: ont:DomainEntity
+      description: A person in the troupe.
+  relations:
+    performedBy:
+      domain: CastSlot
+      range: Person
+      cardinality: {min: 0, max: 1}
+      description: Current performer of this place in the cast.

@@ -196,3 +196,5 @@
 | 2026-06-01 | ONT-001 | Archived Ontology_Layer_And_SpecGraph_Semantic_Import (PASS) |
 
 - 2026-10-31: archived ONT-070 author review with the README showcase task.
+
+- [ONT-071 Foundation identity](ONT-071_Foundation_Identity/ONT-071_Foundation_Identity.md)

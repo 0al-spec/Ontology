@@ -27,6 +27,8 @@ final class HypercodeImportTests: XCTestCase {
             "ontologyc import-hypercode: PASS \(output.path)"
         )
         let draft = try String(contentsOf: output, encoding: .utf8)
+        XCTAssertTrue(draft.contains("id: ontology.foundation"), draft)
+        XCTAssertTrue(draft.contains("extends: ont:DomainEntity"), draft)
         XCTAssertTrue(draft.contains("kind: DomainOntologyPackage"), draft)
         XCTAssertTrue(draft.contains("Service:"), draft)
         XCTAssertTrue(draft.contains("GeneratedDraftRequiresReview:"), draft)
@@ -35,6 +37,17 @@ final class HypercodeImportTests: XCTestCase {
         let check = try ontologyc(["check", output.path])
         XCTAssertEqual(check.status, 0, check.combinedOutput)
         XCTAssertTrue(check.stdout.contains("ontologyc check: PASS \(output.path)"), check.stdout)
+    }
+
+    func testGeneratedPackageCanOwnTheDefaultFoundationNamespace() throws {
+        let output = try makeTemporaryDirectory(name: "ontologyc-foundation-alias").appendingPathComponent("draft.yaml")
+        let result = try ontologyc([
+            "import-hypercode", "SPECS/ontology/hypercode/service.production.ir.json",
+            "--out", output.path, "--id", "example.ont", "--namespace", "ont", "--version", "0.1.0"
+        ])
+        XCTAssertEqual(result.status, 0, result.combinedOutput)
+        let check = try ontologyc(["check", output.path])
+        XCTAssertEqual(check.status, 0, check.combinedOutput)
     }
 
     func testImportHypercodeV2OntologyPackageMapsResolvedProperties() throws {
