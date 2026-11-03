@@ -182,6 +182,9 @@ $defs:
     properties:
       domain:
         $ref: "#/$defs/conceptReference"
+      action:
+        $ref: "#/$defs/conceptReference"
+        description: Action type bound by this relationship. The compiler resolves its ancestry to the imported foundation Action.
       range:
         oneOf:
           - $ref: "#/$defs/conceptReference"

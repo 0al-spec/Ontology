@@ -1,0 +1,23 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: org.example.appointments
+  namespace: pilot
+  version: 0.1.0
+spec:
+  imports:
+    - {id: ontology.foundation, namespace: ont, version: 0.2.0}
+  classes:
+    Person:
+      extends: ont:DomainEntity
+      description: A participant who can appoint or be appointed.
+    Appoint:
+      extends: ont:Action
+      description: Assign a person to a position.
+    Cancel:
+      extends: ont:Action
+      description: Withdraw a previous assignment.
+  relations:
+    CastAppointment: {domain: Person, action: Appoint, range: Person}
+    CrewAppointment: {domain: Person, action: Appoint, range: Person}
+    CastCancellation: {domain: Person, action: Cancel, range: Person}

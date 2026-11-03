@@ -221,6 +221,6 @@ Compatibility rules:
 | Add description, alias, or non-semantic metadata | patch |
 | Add class, relation, optional property, or protocol | minor |
 | Remove class or relation | major |
-| Change relation domain or range | major |
+| Change relation domain, range or its action binding | major |
 | Make an optional field required | major |
 | Change the meaning of a central concept | major |

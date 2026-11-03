@@ -8,6 +8,7 @@ public enum CompatibilityChangeKind: Equatable {
     case relationLayerChanged
     case relationDomainChanged
     case relationRangeChanged
+    case relationActionChanged
     case classRequiredFieldAdded
     case classFieldRemoved
     case classFieldTypeChanged
@@ -52,10 +53,9 @@ public struct CompatibilityChangeDecisionSpec: DecisionSpec {
 
     public func decide(_ context: CompatibilityChangeContext) -> CompatibilityChangeDecision? {
         switch context.kind {
-        case .removedClass:
-            return .breaking("remove class \(context.namespace):\(context.symbolId)")
-        case .removedRelation:
-            return .breaking("remove relation \(context.namespace):\(context.symbolId)")
+        case .removedClass, .removedRelation:
+            let symbolKind = context.kind == .removedClass ? "class" : "relation"
+            return .breaking("remove \(symbolKind) \(context.namespace):\(context.symbolId)")
         case .classLayerChanged, .relationLayerChanged:
             return .compatible
         case .relationDomainChanged:
@@ -66,6 +66,10 @@ public struct CompatibilityChangeDecisionSpec: DecisionSpec {
             return context.beforeComparable == context.afterComparable
                 ? .compatible
                 : .breaking("change relation range \(context.namespace):\(context.symbolId)")
+        case .relationActionChanged:
+            return context.beforeComparable == context.afterComparable
+                ? .compatible
+                : .breaking("change relation action \(context.namespace):\(context.symbolId)")
         case .classRequiredFieldAdded:
             return .breaking("add required field \(context.namespace):\(context.symbolId)")
         case .classFieldRemoved:

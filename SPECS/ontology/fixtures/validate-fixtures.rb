@@ -42,6 +42,7 @@ UNSAFE_TAG_RE = /!!(ruby|python|perl|js)|!<.*(ruby|python|perl|js)/i.freeze
 
 VALID_FIXTURES = [
   File.join(ROOT, "SPECS/ontology/examples/theatre.yaml"),
+  File.join(ROOT, "SPECS/ontology/examples/appointments.yaml"),
   File.join(ROOT, "SPECS/ontology/examples/examcalc.ontology.yaml"),
   File.join(ROOT, "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml")
 ] + Dir[File.join(ROOT, "SPECS/ontology/fixtures/valid/*.yaml")].sort
@@ -338,7 +339,26 @@ def range_refs(range)
   end
 end
 
-def validate_relations(relations, class_names, package_namespace, import_namespaces, errors)
+# Structural resolution at the YAML-fixture boundary; follow the qualified
+# ancestry to the catalog selected by that import, including an explicit alias.
+def action_ref?(ref, classes, package_namespace, imports)
+  visited = Set.new
+  while scalar_string?(ref) && ref.match?(CONCEPT_RE)
+    namespace = ref_namespace(ref)
+    name = ref_name(ref)
+    if namespace && namespace != package_namespace
+      return name == "Action" && imports[namespace]&.fetch("classes")&.include?(name)
+    end
+    return false unless visited.add?(name)
+    definition = classes[name]
+    return false unless definition.is_a?(Hash)
+    ref = definition["extends"]
+  end
+  false
+end
+
+def validate_relations(relations, classes, package_namespace, import_namespaces, errors)
+  class_names = Set.new(classes.keys)
   relations = require_hash(relations, "spec.relations", errors)
   return Set.new unless relations
 
@@ -350,7 +370,10 @@ def validate_relations(relations, class_names, package_namespace, import_namespa
     check_pattern(name, NAME_RE, path, errors)
     next unless require_hash(definition, path, errors)
 
-    unknown_keys(definition, %w[domain range cardinality description], path, errors)
+    unknown_keys(definition, %w[domain range action cardinality description], path, errors)
+    if definition.key?("action") && !action_ref?(definition["action"], classes, package_namespace, import_namespaces)
+      errors << "#{path}.action must resolve to a foundation Action or its subtype"
+    end
     domain = require_key(definition, "domain", path, errors)
     unless resolve_ref?(domain, class_names, package_namespace, import_namespaces)
       errors << "#{path}.domain has unknown relation domain reference #{domain.inspect}"
@@ -483,7 +506,8 @@ def validate_package(data, load_errors)
     import_namespaces,
     errors
   )
-  validate_relations(spec["relations"], class_names, package_namespace, import_namespaces, errors)
+  classes = spec["classes"].is_a?(Hash) ? spec["classes"] : {}
+  validate_relations(spec["relations"], classes, package_namespace, import_namespaces, errors)
   validate_policies(spec.fetch("policies", {}), class_names, package_namespace, import_namespaces, errors)
   validate_state_machines(spec.fetch("stateMachines", {}), command_names, event_names, package_namespace, errors)
 

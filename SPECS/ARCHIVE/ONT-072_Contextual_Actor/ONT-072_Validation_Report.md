@@ -13,3 +13,22 @@ Local macOS run on the ONT-072 branch:
 The compiler export table, checked-in catalog, foundation type documentation and glossary defined both actor kinds. Package reference-slot tests exercised sg:Actor. Five induction fixtures used sg:Actor for Speaker (the valid voice recorder and four negative variants). They now use DomainEntity with the existing hasSpeaker relation. The active packages under SPECS/ontology/packages used contextual roles and had no inheritance from either actor kind.
 
 This inventory covers the Ontology repository. A consuming project selects the new vocabulary and compiler together.
+
+## Follow-up: share an action across named relationships
+
+- The foundation 0.2.0 catalog now exports `Action`. The appointments fixture
+  imports only foundation; the normalized IR binds both appointments to
+  `pilot:Appoint` and the cancellation to `pilot:Cancel`.
+- The public CLI rejected `Appiont` with `relation.action.unresolved` and
+  `Person` with `relation.action.wrong_kind`, at each affected `.action` path.
+- On a freshly generated SDK, TypeScript 6.0.3 accepted both appointments
+  and the cancellation. Removing the expected-error directive from the
+  intentionally swapped action produced TS1360: `"pilot:Cancel"` is not
+  assignable to `"pilot:Appoint"`.
+- Local macOS: formatting, lint, build and 234 Swift tests passed (56 rules,
+  178 compiler); all 13 Ruby package fixtures passed. TypeScript SDK typecheck,
+  seven runtime smoke modules and the fresh consumer typecheck passed. Portable
+  contract smoke and the release smoke for both CLIs passed.
+- These checks cover declarations and typed SDK construction. They do not
+  validate arbitrary incoming relationship JSON or attest the truth of an
+  appointment.

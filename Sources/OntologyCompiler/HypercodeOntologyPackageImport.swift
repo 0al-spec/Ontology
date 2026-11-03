@@ -132,6 +132,9 @@ extension OntologyCompiler {
                 path: "\(nodePath(node)).range"
             )
             var entry = try hypercodeOntologyRelationEntry(node: node, values: values, targets: targets)
+            if (node["properties"] as? JSONObject)?["action"] != nil {
+                entry["action"] = try requiredStringProperty(values, "action", path: "\(nodePath(node)).action")
+            }
             if let description = string(values["description"]) {
                 entry["description"] = description
             }

@@ -92,6 +92,11 @@ The operator can be the actor and the encoder an instrument. Another interpretat
 can model the encoder as the actor. These choices are explicit because they affect
 the design of the application.
 
+In the [theatre and spaceflight example](Examples/theatre-casting/README.md#compile-the-shared-action),
+`CastAppointment` and `CrewAppointment` both use one `Appoint` action.
+The generated TypeScript SDK rejects a `Cancel` action in a `CastAppointment`;
+`CastCancellation` explicitly accepts it.
+
 ```mermaid
 flowchart LR
     M["Motive: prompting reason"] -. "attributed to" .-> A["Actor: a role of an Entity"]

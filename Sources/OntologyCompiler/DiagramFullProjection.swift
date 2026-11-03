@@ -36,7 +36,7 @@ extension DiagramImportedPackage {
             var result = definition
             result["fqid"] = "\(namespace):\(definition["id"] as? String ?? "")"
             result["diagramOrigin"] = "\(ir["id"] as? String ?? "")@\(ir["version"] as? String ?? "")"
-            for key in ["extends", "domain", "lifecycle"] {
+            for key in ["extends", "domain", "action", "lifecycle"] {
                 if let value = definition[key] as? String { result[key] = try fullReference(value) }
             }
             for key in ["implements", "appliesTo", "requiredRelations"] {

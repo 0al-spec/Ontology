@@ -56,7 +56,7 @@ extension OntologyCompiler {
         )
         validateRelations(
             relations,
-            classNames: classNames,
+            classes: classes,
             bindings: bindings,
             packageNamespace: package.namespace
         )
@@ -206,10 +206,16 @@ extension OntologyCompiler {
 
     func validateRelations(
         _ relations: JSONObject,
-        classNames: Set<String>,
+        classes: JSONObject,
         bindings: PackageImportBindings,
         packageNamespace: String
     ) {
+        let classNames = Set(classes.keys)
+        let actionKind = RelationActionDecisionSpec(
+            packageNamespace: packageNamespace,
+            classBases: classes.compactMapValues { ($0 as? JSONObject)?["extends"] as? String },
+            foundations: bindings.foundations
+        )
         for name in relations.keys.sorted() {
             let path = "spec.relations.\(name)"
             validateSymbolName(name, path: path, code: "relation.name.invalid")
@@ -217,9 +223,12 @@ extension OntologyCompiler {
                 add("relation.type", path, "Relation definition must be an object")
                 continue
             }
-            validateKnownKeys(definition, allowed: ["domain", "range", "cardinality", "description", "layer"], path: path)
+            validateKnownKeys(definition, allowed: ["domain", "range", "action", "cardinality", "description", "layer"], path: path)
             validateLayer(definition, path: path)
 
+            if let action = definition["action"] {
+                validateRelationAction(action, path: "\(path).action", spec: actionKind)
+            }
             if let domain = requiredString(definition, "domain", path: "\(path).domain", code: "relation.domain.required"),
                !resolves(domain, localNames: classNames, packageNamespace: packageNamespace, bindings: bindings) {
                 add("relation.domain.unresolved", "\(path).domain", "Relation domain reference \(domain) cannot be resolved")

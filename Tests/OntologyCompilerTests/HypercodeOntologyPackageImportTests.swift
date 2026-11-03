@@ -88,6 +88,32 @@ final class HypercodeOntologyPackageImportTests: XCTestCase {
         XCTAssertNil(imports.first?["namespace"])
     }
 
+    func testV2RetainsExplicitRelationActionAndRejectsMalformedProperty() throws {
+        let directory = try makeTemporaryDirectory(name: "ontologyc-import-hypercode-v2-action")
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let input = directory.appendingPathComponent("package.ir.json")
+        let output = directory.appendingPathComponent("package.yaml")
+        let arguments = ["import-hypercode", input.path, "--out", output.path,
+                         "--id", "unused.package", "--namespace", "unused", "--version", "0.1.0"]
+        let domain = jsonProperty("domain", "Service")
+        let base = minimalV2OntologyPackageIR()
+        let action = jsonProperty("action", "StartService")
+        try base.replacingOccurrences(of: domain, with: domain + ",\n" + action)
+            .write(to: input, atomically: true, encoding: .utf8)
+        let imported = try ontologyc(arguments)
+        XCTAssertEqual(imported.status, 0, imported.combinedOutput)
+        let draft = try XCTUnwrap(Yams.load(yaml: String(contentsOf: output)) as? [String: Any])
+        let spec = try XCTUnwrap(draft["spec"] as? [String: Any])
+        let relations = try XCTUnwrap(spec["relations"] as? [String: [String: Any]])
+        XCTAssertEqual(relations["controls"]?["action"] as? String, "StartService")
+
+        try base.replacingOccurrences(of: domain, with: domain + #", "action": {"value": false}"#)
+            .write(to: input, atomically: true, encoding: .utf8)
+        let malformed = try ontologyc(arguments)
+        XCTAssertEqual(malformed.status, 1, malformed.combinedOutput)
+        XCTAssertTrue(malformed.stderr.contains("Relation#controls.action"), malformed.stderr)
+    }
+
     func testV2RejectsEmptyRequiredSectionsBeforeWriting() throws {
         let directory = try makeTemporaryDirectory(name: "ontologyc-import-hypercode-v2-empty-section")
         let input = directory.appendingPathComponent("empty-section.ir.json")

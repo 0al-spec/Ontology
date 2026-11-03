@@ -95,6 +95,9 @@ extension OntologyCompiler {
                 "domain": normalizeRef(string(definition["domain"]) ?? "", namespace: package.namespace),
                 "range": normalizeRange(definition["range"], namespace: package.namespace)
             ]
+            if let action = string(definition["action"]) {
+                normalized["action"] = normalizeRef(action, namespace: package.namespace)
+            }
             if let cardinality = definition["cardinality"] as? JSONObject {
                 normalized["cardinality"] = cardinality
             }

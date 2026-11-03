@@ -18,7 +18,7 @@ python3 Examples/theatre-casting/replay.py /path/to/ontologyc
 
 The replay queries the [two synthetic records](appointments.json), validates each replacement against the before/after snapshots and checks three mutations. Omitting Anna's removal violates the exact delta. An absent director reference fails resolution. Attributing the first appointment to Boris passes the structural check because he exists; the report still records sourceTruthVerified as false.
 
-## Foundation design checkpoint (proposed)
+## Foundation action model
 
 Entities interact by acting on one another. A domain author can name the
 whole interaction by constructing a relationship from its subject, action and
@@ -48,27 +48,27 @@ membership. Another example is handing over a letter: changing its holder from
 Anna to Boris changes the held items of both people. Which properties the
 domain records is part of describing the situation.
 
-The foundation design target is to let a domain declare both relationship
-types, reuse the same action and query its participants and motive. The
-executable replay above demonstrates the separate eventcore-v1 history check.
+### Compile the shared action
 
-### Compiler probe at eb223ba
+In the [appointment declarations](../../SPECS/ontology/examples/appointments.yaml),
+the `domain` specifies the subject type and the `range` specifies the object type.
+The subject occupies the actor position. Both CastAppointment and CrewAppointment
+bind the same Appoint class. CastCancellation binds Cancel.
 
-Run `python3 Examples/theatre-casting/probe_relationship.py /path/to/ontologyc`.
-Each input imports only foundation 0.2.0 and declares Person and Appoint once.
-Appoint extends Command for this intentional appointment example. The probe checks
-package declarations and inspects the compiled IR for each accepted input.
+```yaml
+CastAppointment: {domain: Person, action: Appoint, range: Person}
+CrewAppointment: {domain: Person, action: Appoint, range: Person}
+CastCancellation: {domain: Person, action: Cancel, range: Person}
+```
 
-| Input | CLI result | Meaning |
-| --- | --- | --- |
-| Two named Person → Person relations | 0 | Both compile. Neither IR relation references Appoint. |
-| Add action = Appoint to each relation | 1 | object.unknown_key at both action fields. |
-| Misspell the direct action as Appiont | 1 | Same unknown-field errors. Resolution never reaches the action name. |
-| Express appointments as two entity classes, each with subject, object and action edges | 0 | Both action edges resolve to pilot:Appoint in IR. |
-| Misspell the action edge range as Appiont | 1 | relation.range.unresolved for both edges. |
-| Use the existing Person class as both action edge ranges | 0 | The compiler accepts pilot:Person in both places. |
+Run `python3 Examples/theatre-casting/probe_relationship.py /path/to/ontologyc`
+to verify the normalized references and both diagnostics. The generated
+TypeScript relationship type associates each relationship name with its declared
+action. The [typed consumer](typed-appointments.ts) constructs all three valid
+relationships and checks that substituting Cancel in a CastAppointment fails.
+Changing the binding in the source package changes the contract itself;
+`ontologyc diff` reports it as breaking.
 
-The missing contract is a reference on the relationship that resolves specifically
-to an action. A future positive check should preserve the shared action identity
-in the two IR relations. Separate negative checks should reject both an unknown
-name and an existing concept of the wrong kind at the offending field.
+This compiler check covers type declarations. The earlier casting replay
+exercises the event history. Motives, instruments and actual changes in a
+particular show require data about that occurrence.

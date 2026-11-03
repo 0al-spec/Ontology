@@ -22,7 +22,7 @@ Behavior:
 2. Validate against `domain-ontology-package.schema.yaml`.
 3. Bind declared import namespaces and resolve available versioned export tables.
 4. Validate class inheritance and protocol references.
-5. Validate relation domain/range and cardinality.
+5. Validate relation endpoints and any declared action reference.
 6. Validate policy applicability.
 7. Validate state machine transitions.
 8. Emit diagnostics.
@@ -101,6 +101,13 @@ default namespace `sg`. Both foundation identities pinned to 0.1.0 resolve again
 Consumers that verify the catalog byte-for-byte, including SpecGraph, must adopt
 the new package identity, CLI and catalog digest together. Keep old source, IR,
 URIs and digests when replaying historical reports.
+
+On a relation, `action: Appoint` selects a reusable action. The compiler
+follows local class inheritance to the imported foundation `Action` (0.2.0).
+It reports `relation.action.unresolved` for unavailable references and
+`relation.action.wrong_kind` for a resolved class of the wrong kind. Imports
+without a verified export catalog cannot establish action ancestry. Successful
+compilation retains the qualified action reference in the relationship's IR.
 
 ### `ontologyc compile`
 
@@ -201,7 +208,7 @@ Behavior:
 | Imports | Import ids and versions resolve or produce an error diagnostic. |
 | Classes | Every class extends exactly one valid base class. |
 | Protocols | Implemented protocols resolve and declare obligations. |
-| Relations | Domain and range resolve; relation ids are unique. |
+| Relations | Domain and range resolve; an optional action resolves to an imported foundation Action or a local subtype; relation ids are unique. |
 | State Machines | States are unique; transition endpoints exist; command/event refs resolve when declared. |
 | Policies | Policy targets resolve; enforceability is one of the allowed values. |
 | Security | Executable-looking hooks or expressions are rejected or treated as inert scalars. |

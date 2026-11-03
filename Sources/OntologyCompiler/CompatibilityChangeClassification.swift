@@ -44,20 +44,12 @@ extension OntologyCompiler {
     private func appendRelationShapeClassifications(to changes: inout [JSONObject], input: CompatibilityChangesInput) {
         for relationId in Set(input.fromRelations.keys).intersection(Set(input.toRelations.keys)).sorted() {
             guard let before = input.fromRelations[relationId], let after = input.toRelations[relationId] else { continue }
-            appendComparableChange(
-                to: &changes,
-                kind: "relationDomainChanged",
-                ref: "\(input.namespaces.from):\(relationId)",
-                before: before["domain"],
-                after: after["domain"]
-            )
-            appendComparableChange(
-                to: &changes,
-                kind: "relationRangeChanged",
-                ref: "\(input.namespaces.from):\(relationId)",
-                before: before["range"],
-                after: after["range"]
-            )
+            for (field, kind) in [("domain", "relationDomainChanged"), ("range", "relationRangeChanged"), ("action", "relationActionChanged")] {
+                appendComparableChange(
+                    to: &changes, kind: kind, ref: "\(input.namespaces.from):\(relationId)",
+                    before: before[field], after: after[field]
+                )
+            }
         }
     }
 

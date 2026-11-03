@@ -66,6 +66,23 @@ final class CompatibilityLayerDiffTests: XCTestCase {
         }, "\(applicabilityChanges)")
     }
 
+    func testChangingRelationActionChangesCompatibilityEvenWithIdenticalEndpoints() throws {
+        func ir(_ action: String?) -> [String: Any] {
+            var relation = ["id": "appointCast", "domain": "test:Person", "range": "test:Person"]
+            relation["action"] = action
+            return ["namespace": "test", "relations": [relation]]
+        }
+        for (before, after) in [(nil, "test:Appoint"), ("test:Appoint", nil), ("test:Appoint", "test:Cancel"), ("test:Appoint", "test:Appoint")] as [(String?, String?)] {
+            let report = OntologyCompiler().compatibilityReport(fromIR: ir(before), toIR: ir(after))
+            let result = try XCTUnwrap(report["result"] as? [String: Any])
+            XCTAssertEqual(result["compatible"] as? Bool, before == after)
+            let changes = try XCTUnwrap(report["changes"] as? [String: Any])
+            let classification = try XCTUnwrap(changes["changeClassification"] as? [String: Any])
+            XCTAssertEqual(classification["structuralChanges"] as? [[String: String]],
+                           before == after ? [] : [["kind": "relationActionChanged", "ref": "test:appointCast"]])
+        }
+    }
+
     private var fromIR: [String: Any] {
         [
             "id": "test-ontology",

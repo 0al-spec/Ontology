@@ -12,6 +12,7 @@ An entity takes the actor role in an action through a named domain relation or a
 
 ```ts
 export type ConceptKind =
+  | "Action"
   | "DomainEntity"
   | "ValueObject"
   | "Capability"
@@ -38,6 +39,10 @@ export interface OntologyNode {
 ## Foundation Interfaces
 
 ```ts
+export interface Action extends OntologyNode {
+  readonly kind: "Action";
+}
+
 export interface DomainEntity extends OntologyNode {
   readonly kind: "DomainEntity";
   readonly lifecycle?: StateMachineRef;
@@ -102,11 +107,13 @@ export interface ConceptRef<
 export interface RelationDefinition<
   TId extends string = string,
   TDomain extends ConceptRef = ConceptRef,
-  TRange extends ConceptRef | OneOfRange = ConceptRef
+  TRange extends ConceptRef | OneOfRange = ConceptRef,
+  TAction extends ConceptRef = ConceptRef
 > {
   readonly id: TId;
   readonly domain: TDomain;
   readonly range: TRange;
+  readonly action?: TAction;
   readonly cardinality?: {
     readonly min?: number;
     readonly max?: number;
@@ -117,6 +124,13 @@ export interface OneOfRange {
   readonly oneOf: readonly ConceptRef[];
 }
 ```
+
+An action-bearing relation binds its subject type in `domain`, its action class
+in `action` and its object type in `range`. The author declares `Appoint` once
+with `extends: ont:Action`. Several named relationships may bind that action.
+The compiler checks the class ancestry, and the generated SDK keeps the
+binding for each relationship. See the [casting example](../../Examples/theatre-casting/README.md).
+A plain binary relation, such as structural containment, omits `action`.
 
 ## State Transitions
 

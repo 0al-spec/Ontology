@@ -1,5 +1,6 @@
 {
   "classes" : [
+    "Action",
     "Capability",
     "Command",
     "DomainEntity",
