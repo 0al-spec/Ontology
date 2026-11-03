@@ -35,7 +35,7 @@ case "advise-staged":
 case "export-foundation":
     let parsed = parseArguments(commandArgs, allowedOptions: [], command: command)
     requirePositionals(0, in: parsed, command: command)
-    printJSON(FoundationExports.version010)
+    printJSON(FoundationExports.current)
 
 case "check":
     let parsed = parseArguments(commandArgs, allowedOptions: ["--format"], command: command)

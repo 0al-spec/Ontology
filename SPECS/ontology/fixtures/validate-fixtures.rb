@@ -7,7 +7,10 @@ require "yaml"
 
 ROOT = File.expand_path("../../..", __dir__)
 
-FOUNDATION = JSON.parse(File.read(File.join(ROOT, "SPECS/ontology/foundation/0.1.0/exports.json"))).freeze
+FOUNDATIONS = Dir[File.join(ROOT, "SPECS/ontology/foundation/*/exports.json")].to_h do |path|
+  catalog = JSON.parse(File.read(path))
+  [catalog.fetch("version"), catalog]
+end.freeze
 
 API_VERSION = "ontology.specgraph.io/v1alpha1"
 KIND = "DomainOntologyPackage"
@@ -38,6 +41,8 @@ UNSAFE_VALUE_RE = /(\$\(|`|<%|eval\(|child_process|subprocess|os\.system|Runtime
 UNSAFE_TAG_RE = /!!(ruby|python|perl|js)|!<.*(ruby|python|perl|js)/i.freeze
 
 VALID_FIXTURES = [
+  File.join(ROOT, "SPECS/ontology/examples/theatre.yaml"),
+  File.join(ROOT, "SPECS/ontology/examples/appointments.yaml"),
   File.join(ROOT, "SPECS/ontology/examples/examcalc.ontology.yaml"),
   File.join(ROOT, "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml")
 ] + Dir[File.join(ROOT, "SPECS/ontology/fixtures/valid/*.yaml")].sort
@@ -232,16 +237,18 @@ def validate_imports(imports, package_namespace, errors)
     unknown_keys(entry, %w[id namespace version], path, errors)
     require_string(require_key(entry, "id", path, errors), "#{path}.id", errors)
     require_string(require_key(entry, "version", path, errors), "#{path}.version", errors)
-    foundation = entry["id"] == FOUNDATION.fetch("id")
-    if foundation && entry["version"] != FOUNDATION.fetch("version")
+    default_namespace = { "ontology.foundation" => "ont", "specgraph.foundation" => "sg" }[entry["id"]]
+    catalog = FOUNDATIONS[entry["version"]] if default_namespace
+    catalog = nil if default_namespace == "sg" && entry["version"] != "0.1.0"
+    if default_namespace && !catalog
       errors << "#{path}.version has no supported foundation export catalog"
     end
-    namespace = entry.fetch("namespace") { FOUNDATION.fetch("namespace") if foundation }
+    namespace = entry.fetch("namespace") { default_namespace }
     next unless namespace || entry.key?("namespace")
 
     next unless require_string(namespace, "#{path}.namespace", errors)
     errors << "#{path}.namespace is ambiguous" if namespace == package_namespace || namespaces.key?(namespace)
-    namespaces[namespace] = foundation && entry["version"] == FOUNDATION.fetch("version") ? FOUNDATION : nil
+    namespaces[namespace] = catalog
   end
   namespaces
 end
@@ -287,7 +294,7 @@ def validate_classes(classes, state_machine_names, package_namespace, import_nam
 
     next unless scalar_string?(extends)
     namespace = ref_namespace(extends)
-    if namespace.nil? || namespace == "sg" || import_namespaces[namespace] == FOUNDATION
+    if namespace.nil? || import_namespaces[namespace]
       command_names.add(name) if ref_name(extends) == "Command"
       event_names.add(name) if ref_name(extends) == "Event"
     end
@@ -332,7 +339,26 @@ def range_refs(range)
   end
 end
 
-def validate_relations(relations, class_names, package_namespace, import_namespaces, errors)
+# Structural resolution at the YAML-fixture boundary; follow the qualified
+# ancestry to the catalog selected by that import, including an explicit alias.
+def action_ref?(ref, classes, package_namespace, imports)
+  visited = Set.new
+  while scalar_string?(ref) && ref.match?(CONCEPT_RE)
+    namespace = ref_namespace(ref)
+    name = ref_name(ref)
+    if namespace && namespace != package_namespace
+      return name == "Action" && imports[namespace]&.fetch("classes")&.include?(name)
+    end
+    return false unless visited.add?(name)
+    definition = classes[name]
+    return false unless definition.is_a?(Hash)
+    ref = definition["extends"]
+  end
+  false
+end
+
+def validate_relations(relations, classes, package_namespace, import_namespaces, errors)
+  class_names = Set.new(classes.keys)
   relations = require_hash(relations, "spec.relations", errors)
   return Set.new unless relations
 
@@ -344,20 +370,35 @@ def validate_relations(relations, class_names, package_namespace, import_namespa
     check_pattern(name, NAME_RE, path, errors)
     next unless require_hash(definition, path, errors)
 
-    unknown_keys(definition, %w[domain range cardinality description], path, errors)
-    domain = require_key(definition, "domain", path, errors)
+    unknown_keys(definition, %w[subject object domain range action cardinality description], path, errors)
+    binary_names = (definition.keys & %w[domain range]).any?
+    acting_names = (definition.keys & %w[subject object]).any?
+    if acting_names && binary_names
+      errors << "#{path} mixes subject/object and domain/range"
+      next
+    end
+    subject, object = if acting_names || (definition.key?("action") && !binary_names)
+      %w[subject object]
+    else
+      %w[domain range]
+    end
+    require_key(definition, "action", path, errors) if acting_names
+    if definition.key?("action") && !action_ref?(definition["action"], classes, package_namespace, import_namespaces)
+      errors << "#{path}.action must resolve to a foundation Action or its subtype"
+    end
+    domain = require_key(definition, subject, path, errors)
     unless resolve_ref?(domain, class_names, package_namespace, import_namespaces)
-      errors << "#{path}.domain has unknown relation domain reference #{domain.inspect}"
+      errors << "#{path}.#{subject} has unknown relation #{subject} reference #{domain.inspect}"
     end
 
-    range = require_key(definition, "range", path, errors)
+    range = require_key(definition, object, path, errors)
     refs = range_refs(range)
-    errors << "#{path}.range must be a reference string or oneOf reference list" if refs.empty?
+    errors << "#{path}.#{object} must be a reference string or oneOf reference list" if refs.empty?
     refs.each_with_index do |ref, index|
       next if resolve_ref?(ref, class_names, package_namespace, import_namespaces)
 
-      site = range.is_a?(Hash) ? "#{path}.range.oneOf[#{index}]" : "#{path}.range"
-      errors << "#{site} has unknown relation range reference #{ref.inspect}"
+      site = range.is_a?(Hash) ? "#{path}.#{object}.oneOf[#{index}]" : "#{path}.#{object}"
+      errors << "#{site} has unknown relation #{object} reference #{ref.inspect}"
     end
   end
 
@@ -477,7 +518,8 @@ def validate_package(data, load_errors)
     import_namespaces,
     errors
   )
-  validate_relations(spec["relations"], class_names, package_namespace, import_namespaces, errors)
+  classes = spec["classes"].is_a?(Hash) ? spec["classes"] : {}
+  validate_relations(spec["relations"], classes, package_namespace, import_namespaces, errors)
   validate_policies(spec.fetch("policies", {}), class_names, package_namespace, import_namespaces, errors)
   validate_state_machines(spec.fetch("stateMachines", {}), command_names, event_names, package_namespace, errors)
 

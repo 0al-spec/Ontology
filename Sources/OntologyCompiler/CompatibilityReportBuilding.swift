@@ -115,23 +115,19 @@ extension OntologyCompiler {
         decision: CompatibilityChangeDecisionSpec,
         breakingChanges: inout [String]
     ) {
-        if let domainMessage = breakingMessage(decision.decide(CompatibilityChangeContext(
-            kind: .relationDomainChanged,
-            namespace: fromNamespace,
-            symbolId: relationId,
-            beforeComparable: jsonComparable(before["domain"]),
-            afterComparable: jsonComparable(after["domain"])
-        ))) {
-            breakingChanges.append(domainMessage)
-        }
-        if let rangeMessage = breakingMessage(decision.decide(CompatibilityChangeContext(
-            kind: .relationRangeChanged,
-            namespace: fromNamespace,
-            symbolId: relationId,
-            beforeComparable: jsonComparable(before["range"]),
-            afterComparable: jsonComparable(after["range"])
-        ))) {
-            breakingChanges.append(rangeMessage)
+        let fields: [(String, CompatibilityChangeKind)] = [
+            ("domain", .relationDomainChanged), ("range", .relationRangeChanged), ("action", .relationActionChanged)
+        ]
+        for (field, kind) in fields {
+            if let message = breakingMessage(decision.decide(CompatibilityChangeContext(
+                kind: kind,
+                namespace: fromNamespace,
+                symbolId: relationId,
+                beforeComparable: jsonComparable(before[field]),
+                afterComparable: jsonComparable(after[field])
+            ))) {
+                breakingChanges.append(message)
+            }
         }
     }
 }

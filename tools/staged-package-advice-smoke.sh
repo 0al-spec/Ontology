@@ -44,7 +44,7 @@ apiVersion: ontology.specgraph.io/v1alpha1
 kind: DomainOntologyPackage
 metadata: {id: test.staged, namespace: sample, version: 0.1.0}
 spec:
-  imports: [{id: ontology.foundation, namespace: ont, version: 0.1.0}]
+  imports: [{id: ontology.foundation, namespace: ont, version: 0.2.0}]
   classes:
     Entry: {extends: "ont:$1", description: A value.$2}
   relations:

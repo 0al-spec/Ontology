@@ -33,6 +33,56 @@ final class DiagramFullProjectionTests: XCTestCase {
         }
     }
 
+    func testBothViewsRebaseActionReferencesInImportedRelations() throws {
+        try fixture { root, child in
+            for file in [root, child] {
+                var text = try String(contentsOf: file.url, encoding: .utf8)
+                    .replacingOccurrences(of: "  classes:", with: """
+                        - id: ontology.foundation
+                          namespace: current
+                          version: 0.2.0
+                      classes:
+                    """)
+                if file == child {
+                    text = text.replacingOccurrences(of: "    Evidence:", with: """
+                            Cite:
+                              extends: current:Action
+                              description: Cite the evidence.
+                            Evidence:
+                        """)
+                        .replacingOccurrences(of: "      range: Evidence", with: "      range: Evidence\n      action: Cite")
+                }
+                try text.write(to: file.url, atomically: true, encoding: .utf8)
+            }
+
+            for options in [OntologyDiagramOptions(imports: [child]),
+                            OntologyDiagramOptions(view: .relations, imports: [child], expandedTypes: ["dep:Proposal", "dep:Evidence", "dep:Cite"])] {
+                let graph = try OntologyCompiler().diagramProjection(path: root, options: options)
+                let relations = try XCTUnwrap(graph["relations"] as? [[String: Any]])
+                let cites = try XCTUnwrap(relations.first { $0["fqid"] as? String == "dep:cites" })
+                XCTAssertEqual(cites["action"] as? String, "dep:Cite")
+            }
+        }
+    }
+
+    func testVisibleRelationRejectsActionOutsideRootImportScope() throws {
+        try fixture { root, child in
+            let text = try String(contentsOf: child.url, encoding: .utf8)
+                .replacingOccurrences(of: "  classes:", with: """
+                    - id: ontology.foundation
+                      namespace: current
+                      version: 0.2.0
+                  classes:
+                """)
+                .replacingOccurrences(of: "      range: Evidence", with: "      range: Evidence\n      action: current:Action")
+            try text.write(to: child.url, atomically: true, encoding: .utf8)
+            let options = OntologyDiagramOptions(view: .relations, imports: [child], expandedTypes: ["dep:Proposal", "dep:Evidence"])
+            XCTAssertThrowsError(try OntologyCompiler().diagramProjection(path: root, options: options)) {
+                XCTAssertTrue(String(describing: $0).contains("Cannot bind imported reference current:Action"))
+            }
+        }
+    }
+
     func testFullProjectionIsIndependentOfImportOrder() throws {
         try fixture { root, child in
             let original = try String(contentsOf: root.url, encoding: .utf8)

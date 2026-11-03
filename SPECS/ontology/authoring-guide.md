@@ -104,7 +104,7 @@ spec:
   imports:
     - id: ontology.foundation
       namespace: ont
-      version: 0.1.0
+      version: 0.2.0
   classes: {}
   relations: {}
   protocols: {}
@@ -122,7 +122,7 @@ in the description and relationships. Check the available names with
 
 | Draft Artifact | YAML Target | Notes |
 |---|---|---|
-| Actor | `spec.classes` with suitable foundation extension | Use actor classes only when they are domain-significant |
+| Actor | A domain relation to the participating entity | Model who acted in this action. Use a domain entity for a person, machine or natural phenomenon |
 | Domain entity | `spec.classes` | Prefer identity-bearing concepts |
 | Value object | `spec.classes` extending a value-object foundation type when available | Avoid primitive obsession in generated SDK semantics |
 | Capability | `spec.classes` extending `ont:Capability` | Useful for permission and policy domains |

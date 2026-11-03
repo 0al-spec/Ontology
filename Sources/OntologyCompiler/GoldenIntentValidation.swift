@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 import Yams
 
 public struct GoldenIntentValidationResult {
@@ -235,12 +236,12 @@ extension OntologyCompiler {
         let expectedRelations = (expectation["minimumRelations"] as? [Any] ?? []).compactMap { $0 as? JSONObject }
         return expectedRelations.sorted { string($0["id"]) ?? "" < string($1["id"]) ?? "" }.map { expected in
             let id = string(expected["id"]) ?? ""
-            guard let relation = relations[id] as? JSONObject else {
+            guard let relation = relations[id] as? JSONObject, let fields = RelationEndpointNames.authored(in: relation) else {
                 return check(section: "minimumRelations", id: id, status: "fail", message: "required relation is missing")
             }
-            let domainOK = string(relation["domain"]).map(refName) == string(expected["domain"]).map(refName)
+            let domainOK = string(relation[fields.subject]).map(refName) == string(expected["domain"]).map(refName)
             let expectedRange = string(expected["range"]) ?? ""
-            let rangeOK = relationRangeRefs(relation["range"] ?? "").map(refName).contains(refName(expectedRange))
+            let rangeOK = relationRangeRefs(relation[fields.object] ?? "").map(refName).contains(refName(expectedRange))
             if domainOK, rangeOK {
                 return check(section: "minimumRelations", id: id, status: "pass", message: "required relation shape is present")
             }

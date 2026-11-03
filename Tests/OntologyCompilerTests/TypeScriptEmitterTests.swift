@@ -60,6 +60,16 @@ final class TypeScriptEmitterTests: XCTestCase {
         XCTAssertTrue(types.contains("export interface Exam {"), types)
     }
 
+    func testInvalidNormalizedRangeFailsBeforeCreatingSDK() {
+        let relation: [String: Any] = ["fqid": "p:assign", "domain": "p:Person", "action": "p:Appoint", "range": ["oneOf": [String]()]]
+        let destination = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: destination) }
+        XCTAssertThrowsError(try OntologyCompiler().emit(ir: ["relations": [relation]], to: destination.path)) {
+            XCTAssertTrue(String(describing: $0).contains("p:assign"))
+        }
+        XCTAssertFalse(FileManager.default.fileExists(atPath: destination.path))
+    }
+
     func testEmitSchemasExportsJsonSchemaHelper() {
         let ir: [String: Any] = [
             "classes": [
@@ -122,7 +132,7 @@ final class TypeScriptEmitterTests: XCTestCase {
         XCTAssertTrue(schemas.contains("title: z.string(),"), schemas)
     }
 
-    func testEmitRefsAndDefinitionsProjectOntologyLayers() {
+    func testEmitRefsAndDefinitionsProjectOntologyLayers() throws {
         let ir: [String: Any] = [
             "id": "test.layers",
             "namespace": "layers",
@@ -150,7 +160,7 @@ final class TypeScriptEmitterTests: XCTestCase {
 
         let compiler = OntologyCompiler()
         let refs = compiler.emitRefs(ir)
-        let relations = compiler.emitRelations(ir)
+        let relations = try compiler.emitRelations(ir, relationships: ActionRelationshipEmitter(ir: ir, compiler: compiler))
 
         XCTAssertTrue(
             refs.contains("export type OntologyLayer = \"objective\" | \"mechanics\" | \"execution\" | \"meta\" | \"multi_agent\";"),

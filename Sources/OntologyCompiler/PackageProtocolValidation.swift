@@ -53,7 +53,8 @@ extension OntologyCompiler {
         var domains: [String: Set<String>] = [:]
         for (relationName, value) in relations {
             guard let definition = value as? JSONObject,
-                  let domain = string(definition["domain"]) else { continue }
+                  let fields = RelationEndpointNames.authored(in: definition),
+                  let domain = string(definition[fields.subject]) else { continue }
             domains[refName(domain), default: []].insert(relationName)
         }
         return domains

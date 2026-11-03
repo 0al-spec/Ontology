@@ -92,6 +92,12 @@ The operator can be the actor and the encoder an instrument. Another interpretat
 can model the encoder as the actor. These choices are explicit because they affect
 the design of the application.
 
+In the [theatre and spaceflight example](Examples/theatre-casting/README.md#compile-the-shared-action),
+`CastAppointment` and `CrewAppointment` both use one `Appoint` action.
+In an executable `CastAppointment`, Ivan must supply `run(Appoint, Person)`.
+Calling `trigger` runs that action on Ivan with Anna as its object. A stored
+appointment records their identities and can be read independently of execution.
+
 ```mermaid
 flowchart LR
     M["Motive: prompting reason"] -. "attributed to" .-> A["Actor: a role of an Entity"]
@@ -223,7 +229,7 @@ expressions. The [Examcalc walkthrough](SPECS/ontology/packages/examcalc/README.
 provides a small golden package; the [tooling guide](SPECS/ontology/tooling-guide.md)
 covers platform setup, other commands, registries and quality checks.
 
-For a new domain package, import `ontology.foundation@0.1.0` and use
+For a new domain package, import `ontology.foundation@0.2.0` and use
 `ont:DomainEntity` for an entity with identity. Ontology owns this vocabulary,
 and `ontologyc export-foundation` prints its catalog. Existing packages using
 `specgraph.foundation` and `sg:` can continue to compile. See the

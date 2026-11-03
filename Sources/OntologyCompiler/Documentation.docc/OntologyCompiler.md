@@ -26,7 +26,7 @@ swift run ontologyc check \
   SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
 ```
 
-An import of `ontology.foundation@0.1.0` (default namespace `ont`) uses the embedded versioned export
+An import of `ontology.foundation@0.2.0` (default namespace `ont`) uses the embedded versioned export
 table to check symbols in their declaration roles. `ontologyc export-foundation`
 prints the canonical catalog. Existing `specgraph.foundation@0.1.0` imports keep
 their default namespace `sg` and receive the same symbol checks.

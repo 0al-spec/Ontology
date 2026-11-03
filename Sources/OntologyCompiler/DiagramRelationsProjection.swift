@@ -46,14 +46,17 @@ struct DiagramImportedPackage {
         }
     }
 
-    func relations(visible: Set<String>) -> [JSONObject] {
-        (ir["relations"] as? [JSONObject] ?? []).compactMap { definition in
+    func relations(visible: Set<String>) throws -> [JSONObject] {
+        try (ir["relations"] as? [JSONObject] ?? []).compactMap { definition in
             let ranges = diagramRangeReferences(definition["range"])
             let targets = ranges.compactMap(rebase)
             guard !targets.isEmpty, targets.count == ranges.count,
                   let domain = rebase(definition["domain"] as? String ?? ""),
                   visible.contains(domain), targets.allSatisfy(visible.contains) else { return nil }
             var result = definition
+            if let action = definition["action"] as? String {
+                result["action"] = try scopedReference(action)
+            }
             result["domain"] = domain
             result["range"] = definition["range"] is String ? targets[0] : ["oneOf": targets]
             result["id"] = "\(namespace):\(definition["id"] as? String ?? "")"
@@ -77,9 +80,11 @@ struct DiagramRelationsProjection {
         }
         let rootClasses = root["classes"] as? [JSONObject] ?? []
         let visible = Set(rootClasses.compactMap { $0["fqid"] as? String }).union(selected)
-        let relations = (root["relations"] as? [JSONObject] ?? [])
-            + imported.sorted { $0.namespace < $1.namespace }.flatMap { $0.relations(visible: visible) }
-        let incident = Set(relations.flatMap { [$0["domain"] as? String ?? ""] + diagramRangeReferences($0["range"]) })
+        let relations = try (root["relations"] as? [JSONObject] ?? [])
+            + imported.sorted { $0.namespace < $1.namespace }.flatMap { try $0.relations(visible: visible) }
+        let incident = Set(relations.flatMap { definition in
+            [definition["domain"], definition["action"]].compactMap { $0 as? String } + diagramRangeReferences(definition["range"])
+        })
         var result = root
         result["classes"] = (rootClasses.filter { incident.contains($0["fqid"] as? String ?? "") }
             + importedClasses.filter { selected.contains($0["fqid"] as? String ?? "") })

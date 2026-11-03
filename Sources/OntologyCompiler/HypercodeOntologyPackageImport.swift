@@ -1,5 +1,6 @@
 import Foundation
 import CoreFoundation
+import OntologyRules
 
 private let ontologyPackageSections = [
     "Metadata",
@@ -127,11 +128,19 @@ extension OntologyCompiler {
         for node in try requireNonEmptyChildren(section, type: "Relation", section: "Relations") {
             let id = try requiredNodeID(node)
             let values = propertyValues(node)
+            let properties = node["properties"] as? JSONObject ?? [:]
+            guard let fields = RelationEndpointNames.authored(in: properties) else {
+                throw OntologyCompilerError.invalidArgument("Hypercode \(nodePath(node)) mixes subject/object and domain/range")
+            }
+            let objectPath = "\(nodePath(node)).\(fields.object)"
             let targets = try csv(
-                try requiredProperty(values, "range", path: "\(nodePath(node)).range"),
-                path: "\(nodePath(node)).range"
+                try requiredProperty(values, fields.object, path: objectPath),
+                path: objectPath
             )
-            var entry = try hypercodeOntologyRelationEntry(node: node, values: values, targets: targets)
+            var entry = try hypercodeOntologyRelationEntry(node: node, values: values, fields: fields, targets: targets)
+            if fields == .acting || properties["action"] != nil {
+                entry["action"] = try requiredStringProperty(values, "action", path: "\(nodePath(node)).action")
+            }
             if let description = string(values["description"]) {
                 entry["description"] = description
             }
@@ -143,11 +152,12 @@ extension OntologyCompiler {
     private func hypercodeOntologyRelationEntry(
         node: JSONObject,
         values: JSONObject,
+        fields: RelationEndpointNames,
         targets: [String]
     ) throws -> JSONObject {
         [
-            "domain": try requiredStringProperty(values, "domain", path: "\(nodePath(node)).domain"),
-            "range": targets.count == 1 ? targets[0] : ["oneOf": targets],
+            fields.subject: try requiredStringProperty(values, fields.subject, path: "\(nodePath(node)).\(fields.subject)"),
+            fields.object: targets.count == 1 ? targets[0] : ["oneOf": targets],
             "cardinality": [
                 "min": try cardinalityBound(
                     try requiredProperty(values, "card_min", path: "\(nodePath(node)).card_min"),

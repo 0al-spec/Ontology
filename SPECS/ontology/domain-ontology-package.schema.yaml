@@ -176,25 +176,26 @@ $defs:
   relationDefinition:
     type: object
     additionalProperties: false
-    required:
-      - domain
-      - range
+    oneOf:
+      - required: [subject, action, object]
+        not:
+          anyOf: [{required: [domain]}, {required: [range]}]
+      - required: [domain, range]
+        not:
+          anyOf: [{required: [subject]}, {required: [object]}]
     properties:
+      subject:
+        $ref: "#/$defs/conceptReference"
+        description: Entity that supplies the Actor capability for this action and object when the relationship executes.
+      object:
+        $ref: "#/$defs/relationObject"
       domain:
         $ref: "#/$defs/conceptReference"
+      action:
+        $ref: "#/$defs/conceptReference"
+        description: Action type bound by this relationship. The compiler resolves its ancestry to the imported foundation Action.
       range:
-        oneOf:
-          - $ref: "#/$defs/conceptReference"
-          - type: object
-            additionalProperties: false
-            required:
-              - oneOf
-            properties:
-              oneOf:
-                type: array
-                minItems: 1
-                items:
-                  $ref: "#/$defs/conceptReference"
+        $ref: "#/$defs/relationObject"
       cardinality:
         type: object
         additionalProperties: false
@@ -211,6 +212,18 @@ $defs:
         type: string
       layer:
         $ref: "#/$defs/ontologyLayer"
+  relationObject:
+    oneOf:
+      - $ref: "#/$defs/conceptReference"
+      - type: object
+        additionalProperties: false
+        required: [oneOf]
+        properties:
+          oneOf:
+            type: array
+            minItems: 1
+            items:
+              $ref: "#/$defs/conceptReference"
   policyDefinition:
     type: object
     additionalProperties: false

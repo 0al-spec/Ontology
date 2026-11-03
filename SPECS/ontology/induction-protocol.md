@@ -89,7 +89,6 @@ Every induction run should reason with this stable vocabulary before producing
 
 | Meta-Class | Meaning |
 |---|---|
-| `Actor` | Human, organization, role, or external system that acts in the domain |
 | `DomainEntity` | Object with identity and possible lifecycle |
 | `ValueObject` | Structured value without independent identity |
 | `Capability` | Something the product or system can do |
@@ -101,6 +100,8 @@ Every induction run should reason with this stable vocabulary before producing
 | `Risk` | Failure, abuse, compliance, or trust concern |
 | `EvidenceRequirement` | Proof needed to verify behavior, state, or compliance |
 | `BoundedContext` | Semantic boundary where terms and rules are internally consistent |
+
+During induction, record the actor together with the action attributed to that entity. A domain relation or an event interpretation carries the attribution.
 
 The meta-model is not itself the product ontology. It is the induction vocabulary used to
 decide what should become classes, relations, policies, state machines, and validation

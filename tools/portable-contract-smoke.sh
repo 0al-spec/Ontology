@@ -13,6 +13,8 @@ trap 'rm -rf "$output"' EXIT
 export LLVM_PROFILE_FILE="$output/portable-%p.profraw"
 
 bash tools/staged-package-advice-smoke.sh "$compiler"
+python3 Examples/theatre-casting/replay.py "$compiler"
+python3 Examples/theatre-casting/probe_relationship.py "$compiler"
 
 # Compare complete compiler output with tracked baselines on each platform.
 # These are package/structural checks, not proof of source truth or causation.

@@ -29,8 +29,8 @@ jobs:
       - name: Show Swift version
         run: swift --version
 
-      - name: Install diagram renderer
-        run: apt-get update && apt-get install -y --no-install-recommends graphviz
+      - name: Install diagram renderer and smoke test interpreter
+        run: apt-get update && apt-get install -y --no-install-recommends graphviz python3
 
       - name: Restore Linux SwiftPM cache
         uses: actions/cache@v5
@@ -53,7 +53,7 @@ jobs:
           cache-dependency-path: SPECS/ontology/package-lock.json
 
       - name: Run TypeScript SDK smoke gate
-        run: bash tools/typescript-smoke.sh
+        run: bash tools/typescript-smoke.sh .build/ci-quality/debug/ontologyc
 
       - name: Validate identical generated output and contracts
         env:

@@ -9,7 +9,7 @@ metadata:
   approvalStatus: draft
 spec:
   imports:
-    - {id: ontology.foundation, namespace: ont, version: 0.1.0}
+    - {id: ontology.foundation, namespace: ont, version: 0.2.0}
   classes:
     CastSlot:
       extends: ont:DomainEntity

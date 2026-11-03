@@ -20,7 +20,7 @@ struct DiagramFullProjection {
 }
 
 extension DiagramImportedPackage {
-    private func fullReference(_ value: String) throws -> String {
+    func scopedReference(_ value: String) throws -> String {
         guard !value.isEmpty else { return value }
         let qualified = value.contains(":") ? value : "\(ir["namespace"] as? String ?? ""):\(value)"
         guard let mapped = rebase(qualified) else {
@@ -36,22 +36,22 @@ extension DiagramImportedPackage {
             var result = definition
             result["fqid"] = "\(namespace):\(definition["id"] as? String ?? "")"
             result["diagramOrigin"] = "\(ir["id"] as? String ?? "")@\(ir["version"] as? String ?? "")"
-            for key in ["extends", "domain", "lifecycle"] {
-                if let value = definition[key] as? String { result[key] = try fullReference(value) }
+            for key in ["extends", "domain", "action", "lifecycle"] {
+                if let value = definition[key] as? String { result[key] = try scopedReference(value) }
             }
             for key in ["implements", "appliesTo", "requiredRelations"] {
-                if let values = definition[key] as? [String] { result[key] = try values.map(fullReference) }
+                if let values = definition[key] as? [String] { result[key] = try values.map(scopedReference) }
             }
             if let range = definition["range"] as? String {
-                result["range"] = try fullReference(range)
+                result["range"] = try scopedReference(range)
             } else if let range = definition["range"] as? JSONObject, let alternatives = range["oneOf"] as? [String] {
-                result["range"] = ["oneOf": try alternatives.map(fullReference)]
+                result["range"] = ["oneOf": try alternatives.map(scopedReference)]
             }
             if let transitions = definition["transitions"] as? [JSONObject] {
                 result["transitions"] = try transitions.map { transition in
                     var mapped = transition
                     for key in ["command", "event"] {
-                        if let ref = transition[key] as? String { mapped[key] = try fullReference(ref) }
+                        if let ref = transition[key] as? String { mapped[key] = try scopedReference(ref) }
                     }
                     return mapped
                 }

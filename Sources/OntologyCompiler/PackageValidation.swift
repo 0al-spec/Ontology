@@ -56,7 +56,7 @@ extension OntologyCompiler {
         )
         validateRelations(
             relations,
-            classNames: classNames,
+            classes: classes,
             bindings: bindings,
             packageNamespace: package.namespace
         )
@@ -201,58 +201,6 @@ extension OntologyCompiler {
                     )
                 }
             }
-        }
-    }
-
-    func validateRelations(
-        _ relations: JSONObject,
-        classNames: Set<String>,
-        bindings: PackageImportBindings,
-        packageNamespace: String
-    ) {
-        for name in relations.keys.sorted() {
-            let path = "spec.relations.\(name)"
-            validateSymbolName(name, path: path, code: "relation.name.invalid")
-            guard let definition = relations[name] as? JSONObject else {
-                add("relation.type", path, "Relation definition must be an object")
-                continue
-            }
-            validateKnownKeys(definition, allowed: ["domain", "range", "cardinality", "description", "layer"], path: path)
-            validateLayer(definition, path: path)
-
-            if let domain = requiredString(definition, "domain", path: "\(path).domain", code: "relation.domain.required"),
-               !resolves(domain, localNames: classNames, packageNamespace: packageNamespace, bindings: bindings) {
-                add("relation.domain.unresolved", "\(path).domain", "Relation domain reference \(domain) cannot be resolved")
-            }
-
-            guard let rangeValue = definition["range"] else {
-                add("relation.range.required", "\(path).range", "Relation range is required")
-                continue
-            }
-            validateRelationRange(rangeValue, path: "\(path).range", classes: classNames, namespace: packageNamespace, bindings: bindings)
-        }
-    }
-
-    private func validateRelationRange(_ value: Any, path: String, classes: Set<String>, namespace: String, bindings: PackageImportBindings) {
-        func validateRef(_ ref: String?, at site: String) {
-            guard let ref else {
-                add("relation.range.type", site, "Relation range member must be a reference string")
-                return
-            }
-            if !resolves(ref, localNames: classes, packageNamespace: namespace, bindings: bindings) {
-                add("relation.range.unresolved", site, "Relation range reference \(ref) cannot be resolved")
-            }
-        }
-
-        switch RelationRangeShapeDecisionSpec().sourceShape(of: value) {
-        case .scalarRef(let ref):
-            validateRef(ref, at: path)
-        case .oneOfMembers(let members) where !members.isEmpty:
-            for (index, member) in members.enumerated() {
-                validateRef(member, at: "\(path).oneOf[\(index)]")
-            }
-        case .oneOfMembers, .invalid:
-            add("relation.range.type", path, "Relation range must be a reference string or oneOf reference list")
         }
     }
 

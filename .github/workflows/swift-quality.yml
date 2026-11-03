@@ -59,7 +59,7 @@ jobs:
           cache-dependency-path: SPECS/ontology/package-lock.json
 
       - name: Run TypeScript SDK smoke gate
-        run: bash ./tools/typescript-smoke.sh
+        run: bash ./tools/typescript-smoke.sh .build/ci-quality/debug/ontologyc
 
       - name: Validate identical generated output and contracts
         env:

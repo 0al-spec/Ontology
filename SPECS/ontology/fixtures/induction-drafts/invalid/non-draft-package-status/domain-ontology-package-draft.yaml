@@ -21,7 +21,7 @@ spec:
       extends: sg:DomainEntity
       description: Time-bounded audio evidence captured during a recording session.
     Speaker:
-      extends: sg:Actor
+      extends: sg:DomainEntity
       description: Participant whose speech may be attributed in a transcript.
     Transcript:
       extends: sg:DomainEntity

@@ -22,7 +22,7 @@ Behavior:
 2. Validate against `domain-ontology-package.schema.yaml`.
 3. Bind declared import namespaces and resolve available versioned export tables.
 4. Validate class inheritance and protocol references.
-5. Validate relation domain/range and cardinality.
+5. Validate relation endpoints and any declared action reference.
 6. Validate policy applicability.
 7. Validate state machine transitions.
 8. Emit diagnostics.
@@ -79,9 +79,9 @@ Read the findings, correct the package and stage the fix, or keep the draft for 
 
 ### `ontologyc export-foundation`
 
-This command prints the [built-in export catalog](foundation/0.1.0/exports.json)
-for `ontology.foundation@0.1.0` as JSON. The Swift library exposes the same
-inventory through `FoundationExports.version010`. Consumers can pin its bytes
+This command prints the [built-in export catalog](foundation/0.2.0/exports.json)
+for `ontology.foundation@0.2.0` as JSON. The Swift library exposes the same
+inventory through `FoundationExports.current`. Consumers can pin its bytes
 alongside the compiler. Changing the exported symbol set requires a new vocabulary version.
 
 An import of this package binds its declared namespace (default `ont`) to the
@@ -94,13 +94,43 @@ namespace validation; verifying their exported symbols requires another catalog.
 
 The foundation vocabulary has its own version, independent of the CLI release.
 A new package can refer to `ont:DomainEntity` under this import. The corresponding
-versioned concept URI is `ontology://ontology.foundation/0.1.0/classes/DomainEntity`.
+versioned concept URI is `ontology://ontology.foundation/0.2.0/classes/DomainEntity`.
 
 Existing packages can continue importing `specgraph.foundation@0.1.0` with its
-default namespace `sg`. The compiler applies the same version and symbol checks.
+default namespace `sg`. Both foundation identities pinned to 0.1.0 resolve against the archived 0.1.0 vocabulary. In 0.2.0, declare participants as domain entities and express acting through a relation.
 Consumers that verify the catalog byte-for-byte, including SpecGraph, must adopt
 the new package identity, CLI and catalog digest together. Keep old source, IR,
 URIs and digests when replaying historical reports.
+
+An author writes `CastAppointment: {subject: Person, action: Appoint, object: Person}`.
+The compiler also reads the earlier `domain`/`range` pair and rejects a mix of
+the two spellings in a single declaration. Both pairs normalize to the same
+endpoint references. Diagnostics use the names in the input.
+The `action: Appoint` field selects a reusable action. The compiler
+follows local class inheritance to the imported foundation `Action` (0.2.0).
+It reports `relation.action.unresolved` for unavailable references and
+`relation.action.wrong_kind` for a resolved class of the wrong kind. Imports
+without a verified export catalog cannot establish action ancestry. Successful
+compilation retains the qualified action reference in the relationship's IR.
+
+When a package declares an action-bearing relationship, its TypeScript SDK
+exports `ActionRelationshipRecordSchema` from `validators.ts` (tested with Zod
+4.4.3). The earlier `ActionRelationshipSchema` name aliases that record schema.
+Call `.safeParse(value)` on decoded JSON. The relationship name selects
+the schema for the subject, action and object. A mismatched action type is
+reported at `action.$type` with its expected qualified identifier. A local
+endpoint uses its class fields and the required string fields of its local
+protocols. For an imported endpoint, the SDK checks the declared type tag and
+optional string ID and passes additional fields through.
+
+The result of a successful parse has the data shape `ActionRelationshipRecord`.
+For execution, `relations.ts` exports `ActionRelationship<Name>`, `Entity`,
+`Actor<A, O>` and `trigger`. The subject must be an identified instance of
+its declared type with a `run` function accepting the bound action and
+object type. The object is also identified. For an `object.oneOf` declaration
+the function accepts the declared union of object types. Each call to
+`trigger` invokes that subject once and returns its result, including an
+asynchronous completion. Parsing and construction perform no action.
 
 ### `ontologyc compile`
 
@@ -201,7 +231,7 @@ Behavior:
 | Imports | Import ids and versions resolve or produce an error diagnostic. |
 | Classes | Every class extends exactly one valid base class. |
 | Protocols | Implemented protocols resolve and declare obligations. |
-| Relations | Domain and range resolve; relation ids are unique. |
+| Relations | Domain and range resolve; an optional action resolves to an imported foundation Action or a local subtype; relation ids are unique. |
 | State Machines | States are unique; transition endpoints exist; command/event refs resolve when declared. |
 | Policies | Policy targets resolve; enforceability is one of the allowed values. |
 | Security | Executable-looking hooks or expressions are rejected or treated as inert scalars. |

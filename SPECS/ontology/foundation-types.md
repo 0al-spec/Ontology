@@ -4,14 +4,18 @@
 
 The foundation model defines the stable semantic target for product ontologies. YAML ontology packages declare semantic inheritance and protocol implementation; generated TypeScript projects those declarations into typed references, interfaces, relations, policies, state machines, and validators.
 
-New packages import `ontology.foundation@0.1.0` with the default namespace `ont`. For the compiler-owned names and their export roles, see the [versioned foundation catalog](foundation/0.1.0/exports.json) or run `ontologyc export-foundation`.
+New packages import `ontology.foundation@0.2.0` with the default namespace `ont`. For the compiler-owned names and their export roles, see the [versioned foundation catalog](foundation/0.2.0/exports.json) or run `ontologyc export-foundation`.
+
+In a named relationship the subject is the Actor for its declared action and
+object. Ivan and Anna can both be People. To appoint Anna, Ivan must be able
+to perform `Appoint` on her. An event interpretation can subsequently record
+who acted.
 
 ## Concept Kind Set
 
 ```ts
 export type ConceptKind =
-  | "Actor"
-  | "SystemActor"
+  | "Action"
   | "DomainEntity"
   | "ValueObject"
   | "Capability"
@@ -38,12 +42,8 @@ export interface OntologyNode {
 ## Foundation Interfaces
 
 ```ts
-export interface Actor extends OntologyNode {
-  readonly kind: "Actor";
-}
-
-export interface SystemActor extends OntologyNode {
-  readonly kind: "SystemActor";
+export interface Action extends OntologyNode {
+  readonly kind: "Action";
 }
 
 export interface DomainEntity extends OntologyNode {
@@ -106,15 +106,35 @@ export interface ConceptRef<
 
 ## Relations
 
+An author declares the subject entity, reusable action class and object entity
+in the package. Two relationships can use the same action.
+
+```yaml
+CastAppointment: {subject: Person, action: Appoint, object: Person}
+CrewAppointment: {subject: Person, action: Appoint, object: Person}
+```
+
+The generated TypeScript type `ActionRelationship<"pilot:CastAppointment">`
+requires `Person & Actor<Appoint, Person & Entity>` as its subject and
+`Person & Entity` as its object. `Entity` supplies the instance ID.
+`trigger(relationship)` calls `relationship.subject.run(relationship.action,
+relationship.object)` and returns the implementation's result. The application
+implements the action on that identified subject. `ActionRelationshipRecord`
+describes the serializable data. See the [casting example](../../Examples/theatre-casting/README.md).
+
+The compiler stores endpoint types in the following normalized metadata shape.
+
 ```ts
 export interface RelationDefinition<
   TId extends string = string,
   TDomain extends ConceptRef = ConceptRef,
-  TRange extends ConceptRef | OneOfRange = ConceptRef
+  TRange extends ConceptRef | OneOfRange = ConceptRef,
+  TAction extends ConceptRef = ConceptRef
 > {
   readonly id: TId;
   readonly domain: TDomain;
   readonly range: TRange;
+  readonly action?: TAction;
   readonly cardinality?: {
     readonly min?: number;
     readonly max?: number;
@@ -125,6 +145,9 @@ export interface OneOfRange {
   readonly oneOf: readonly ConceptRef[];
 }
 ```
+
+The compiler resolves the action class to `ont:Action` through its inheritance
+chain. Plain binary relations such as containment use `domain` and `range`.
 
 ## State Transitions
 
