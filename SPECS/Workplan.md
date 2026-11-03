@@ -1316,3 +1316,5 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - ✅ Local validation passed. See the [validation and inventory](ARCHIVE/ONT-072_Contextual_Actor/ONT-072_Validation_Report.md).
 - [Shared action follow-up](ARCHIVE/ONT-072_Contextual_Actor/ONT-072_Action_Relationships.md):
   the compiler checks relation action declarations and the SDK checks a consumer's action substitution.
+- [Incoming relationship JSON](ARCHIVE/ONT-072_Contextual_Actor/ONT-072_Relationship_JSON.md)
+  covers the same assignments when a consumer reads records from an API.

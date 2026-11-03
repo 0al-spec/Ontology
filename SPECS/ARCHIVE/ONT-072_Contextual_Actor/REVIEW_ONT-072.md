@@ -14,3 +14,11 @@ domain author can deliberately rebind the declaration; the compatibility diff
 reports such a change as breaking. The previously installed commit hook does
 not recognize the new field. Running `advise-staged` from the branch build on
 the same staged fixture produced no warnings.
+
+An independent consumer also compiled a package with one action-bearing
+relation, a class named ActionRelationship, an optional integer and a local
+protocol requiring a string. The object allowed a local class, an imported
+class or a foundation class. Four JSON round-trips preserved their values.
+Six malformed values produced the expected diagnostics, including a missing
+protocol field. The generated SDK passed strict TypeScript checking with
+exact optional properties.

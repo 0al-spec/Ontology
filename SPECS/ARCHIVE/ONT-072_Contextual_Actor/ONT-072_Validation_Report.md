@@ -29,6 +29,24 @@ This inventory covers the Ontology repository. A consuming project selects the n
   178 compiler); all 13 Ruby package fixtures passed. TypeScript SDK typecheck,
   seven runtime smoke modules and the fresh consumer typecheck passed. Portable
   contract smoke and the release smoke for both CLIs passed.
-- These checks cover declarations and typed SDK construction. They do not
-  validate arbitrary incoming relationship JSON or attest the truth of an
-  appointment.
+- These checks cover declarations and typed SDK construction.
+
+## Follow-up — Read incoming relationship JSON
+
+The same public compiler generated the SDK used in the Node smoke. The fixture
+decoded JSON as `unknown` and called `ActionRelationshipSchema.safeParse`.
+
+| Input | Result |
+| --- | --- |
+| Cast appointment, crew appointment, cast cancellation | All three parsed and passed to the typed consumer |
+| Cancel action in a cast appointment | `action.$type` expected `pilot:Appoint` |
+| Appointment action in a cast cancellation | `action.$type` expected `pilot:Cancel` |
+| Missing action or unrecognized relation | Diagnostic at `action` or `relation` respectively |
+| Cancellation object used as subject or object | Diagnostic on that endpoint's `$type` expecting `pilot:Person` |
+
+All three positive and six negative runtime controls passed under Zod 4.4.3.
+TypeScript 6.0.3 accepted the narrowed result with strict and exact optional
+property checks. Seven existing Node smoke modules, the portable CLI contracts
+and both Swift test suites (56 and 178 tests) passed locally. These checks
+establish the shape of a supplied record. The cast event replay separately
+checks its historical evidence.
