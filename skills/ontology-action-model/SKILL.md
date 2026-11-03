@@ -1,6 +1,6 @@
 ---
 name: ontology-action-model
-description: Model a bounded application action through entity identity, actor roles, state transitions, goal criteria, and BDD/PBT examples. Use for conceptual behavior modeling and review, without assuming implementation or a new ontology schema.
+description: Model a bounded application action through entity identity, actor roles, state transitions and goal criteria. Use for conceptual review, BDD/PBT examples, or authoring executable subject/action/object relationships with ontologyc.
 ---
 
 # Ontology Action Model
@@ -51,6 +51,31 @@ require creating files, implementing an application, or changing ontology packag
 Do not add request chains, application creation, distribution, stores, or hardware
 setup to an explicitly within-app example. New events need a reason within the
 requested boundary, not a desire to populate every available ontology concept.
+
+## When the user wants an executable relationship
+
+With Ontology 0.7.0, import `ontology.foundation@0.2.0` as `ont`. Declare the
+participants as entity classes and the reusable action as a class extending
+`ont:Action`. Name the relationship for its domain meaning. For example,
+given a `Person` class and an `Appoint` action:
+
+```yaml
+CastAppointment: {subject: Person, action: Appoint, object: Person}
+```
+
+The identified subject supplies `Actor<Appoint, Person & Entity>`. In an
+appointment of Anna by Ivan, `trigger(appointment)` calls Ivan's
+`run(action, object)` with Anna. The same Person can be the object in one
+relationship and act in another. An ordinary membership or containment link
+can use `domain` and `range` without declaring an action.
+
+Run `ontologyc check PACKAGE.yaml` and `ontologyc compile PACKAGE.yaml --target
+typescript --out SDK_DIR`. Parse an incoming record with
+`ActionRelationshipRecordSchema`. To test execution, supply a concrete subject
+and explicitly trigger the relationship. Check the affected object's state
+before reading, after reading, and after the trigger. Include a subject that
+lacks the required action as a negative typecheck.
+[Compilable package and tested SDK example](https://github.com/0al-spec/Ontology/tree/0.7.0/Examples/theatre-casting).
 
 ## Make the criterion testable
 
