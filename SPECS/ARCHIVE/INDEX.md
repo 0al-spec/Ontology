@@ -78,7 +78,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
-| 2026-11-04 | ONT-076 | Archived exam calculator rewrite and local validation (PASS) |
+| 2026-11-04 | ONT-076 | Archived exam calculator rewrite, validation (PASS) and [review](ONT-076_Examcalc_Outcome/REVIEW_ONT-076.md) |
 | 2026-10-31 | ONT-068 | Archived [self-review](ONT-068_Viewer_Launch_Manual/REVIEW_ONT-068.md); ONT-069 records dependency follow-up |
 | 2026-10-31 | ONT-068 | Archived viewer launch manual and bounded validation |
 | 2026-10-31 | ONT-067 | Archived [self-review](ONT-067_Package_Filters/REVIEW_ONT-067.md); FOLLOW-UP skipped |
