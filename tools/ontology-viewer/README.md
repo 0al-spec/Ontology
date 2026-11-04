@@ -25,6 +25,13 @@ are tinted blue; unresolved external references are gray and never presented as
 loaded declarations. The inspector shows the owning package, logical YAML pointer
 and byte digest where a declaration is available.
 
+For a relationship with an action, the inspector shows **Subject**, **Action**
+and **Object**. In the [repository membership example](../../Examples/repository-membership/package.yaml),
+select `addsRepositoryTo`, follow `AddRepository`, then follow its `repository`
+field to the `Repository` declaration. Reference targets are displayed by type;
+navigation requires a loaded declaration. Ordinary binary relations retain
+their **Domain** and **Range** labels.
+
 Open **Filters** to enable or disable node types, their origin (local, imported,
 unresolved), and relationship kinds independently. **Hide** removes inactive
 elements from the canvas and keyboard navigation; **Dim** keeps them visible as

@@ -23,6 +23,8 @@ export default function App() {
   const input = useRef<HTMLInputElement>(null);
   const graphKey = useRef('');
   const graph = useMemo(() => projection ? buildGraph(projection) : null, [projection]);
+  const classNodes = useMemo(() => new Map((graph?.nodes || [])
+    .filter((node) => node.id.startsWith('classes/')).map((node) => [node.data.label, node])), [graph]);
   const visibility = useMemo(() => graph && projection ? graphVisibility(graph, filters, projection.id) : null, [graph, filters, projection]);
   const filterCounts = useMemo(() => graph && projection ? graphFilterCounts(graph, projection.id) : undefined, [graph, projection]);
   const packages = useMemo(() => graph && projection ? graphPackages(graph, projection) : [], [graph, projection]);
@@ -130,7 +132,13 @@ export default function App() {
       </section>
       <GraphCanvas graph={graph} identity={`${projection.id}@${projection.version}`} search={search} focusNode={focusNode}
         visibility={visibility || undefined} filterMode={filters.mode} onSelect={setSelection} />
-      <Inspector selection={selection} filtered={selectionFiltered} />
+      <Inspector selection={selection} filtered={selectionFiltered} classReferences={classNodes}
+        onSelectClass={(fqid) => {
+          const node = classNodes.get(fqid);
+          if (!node) return;
+          setSelection({ type: 'node', id: node.id, data: node.data });
+          if (visibility?.nodeIds.has(node.id)) setFocusNode({ id: node.id });
+        }} />
     </main> : <main className="welcome">
       <div className="welcome-symbol">◈</div>
       <div className="section-label">LOCAL GRAPH WORKSPACE</div>
