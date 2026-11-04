@@ -11,3 +11,9 @@
 - Both projection modes preserve loaded reference-field targets. The screenshot
   and its README caption describe types. Viewing a supplied instance and its
   recorded participant values is the next separate slice.
+
+The membership inputs now start in subject, action, object order. A Chromium
+regression sampled the painted strokes of all four visible wires: two pairs
+intersected on the earlier layout and zero on the updated layout. The screenshot
+was recaptured after reopening the Viewer without dragging any card. The
+build, 21 unit tests and all 24 repository Chromium scenarios passed.
