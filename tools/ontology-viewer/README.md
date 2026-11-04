@@ -67,8 +67,10 @@ for this application's styling. This is source-level reuse, not a published npm
 package or a SpecSpace integration. The projection contains type declarations,
 not runtime instances, proof of factual truth or approval of manual policies.
 
-Current node positions are local display state. The viewer's file-open mode is
-read-only; the optional local workspace below edits source text.
+The initial layout places adjacent, unshared inputs to one relationship in port
+order when they occupy the same layout column. You can then drag any card;
+its position is local display state. The viewer's file-open mode is read-only;
+the optional local workspace below edits source text.
 
 ## Local YAML workspace
 

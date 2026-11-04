@@ -31,6 +31,38 @@ async function openGraph(page: Page, graph: unknown) {
   await page.getByRole('button', { name: 'membership:addsRepositoryTo relation' }).click();
 }
 
+test('lays out membership inputs in port order without crossing wires', async ({ page }) => {
+  await openGraph(page, fixture);
+  await page.locator('.filter-panel summary').click();
+  await page.getByRole('checkbox', { name: 'Unresolved', exact: true }).uncheck();
+  const wires = page.locator('.react-flow__edge:visible .react-flow__edge-path');
+  await expect(wires).toHaveCount(4);
+
+  const crossings = await wires.evaluateAll(elements => {
+    const paths = elements.filter((element): element is SVGPathElement => element instanceof SVGPathElement);
+    const intersecting: string[][] = [];
+    for (const [index, a] of paths.entries()) {
+      for (const b of paths.slice(index + 1)) {
+        const transform = b.getScreenCTM()!.inverse().multiply(a.getScreenCTM()!);
+        const length = a.getTotalLength();
+        for (let distance = 0; distance <= length; distance += 0.5) {
+          if (b.isPointInStroke(a.getPointAtLength(distance).matrixTransform(transform))) {
+            intersecting.push([a, b].map(path => path.closest('.react-flow__edge')!.getAttribute('data-id')!));
+            break;
+          }
+        }
+      }
+    }
+    return intersecting;
+  });
+  expect(crossings).toEqual([]);
+
+  const rows = await Promise.all(['User', 'AddRepository', 'Project'].map(name =>
+    page.locator(`[data-id="classes/membership:${name}"]`).evaluate(node => node.getBoundingClientRect().top)));
+  expect(rows[0]).toBeLessThan(rows[1]);
+  expect(rows[1]).toBeLessThan(rows[2]);
+});
+
 test('navigates from relation to action to reference target without opening raw data', async ({ page }) => {
   await openGraph(page, fixture);
   const inspector = page.getByLabel('Inspector');

@@ -35,6 +35,33 @@ function objects(value: unknown): JsonObject[] {
   return Array.isArray(value) ? value.filter((item): item is JsonObject => typeof item === 'object' && item !== null && !Array.isArray(item)) : [];
 }
 
+function layoutWithPortOrder(layout: dagre.graphlib.Graph, edges: ViewerEdge[]) {
+  // Role edges are emitted in declaration order: subject, action, then object alternatives.
+  const inputs = new Map<string, string[]>();
+  const uses = new Map<string, number>();
+  for (const edge of edges) {
+    if (edge.data?.kind !== 'relation' || !edge.targetHandle) continue;
+    const peers = inputs.get(edge.target);
+    if (peers) peers.push(edge.source);
+    else inputs.set(edge.target, [edge.source]);
+    uses.set(edge.source, (uses.get(edge.source) || 0) + 1);
+  }
+
+  dagre.layout(layout, { customOrder(graph, defaultOrder) {
+    defaultOrder(graph, {});
+    for (const peers of inputs.values()) {
+      if (peers.some((id) => uses.get(id) !== 1)) continue;
+      // Dagre computes the order within each rank before it places cards of different heights.
+      const labels = peers.map((id) => graph.node(id) as dagre.Node<{ order: number }>);
+      const slots = labels.map((label) => label.order).sort((a, b) => a - b);
+      if (labels.some((label) => label.rank !== labels[0].rank)) continue;
+      if (slots.some((slot, index) => slot !== slots[0] + index)) continue;
+      // Only permute an uninterrupted block of inputs to one relationship.
+      labels.forEach((label, index) => { label.order = slots[index]; });
+    }
+  } });
+}
+
 /** Project semantic declarations to presentation elements without changing the source graph. */
 export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges: ViewerEdge[] } {
   const nodes: ViewerNode[] = [];
@@ -211,7 +238,7 @@ export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges
   for (const node of [...nodes].sort((a, b) => a.id.localeCompare(b.id))) layout.setNode(node.id, { width, height: height(node) });
   for (const item of [...edges].sort((a, b) => a.id.localeCompare(b.id))) layout.setEdge(item.source, item.target,
     { width: Math.min(180, String(item.label || '').length * 7), height: 20 }, item.id);
-  dagre.layout(layout);
+  layoutWithPortOrder(layout, edges);
   for (const node of nodes) {
     const position = layout.node(node.id) as { x: number; y: number };
     node.position = { x: position.x - width / 2, y: position.y - height(node) / 2 };
