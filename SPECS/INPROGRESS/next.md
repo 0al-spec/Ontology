@@ -35,7 +35,7 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 - ONT-074 adds inspector navigation for executable action relationships and typed field targets. See the [validation](../ARCHIVE/ONT-074_Viewer_Inspector/Validation.md).
 
-- ONT-076 rebuilt examcalc from a human outcome and two action clauses. The single-tablet handoff and reassignment probes passed [local validation](../ARCHIVE/ONT-076_Examcalc_Outcome/ONT-076_Validation_Report.md). See the [handoff scenario](../../Examples/examcalc/README.md#проверка-выдачи). Section transitions are a separate candidate.
+- ONT-076 rebuilt examcalc from a human outcome and two action clauses. Tablet handoff, reassignment and the [first student operation](../../Examples/examcalc/README.md#первое-нажатие-после-выдачи) passed [local validation](../ARCHIVE/ONT-076_Examcalc_Outcome/ONT-076_Validation_Report.md). Section transitions are a separate candidate.
 
 - ONT-073 completed its typed repository-reference pilot. See the [validation](../ARCHIVE/ONT-073_Typed_References/Validation.md).
 

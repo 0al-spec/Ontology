@@ -19,6 +19,16 @@
       ]
     }
   },
+  "firstStudentPress": {
+    "id": "examcalc.first-student-operation",
+    "agreedCriterion": "После выдачи студент нажимает sin без повторного указания экзамена. Калькулятор применяет активный набор.",
+    "operation": "sine",
+    "argument": 0,
+    "examples": [
+      {"exam": "arithmetic", "functions": "basic", "expected": "unavailable", "calls": 0, "value": null},
+      {"exam": "trigonometry", "functions": "scientific", "expected": "available", "calls": 1, "value": 0}
+    ]
+  },
   "examples": [
     {"exam": "arithmetic", "operation": "add", "expected": "available"},
     {"exam": "arithmetic", "operation": "sine", "expected": "unavailable"},

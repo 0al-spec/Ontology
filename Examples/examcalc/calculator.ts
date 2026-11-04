@@ -9,6 +9,13 @@ type ExamInstance = Exam & Entity;
 type SetInstance = AllowedFunctionSet & Entity;
 export type Operation = CalculatorFunction & Entity;
 export type FunctionList = SetInstance & { readonly members: readonly Operation[] };
+type Result = { status: "available"; value: number } | { status: "unavailable" | "unknown" };
+type IssuedTablet = {
+  tablet: string;
+  exam: string;
+  functions: string;
+  sin: (operand: number) => Result;
+};
 
 function lookup<T>(table: ReadonlyMap<string, T>, key: unknown, kind: string): T {
   const value = typeof key === "string" ? table.get(key) : undefined;
@@ -21,7 +28,7 @@ export class Classroom {
   private readonly sets: ReadonlyMap<string, FunctionList>;
   private readonly applied = new Map<string, SetInstance>();
 
-  constructor(examIds: readonly string[], sets: readonly FunctionList[]) {
+  constructor(examIds: readonly string[], sets: readonly FunctionList[], private readonly calculateSin = Math.sin) {
     for (const id of examIds) this.exams.set(id, { $type: classes.Exam.alias, id });
     this.sets = new Map(sets.map(set => [set.id, set]));
   }
@@ -69,21 +76,41 @@ export class Classroom {
     return { selected, applied: this.applied.get(exam.id)?.id ?? null };
   }
 
-  handOutFor(attendingExam: string): { tablet: string; exam: string; functions: string } | null {
-    const { id, activeExam, activeFunctions } = this.calculator;
+  private readySelection(): { exam: ExamInstance; functions: FunctionList } | null {
+    const { activeExam, activeFunctions } = this.calculator;
     if (!activeExam || !activeFunctions) return null;
     const exam = lookup(this.exams, activeExam.locator, "exam");
     const functions = lookup(this.sets, activeFunctions.locator, "function set");
-    if (exam.id !== attendingExam || exam.allowedFunctions?.locator !== functions.id) return null;
-    return { tablet: id, exam: exam.id, functions: functions.id };
+    if (exam.allowedFunctions?.locator !== functions.id) return null;
+    return { exam, functions };
   }
 
-  use(examId: string, operation: Operation, calculate: () => number):
-    { status: "available"; value: number } | { status: "unavailable" | "unknown" } {
+  handOutFor(attendingExam: string): IssuedTablet | null {
+    const ready = this.readySelection();
+    if (!ready || ready.exam.id !== attendingExam) return null;
+    const { exam, functions } = ready;
+    return {
+      tablet: this.calculator.id,
+      exam: exam.id,
+      functions: functions.id,
+      sin: operand => {
+        const current = this.readySelection();
+        if (!current || current.exam.id !== exam.id || current.functions.id !== functions.id) return { status: "unknown" };
+        const sine: Operation = { $type: classes.CalculatorFunction.alias, id: "sine" };
+        return this.evaluate(functions.id, sine, () => this.calculateSin(operand));
+      },
+    };
+  }
+
+  use(examId: string, operation: Operation, calculate: () => number): Result {
     const exam = lookup(this.exams, examId, "exam");
     const set = this.applied.get(exam.id);
     if (!set || exam.allowedFunctions?.locator !== set.id) return { status: "unknown" };
-    const { members } = lookup(this.sets, set.id, "function set");
+    return this.evaluate(set.id, operation, calculate);
+  }
+
+  private evaluate(setId: string, operation: Operation, calculate: () => number): Result {
+    const { members } = lookup(this.sets, setId, "function set");
     if (!members.some(member => member.id === operation.id)) return { status: "unavailable" };
     return { status: "available", value: calculate() };
   }
