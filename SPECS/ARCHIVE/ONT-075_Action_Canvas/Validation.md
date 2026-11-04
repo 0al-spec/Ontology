@@ -17,3 +17,12 @@ regression sampled the painted strokes of all four visible wires: two pairs
 intersected on the earlier layout and zero on the updated layout. The screenshot
 was recaptured after reopening the Viewer without dragging any card. The
 build, 21 unit tests and all 24 repository Chromium scenarios passed.
+
+Review reproduced a field whose source pointed to a different package or
+field. On fresh `full` and `relations` exports of the membership example, the
+Viewer now rejects independent edits to the package ID, version, either
+digest or pointer. With the source omitted it shows the owning class location.
+A Chromium test opens the genuine export, selects the relationship, attempts
+to open a graph with the altered field pointer and verifies that the original
+file and selection remain visible. The build, 33 unit tests and 25 Chromium
+scenarios passed.

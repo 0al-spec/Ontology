@@ -32,6 +32,9 @@ Each visible declaration carries `source` with its owning package `id`,
 document. Class fields carry their own pointers. Pointer components follow JSON
 Pointer escaping (`~0`, `~1`). This is a logical location, not a source byte,
 line/column span, editable syntax tree or guarantee of round-trip preservation.
+The Viewer accepts a field source when its package ID, version and both digests
+match the class and its pointer is `<class pointer>/fields/<escaped field id>`.
+If the source is omitted, the inspector shows the class location.
 Normalized fields may omit source metadata and comments; do not regenerate YAML
 from the projection. Recheck `sourceByteDigest` before applying edits to a source file.
 

@@ -167,12 +167,8 @@ export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges
     const from = nodeId('classes', record.fqid);
     const ownerNode = known.get(from);
     const owner = projection.sources.find((item) => item.id === record.source.id && item.version === record.source.version);
-    for (const field of objects(record.fields)) {
+    for (const field of record.fields ?? []) {
       if (field.type !== 'ref' || !string(field.id) || !string(field.target)) continue;
-      const loc = field.source;
-      const source = typeof loc === 'object' && loc !== null && !Array.isArray(loc) &&
-        ['id', 'version', 'sourceDigest', 'sourceByteDigest', 'pointer'].every((key) => typeof (loc as JsonObject)[key] === 'string')
-        ? loc as SourceLocation : record.source;
       const target = string(field.target);
       let targetNode: string;
       if (owner && owner.alias !== projection.namespace) {
@@ -188,7 +184,7 @@ export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges
         ownerNode.data.fieldTargets[string(field.id)] = targetNode.slice('classes/'.length);
       }
       edge(`field/${record.fqid}/${string(field.id)}`, targetNode, from,
-        '', { semanticId: `${record.fqid}.${string(field.id)}`, kind: 'field-ref', record: field, source },
+        '', { semanticId: `${record.fqid}.${string(field.id)}`, kind: 'field-ref', record: field, source: field.source ?? record.source },
         { targetHandle: `field-${string(field.id)}`, neutral: true, role: 'field' });
     }
     if (projection.view !== 'full') continue;

@@ -130,6 +130,20 @@ test('catalog lists declarations without search and selects their canonical node
   await expect(page.getByLabel('Search results').getByRole('button', { name: /membership:Repository/ })).toHaveCount(0);
 });
 
+test('rejects a field attributed to another class and retains the open graph', async ({ page }) => {
+  await openGraph(page, fixture);
+  const modified = structuredClone(fixture);
+  const field = modified.classes.find(item => item.id === 'AddRepository')?.fields?.find(item => item.id === 'repository');
+  if (!field?.source) throw new Error('The exported repository field has no source');
+  field.source.pointer = '/spec/classes/Project/fields/repository';
+  await page.getByLabel('Open graph JSON').setInputFiles({
+    name: 'retargeted.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(modified)),
+  });
+  await expect(page.getByRole('alert')).toContainText('membership:AddRepository.fields.repository.source.pointer');
+  await expect(page.getByLabel('Inspector').getByRole('heading', { name: 'membership:addsRepositoryTo' })).toBeVisible();
+  await expect(page.locator('.topbar')).toContainText('membership.json');
+});
+
 test('presents oneOf objects and leaves unloaded references as text', async ({ page }) => {
   const graph = structuredClone(fixture);
   graph.relations[0].range = { oneOf: ['membership:Project', 'membership:Repository'] };
@@ -147,15 +161,16 @@ test('shows independently named ref fields on a class derived from a local actio
   const graph = structuredClone(fixture);
   const action = graph.classes.find((item: { fqid: string }) => item.fqid === 'membership:AddRepository');
   if (!action || !Array.isArray(action.fields)) throw new Error('Example action fields are missing');
-  const field: unknown = action.fields[0];
-  if (typeof field !== 'object' || field === null || Array.isArray(field)) throw new Error('Example ref field is missing');
+  const field = action.fields[0];
+  if (!field?.source) throw new Error('Example ref field source is missing');
   const base: Declaration = { ...action, id: 'AddRepositoryBase', fqid: 'membership:AddRepositoryBase',
     source: { ...action.source, pointer: '/spec/classes/AddRepositoryBase' } };
   delete base.fields;
   graph.classes.push(base);
   action.kind = 'AddRepositoryBase';
   action.extends = 'membership:AddRepositoryBase';
-  action.fields.push({ ...field, id: 'secondaryRepository' });
+  action.fields.push({ ...field, id: 'secondaryRepository',
+    source: { ...field.source, pointer: '/spec/classes/AddRepository/fields/secondaryRepository' } });
   await openGraph(page, graph);
   const inspector = page.getByLabel('Inspector');
   await inspector.getByRole('button', { name: 'membership:AddRepository' }).click();

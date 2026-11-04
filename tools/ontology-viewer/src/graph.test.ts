@@ -89,6 +89,7 @@ describe('ontology graph projection adapter', () => {
     expect(relation?.data.ports?.find((port) => port.role === 'object')?.label).toBe('object: test:Evidence');
     const field = flow.edges.find((edge) => edge.id === 'field/dep:Imported/other');
     expect(field?.source).toBe('external/scoped/dep:Imported/test:Evidence');
+    expect(field?.data?.source).toEqual(importedSource);
     expect(flow.nodes.find((node) => node.id === field?.source)?.data.kind).toBe('external');
     expect(flow.nodes.find((node) => node.id === 'classes/dep:Imported')?.data.fieldTargets).toBeUndefined();
   });
@@ -99,5 +100,51 @@ describe('ontology graph projection adapter', () => {
     expect(() => parseProjection({ ...graph, classes: [...graph.classes, graph.classes[0]] })).toThrow(/duplicate/i);
     expect(() => parseProjection({ ...graph, classes: [{ ...graph.classes[0], source: { ...source('/spec/classes/Proposal'), sourceByteDigest: 'invalid' } }] })).toThrow(/sourceByteDigest/);
     expect(() => parseProjection({ ...graph, classes: [{ ...graph.classes[0], source: { ...source('/spec/classes/Proposal'), id: 'unloaded' } }] })).toThrow(/loaded package/);
+  });
+});
+
+describe('class field sources', () => {
+  const owner = graph.classes[0];
+  const pointer = '/spec/classes/Proposal/fields/evidence';
+  const other = { ...graph.sources[0], id: 'example.imported', namespace: 'original', alias: 'dep' };
+  const field = { id: 'evidence', type: 'ref', target: 'test:Evidence' };
+  const withSource = (fieldSource: unknown) => ({
+    ...graph, sources: [...graph.sources, other],
+    classes: [{ ...owner, fields: [{ ...field, source: fieldSource }] }, graph.classes[1]],
+  });
+
+  it.each([
+    ['another loaded package', { ...source(pointer), id: other.id }],
+    ['another version', { ...source(pointer), version: '2.0.0' }],
+    ['another source digest', { ...source(pointer), sourceDigest: `sha256:${'b'.repeat(64)}` }],
+    ['another byte digest', { ...source(pointer), sourceByteDigest: `sha256:${'b'.repeat(64)}` }],
+    ['another class', source('/spec/classes/Evidence/fields/evidence')],
+    ['another field', source('/spec/classes/Proposal/fields/sibling')],
+    ['a malformed digest', { ...source(pointer), sourceByteDigest: 'invalid' }],
+    ['an incomplete source', { pointer }],
+    ['an explicit null source', null],
+  ])('rejects %s on a field', (_, supplied) => {
+    expect(() => parseProjection(withSource(supplied))).toThrow(/evidence/);
+  });
+
+  it('rejects a class and its field redirected together', () => {
+    const input = withSource(source('/spec/classes/Evidence/fields/evidence'));
+    input.classes[0].source = source('/spec/classes/Evidence');
+    expect(() => parseProjection(input)).toThrow(/test:Proposal/);
+  });
+
+  it('rejects a local class and its field claiming another loaded package', () => {
+    const input = withSource({ ...source(pointer), id: other.id });
+    input.classes[0].source = { ...owner.source, id: other.id };
+    expect(() => parseProjection(input)).toThrow(/test:Proposal/);
+  });
+
+  it('retains escaped field pointers in the original package under an import alias', () => {
+    const classSource = { ...source('/spec/classes/A~0B~1C'), id: other.id };
+    const fieldSource = { ...classSource, pointer: classSource.pointer + '/fields/path~1to~0field' };
+    const imported = { id: 'A~B/C', fqid: 'dep:A~B/C', source: classSource,
+      fields: [{ ...field, id: 'path/to~field', source: fieldSource }] };
+    const flow = buildGraph(parseProjection({ ...graph, sources: [...graph.sources, other], classes: [imported] }));
+    expect(flow.edges.find(edge => edge.data?.kind === 'field-ref')?.data?.source).toEqual(fieldSource);
   });
 });
