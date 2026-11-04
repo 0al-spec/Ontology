@@ -1323,3 +1323,6 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-073: Typed references in action parameters
 - Local validation passed for both locator forms. See [ONT-073 validation](ARCHIVE/ONT-073_Typed_References/Validation.md).
+
+## ONT-074: Navigable action inspector
+- Selected from the ONT-073 Viewer audit. Trace a relationship to its action and a typed field to its target class.

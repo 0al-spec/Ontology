@@ -1,3 +1,5 @@
+# In progress: ONT-074 — Navigable action inspector
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
