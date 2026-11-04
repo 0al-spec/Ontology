@@ -26,17 +26,18 @@ supplies reusable vocabulary, structural checks and bounded review experiments.
 
 ## Explore the model in Ontology Viewer
 
-[![Ontology Viewer showing the repository membership graph and the AddRepository inspector with its repository reference field.](Examples/package-visualization/ontology-viewer.png)](tools/ontology-viewer/LAUNCH.md)
+[![Ontology Viewer with the type catalog on the left and a canvas showing the subject, action and object ports of addsRepositoryTo. The AddRepository action has a separate port for its Repository reference.](Examples/package-visualization/ontology-viewer.png)](tools/ontology-viewer/LAUNCH.md)
 
 **Browse the model, inspect its sources, and edit YAML with compiler feedback.**
-The standalone Viewer provides an interactive canvas, search, and filters for
-node types, relationships and packages. Hide or dim context without moving nodes.
+The catalog lists the types and relationships in the loaded model. Select one to
+find it on the canvas, or hide and dim other declarations with the filters.
 Open an exported JSON graph for read-only exploration, or use a local workspace
 to edit YAML and see compiler diagnostics.
 
-*The graph shows a user adding a repository to a project. In the live Viewer,
-selecting `repository: Ref<Repository>` in the `AddRepository` inspector opens
-the `Repository` declaration.*
+*In the [repository membership example](Examples/repository-membership/package.yaml),
+the `addsRepositoryTo` relationship connects the subject `User`, the action
+`AddRepository` and the object `Project`. A separate wire connects the action's
+`repository: Ref<Repository>` port to the `Repository` type.*
 
 [Launch the Viewer](tools/ontology-viewer/LAUNCH.md) ·
 [Viewer capabilities and editing behavior](tools/ontology-viewer/README.md)
