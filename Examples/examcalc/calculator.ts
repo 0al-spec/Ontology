@@ -56,6 +56,14 @@ export class Classroom {
     }
   }
 
+  observeSets(examId: string): { selected: string | null; applied: string | null } {
+    const exam = lookup(this.exams, examId, "exam");
+    const selected = exam.allowedFunctions
+      ? lookup(this.sets, exam.allowedFunctions.locator, "function set").id
+      : null;
+    return { selected, applied: this.applied.get(exam.id)?.id ?? null };
+  }
+
   use(examId: string, operation: Operation, calculate: () => number):
     { status: "available"; value: number } | { status: "unavailable" | "unknown" } {
     const exam = lookup(this.exams, examId, "exam");

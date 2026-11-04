@@ -24,6 +24,18 @@ function list(id: string, ...members: Operation[]): FunctionList {
   return { $type: classes.AllowedFunctionSet.alias, id, members };
 }
 
+function checkSine(room: Classroom, exam: string, selected: string | null, applied: string | null,
+  expected: "available" | "unavailable" | "unknown") {
+  const sets = room.observeSets(exam);
+  let calls = 0;
+  const result = room.use(exam, sine, () => { calls++; return Math.sin(0); });
+  const observation = JSON.stringify({ exam, ...sets, sine: result, calls });
+  assert(sets.selected === selected && sets.applied === applied && result.status === expected, observation);
+  assert(calls === (expected === "available" ? 1 : 0), observation);
+  if (result.status === "available") assert(result.value === 0, observation);
+  console.log(observation);
+}
+
 async function verify() {
   const wrongType: SetAllowedFunctions = {
     $type: classes.SetAllowedFunctions.alias,
@@ -36,11 +48,18 @@ async function verify() {
     && !("action" in membership), "Set membership must link a set to a function without an action");
   const room = new Classroom(["arithmetic", "trigonometry", "empty", "unassigned"], [
     list("basic", add), list("scientific", add, sine), list("basic-copy", add), list("none"),
+    list("arithmetic-plus", add, sine),
   ]);
   const read = (exam: string, functions: string) => compileReading(intent.agreedReading, { exam, functions });
   const arithmetic = read("arithmetic", "basic"), trigonometry = read("trigonometry", "scientific");
-  // Assign BOTH exams before applying either selection. A single "last set" cannot satisfy this.
-  for (const step of [arithmetic[0], trigonometry[0], arithmetic[1], trigonometry[1]]) await room.execute(step);
+  checkSine(room, "arithmetic", null, null, "unknown");
+  // Assign both exams before applying either selection.
+  await room.execute(arithmetic[0]);
+  checkSine(room, "arithmetic", "basic", null, "unknown");
+  await room.execute(trigonometry[0]);
+  await room.execute(arithmetic[1]);
+  checkSine(room, "arithmetic", "basic", "basic", "unavailable");
+  await room.execute(trigonometry[1]);
   for (const { exam, operation, expected } of intent.examples) {
     const fn = operations.get(operation);
     assert(fn, "Unimplemented example operation: " + operation);
@@ -60,6 +79,15 @@ async function verify() {
   assert(room.use("unassigned", sine, () => 0).status === "unknown", "Missing assignment became a denial");
   for (const step of read("empty", "none")) await room.execute(step);
   assert(room.use("empty", sine, () => 0).status === "unavailable", "Empty set became unknown");
+
+  const change = read("arithmetic", "arithmetic-plus");
+  checkSine(room, "trigonometry", "scientific", "scientific", "available");
+  await room.execute(change[0]);
+  checkSine(room, "arithmetic", "arithmetic-plus", "basic", "unknown");
+  checkSine(room, "trigonometry", "scientific", "scientific", "available");
+  await room.execute(change[1]);
+  checkSine(room, "arithmetic", "arithmetic-plus", "arithmetic-plus", "available");
+  checkSine(room, "trigonometry", "scientific", "scientific", "available");
 
   const context = { exam: "unused", functions: "unused" };
   const named = compileReading("Преподаватель задаёт для экзамена «arithmetic» набор разрешённых функций «basic», а калькулятор применяет этот набор.", context);
