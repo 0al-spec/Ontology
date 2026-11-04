@@ -58,6 +58,9 @@ button { cursor: pointer; }
 .declaration-catalog summary { color: #4d6b59; font-size: 11px; padding: 5px 0; }
 .declaration-catalog summary span { color: #879b90; margin-left: 4px; }
 .canvas { position: relative; min-width: 0; min-height: 460px; background: #f4f8f5; }
+.line-options { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border: 1px solid #d6e4db; border-radius: 8px; background: #fff; color: #395b48; font-size: 12px; }
+.line-options label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+.line-options input { margin: 0; accent-color: #39805a; }
 .react-flow__node.ontology-node { width: 250px; min-height: 76px; border: 1px solid #bdd9c9; border-radius: 12px; background: #fff; box-shadow: 0 5px 16px #1d4d3212; padding: 0; color: #234935; font-size: 12px; text-align: left; }
 .node-header { min-height: 75px; padding: 12px 15px; }
 .node-port { position: relative; height: 34px; display: flex; align-items: center; border-top: 1px solid #e5ece7; padding: 0 15px; font-size: 11px; font-weight: 700; white-space: nowrap; }

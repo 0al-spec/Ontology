@@ -33,9 +33,9 @@ export function Inspector({ selection, filtered = false, classReferences, onSele
       {selection.data.origin ? ` from ${selection.data.origin}` : ''}. Its declaration has not been loaded.
     </p>}
     {description && <p>{description}</p>}
-    {action && record && <dl>
+    {data.kind === 'relation' && record && <dl>
       {typeof record.domain === 'string' && <><dt>Subject</dt><dd>{record.domain}</dd></>}
-      <dt>Action</dt><dd>{reference(action)}</dd>
+      {action && <><dt>Action</dt><dd>{reference(action)}</dd></>}
       {typeof range === 'string' ? <><dt>Object</dt><dd>{range}</dd></> : choices.length > 0 && <>
         <dt>Object (oneOf)</dt><dd>{choices.join(' | ')}</dd>
       </>}
@@ -44,10 +44,6 @@ export function Inspector({ selection, filtered = false, classReferences, onSele
       {typeof record.id === 'string' && <><dt>Field</dt><dd>{record.id}</dd></>}
       {typeof record.target === 'string' && <><dt>Target</dt><dd>{record.target}</dd></>}
       {typeof record.type === 'string' && <><dt>Type</dt><dd>{record.type}</dd></>}
-    </dl>}
-    {selection.type === 'edge' && record && !action && data.kind !== 'field-ref' && <dl>
-      {typeof record.domain === 'string' && <><dt>Domain</dt><dd>{record.domain}</dd></>}
-      {record.range !== undefined && <><dt>Range</dt><dd>{typeof record.range === 'string' ? record.range : JSON.stringify(record.range)}</dd></>}
     </dl>}
     {fields.length > 0 && <dl><dt>Fields</dt>{fields.map((field) => <dd key={field.id}><code>
       {selection.type === 'node' && selection.data.fieldTargets?.[field.id]

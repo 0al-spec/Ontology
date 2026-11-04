@@ -5,30 +5,33 @@ import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { parseProjection, type Declaration, type Projection } from '../src/projection';
 
-let fixture: Projection & { sourceDigest: string; sourceByteDigest: string };
-test.beforeAll(() => {
+type GraphFixture = Projection & { sourceDigest: string; sourceByteDigest: string };
+let fixture: GraphFixture;
+
+function exportGraph(source: string, view: Projection['view'] = 'full'): GraphFixture {
   const viz = process.env.ONTOLOGY_VIZ;
   if (!viz) throw new Error('Set ONTOLOGY_VIZ to the matching ontologyviz executable');
-  const source = path.resolve('../../Examples/repository-membership/package.yaml');
   const directory = mkdtempSync(path.join(process.env.ONTOLOGY_VIEWER_TEST_TMP || os.tmpdir(), 'ontology-action-reference-'));
   try {
-    execFileSync(viz, [source, '--format', 'json', '--out', directory]);
+    execFileSync(viz, [path.resolve(source), '--view', view, '--format', 'json', '--out', directory]);
     const parsed = parseProjection(JSON.parse(readFileSync(path.join(directory, 'ontology.graph.json'), 'utf8')) as unknown);
     const { sourceDigest, sourceByteDigest } = parsed.sources[0];
     if (typeof sourceDigest !== 'string' || typeof sourceByteDigest !== 'string') throw new Error('Projection root digests are missing');
-    fixture = { ...parsed, sourceDigest, sourceByteDigest };
+    return { ...parsed, sourceDigest, sourceByteDigest };
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
-});
+}
 
-async function openGraph(page: Page, graph: unknown) {
+test.beforeAll(() => { fixture = exportGraph('../../Examples/repository-membership/package.yaml'); });
+
+async function openGraph(page: Page, graph: unknown, relation = 'membership:addsRepositoryTo', name = 'membership.json') {
   await page.goto('/');
   await page.getByLabel('Open graph JSON').setInputFiles({
-    name: 'membership.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(graph)),
+    name, mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(graph)),
   });
-  await page.getByLabel('Search graph').fill('addsRepositoryTo');
-  await page.getByRole('button', { name: 'membership:addsRepositoryTo relation' }).click();
+  await page.getByLabel('Search graph').fill(relation);
+  await page.getByRole('button', { name: `${relation} relation`, exact: true }).click();
 }
 
 test('lays out membership inputs in port order without crossing wires', async ({ page }) => {
@@ -179,12 +182,59 @@ test('shows independently named ref fields on a class derived from a local actio
   await expect(inspector.getByRole('heading', { name: 'membership:Repository' })).toBeVisible();
 });
 
-test('keeps binary relation Domain and Range when there is no action', async ({ page }) => {
-  const graph = structuredClone(fixture);
-  delete graph.relations[0].action;
-  await openGraph(page, graph);
+const examcalcPackage = '../../SPECS/ontology/packages/examcalc/domain-ontology-package.yaml';
+
+test('shows Subject and Object for examcalc relationships without inventing an action', async ({ page }) => {
+  await openGraph(page, exportGraph(examcalcPackage, 'relations'), 'examcalc:requires_policy', 'examcalc.json');
   const inspector = page.getByLabel('Inspector');
-  await expect(inspector.locator('dl')).toContainText('Domain');
-  await expect(inspector.locator('dl')).toContainText('Range');
-  await expect(inspector.locator('dl')).not.toContainText('Subject');
+  await expect(inspector.locator('dt')).toHaveText(['Subject', 'Object']);
+  await expect(inspector.locator('dd')).toHaveText(['examcalc:Exam', 'examcalc:ExamPolicyProfile']);
+  await page.getByLabel('Search graph').fill('examcalc:records');
+  await page.getByRole('button', { name: 'examcalc:records relation' }).click();
+  await expect(inspector.locator('dt')).toHaveText(['Subject', 'Object (oneOf)']);
+  await expect(inspector.locator('dd')).toHaveText(['examcalc:AuditLogEntry', 'examcalc:ExamModeSession | examcalc:PolicyViolation']);
+});
+
+test('separates and selects parallel examcalc links in both line styles', async ({ page }) => {
+  await openGraph(page, exportGraph(examcalcPackage, 'relations'), 'examcalc:requires_policy', 'examcalc.json');
+  await expect(page.getByRole('radio', { name: 'Rect', exact: true })).toBeChecked();
+  // The catalog animates the viewport when locating the selected relation.
+  await page.waitForTimeout(350);
+  await page.getByRole('button', { name: 'Fit View' }).click();
+  const viewport = page.locator('.react-flow__viewport');
+  await expect.poll(() => page.locator('.react-flow__node').evaluateAll(nodes => {
+    const canvas = document.querySelector('.canvas')!.getBoundingClientRect();
+    return nodes.every(node => {
+      const bounds = node.getBoundingClientRect();
+      return bounds.left >= canvas.left && bounds.right <= canvas.right;
+    });
+  })).toBe(true);
+  const node = page.locator('[data-id="classes/examcalc:ExamPolicyProfile"]');
+  const position = await node.getAttribute('style');
+  const transform = await viewport.getAttribute('style');
+  const edge = (id: string) => page.getByTestId(`rf__edge-relation/examcalc:${id}/0`);
+  const wire = (id: string) => edge(id).locator('.react-flow__edge-path');
+  const initial = await wire('allows').getAttribute('d');
+  for (const style of ['Rect', 'Curve']) {
+    await page.getByRole('radio', { name: style, exact: true }).check();
+    await expect(page.getByLabel('Inspector').getByRole('heading')).toHaveText(style === 'Rect' ? 'examcalc:requires_policy' : 'examcalc:denies');
+    await expect(node).toHaveAttribute('style', position!);
+    await expect(viewport).toHaveAttribute('style', transform!);
+    const allowsPath = await wire('allows').getAttribute('d');
+    expect(allowsPath).not.toEqual(await wire('denies').getAttribute('d'));
+    expect(allowsPath).toMatch(style === 'Rect' ? /H/ : /C/);
+    const singlePath = await wire('requires_policy').getAttribute('d');
+    expect(singlePath?.includes('C')).toBe(style === 'Curve');
+    const allows = edge('allows').locator('.react-flow__edge-text');
+    const denies = edge('denies').locator('.react-flow__edge-text');
+    const boxes = await Promise.all([allows.boundingBox(), denies.boundingBox()]);
+    expect(boxes[0]!.y + boxes[0]!.height).toBeLessThan(boxes[1]!.y);
+    for (const [id, label] of [['allows', allows], ['denies', denies]] as const) {
+      const box = (await label.boundingBox())!;
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      await expect(page.getByLabel('Inspector').getByRole('heading')).toHaveText(`examcalc:${id}`);
+    }
+  }
+  await page.getByRole('radio', { name: 'Rect', exact: true }).check();
+  await expect(wire('allows')).toHaveAttribute('d', initial!);
 });

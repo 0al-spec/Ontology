@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
-  Background, Controls, Handle, MiniMap, Position, ReactFlow, useEdgesState, useNodesState,
+  Background, Controls, Handle, MiniMap, Panel, Position, ReactFlow, useEdgesState, useNodesState,
   type EdgeMouseHandler, type NodeMouseHandler, type NodeProps, type ReactFlowInstance,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { canvasEdgeTypes, styleCanvasEdges, type LineType } from './canvasEdges';
 import type { FilterMode, GraphVisibility } from './filters';
 import type { ViewerEdge, ViewerNode } from './graph';
 import type { Selection } from './selection';
@@ -37,6 +38,8 @@ export function GraphCanvas({ graph, identity, search, focusNode, visibility, fi
 }) {
   const [nodes, setNodes, onNodesChange] = useNodesState(graph.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(graph.edges);
+  const [lineType, setLineType] = useState<LineType>('rect');
+  const lineGroup = useId();
   const instance = useRef<ReactFlowInstance<ViewerNode, ViewerEdge> | null>(null);
   const previousIdentity = useRef(identity);
   useEffect(() => {
@@ -69,23 +72,33 @@ export function GraphCanvas({ graph, identity, search, focusNode, visibility, fi
       };
     });
   }, [nodes, search, visibility, filterMode]);
-  const shownEdges = useMemo<ViewerEdge[]>(() => edges.map((edge) => {
+  const styledEdges = useMemo(() => styleCanvasEdges(edges, lineType), [edges, lineType]);
+  const shownEdges = useMemo<ViewerEdge[]>(() => styledEdges.map((edge) => {
     const active = !visibility || visibility.edgeIds.has(edge.id);
     return { ...edge, hidden: Boolean(edge.hidden || (!active && filterMode === 'hide')),
       className: `${edge.className || ''}${!active && filterMode === 'dim' ? ' filter-dim' : ''}` };
-  }), [edges, visibility, filterMode]);
+  }), [styledEdges, visibility, filterMode]);
   const onNodeClick: NodeMouseHandler<ViewerNode> = (_, node) => onSelect({ type: 'node', id: node.id, data: node.data });
   const onEdgeClick: EdgeMouseHandler<ViewerEdge> = (_, edge) => {
     if (edge.data) onSelect({ type: 'edge', id: edge.id, source: edge.source, target: edge.target, data: edge.data });
   };
   return <div className="canvas" aria-label="Ontology graph">
     <ReactFlow
-      nodes={shownNodes} edges={shownEdges} nodeTypes={nodeTypes} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange}
+      nodes={shownNodes} edges={shownEdges} nodeTypes={nodeTypes} edgeTypes={canvasEdgeTypes} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange}
       onInit={(flow) => { instance.current = flow; }} onNodeClick={onNodeClick} onEdgeClick={onEdgeClick}
       nodesConnectable={false} deleteKeyCode={null}
       fitView minZoom={0.08} maxZoom={2}
     >
       <Background gap={24} color="#dbe5e1" />
+      <Panel position="top-right">
+        <div className="line-options nodrag nopan" role="group" aria-label="Line type">
+          <span>Line type</span>
+          {(['rect', 'curve'] as const).map(type => <label key={type}>
+            <input type="radio" name={lineGroup} checked={lineType === type} onChange={() => setLineType(type)} />
+            {type === 'rect' ? 'Rect' : 'Curve'}
+          </label>)}
+        </div>
+      </Panel>
       <Controls showInteractive={false} />
       <MiniMap pannable zoomable nodeColor={(node) => node.data.kind === 'external' ? '#b9c4bf' : '#71a98d'}
         nodeClassName={(node) => node.className?.includes('filter-dim') ? 'filter-dim' : ''} />

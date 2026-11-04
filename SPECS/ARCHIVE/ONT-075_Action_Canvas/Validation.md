@@ -26,3 +26,10 @@ A Chromium test opens the genuine export, selects the relationship, attempts
 to open a graph with the altered field pointer and verifies that the original
 file and selection remain visible. The build, 33 unit tests and 25 Chromium
 scenarios passed.
+
+The examcalc regression now selects `requires_policy` and `records` in the
+exported graph. The inspector shows Subject and Object for both, shows the
+`oneOf` alternatives for `records`, and omits Action. Chromium clicked both
+`allows` and `denies` directly on their separate paths in Rect and Curve
+modes and verified the selection, node position and viewport across switches.
+The production build, 35 unit tests and 26 Chromium scenarios passed.

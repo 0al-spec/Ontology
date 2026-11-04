@@ -30,7 +30,14 @@ the `addsRepositoryTo` relationship has three ports. Follow **subject** to
 `repository: Ref<Repository>` field on the action connects to `Repository`.
 These wires describe the allowed types. Several relationships can share the
 same action card, and multiple object alternatives belong to the same relationship.
-Ordinary binary relations remain lines with **Domain** and **Range** in the inspector.
+The inspector labels the endpoints of every relationship **Subject** and **Object**.
+It also shows **Action** when the relationship declares one.
+
+Use **Line type** on the canvas to switch between rectangular (**Rect**, the
+default) and Bézier (**Curve**) wires. Relationships that share the same ports
+get separate paths and labels in both modes. For example, select either
+`examcalc:allows` or `examcalc:denies` directly between the policy profile and
+the calculator function. Switching line type keeps your layout and selection.
 
 Open **Filters** to enable or disable node types, their origin (local, imported,
 unresolved), and relationship kinds independently. **Hide** removes inactive
