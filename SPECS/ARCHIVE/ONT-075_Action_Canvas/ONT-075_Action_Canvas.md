@@ -20,3 +20,7 @@ The first view renders type declarations. A shared action is one type even
 when multiple relationship types use it. A separate follow-up will show a
 supplied instance record against this schema, with concrete participants
 and reference values supplied by that record.
+
+In the membership example, place the action above the project. Arrange the
+three input cards in the same vertical order as their ports and verify that
+their four visible wires neither cross nor overlap.
