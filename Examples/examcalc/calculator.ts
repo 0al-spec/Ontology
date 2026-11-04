@@ -3,7 +3,6 @@ import { trigger, type Actor, type Entity } from "./generated/relations";
 import type {
   AllowedFunctionSet, ApplyAllowedFunctions, Calculator, CalculatorFunction, Exam, Instructor, SetAllowedFunctions,
 } from "./generated/types";
-import type { Step } from "./reading";
 
 type ExamInstance = Exam & Entity;
 type SetInstance = AllowedFunctionSet & Entity;
@@ -56,16 +55,18 @@ export class Classroom {
     },
   };
 
-  async execute(step: Step): Promise<void> {
-    const exam = lookup(this.exams, step.exam, "exam");
-    const functions = lookup(this.sets, step.functions, "function set");
-    if (step.relation === relations.setsFunctionsForExam.alias) {
-      await trigger({ relation: step.relation, subject: this.instructor, object: exam,
-        action: { $type: classes.SetAllowedFunctions.alias, functions: { target: functions.$type, locator: functions.id } } });
-    } else {
-      await trigger({ relation: step.relation, subject: this.calculator, object: functions,
-        action: { $type: classes.ApplyAllowedFunctions.alias, exam: { target: exam.$type, locator: exam.id } } });
-    }
+  async setAllowedFunctions(examId: string, setId: string): Promise<void> {
+    const exam = lookup(this.exams, examId, "exam");
+    const functions = lookup(this.sets, setId, "function set");
+    await trigger({ relation: relations.setsFunctionsForExam.alias, subject: this.instructor, object: exam,
+      action: { $type: classes.SetAllowedFunctions.alias, functions: { target: functions.$type, locator: functions.id } } });
+  }
+
+  async applyAllowedFunctions(examId: string, setId: string): Promise<void> {
+    const exam = lookup(this.exams, examId, "exam");
+    const functions = lookup(this.sets, setId, "function set");
+    await trigger({ relation: relations.appliesFunctionSet.alias, subject: this.calculator, object: functions,
+      action: { $type: classes.ApplyAllowedFunctions.alias, exam: { target: exam.$type, locator: exam.id } } });
   }
 
   observeSets(examId: string): { selected: string | null; applied: string | null } {

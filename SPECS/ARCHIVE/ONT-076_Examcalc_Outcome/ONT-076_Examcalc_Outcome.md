@@ -2,7 +2,7 @@
 
 The human asks for a university tablet calculator whose available functions depend on the exam. The agreed clarification is: «Преподаватель задаёт для экзамена набор разрешённых функций, а калькулятор применяет этот набор». The original utterance is user message `9cfde494-fc96-4962-9b0a-a31ba63e48ca` in the archived ontology discussion. The user supplies the result; the following operational reading is one proposed way to achieve it.
 
-Deliver a fresh versioned draft package with typed action relationships and a bounded executable reading of the two clauses. Link each clause to its actor, action, object, reference and observable effect. Retain the published 0.1 fixture at its existing path. Neither a global active policy nor a tablet security protocol follows from the source.
+The agent reads the person's free-form intent, preserves the quote and proposes a draft ontology. It can correct spelling and punctuation in its own restatement. A change to the actor, the chosen set or the requested outcome needs separate clarification. Show how the typed actions could produce that outcome and exercise the saved model through its generated SDK. Retain the published 0.1 fixture at its existing path.
 
 Acceptance:
 

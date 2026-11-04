@@ -225,10 +225,11 @@ swift run ontologyc compile \
 
 Inspect `ontology.normalized.json` and the generated types, schemas, relations and
 validators. Ontology YAML is data: validation does not execute embedded hooks or
-expressions. The [Examcalc walkthrough](Examples/examcalc/README.md) runs the same
-calculator operation on two exams with different permitted functions; the
-[tooling guide](SPECS/ontology/tooling-guide.md)
-covers platform setup, other commands, registries and quality checks.
+expressions. In the [Examcalc walkthrough](Examples/examcalc/README.md#как-дать-агенту-свой-intent),
+the author gives the agent a free-form request. The agent keeps the quote and drafts
+the ontology. The SDK tests run the same operation on two exams with different
+permitted functions. The [tooling guide](SPECS/ontology/tooling-guide.md) covers
+platform setup, other commands, registries and quality checks.
 
 For a new domain package, import `ontology.foundation@0.2.0` and use
 `ont:DomainEntity` for an entity with identity. Ontology owns this vocabulary,

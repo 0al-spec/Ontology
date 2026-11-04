@@ -1,6 +1,6 @@
 ---
 name: ontology-action-model
-description: Explain how a desired product outcome could arise from typed actions and state changes. Use for bounded ontology modeling, executable subject/action/object relationships, and behavioral checks.
+description: Turn a person's free-form intent into a draft ontology and explain how typed actions and state changes could produce the desired outcome. Use for bounded ontology modeling, executable relationships, and behavioral checks.
 ---
 
 # Ontology Action Model
@@ -26,6 +26,19 @@ Return the model in the user's requested medium. A conceptual discussion does no
 require creating files, implementing an application, or changing ontology packages.
 
 ## Explain how the requested property could arise
+
+Take the person's own words as input. Preserve the original quote and its source.
+In your own reading, you can correct spelling, punctuation and transcription.
+Keep quoted names and identifiers intact. When plausible readings would change
+who acts, what is affected, or the expected outcome, show the difference or ask
+which was intended. A spelling variation alone needs no clarification.
+
+When the person wants a compilable model, author a draft `DomainOntologyPackage`
+using the chosen foundation and project vocabulary. Link it to the source and
+explain which relationships the person supplied and which you propose. Run
+`ontologyc check` on the YAML. Test the proposed behavior through the generated
+SDK using examples derived from the desired outcome. The agent interprets prose
+during authoring. Replaying these checks starts from the saved package.
 
 1. Keep the person's words and give an observable criterion in their terms. Fix
    the scope of words such as “this”, “each” and “after”. For “the calculator

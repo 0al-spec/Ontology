@@ -4,7 +4,6 @@ import { relationDefinitions } from "./generated/relations";
 import type { SetAllowedFunctions } from "./generated/types";
 import { SetAllowedFunctionsSchema } from "./generated/schemas";
 import { Classroom, type FunctionList, type Operation } from "./calculator";
-import { compileReading } from "./reading";
 import { verifyHandoffs } from "./verify-handoff";
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -52,16 +51,14 @@ async function verify() {
     list("arithmetic-plus", add, sine),
   ];
   const room = new Classroom(["arithmetic", "trigonometry", "empty", "unassigned"], sets);
-  const read = (exam: string, functions: string) => compileReading(intent.agreedReading, { exam, functions });
-  const arithmetic = read("arithmetic", "basic"), trigonometry = read("trigonometry", "scientific");
   checkSine(room, "arithmetic", null, null, "unknown");
   // Assign both exams before applying either selection.
-  await room.execute(arithmetic[0]);
+  await room.setAllowedFunctions("arithmetic", "basic");
   checkSine(room, "arithmetic", "basic", null, "unknown");
-  await room.execute(trigonometry[0]);
-  await room.execute(arithmetic[1]);
+  await room.setAllowedFunctions("trigonometry", "scientific");
+  await room.applyAllowedFunctions("arithmetic", "basic");
   checkSine(room, "arithmetic", "basic", "basic", "unavailable");
-  await room.execute(trigonometry[1]);
+  await room.applyAllowedFunctions("trigonometry", "scientific");
   for (const { exam, operation, expected } of intent.examples) {
     const fn = operations.get(operation);
     assert(fn, "Unimplemented example operation: " + operation);
@@ -72,34 +69,34 @@ async function verify() {
     if (result.status === "available") assert(result.value === (fn.id === "sine" ? 0 : 5), "Wrong result");
   }
   for (const wrong of ["scientific", "basic-copy"]) {
-    await rejects(() => room.execute({ ...arithmetic[1], functions: wrong }), "Different set selected");
+    await rejects(() => room.applyAllowedFunctions("arithmetic", wrong), "Different set selected");
   }
   assert(room.handOutFor("trigonometry")?.functions === "scientific", "Failed apply switched the tablet");
   assert(room.use("arithmetic", sine, () => 0).status === "unavailable", "Failed apply changed arithmetic");
-  await rejects(() => room.execute({ ...arithmetic[0], functions: "missing" }), "Unknown function set");
-  await room.execute(arithmetic[1]); // The previous selection survived a failed assignment.
-  await rejects(() => room.execute(read("unassigned", "none")[1]), "No set selected");
+  await rejects(() => room.setAllowedFunctions("arithmetic", "missing"), "Unknown function set");
+  await room.applyAllowedFunctions("arithmetic", "basic"); // The previous selection survived a failed assignment.
+  await rejects(() => room.applyAllowedFunctions("unassigned", "none"), "No set selected");
   assert(room.use("unassigned", sine, () => 0).status === "unknown", "Missing assignment became a denial");
-  for (const step of read("empty", "none")) await room.execute(step);
+  await room.setAllowedFunctions("empty", "none");
+  await room.applyAllowedFunctions("empty", "none");
   assert(room.use("empty", sine, () => 0).status === "unavailable", "Empty set became unknown");
 
-  const change = read("arithmetic", "arithmetic-plus");
   checkSine(room, "trigonometry", "scientific", "scientific", "available");
-  await room.execute(change[0]);
+  await room.setAllowedFunctions("arithmetic", "arithmetic-plus");
   checkSine(room, "arithmetic", "arithmetic-plus", "basic", "unknown");
   checkSine(room, "trigonometry", "scientific", "scientific", "available");
-  await room.execute(change[1]);
+  await room.applyAllowedFunctions("arithmetic", "arithmetic-plus");
   checkSine(room, "arithmetic", "arithmetic-plus", "arithmetic-plus", "available");
   checkSine(room, "trigonometry", "scientific", "scientific", "available");
 
-  const context = { exam: "unused", functions: "unused" };
-  const named = compileReading("Преподаватель задаёт для экзамена «arithmetic» набор разрешённых функций «basic», а калькулятор применяет этот набор.", context);
-  assert(named.every(step => step.exam === "arithmetic" && step.functions === "basic"), "Antecedent binding lost");
-  await rejects(() => compileReading("Калькулятор применяет этот набор.", context), "no preceding selection");
-  await rejects(() => compileReading("Экзамен требует профиль.", context), "Expected the instructor");
-  await rejects(() => compileReading(intent.agreedReading.replace("калькулятор применяет", "экзамен применяет"), context), "Expected the calculator");
+  const namedExam = "Матан, а также геометрия";
+  const namedRoom = new Classroom([namedExam], [list("Всё", add), list("Все", add)]);
+  await namedRoom.setAllowedFunctions(namedExam, "Всё");
+  await rejects(() => namedRoom.applyAllowedFunctions(namedExam, "Все"), "Different set selected");
+  await namedRoom.applyAllowedFunctions(namedExam, "Всё");
+  assert(namedRoom.handOutFor(namedExam)?.functions === "Всё", "Exam and set identifiers must be preserved");
   await verifyHandoffs(sets);
-  console.log("Examcalc: exam outcomes, handoff, missing/empty input and sentence controls passed.");
+  console.log("Examcalc: exam outcomes, handoff and missing/empty selections passed.");
 }
 
 void verify();
