@@ -1,6 +1,6 @@
 ---
 name: ontology-action-model
-description: Model a bounded application action through entity identity, actor roles, state transitions, goal criteria, and BDD/PBT examples. Use for conceptual behavior modeling and review, without assuming implementation or a new ontology schema.
+description: Model a bounded application action through entity identity, actor roles, state transitions and goal criteria. Use for conceptual review, BDD/PBT examples, or authoring executable subject/action/object relationships with ontologyc.
 ---
 
 # Ontology Action Model
@@ -36,8 +36,8 @@ require creating files, implementing an application, or changing ontology packag
    actor is unspecified, keep it unresolved or explicitly label an assumed reading.
    An encoder may be the operator's instrument in one view and an actor
    in another view of the same observations. A separate request or delegation event
-   is decomposition, not merely a role change. Name the domain relation and explain
-   how its subject, object and instrument participate through the selected action.
+   is decomposition, not merely a role change. Name the domain relation and its
+   subject and object. Include an instrument when the means of acting matters.
 3. Describe `State_before`, `State_after`, and the actual Delta in that projection.
    Missing or incomparable required observations leave the relevant difference
    unknown. An empty Delta requires known comparable states with no difference.
@@ -51,6 +51,42 @@ require creating files, implementing an application, or changing ontology packag
 Do not add request chains, application creation, distribution, stores, or hardware
 setup to an explicitly within-app example. New events need a reason within the
 requested boundary, not a desire to populate every available ontology concept.
+
+## When the user wants an executable relationship
+
+With Ontology 0.7.0, import `ontology.foundation@0.2.0` as `ont`. Declare the
+participants as entity classes and the reusable action as a class extending
+`ont:Action`. Name the relationship for its domain meaning. For example,
+given a `Person` class and an `Appoint` action:
+
+```yaml
+CastAppointment: {subject: Person, action: Appoint, object: Person}
+```
+
+The identified subject supplies `Actor<Appoint, Person & Entity>`. In an
+appointment of Anna by Ivan, `trigger(appointment)` calls Ivan's
+`run(action, object)` with Anna. The same Person can be the object in one
+relationship and act in another. An ordinary membership or containment link
+can use `domain` and `range` without declaring an action.
+
+Ask what else the action carries. In the [letter transfer package](assets/letter-transfer.yaml),
+the sender is the subject, the recipient is the object, and `PassLetter`
+carries a required `letterId`. The SDK checks the string field. The application
+resolves it to an existing `Letter`.
+Both “who received it?” and “what did they pass?” refer to the same transfer.
+If the story follows that letter from writing to burning, reuse its identity
+across those scenarios. In `burnsLetter` the letter itself is the object.
+For “add three to the balance”, the quantity alone is sufficient as the
+action parameter. Reuse the selected package vocabulary and model only the
+participants and state needed to answer the question.
+
+Run `ontologyc check PACKAGE.yaml` and `ontologyc compile PACKAGE.yaml --target
+typescript --out SDK_DIR`. Parse an incoming record with
+`ActionRelationshipRecordSchema`. To test execution, supply a concrete subject
+and explicitly trigger the relationship. Check the affected object's state
+before reading, after reading, and after the trigger. Include a subject that
+lacks the required action as a negative typecheck.
+[Compilable package and tested SDK example](https://github.com/0al-spec/Ontology/tree/0.7.0/Examples/theatre-casting).
 
 ## Make the criterion testable
 
@@ -91,7 +127,7 @@ For PBT, state each rule's domain, preconditions, generated inputs, oracle and
 counterexample. Passing generated cases is evidence within those bounds, not a
 universal proof. Do not invent codec properties or reported test executions.
 
-These resources are documentation templates. Their notation is not an accepted
-InstanceGraph wire format, executable goal DSL, compiler schema extension, or
+The worksheet and Gherkin example are documentation templates. Their notation
+is not an accepted InstanceGraph wire format, executable goal DSL, compiler schema extension, or
 runtime admission profile. Propose a future schema only when requested, with the
 minimum fields needed for the selected behavior; implementation remains separate.
