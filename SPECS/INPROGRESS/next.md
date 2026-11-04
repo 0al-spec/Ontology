@@ -33,6 +33,8 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+Parallel selection: ONT-076 rebuilds examcalc independently of the NormLab pilot. Source: the university-calculator request and the operator's instructor/calculator clarification.
+
 - ONT-074 adds inspector navigation for executable action relationships and typed field targets. See the [validation](../ARCHIVE/ONT-074_Viewer_Inspector/Validation.md).
 
 - ONT-073 completed its typed repository-reference pilot. See the [validation](../ARCHIVE/ONT-073_Typed_References/Validation.md).

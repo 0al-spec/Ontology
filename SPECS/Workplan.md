@@ -1324,5 +1324,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
 ## ONT-073: Typed references in action parameters
 - Local validation passed for both locator forms. See [ONT-073 validation](ARCHIVE/ONT-073_Typed_References/Validation.md).
 
+## ONT-076: Exam calculator from the human outcome
+- Selected: rebuild the example from the user's exam-scoped function sets; demonstrate a typed route to the outcome on two exams.
+
 ## ONT-074: Navigable action inspector
 - Local validation passed. The inspector follows a relationship to its action and a typed field to its target class. See [validation](ARCHIVE/ONT-074_Viewer_Inspector/Validation.md).
