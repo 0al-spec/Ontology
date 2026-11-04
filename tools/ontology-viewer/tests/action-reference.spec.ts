@@ -34,6 +34,33 @@ async function openGraph(page: Page, graph: unknown) {
 test('navigates from relation to action to reference target without opening raw data', async ({ page }) => {
   await openGraph(page, fixture);
   const inspector = page.getByLabel('Inspector');
+  const relation = page.locator('[data-id="relations/membership:addsRepositoryTo"]');
+  const action = page.locator('[data-id="classes/membership:AddRepository"]');
+  await expect(relation).toContainText('subject: User');
+  await expect(relation).toContainText('action: AddRepository');
+  await expect(relation).toContainText('object: Project');
+  await expect(action).toContainText('Action');
+  await expect(action).toContainText('repository: Ref<Repository>');
+  await expect(page.locator('[data-testid="rf__edge-role/membership:addsRepositoryTo/action"]')).toHaveCount(1);
+  await expect(page.locator('[data-testid="rf__edge-field/membership:AddRepository/repository"]')).toHaveCount(1);
+  await expect(page.locator('[data-testid="rf__edge-relation/membership:addsRepositoryTo/0"]')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Fit View' }).click();
+  // The preceding search focus animates for 300 ms; let it finish before measuring the SVG path.
+  await page.waitForTimeout(400);
+  const point = await page.locator('[data-testid="rf__edge-field/membership:AddRepository/repository"] .react-flow__edge-path')
+    .evaluate((element) => {
+      const path = element as SVGPathElement;
+      const location = path.getPointAtLength(path.getTotalLength() * 0.5);
+      const matrix = path.getScreenCTM();
+      if (!matrix) throw new Error('Field wire is not visible');
+      const screen = new DOMPoint(location.x, location.y).matrixTransform(matrix);
+      return { x: screen.x, y: screen.y };
+    });
+  await page.mouse.click(point.x, point.y);
+  await expect(inspector).toContainText('Field');
+  await expect(inspector).toContainText('membership:Repository');
+  await expect(inspector).toContainText('/spec/classes/AddRepository/fields/repository');
+  await relation.click();
   await expect(inspector.locator('dl')).toContainText('Subject');
   await expect(inspector.locator('dl')).toContainText('membership:User');
   await expect(inspector.locator('dl')).toContainText('Object');
@@ -44,6 +71,31 @@ test('navigates from relation to action to reference target without opening raw 
   await inspector.getByRole('button', { name: 'repository: Ref<Repository>', exact: true }).click();
   await expect(inspector.getByRole('heading', { name: 'membership:Repository' })).toBeVisible();
   await expect(inspector.locator('details')).not.toHaveAttribute('open', '');
+});
+
+test('catalog lists declarations without search and selects their canonical nodes', async ({ page }) => {
+  await page.goto('/');
+  await page.getByLabel('Open graph JSON').setInputFiles({
+    name: 'membership.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(fixture)),
+  });
+  const catalog = page.getByLabel('Declaration catalog');
+  for (const name of ['membership:AddRepository', 'membership:User', 'membership:Project', 'membership:Repository', 'membership:addsRepositoryTo']) {
+    await expect(catalog.getByRole('button', { name: new RegExp(name) })).toHaveCount(1);
+  }
+  await catalog.getByRole('button', { name: 'membership:AddRepository action' }).click();
+  await expect(page.getByLabel('Inspector').getByRole('heading', { name: 'membership:AddRepository' })).toBeVisible();
+  await expect(page.getByLabel('Inspector')).toContainText('Action');
+  await page.locator('.filter-panel summary').click();
+  await page.getByRole('checkbox', { name: 'Classes', exact: true }).uncheck();
+  await page.locator('.filter-panel summary').click();
+  await expect(catalog.getByRole('button', { name: 'membership:Repository class · hidden by filters' })).toBeVisible();
+  await catalog.getByRole('button', { name: 'membership:Repository class · hidden by filters' }).click();
+  await expect(page.getByLabel('Inspector').getByRole('status')).toContainText('outside the active filters');
+  await page.locator('.filter-panel summary').click();
+  await expect(page.getByRole('checkbox', { name: 'Classes', exact: true })).not.toBeChecked();
+  await page.locator('.filter-panel summary').click();
+  await page.getByLabel('Search graph').fill('Repository');
+  await expect(page.getByLabel('Search results').getByRole('button', { name: /membership:Repository/ })).toHaveCount(0);
 });
 
 test('presents oneOf objects and leaves unloaded references as text', async ({ page }) => {

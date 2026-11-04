@@ -18,19 +18,19 @@ neither must already be on PATH. It also explains full/relations profiles,
 ports, shutdown and troubleshooting. This directory contains the frontend;
 it is not a globally installed `npm` command.
 
-Search finds nodes and relations; select a result to focus the canvas and inspect
-its declaration. Drag nodes, zoom and pan to explore. Visual links from one
-`oneOf` relation lead to the same underlying relation record. Imported classes
-are tinted blue; unresolved external references are gray and never presented as
-loaded declarations. The inspector shows the owning package, logical YAML pointer
-and byte digest where a declaration is available.
+The left panel lists the declarations in the loaded projection. Select a type
+or a relationship to inspect it. Search narrows the list. Imported declarations
+carry their package identity, and unloaded references appear separately.
+Drag cards, zoom or pan to explore. The inspector shows the owning package,
+logical YAML pointer and byte digest where source information is available.
 
-For a relationship with an action, the inspector shows **Subject**, **Action**
-and **Object**. In the [repository membership example](../../Examples/repository-membership/package.yaml),
-select `addsRepositoryTo`, follow `AddRepository`, then follow its `repository`
-field to the `Repository` declaration. Reference targets are displayed by type;
-navigation requires a loaded declaration. Ordinary binary relations retain
-their **Domain** and **Range** labels.
+In the [repository membership example](../../Examples/repository-membership/package.yaml),
+the `addsRepositoryTo` relationship has three ports. Follow **subject** to
+`User`, **action** to `AddRepository`, and **object** to `Project`. The
+`repository: Ref<Repository>` field on the action connects to `Repository`.
+These wires describe the allowed types. Several relationships can share the
+same action card, and multiple object alternatives belong to the same relationship.
+Ordinary binary relations remain lines with **Domain** and **Range** in the inspector.
 
 Open **Filters** to enable or disable node types, their origin (local, imported,
 unresolved), and relationship kinds independently. **Hide** removes inactive

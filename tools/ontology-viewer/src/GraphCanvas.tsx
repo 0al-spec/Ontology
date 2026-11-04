@@ -10,11 +10,17 @@ import type { Selection } from './selection';
 
 function OntologyNode({ data }: NodeProps<ViewerNode>) {
   return <>
-    <Handle type="target" position={Position.Left} isConnectable={false} />
-    <span className="node-kind">{data.kind === 'external' ? 'External reference' : data.kind}</span>
-    <strong>{data.label}</strong>
-    {data.origin && <small>{data.origin}</small>}
-    <Handle type="source" position={Position.Right} isConnectable={false} />
+    {data.kind !== 'relation' && <Handle type="target" position={Position.Left} style={{ top: 38 }} isConnectable={false} />}
+    <div className="node-header">
+      <span className="node-kind">{data.kind === 'external' ? 'External reference' : data.kind === 'relation' ? 'Relationship' : data.isAction ? 'Action' : data.kind}</span>
+      <strong>{data.label}</strong>
+      {data.origin && <small>{data.origin}</small>}
+    </div>
+    {data.kind !== 'relation' && <Handle type="source" position={Position.Right} style={{ top: 38 }} isConnectable={false} />}
+    {data.ports?.map((port) => <div key={port.id} className={`node-port node-port--${port.role}`} title={port.title}>
+      <Handle id={port.id} type="target" position={Position.Left} isConnectable={false} />
+      <span>{port.label}</span>
+    </div>)}
   </>;
 }
 
@@ -50,7 +56,7 @@ export function GraphCanvas({ graph, identity, search, focusNode, visibility, fi
   }, [graph, identity, setNodes, setEdges]);
   useEffect(() => {
     const node = focusNode ? instance.current?.getNode(focusNode.id) : undefined;
-    if (node) void instance.current?.setCenter(node.position.x + 110, node.position.y + 38, { zoom: 1, duration: 300 });
+    if (node) void instance.current?.setCenter(node.position.x + 125, node.position.y + 38, { zoom: 1, duration: 300 });
   }, [focusNode]);
   const shownNodes = useMemo<ViewerNode[]>(() => {
     const query = search.trim().toLowerCase();
