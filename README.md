@@ -150,7 +150,7 @@ and retains the DOT source. Image rendering requires Graphviz.
 
 ```sh
 swift run ontologyviz \
-  SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml --out diagrams
+  SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml --out diagrams
 ```
 
 For interactive local browsing, use the standalone [Ontology Viewer](tools/ontology-viewer/README.md)
@@ -216,10 +216,10 @@ environment. A source-built Linux executable needs its Swift runtime libraries.
 swift build --product ontologyc
 
 swift run ontologyc check \
-  SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml
+  SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml
 
 swift run ontologyc compile \
-  SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml \
+  SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml \
   --target typescript --out /tmp/ontology-examcalc
 ```
 

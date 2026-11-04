@@ -77,7 +77,7 @@ SVG and PNG locally.
 
 ```sh
 swift run ontologyviz \
-  SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml --out diagrams
+  SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml --out diagrams
 ```
 
 The default writes `ontology.dot`, `ontology.svg` and `ontology.png`. Select

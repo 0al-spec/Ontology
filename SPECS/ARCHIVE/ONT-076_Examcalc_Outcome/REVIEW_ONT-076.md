@@ -7,4 +7,4 @@
 - The sample workflow compiles the YAML placed in its archive and runs the manifest emitter from the same build. Local replay verified every manifest path. Legacy bindings, input and generated directory have no diff.
 - Local checks: 181 Swift tests, 15 Ruby fixtures, the SDK type-check and execution, SVG generation and archive replay. There is no claim about broad Russian parsing, tablet hardware or human acceptance.
 
-No actionable repository findings; skip FOLLOW-UP. An older locally pinned Git advisory flags the new action syntax; on identical staged bytes the freshly built advisory is silent and the strict compiler passes. The machine-local pin is a separate operator handoff.
+PR review exposed an undeclared per-exam cache that could run an operation after its exam lost the tablet. Execution now uses the active pair declared by the package. The new design has its own version line, separate from the historical 0.2.0 fixture. An older locally pinned Git advisory flags the new action syntax; on identical staged bytes the freshly built advisory is silent and the strict compiler passes. The machine-local pin is a separate operator handoff.

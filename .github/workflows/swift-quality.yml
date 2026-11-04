@@ -74,7 +74,7 @@ jobs:
           compiler=".build/ci-quality/debug/ontologyc"
           rm -rf ".build/ontology-viewer-artifacts"
           mkdir -p "$archive_root"
-          cp SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml "$archive_root/domain-ontology-package.yaml"
+          cp SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml "$archive_root/domain-ontology-package.yaml"
           "$compiler" compile "$archive_root/domain-ontology-package.yaml" --target typescript --out "$archive_root/generated"
           "$compiler" export-viewer-archive-manifest \
             "$archive_root/domain-ontology-package.yaml" \

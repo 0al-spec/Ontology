@@ -24,13 +24,13 @@ function list(id: string, ...members: Operation[]): FunctionList {
   return { $type: classes.AllowedFunctionSet.alias, id, members };
 }
 
-function checkSine(room: Classroom, exam: string, selected: string | null, applied: string | null,
+function checkSine(room: Classroom, exam: string, selected: string | null, active: string | null,
   expected: "available" | "unavailable" | "unknown") {
   const sets = room.observeSets(exam);
   let calls = 0;
   const result = room.use(exam, sine, () => { calls++; return Math.sin(0); });
   const observation = JSON.stringify({ exam, ...sets, sine: result, calls });
-  assert(sets.selected === selected && sets.applied === applied && result.status === expected, observation);
+  assert(sets.selected === selected && sets.active === active && result.status === expected, observation);
   assert(calls === (expected === "available" ? 1 : 0), observation);
   if (result.status === "available") assert(result.value === 0, observation);
   console.log(observation);
@@ -59,7 +59,11 @@ async function verify() {
   await room.applyAllowedFunctions("arithmetic", "basic");
   checkSine(room, "arithmetic", "basic", "basic", "unavailable");
   await room.applyAllowedFunctions("trigonometry", "scientific");
+  checkSine(room, "arithmetic", "basic", null, "unknown");
   for (const { exam, operation, expected } of intent.examples) {
+    const { selected } = room.observeSets(exam);
+    assert(selected !== null, "Missing selection for " + exam);
+    await room.applyAllowedFunctions(exam, selected);
     const fn = operations.get(operation);
     assert(fn, "Unimplemented example operation: " + operation);
     let calls = 0;
@@ -68,11 +72,12 @@ async function verify() {
     assert(calls === (expected === "available" ? 1 : 0), "Unexpected invocation count");
     if (result.status === "available") assert(result.value === (fn.id === "sine" ? 0 : 5), "Wrong result");
   }
+  await room.applyAllowedFunctions("trigonometry", "scientific");
   for (const wrong of ["scientific", "basic-copy"]) {
     await rejects(() => room.applyAllowedFunctions("arithmetic", wrong), "Different set selected");
   }
   assert(room.handOutFor("trigonometry")?.functions === "scientific", "Failed apply switched the tablet");
-  assert(room.use("arithmetic", sine, () => 0).status === "unavailable", "Failed apply changed arithmetic");
+  checkSine(room, "arithmetic", "basic", null, "unknown");
   await rejects(() => room.setAllowedFunctions("arithmetic", "missing"), "Unknown function set");
   await room.applyAllowedFunctions("arithmetic", "basic"); // The previous selection survived a failed assignment.
   await rejects(() => room.applyAllowedFunctions("unassigned", "none"), "No set selected");
@@ -81,12 +86,15 @@ async function verify() {
   await room.applyAllowedFunctions("empty", "none");
   assert(room.use("empty", sine, () => 0).status === "unavailable", "Empty set became unknown");
 
-  checkSine(room, "trigonometry", "scientific", "scientific", "available");
+  await room.applyAllowedFunctions("arithmetic", "basic");
+  checkSine(room, "arithmetic", "basic", "basic", "unavailable");
   await room.setAllowedFunctions("arithmetic", "arithmetic-plus");
   checkSine(room, "arithmetic", "arithmetic-plus", "basic", "unknown");
-  checkSine(room, "trigonometry", "scientific", "scientific", "available");
   await room.applyAllowedFunctions("arithmetic", "arithmetic-plus");
   checkSine(room, "arithmetic", "arithmetic-plus", "arithmetic-plus", "available");
+  assert(room.handOutFor("trigonometry") === null, "Inactive exam received a tablet");
+  checkSine(room, "trigonometry", "scientific", null, "unknown");
+  await room.applyAllowedFunctions("trigonometry", "scientific");
   checkSine(room, "trigonometry", "scientific", "scientific", "available");
 
   const namedExam = "Матан, а также геометрия";

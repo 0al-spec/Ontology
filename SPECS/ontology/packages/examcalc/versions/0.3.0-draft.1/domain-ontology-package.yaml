@@ -3,7 +3,7 @@ kind: DomainOntologyPackage
 metadata:
   id: edu.university.examcalc
   namespace: examcalc
-  version: 0.2.0-draft.1
+  version: 0.3.0-draft.1
   approvalStatus: draft
   source: Examples/examcalc/intent.json
 spec:
@@ -56,7 +56,7 @@ spec:
       subject: Calculator
       action: ApplyAllowedFunctions
       object: AllowedFunctionSet
-      description: A successful application sets activeExam and activeFunctions together on this calculator.
+      description: A successful application replaces the calculator's active exam and set together. Other exams retain their teacher's selection.
     includesFunction:
       domain: AllowedFunctionSet
       range: CalculatorFunction

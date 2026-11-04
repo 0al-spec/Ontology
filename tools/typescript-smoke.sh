@@ -33,6 +33,6 @@ if [[ -n "$compiler" ]]; then
     check_consumer "$smoke_dir/examples/appointments.yaml" "$root/Examples/theatre-casting/typed-appointments.ts"
     check_consumer "$root/Examples/repository-membership/package.yaml" "$root/Examples/repository-membership/membership.ts"
     examcalc="$root/Examples/examcalc"
-    check_consumer "$smoke_dir/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml" \
+    check_consumer "$smoke_dir/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml" \
         "$examcalc/verify.ts" "$examcalc/verify-handoff.ts" "$examcalc/calculator.ts" "$examcalc/intent.json"
 fi

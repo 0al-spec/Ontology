@@ -57,8 +57,7 @@ export async function verifyHandoffs(sets: readonly FunctionList[]) {
   const issued = room.handOutFor("arithmetic");
   if (!issued) throw new Error("Expected arithmetic tablet");
 
-  // Activate basic for trigonometry. The earlier application of basic for
-  // arithmetic still exists in the per-exam history.
+  // Only the exam changes on the tablet; the function set is the same.
   await room.setAllowedFunctions(example.activeExam, example.functions);
   await room.applyAllowedFunctions(example.activeExam, example.functions);
   const stale = issued.sin(0);

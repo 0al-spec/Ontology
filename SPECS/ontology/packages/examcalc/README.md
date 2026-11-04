@@ -1,10 +1,12 @@
 # `examcalc`: exam-specific calculator functions
 
-Start with the [rewritten package, 0.2.0-draft.1](versions/0.2.0-draft.1/domain-ontology-package.yaml)
+Start with the [rewritten package, 0.3.0-draft.1](versions/0.3.0-draft.1/domain-ontology-package.yaml)
 and the [two-exam walkthrough](../../../../Examples/examcalc/README.md). A teacher selects
 a set of functions for an exam; a calculator applies that very set for that exam.
 The walkthrough shows how to distinguish the human's result from the agent's model
 and how to execute the same function on two exams with different allowances.
+The [0.2.0 compatibility fixture](compatibility/examcalc-0.2.0-breaking.yaml)
+provides the earlier breaking-change example for the compiler's diff tests.
 
 ## Historical golden (0.1.0)
 
