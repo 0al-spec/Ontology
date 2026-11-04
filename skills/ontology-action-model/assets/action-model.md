@@ -11,7 +11,7 @@ Replace bracketed prompts with the model's values. Keep unresolved data explicit
 | Application behavior | [one bounded action] |
 | Modeling question | [what this model must explain or evaluate] |
 | Action / omission | [kind and domain name of the selected contribution] |
-| Action parameters / configuration | [values or configuration snapshot at this occurrence; unknown explicitly] |
+| Action parameters / configuration | [values, configuration or entity references at this occurrence; how references resolve; mark unknowns] |
 | Event boundary | [what begins and ends the selected occurrence] |
 | Operation outcome | [completed, failed, cancelled, pending, or the chosen contract; observation source] |
 | Included observations | [available within-app evidence] |
