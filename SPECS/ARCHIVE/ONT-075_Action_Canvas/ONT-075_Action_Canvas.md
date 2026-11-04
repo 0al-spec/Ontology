@@ -29,3 +29,9 @@ When the inspector shows the source of a field, its package, version and both
 digests must match the owning class. The pointer must address that exact field.
 Opening a graph with inconsistent source metadata keeps the previous graph
 visible. A field without source metadata can still link to its owning class.
+
+Use Subject and Object in the inspector for every relationship. Show Action
+when the declaration supplies one. The canvas offers rectangular (default)
+and curved lines. In both modes, readers can distinguish and select parallel
+relationships such as `examcalc:allows` and `examcalc:denies` by their labels.
+Switching modes preserves node positions, the viewport and the selection.
