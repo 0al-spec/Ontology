@@ -24,3 +24,8 @@ and reference values supplied by that record.
 In the membership example, place the action above the project. Arrange the
 three input cards in the same vertical order as their ports and verify that
 their four visible wires neither cross nor overlap.
+
+When the inspector shows the source of a field, its package, version and both
+digests must match the owning class. The pointer must address that exact field.
+Opening a graph with inconsistent source metadata keeps the previous graph
+visible. A field without source metadata can still link to its owning class.
