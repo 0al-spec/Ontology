@@ -5,6 +5,7 @@ import type { SetAllowedFunctions } from "./generated/types";
 import { SetAllowedFunctionsSchema } from "./generated/schemas";
 import { Classroom, type FunctionList, type Operation } from "./calculator";
 import { compileReading } from "./reading";
+import { verifyHandoffs } from "./verify-handoff";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -46,10 +47,11 @@ async function verify() {
   const membership = relationDefinitions.find(relation => relation.id === "includesFunction");
   assert(membership?.domain === classes.AllowedFunctionSet.alias && membership.range === classes.CalculatorFunction.alias
     && !("action" in membership), "Set membership must link a set to a function without an action");
-  const room = new Classroom(["arithmetic", "trigonometry", "empty", "unassigned"], [
+  const sets = [
     list("basic", add), list("scientific", add, sine), list("basic-copy", add), list("none"),
     list("arithmetic-plus", add, sine),
-  ]);
+  ];
+  const room = new Classroom(["arithmetic", "trigonometry", "empty", "unassigned"], sets);
   const read = (exam: string, functions: string) => compileReading(intent.agreedReading, { exam, functions });
   const arithmetic = read("arithmetic", "basic"), trigonometry = read("trigonometry", "scientific");
   checkSine(room, "arithmetic", null, null, "unknown");
@@ -72,6 +74,7 @@ async function verify() {
   for (const wrong of ["scientific", "basic-copy"]) {
     await rejects(() => room.execute({ ...arithmetic[1], functions: wrong }), "Different set selected");
   }
+  assert(room.handOutFor("trigonometry")?.functions === "scientific", "Failed apply switched the tablet");
   assert(room.use("arithmetic", sine, () => 0).status === "unavailable", "Failed apply changed arithmetic");
   await rejects(() => room.execute({ ...arithmetic[0], functions: "missing" }), "Unknown function set");
   await room.execute(arithmetic[1]); // The previous selection survived a failed assignment.
@@ -95,7 +98,8 @@ async function verify() {
   await rejects(() => compileReading("Калькулятор применяет этот набор.", context), "no preceding selection");
   await rejects(() => compileReading("Экзамен требует профиль.", context), "Expected the instructor");
   await rejects(() => compileReading(intent.agreedReading.replace("калькулятор применяет", "экзамен применяет"), context), "Expected the calculator");
-  console.log("Examcalc: two exam outcomes, same-set identity, missing/empty input and sentence controls passed.");
+  await verifyHandoffs(sets);
+  console.log("Examcalc: exam outcomes, handoff, missing/empty input and sentence controls passed.");
 }
 
 void verify();

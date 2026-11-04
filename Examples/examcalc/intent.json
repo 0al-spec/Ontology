@@ -6,6 +6,19 @@
     "quote": "Хочу сделать приложение-калькулятор для учебных планшетов в университете, которым бы было разрешено пользоваться на экзаменах. При этом для разных экзаменов должны быть разрешены разные наборы функций."
   },
   "agreedReading": "Преподаватель задаёт для экзамена набор разрешённых функций, а калькулятор применяет этот набор.",
+  "tabletHandoff": {
+    "id": "examcalc.handoff-ready",
+    "agreedCriterion": "В момент выдачи на планшете активен набор именно того экзамена, на который пришёл студент.",
+    "assentToProposedPilotCheck": "Ок, давай",
+    "sharedSetExample": {
+      "activeExam": "trigonometry",
+      "functions": "basic",
+      "visits": [
+        {"attendingExam": "arithmetic", "expectedHandoff": null},
+        {"attendingExam": "trigonometry", "expectedHandoff": "basic"}
+      ]
+    }
+  },
   "examples": [
     {"exam": "arithmetic", "operation": "add", "expected": "available"},
     {"exam": "arithmetic", "operation": "sine", "expected": "unavailable"},

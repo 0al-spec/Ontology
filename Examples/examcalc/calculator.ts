@@ -34,15 +34,20 @@ export class Classroom {
     },
   } satisfies Instructor & Actor<SetAllowedFunctions, ExamInstance>;
 
-  private readonly calculator = {
+  private calculator: Calculator & Actor<ApplyAllowedFunctions, SetInstance> = {
     $type: classes.Calculator.alias, id: "tablet-calculator",
     run: (action, functions) => {
       const exam = lookup(this.exams, action.exam.locator, "exam");
       if (!exam.allowedFunctions) throw new Error("No set selected for " + exam.id);
       if (exam.allowedFunctions.locator !== functions.id) throw new Error("Different set selected for " + exam.id);
+      this.calculator = {
+        ...this.calculator,
+        activeExam: action.exam,
+        activeFunctions: { target: functions.$type, locator: functions.id },
+      };
       this.applied.set(exam.id, functions);
     },
-  } satisfies Calculator & Actor<ApplyAllowedFunctions, SetInstance>;
+  };
 
   async execute(step: Step): Promise<void> {
     const exam = lookup(this.exams, step.exam, "exam");
@@ -62,6 +67,15 @@ export class Classroom {
       ? lookup(this.sets, exam.allowedFunctions.locator, "function set").id
       : null;
     return { selected, applied: this.applied.get(exam.id)?.id ?? null };
+  }
+
+  handOutFor(attendingExam: string): { tablet: string; exam: string; functions: string } | null {
+    const { id, activeExam, activeFunctions } = this.calculator;
+    if (!activeExam || !activeFunctions) return null;
+    const exam = lookup(this.exams, activeExam.locator, "exam");
+    const functions = lookup(this.sets, activeFunctions.locator, "function set");
+    if (exam.id !== attendingExam || exam.allowedFunctions?.locator !== functions.id) return null;
+    return { tablet: id, exam: exam.id, functions: functions.id };
   }
 
   use(examId: string, operation: Operation, calculate: () => number):
