@@ -4,7 +4,7 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 smoke_dir="$root/SPECS/ontology"
 
-# An optional built compiler enables the fresh-generation appointment contract test.
+# A built compiler enables tests against freshly generated SDKs.
 compiler=${1:-}
 if [[ -n "$compiler" && "$compiler" != /* ]]; then compiler="$PWD/$compiler"; fi
 
@@ -15,14 +15,19 @@ npm run typecheck
 npm run smoke
 
 if [[ -n "$compiler" ]]; then
-    work="$(mktemp -d "${TMPDIR:-/tmp}/ontology-typed-appointments.XXXXXX")"
+    work="$(mktemp -d "${TMPDIR:-/tmp}/ontology-typed-actions.XXXXXX")"
     trap 'rm -rf "$work"' EXIT
-    "$compiler" compile "$smoke_dir/examples/appointments.yaml" --target typescript --out "$work/generated"
-    cp "$root/Examples/theatre-casting/typed-appointments.ts" "$work/"
-    # Resolve the pinned Zod dependency from the freshly generated SDK on both hosts.
     ln -s "$smoke_dir/node_modules" "$work/node_modules"
-    cd "$work"
-    "$smoke_dir/node_modules/.bin/tsc" --strict --exactOptionalPropertyTypes --noEmit --target ES2022 \
-        --module ESNext --moduleResolution Bundler typed-appointments.ts
-    "$smoke_dir/node_modules/.bin/tsx" typed-appointments.ts
+
+    check_consumer() {
+        local package="$1" consumer="$2" test_dir="$work/$(basename "$2" .ts)"
+        mkdir "$test_dir"
+        "$compiler" compile "$package" --target typescript --out "$test_dir/generated"
+        cp "$consumer" "$test_dir/consumer.ts"
+        "$smoke_dir/node_modules/.bin/tsc" --strict --exactOptionalPropertyTypes --noEmit --target ES2022 \
+            --module ESNext --moduleResolution Bundler "$test_dir/consumer.ts"
+        "$smoke_dir/node_modules/.bin/tsx" "$test_dir/consumer.ts"
+    }
+    check_consumer "$smoke_dir/examples/appointments.yaml" "$root/Examples/theatre-casting/typed-appointments.ts"
+    check_consumer "$root/Examples/repository-membership/package.yaml" "$root/Examples/repository-membership/membership.ts"
 fi

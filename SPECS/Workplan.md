@@ -1320,3 +1320,6 @@ This workplan tracks the specification work for the Ontology repository. The ini
   covers the same assignments when a consumer reads records from an API.
 - [Executable subjects](ARCHIVE/ONT-072_Contextual_Actor/ONT-072_Executable_Subject.md)
   require the identified subject to implement the relationship's action on its object.
+
+## ONT-073: Typed references in action parameters
+- Local validation passed for both locator forms. See [ONT-073 validation](ARCHIVE/ONT-073_Typed_References/Validation.md).

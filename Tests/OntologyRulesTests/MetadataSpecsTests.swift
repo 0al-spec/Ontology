@@ -36,6 +36,7 @@ final class MetadataSpecsTests: XCTestCase {
 
         XCTAssertTrue(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "string")))
         XCTAssertTrue(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "integer")))
+        XCTAssertTrue(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "ref")))
         XCTAssertFalse(OntologyFieldTypeSpec().isSatisfiedBy(OntologyFieldType(rawValue: "date-time")))
     }
 

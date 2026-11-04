@@ -59,6 +59,20 @@ extension OntologyCompiler {
         export const stateMachines = \(tsObject(stateMachineRefs)) as const;
         export const allRefs = \(tsObject(allRefs)) as const;
 
+        """ + instanceReferenceType(for: classes)
+    }
+
+    private func instanceReferenceType(for classes: [JSONObject]) -> String {
+        guard classes.contains(where: { emittedClassFields($0).contains { fieldType($0) == "ref" } }) else { return "" }
+        return """
+
+        type Locator = null | boolean | number | string | readonly Locator[] | { readonly [key: string]: Locator };
+
+        export type Ref<T extends { readonly $type: string }> = {
+          readonly target: T["$type"];
+          readonly locator: Locator;
+        };
+
         """
     }
 
@@ -89,7 +103,7 @@ extension OntologyCompiler {
             }
             let extendsClause = localProtos.isEmpty ? "" : " extends \(localProtos.joined(separator: ", "))"
             let fieldLines = emittedClassFields(item).map {
-                "  readonly \(fieldId($0))\(fieldRequired($0) ? "" : "?"): \(tsFieldType(fieldType($0)));"
+                "  readonly \(fieldId($0))\(fieldRequired($0) ? "" : "?"): \(tsFieldType($0));"
             }
             let interfaceBody = ([
                 "  readonly $type: \"\(fqid)\";",
@@ -304,8 +318,10 @@ extension OntologyCompiler {
         (field["required"] as? Bool) ?? false
     }
 
-    private func tsFieldType(_ type: String) -> String {
-        switch type {
+    private func tsFieldType(_ field: JSONObject) -> String {
+        switch fieldType(field) {
+        case "ref":
+            return "import(\"./refs\").Ref<\(refName(string(field["target"]) ?? ""))>"
         case "boolean":
             return "boolean"
         case "integer", "number":
@@ -318,6 +334,9 @@ extension OntologyCompiler {
     private func zodFieldExpression(field: JSONObject) -> String {
         let base: String
         switch fieldType(field) {
+        case "ref":
+            let target = string(field["target"]) ?? ""
+            base = "z.object({ target: z.literal(\"\(target)\"), locator: z.json() })"
         case "boolean":
             base = "z.boolean()"
         case "integer":

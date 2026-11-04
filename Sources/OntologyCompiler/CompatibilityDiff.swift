@@ -189,8 +189,8 @@ extension OntologyCompiler {
         decision: CompatibilityChangeDecisionSpec,
         changes: inout CompatibilityFieldChanges
     ) {
-        let beforeType = string(beforeField["type"]) ?? ""
-        let afterType = string(afterField["type"]) ?? ""
+        let beforeType = comparableFieldType(beforeField)
+        let afterType = comparableFieldType(afterField)
         guard beforeType != afterType else { return }
         changes.changedFields.append("\(fromNamespace):\(symbolId)")
         if let message = breakingMessage(decision.decide(CompatibilityChangeContext(
@@ -202,6 +202,11 @@ extension OntologyCompiler {
         ))) {
             changes.breakingChanges.append(message)
         }
+    }
+
+    private func comparableFieldType(_ field: JSONObject) -> String {
+        if let target = string(field["target"]) { return "ref<\(target)>" }
+        return string(field["type"]) ?? ""
     }
 
     func appendRequirednessChange(

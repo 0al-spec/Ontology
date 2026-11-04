@@ -41,6 +41,7 @@ UNSAFE_VALUE_RE = /(\$\(|`|<%|eval\(|child_process|subprocess|os\.system|Runtime
 UNSAFE_TAG_RE = /!!(ruby|python|perl|js)|!<.*(ruby|python|perl|js)/i.freeze
 
 VALID_FIXTURES = [
+  File.join(ROOT, "Examples/repository-membership/package.yaml"),
   File.join(ROOT, "SPECS/ontology/examples/theatre.yaml"),
   File.join(ROOT, "SPECS/ontology/examples/appointments.yaml"),
   File.join(ROOT, "SPECS/ontology/examples/examcalc.ontology.yaml"),
@@ -277,7 +278,7 @@ def validate_classes(classes, state_machine_names, package_namespace, import_nam
 
     description = require_key(definition, "description", path, errors)
     require_string(description, "#{path}.description", errors)
-    validate_class_fields(definition["fields"], "#{path}.fields", errors) if definition.key?("fields")
+    validate_class_fields(definition["fields"], "#{path}.fields", class_names, package_namespace, errors) if definition.key?("fields")
 
     implements = definition.key?("implements") ? require_array(definition["implements"], "#{path}.implements", errors) : []
     Array(implements).each_with_index do |ref, index|
@@ -303,7 +304,7 @@ def validate_classes(classes, state_machine_names, package_namespace, import_nam
   [class_names, command_names, event_names]
 end
 
-def validate_class_fields(value, path, errors)
+def validate_class_fields(value, path, class_names, package_namespace, errors)
   fields = require_hash(value, path, errors)
   return unless fields
 
@@ -314,11 +315,18 @@ def validate_class_fields(value, path, errors)
     end
     next unless require_hash(definition, field_path, errors)
 
-    unknown_keys(definition, %w[type required description], field_path, errors)
     type = require_key(definition, "type", field_path, errors)
-    unless %w[string boolean integer number].include?(type)
-      errors << "#{field_path}.type must be a supported primitive field type"
+    keys = %w[type required description]
+    if type == "ref"
+      keys << "target"
+      target = definition["target"]
+      unless scalar_string?(target) && target.match?(CONCEPT_RE) && local_ref?(target, class_names, package_namespace)
+        errors << "#{field_path}.target must name a local class"
+      end
+    elsif !%w[string boolean integer number].include?(type)
+      errors << "#{field_path}.type must be a supported primitive field type or ref"
     end
+    unknown_keys(definition, keys, field_path, errors)
     required = require_key(definition, "required", field_path, errors)
     unless required == true || required == false
       errors << "#{field_path}.required must be a boolean"

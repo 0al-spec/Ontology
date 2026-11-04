@@ -61,7 +61,7 @@ public struct OntologyFieldName: RawRepresentable, Equatable, Hashable, Sendable
     }
 }
 
-/// A primitive class field type supported by the first SDK data-shape slice.
+/// The authored type name of a class data field.
 public struct OntologyFieldType: RawRepresentable, Equatable, Hashable, Sendable {
     public let rawValue: String
 

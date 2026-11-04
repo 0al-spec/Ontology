@@ -147,10 +147,20 @@ $defs:
           - boolean
           - integer
           - number
+          - ref
+      target:
+        $ref: "#/$defs/conceptReference"
       required:
         type: boolean
       description:
         type: string
+    if:
+      properties:
+        type: {const: ref}
+    then:
+      required: [target]
+    else:
+      not: {required: [target]}
   protocolDefinition:
     type: object
     additionalProperties: false

@@ -45,14 +45,14 @@ public struct ReservedOntologyClassFieldNameSpec: Specification {
     }
 }
 
-/// Validates primitive class data field types supported by generated SDK output.
+/// Validates class field type names supported by generated SDK output.
 public struct OntologyFieldTypeSpec: Specification {
     public typealias T = OntologyFieldType
 
     public init() {}
 
     public func isSatisfiedBy(_ candidate: OntologyFieldType) -> Bool {
-        ["string", "boolean", "integer", "number"].contains(candidate.rawValue)
+        ["string", "boolean", "integer", "number", "ref"].contains(candidate.rawValue)
     }
 }
 
