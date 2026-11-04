@@ -1,5 +1,3 @@
-# In progress: ONT-074 — Navigable action inspector
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -34,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-074 adds inspector navigation for executable action relationships and typed field targets. See the [validation](../ARCHIVE/ONT-074_Viewer_Inspector/Validation.md).
 
 - ONT-073 completed its typed repository-reference pilot. See the [validation](../ARCHIVE/ONT-073_Typed_References/Validation.md).
 

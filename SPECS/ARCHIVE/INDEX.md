@@ -203,3 +203,4 @@
 - [ONT-072 Incoming relationship JSON](ONT-072_Contextual_Actor/ONT-072_Relationship_JSON.md)
 - [ONT-072 Executable relationship subjects](ONT-072_Contextual_Actor/ONT-072_Executable_Subject.md)
 - [ONT-073 Typed action reference pilot](ONT-073_Typed_References/Validation.md)
+- [ONT-074 Navigable action inspector](ONT-074_Viewer_Inspector/Validation.md)
