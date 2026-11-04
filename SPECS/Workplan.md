@@ -1328,4 +1328,5 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - Local validation passed. The inspector follows a relationship to its action and a typed field to its target class. See [validation](ARCHIVE/ONT-074_Viewer_Inspector/Validation.md).
 
 ## ONT-075: Action relationships on the Viewer canvas
-- Selected from the README screenshot review. Show the named relationship, its participants and the typed action parameter.
+- Local validation passed for the declaration palette, role ports and reference wires. See [validation](ARCHIVE/ONT-075_Action_Canvas/Validation.md).
+- Follow-up: view a supplied instance record against the same type schema.

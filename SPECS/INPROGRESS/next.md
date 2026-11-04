@@ -1,5 +1,3 @@
-# In progress: ONT-075 — Action relationships on the Viewer canvas
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -34,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-075 shows the type catalog and wired action declarations in the Viewer. The next Viewer slice is a supplied instance record against its type map. See [validation](../ARCHIVE/ONT-075_Action_Canvas/Validation.md).
 
 - ONT-074 adds inspector navigation for executable action relationships and typed field targets. See the [validation](../ARCHIVE/ONT-074_Viewer_Inspector/Validation.md).
 

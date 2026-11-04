@@ -15,3 +15,8 @@ ports on their cards and attach each wire to its own port. A side panel lists
 the types and relationships in the loaded projection before any search is
 entered. Selecting a declaration locates its existing card or binary relation
 and shows its inspector. Mark unresolved references separately from definitions.
+
+The first view renders type declarations. A shared action is one type even
+when multiple relationship types use it. A separate follow-up will show a
+supplied instance record against this schema, with concrete participants
+and reference values supplied by that record.
