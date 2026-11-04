@@ -35,7 +35,7 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 - ONT-074 adds inspector navigation for executable action relationships and typed field targets. See the [validation](../ARCHIVE/ONT-074_Viewer_Inspector/Validation.md).
 
-- ONT-076 rebuilt examcalc from a human outcome and two action clauses. Local [validation](../ARCHIVE/ONT-076_Examcalc_Outcome/ONT-076_Validation_Report.md) passed. Next: try a changed exam allowance against the same outcome before adding another product rule.
+- ONT-076 rebuilt examcalc from a human outcome and two action clauses. The reassignment probe passed [local validation](../ARCHIVE/ONT-076_Examcalc_Outcome/ONT-076_Validation_Report.md). For the single-set scenario, the next acceptance check is readiness at tablet handoff. Section transitions are a separate candidate in the [walkthrough](../../Examples/examcalc/README.md).
 
 - ONT-073 completed its typed repository-reference pilot. See the [validation](../ARCHIVE/ONT-073_Typed_References/Validation.md).
 

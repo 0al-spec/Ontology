@@ -45,9 +45,10 @@ require creating files, implementing an application, or changing ontology packag
    the independent criterion, including the intermediate state where the two
    explanations diverge. Mark predictions as such until observed.
 
-For example, selecting a set for an exam changes the exam's selection. Applying
-it changes the calculator's behavior for that exam. The requester can now decide
-what should happen in the interval between those actions.
+Distinguish a state the test can inspect from a state the user can encounter.
+If a student receives the tablet after the exam's function set is active, check
+readiness at handoff. If sections with different sets are part of the requested
+exam, the student's transition is a separate behavior to model.
 
 ## Model the action
 
