@@ -9,3 +9,9 @@ visually, and connect its declared repository field to its target. Use the
 exported types, IDs and source pointers. Keep ordinary binary relations usable.
 Verify selection, filtering, oneOf and reuse of one action across relationships.
 Capture the actual Viewer for the README and inspect it at README width.
+
+Use the visual grammar of a shader editor. Render the named slots as visible
+ports on their cards and attach each wire to its own port. A side panel lists
+the types and relationships in the loaded projection before any search is
+entered. Selecting a declaration locates its existing card or binary relation
+and shows its inspector. Mark unresolved references separately from definitions.
