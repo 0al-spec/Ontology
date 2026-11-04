@@ -76,6 +76,8 @@ button { cursor: pointer; }
 .inspector-icon, .welcome-symbol { display: grid; place-items: center; color: #4e9670; background: #e8f5ec; border-radius: 18px; width: 60px; height: 60px; font-size: 35px; }
 .notice { background: #f2f5f3; border-radius: 9px; padding: 11px; }
 dl { font-size: 12px; } dt { color: #94a69b; font-weight: 700; margin-top: 15px; } dd { margin: 6px 0; overflow-wrap: anywhere; }
+.inspector-reference { border: 0; padding: 0; background: transparent; color: #286d49; font: inherit; text-align: left; text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; cursor: pointer; }
+.inspector-reference:focus-visible { outline: 2px solid #4e9a70; outline-offset: 2px; }
 .source-box { border: 1px solid #e3eee7; background: #f8fbf9; border-radius: 10px; padding: 14px; margin-top: 24px; }
 .source-box strong, .source-box code, .source-box small { display: block; margin-top: 10px; overflow-wrap: anywhere; }
 .source-box strong { font-size: 12px; }.source-box strong span, .source-box small { color: #8a9f92; font-weight: 400; }
