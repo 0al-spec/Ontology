@@ -1,0 +1,60 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata:
+  id: edu.university.examcalc
+  namespace: examcalc
+  version: 0.2.0-draft.1
+  approvalStatus: draft
+  source: Examples/examcalc/intent.json
+spec:
+  imports:
+    - {id: ontology.foundation, namespace: ont, version: 0.2.0}
+
+  classes:
+    Instructor:
+      extends: ont:DomainEntity
+      description: The teacher who selects which functions are available for an exam.
+    Exam:
+      extends: ont:DomainEntity
+      description: The particular exam for which the teacher selects functions.
+      fields:
+        allowedFunctions:
+          type: ref
+          target: AllowedFunctionSet
+          required: false
+          description: Set selected for this exam. An absent selection is not an empty set.
+    Calculator:
+      extends: ont:DomainEntity
+      description: The calculator that applies the selection for the exam in use.
+    AllowedFunctionSet:
+      extends: ont:DomainEntity
+      description: An identifiable set whose members are the permitted functions.
+    CalculatorFunction:
+      extends: ont:DomainEntity
+      description: An operation, such as addition or sine.
+    SetAllowedFunctions:
+      extends: ont:Action
+      description: Assign the referenced function set to the exam.
+      fields:
+        functions: {type: ref, target: AllowedFunctionSet, required: true}
+    ApplyAllowedFunctions:
+      extends: ont:Action
+      description: Use the selected set when evaluating functions for the referenced exam.
+      fields:
+        exam: {type: ref, target: Exam, required: true}
+
+  relations:
+    setsFunctionsForExam:
+      subject: Instructor
+      action: SetAllowedFunctions
+      object: Exam
+      description: The instructor sets the exam's allowedFunctions to the supplied set.
+    appliesFunctionSet:
+      subject: Calculator
+      action: ApplyAllowedFunctions
+      object: AllowedFunctionSet
+      description: The calculator applies this very set for the referenced exam.
+    includesFunction:
+      domain: AllowedFunctionSet
+      range: CalculatorFunction
+      description: A function belongs to the set. Membership is a fact, not an action.

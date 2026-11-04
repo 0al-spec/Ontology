@@ -71,11 +71,12 @@ jobs:
           set -euo pipefail
           archive_root=".build/ontology-viewer-artifacts/examcalc"
           archive_zip=".build/ontology-viewer-artifacts/examcalc-ontology-viewer-archive.zip"
+          compiler=".build/ci-quality/debug/ontologyc"
           rm -rf ".build/ontology-viewer-artifacts"
           mkdir -p "$archive_root"
-          cp SPECS/ontology/packages/examcalc/domain-ontology-package.yaml "$archive_root/domain-ontology-package.yaml"
-          cp -R SPECS/ontology/packages/examcalc/generated "$archive_root/generated"
-          swift run ontologyc export-viewer-archive-manifest \
+          cp SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml "$archive_root/domain-ontology-package.yaml"
+          "$compiler" compile "$archive_root/domain-ontology-package.yaml" --target typescript --out "$archive_root/generated"
+          "$compiler" export-viewer-archive-manifest \
             "$archive_root/domain-ontology-package.yaml" \
             --generated "$archive_root/generated" \
             --out "$archive_root/ontology-viewer-archive-manifest.json"

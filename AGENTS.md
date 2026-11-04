@@ -24,10 +24,10 @@ The project is a Swift package (macOS 13+, Swift 6.0) with these production targ
 
 ```bash
 # Check a package
-swift run ontologyc check SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+swift run ontologyc check SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml
 
 # Compile to TypeScript
-swift run ontologyc compile SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
+swift run ontologyc compile SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml \
   --target typescript --out /tmp/examcalc-out
 
 # Validate a SpecGraph binding against compiled IR

@@ -150,7 +150,7 @@ and retains the DOT source. Image rendering requires Graphviz.
 
 ```sh
 swift run ontologyviz \
-  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml --out diagrams
+  SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml --out diagrams
 ```
 
 For interactive local browsing, use the standalone [Ontology Viewer](tools/ontology-viewer/README.md)
@@ -216,17 +216,18 @@ environment. A source-built Linux executable needs its Swift runtime libraries.
 swift build --product ontologyc
 
 swift run ontologyc check \
-  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+  SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml
 
 swift run ontologyc compile \
-  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
+  SPECS/ontology/packages/examcalc/versions/0.2.0-draft.1/domain-ontology-package.yaml \
   --target typescript --out /tmp/ontology-examcalc
 ```
 
 Inspect `ontology.normalized.json` and the generated types, schemas, relations and
 validators. Ontology YAML is data: validation does not execute embedded hooks or
-expressions. The [Examcalc walkthrough](SPECS/ontology/packages/examcalc/README.md)
-provides a small golden package; the [tooling guide](SPECS/ontology/tooling-guide.md)
+expressions. The [Examcalc walkthrough](Examples/examcalc/README.md) runs the same
+calculator operation on two exams with different permitted functions; the
+[tooling guide](SPECS/ontology/tooling-guide.md)
 covers platform setup, other commands, registries and quality checks.
 
 For a new domain package, import `ontology.foundation@0.2.0` and use

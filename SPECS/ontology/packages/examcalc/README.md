@@ -1,14 +1,23 @@
-# `examcalc` Golden Ontology Package
+# `examcalc`: exam-specific calculator functions
 
-This folder is the canonical golden package for `edu.university.examcalc@0.1.0`.
+Start with the [rewritten package, 0.2.0-draft.1](versions/0.2.0-draft.1/domain-ontology-package.yaml)
+and the [two-exam walkthrough](../../../../Examples/examcalc/README.md). A teacher selects
+a set of functions for an exam; a calculator applies that very set for that exam.
+The walkthrough shows how to distinguish the human's result from the agent's model
+and how to execute the same function on two exams with different allowances.
 
-The package materializes the exam-controlled calculator ontology from ONT-001 and is used as a stable regression input for later `ontologyc` and SpecGraph semantic reference validation work.
+## Historical golden (0.1.0)
+
+The package at this directory's original path is the frozen `edu.university.examcalc@0.1.0`
+benchmark. Its signed profiles, audit policies and state machine come from the expanded
+[golden intent](../../golden-intents/exam-controlled-calculator.intent.md). Existing
+compiler, Hypercode and SpecGraph regression inputs continue to refer to that version.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `domain-ontology-package.yaml` | Canonical `DomainOntologyPackage` for the exam-controlled calculator domain |
+| `domain-ontology-package.yaml` | Frozen 0.1.0 golden, not the new design |
 | `specgraph-requirement-binding.yaml` | Example SpecGraph project and requirement that import this package and reference `examcalc:*` symbols |
 | `validation-manifest.yaml` | Required class, relation, policy, state machine, and binding coverage for the golden package |
 | `validate-golden.rb` | Dependency-free Ruby validator for package coverage and semanticRef resolution |
