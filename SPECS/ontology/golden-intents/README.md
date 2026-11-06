@@ -13,6 +13,11 @@ candidate induction outputs against minimum semantic expectations.
 | `exam-controlled-calculator.intent.md` | `expectations/exam-controlled-calculator.expectation.yaml` |
 | `voice-recorder-ai-transcription.intent.md` | `expectations/voice-recorder-ai-transcription.expectation.yaml` |
 
+The calculator row evaluates the expanded 0.1.0 benchmark, including its explicit
+trust and audit policies. The [exam-specific functions draft](../../../Examples/examcalc/README.md)
+uses the original human outcome and a separately agreed reading; it has its own
+behavioral examples and is not scored against that historical expectation.
+
 ## Expectation Semantics
 
 Expectation files are minimum semantic criteria. They define what a valid candidate output

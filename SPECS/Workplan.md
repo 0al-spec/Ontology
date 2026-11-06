@@ -1330,3 +1330,6 @@ This workplan tracks the specification work for the Ontology repository. The ini
 ## ONT-075: Action relationships on the Viewer canvas
 - Local validation passed for the declaration palette, role ports and reference wires. See [validation](ARCHIVE/ONT-075_Action_Canvas/Validation.md).
 - Follow-up: view a supplied instance record against the same type schema.
+
+## ONT-076: Exam calculator from the human outcome
+- The [exam calculator](../Examples/examcalc/README.md) models two typed actions. The [checks](ARCHIVE/ONT-076_Examcalc_Outcome/ONT-076_Validation_Report.md) compare two exam selections and confirm that a tablet can compute only for its currently active exam and set.

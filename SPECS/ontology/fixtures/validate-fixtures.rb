@@ -45,7 +45,8 @@ VALID_FIXTURES = [
   File.join(ROOT, "SPECS/ontology/examples/theatre.yaml"),
   File.join(ROOT, "SPECS/ontology/examples/appointments.yaml"),
   File.join(ROOT, "SPECS/ontology/examples/examcalc.ontology.yaml"),
-  File.join(ROOT, "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml")
+  File.join(ROOT, "SPECS/ontology/packages/examcalc/domain-ontology-package.yaml"),
+  File.join(ROOT, "SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml")
 ] + Dir[File.join(ROOT, "SPECS/ontology/fixtures/valid/*.yaml")].sort
 
 INVALID_FIXTURES = {
