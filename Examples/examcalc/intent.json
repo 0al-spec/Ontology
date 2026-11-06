@@ -1,0 +1,38 @@
+{
+  "desiredResult": {
+    "source": "SPECS/raw/Агентная_Операционная_Система_-_Branch_SpecGraph_-_Онтологии.json",
+    "speaker": "user",
+    "messageId": "9cfde494-fc96-4962-9b0a-a31ba63e48ca",
+    "quote": "Хочу сделать приложение-калькулятор для учебных планшетов в университете, которым бы было разрешено пользоваться на экзаменах. При этом для разных экзаменов должны быть разрешены разные наборы функций."
+  },
+  "agreedReading": "Преподаватель задаёт для экзамена набор разрешённых функций, а калькулятор применяет этот набор.",
+  "tabletHandoff": {
+    "id": "examcalc.handoff-ready",
+    "agreedCriterion": "В момент выдачи на планшете активен набор именно того экзамена, на который пришёл студент.",
+    "assentToProposedPilotCheck": "Ок, давай",
+    "sharedSetExample": {
+      "activeExam": "trigonometry",
+      "functions": "basic",
+      "visits": [
+        {"attendingExam": "arithmetic", "expectedHandoff": null},
+        {"attendingExam": "trigonometry", "expectedHandoff": "basic"}
+      ]
+    }
+  },
+  "firstStudentPress": {
+    "id": "examcalc.first-student-operation",
+    "agreedCriterion": "После выдачи студент нажимает sin без повторного указания экзамена. Калькулятор применяет активный набор.",
+    "operation": "sine",
+    "argument": 0,
+    "examples": [
+      {"exam": "arithmetic", "functions": "basic", "expected": "unavailable", "calls": 0, "value": null},
+      {"exam": "trigonometry", "functions": "scientific", "expected": "available", "calls": 1, "value": 0}
+    ]
+  },
+  "examples": [
+    {"exam": "arithmetic", "operation": "add", "expected": "available"},
+    {"exam": "arithmetic", "operation": "sine", "expected": "unavailable"},
+    {"exam": "trigonometry", "operation": "sine", "expected": "available"},
+    {"exam": "trigonometry", "operation": "add", "expected": "available"}
+  ]
+}

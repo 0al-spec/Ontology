@@ -150,7 +150,7 @@ and retains the DOT source. Image rendering requires Graphviz.
 
 ```sh
 swift run ontologyviz \
-  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml --out diagrams
+  SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml --out diagrams
 ```
 
 For interactive local browsing, use the standalone [Ontology Viewer](tools/ontology-viewer/README.md)
@@ -216,18 +216,20 @@ environment. A source-built Linux executable needs its Swift runtime libraries.
 swift build --product ontologyc
 
 swift run ontologyc check \
-  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml
+  SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml
 
 swift run ontologyc compile \
-  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml \
+  SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml \
   --target typescript --out /tmp/ontology-examcalc
 ```
 
 Inspect `ontology.normalized.json` and the generated types, schemas, relations and
 validators. Ontology YAML is data: validation does not execute embedded hooks or
-expressions. The [Examcalc walkthrough](SPECS/ontology/packages/examcalc/README.md)
-provides a small golden package; the [tooling guide](SPECS/ontology/tooling-guide.md)
-covers platform setup, other commands, registries and quality checks.
+expressions. In the [Examcalc walkthrough](Examples/examcalc/README.md#как-дать-агенту-свой-intent),
+the author gives the agent a free-form request. The agent keeps the quote and drafts
+the ontology. The SDK tests run the same operation on two exams with different
+permitted functions. The [tooling guide](SPECS/ontology/tooling-guide.md) covers
+platform setup, other commands, registries and quality checks.
 
 For a new domain package, import `ontology.foundation@0.2.0` and use
 `ont:DomainEntity` for an entity with identity. Ontology owns this vocabulary,

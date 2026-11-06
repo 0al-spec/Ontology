@@ -117,7 +117,8 @@ Examples:
 
 | Product Surface | Governing Concept |
 |---|---|
-| Exam calculator | `ExamPolicyProfile` |
+| Exam calculator with different functions per exam | The set selected for that exam; see the [two-exam example](../../Examples/examcalc/README.md). |
+| Historical calculator benchmark with explicit signing and audit requirements | `ExamPolicyProfile` in the expanded 0.1.0 input |
 | Equipment rental marketplace | `RentalContract` |
 | B2B subscription SaaS | `Subscription` |
 | Zero-trust agent runtime | `AgentPassport` |

@@ -12,6 +12,15 @@ process that happens before YAML assembly.
 Do not start by writing YAML. Start by inducing a domain model from intent, review it as a
 candidate, then assemble YAML and validate it with `ontologyc`.
 
+Keep the human's desired result in their words. Give it a check that can still be
+run if the design changes. Then use the ontology to propose how to reach it:
+who acts, on what, with which inputs, and what observable change should follow?
+For example, [examcalc](../../Examples/examcalc/README.md) checks the same operation
+on two exams. A teacher selecting an exam's function set and a calculator applying
+it is the agreed route. A signed policy is a separate design proposal until it has
+its own source. A valid package establishes type consistency; the two-exam replay
+checks whether this particular route delivers the requested difference.
+
 ```text
 intent -> staged prompt contracts -> validate-draft -> YAML -> ontologyc check -> compile
 ```

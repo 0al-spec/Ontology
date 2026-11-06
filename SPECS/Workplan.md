@@ -1326,3 +1326,6 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-074: Navigable action inspector
 - Local validation passed. The inspector follows a relationship to its action and a typed field to its target class. See [validation](ARCHIVE/ONT-074_Viewer_Inspector/Validation.md).
+
+## ONT-076: Exam calculator from the human outcome
+- The [exam calculator](../Examples/examcalc/README.md) models two typed actions. The [checks](ARCHIVE/ONT-076_Examcalc_Outcome/ONT-076_Validation_Report.md) compare two exam selections and confirm that a tablet can compute only for its currently active exam and set.

@@ -1,6 +1,6 @@
 ---
 name: ontology-action-model
-description: Model a bounded application action through entity identity, actor roles, state transitions and goal criteria. Use for conceptual review, BDD/PBT examples, or authoring executable subject/action/object relationships with ontologyc.
+description: Turn a person's free-form intent into a draft ontology and explain how typed actions and state changes could produce the desired outcome. Use for bounded ontology modeling, executable relationships, and behavioral checks.
 ---
 
 # Ontology Action Model
@@ -24,6 +24,44 @@ desired change, actor-relative explanation, and verification evidence.
 
 Return the model in the user's requested medium. A conceptual discussion does not
 require creating files, implementing an application, or changing ontology packages.
+
+## Explain how the requested property could arise
+
+Take the person's own words as input. Preserve the original quote and its source.
+In your own reading, you can correct spelling, punctuation and transcription.
+Keep quoted names and identifiers intact. When plausible readings would change
+who acts, what is affected, or the expected outcome, show the difference or ask
+which was intended. A spelling variation alone needs no clarification.
+
+When the person wants a compilable model, author a draft `DomainOntologyPackage`
+using the chosen foundation and project vocabulary. Link it to the source and
+explain which relationships the person supplied and which you propose. Run
+`ontologyc check` on the YAML. Test the proposed behavior through the generated
+SDK using examples derived from the desired outcome. The agent interprets prose
+during authoring. Replaying these checks starts from the saved package.
+
+1. Keep the person's words and give an observable criterion in their terms. Fix
+   the scope of words such as “this”, “each” and “after”. For “the calculator
+   allows different functions on different exams”, try the same function on two exams.
+2. Work backwards from that observation. Which state must the observer use?
+   Which actor can change it, by which action, on which entity? Follow the inputs
+   to the preceding step until you reach a supplied fact or an unresolved choice.
+   A structural fact such as membership can be a premise without an event.
+3. Walk the proposed chain forwards for the requester. Show the same identifiable
+   entities before and after each action, the reference passed to the next step
+   and the behavior the person can see. Attribute the requested outcome, the
+   agreed steps and any remaining design assumptions separately. Describe the
+   choice in the person's vocabulary, especially when another plausible route
+   would behave differently. Leave a missing actor or transition visible.
+4. Challenge the explanation. Omit a step or substitute a valid entity from
+   another context. Where execution exists, compare the actual observations with
+   the independent criterion, including the intermediate state where the two
+   explanations diverge. Mark predictions as such until observed.
+
+Distinguish a state the test can inspect from a state the user can encounter.
+If a student receives the tablet after the exam's function set is active, check
+readiness at handoff. If sections with different sets are part of the requested
+exam, the student's transition is a separate behavior to model.
 
 ## Model the action
 

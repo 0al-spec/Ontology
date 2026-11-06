@@ -77,7 +77,7 @@ SVG and PNG locally.
 
 ```sh
 swift run ontologyviz \
-  SPECS/ontology/packages/examcalc/domain-ontology-package.yaml --out diagrams
+  SPECS/ontology/packages/examcalc/versions/0.3.0-draft.1/domain-ontology-package.yaml --out diagrams
 ```
 
 The default writes `ontology.dot`, `ontology.svg` and `ontology.png`. Select
@@ -124,7 +124,10 @@ manifest is an inert SpecSpace input contract: it does not approve package
 publication, authorize registry writes, or mutate SpecGraph.
 
 The Swift Quality workflow also uploads an
-`examcalc-ontology-viewer-archive.zip` artifact. The downloaded artifact keeps
+`examcalc-ontology-viewer-archive.zip` artifact from the new exam-specific
+functions draft, compiled from the same YAML that is included in the zip. The
+command above uses the frozen 0.1.0 fixture with its matching checked-in IR.
+The downloaded artifact keeps
 `ontology-viewer-archive-manifest.json` at its root and can be dropped directly
 into SpecSpace `/ontology` for cross-repo smoke checks.
 
@@ -195,7 +198,12 @@ swift run ontologyc compile --help
 
 ## Examcalc Walkthrough
 
-Validate the canonical golden package:
+For the new model and an executable two-exam scenario, use the
+[examcalc walkthrough](../../Examples/examcalc/README.md). The commands below
+replay the historical 0.1.0 package against its **matching** SpecGraph binding,
+registry and generated baselines.
+
+Validate that frozen package:
 
 ```bash
 swift run ontologyc check \
