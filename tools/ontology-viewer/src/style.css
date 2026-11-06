@@ -53,15 +53,33 @@ button { cursor: pointer; }
 .search-results button { display: flex; flex-direction: column; align-items: flex-start; width: 100%; gap: 4px; border: 0; background: transparent; padding: 10px 0; text-align: left; color: #285440; overflow-wrap: anywhere; }
 .search-results button + button { border-top: 1px solid #edf2ef; }
 .search-results button small { color: #93a49a; }
+.declaration-catalog { max-height: 44vh; min-height: 100px; }
+.declaration-catalog details { margin: 8px 0; }
+.declaration-catalog summary { color: #4d6b59; font-size: 11px; padding: 5px 0; }
+.declaration-catalog summary span { color: #879b90; margin-left: 4px; }
 .canvas { position: relative; min-width: 0; min-height: 460px; background: #f4f8f5; }
-.react-flow__node.ontology-node { width: 220px; min-height: 76px; border: 1px solid #bdd9c9; border-radius: 12px; background: #fff; box-shadow: 0 5px 16px #1d4d3212; padding: 12px 15px; color: #234935; font-size: 12px; text-align: left; }
+.line-options { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border: 1px solid #d6e4db; border-radius: 8px; background: #fff; color: #395b48; font-size: 12px; }
+.line-options label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+.line-options input { margin: 0; accent-color: #39805a; }
+.react-flow__node.ontology-node { width: 250px; min-height: 76px; border: 1px solid #bdd9c9; border-radius: 12px; background: #fff; box-shadow: 0 5px 16px #1d4d3212; padding: 0; color: #234935; font-size: 12px; text-align: left; }
+.node-header { min-height: 75px; padding: 12px 15px; }
+.node-port { position: relative; height: 34px; display: flex; align-items: center; border-top: 1px solid #e5ece7; padding: 0 15px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.node-port--subject { color: #215b88; }.node-port--action { color: #6d378f; }.node-port--object { color: #96441f; }.node-port--field { color: #176444; }
+.node-port .react-flow__handle { width: 10px; height: 10px; border: 2px solid white; background: currentColor; }
+.edge--role-subject .react-flow__edge-path { stroke: #5591bd; stroke-width: 2; }.edge--role-action .react-flow__edge-path { stroke: #9b6aba; stroke-width: 2; }
+.edge--role-object .react-flow__edge-path { stroke: #d28a61; stroke-width: 2; }.edge--role-field .react-flow__edge-path { stroke: #4b9b7c; stroke-width: 2; }
 .react-flow__node.ontology-node.selected, .react-flow__node.ontology-node.search-match { border-color: #429369; box-shadow: 0 0 0 3px #bfe4cd; }
 .react-flow__node.node--external { border-style: dashed; background: #f7f9f8; color: #697c72; }
 .react-flow__node.node--imported { border-color: #a8c9e8; background: #f7fbff; color: #315775; }
+.react-flow__node.node--relation { border-color: #ad9bd1; background: #fbf8ff; color: #4a3968; }
+.react-flow__node.node--action { border-color: #8cb9a0; background: #f6fcf8; }
 .react-flow__node.node--protocol, .react-flow__node.node--policy { border-color: #cfc4e5; background: #fcfaff; }
 .react-flow__node.node--machine, .react-flow__node.node--state { border-color: #a4d5d1; background: #f6fffd; }
 .react-flow__node.filter-dim, .react-flow__edge.filter-dim, .react-flow__minimap-node.filter-dim { opacity: .15; }
 .ontology-node .node-kind { display: block; text-transform: uppercase; letter-spacing: .1em; color: #819c8d; font-size: 9px; font-weight: 800; margin-bottom: 7px; }
+.node--action .node-kind, .node--relation .node-kind { display: table; border-radius: 4px; padding: 3px 6px; font-size: 11px; letter-spacing: .06em; margin: -3px 0 4px; }
+.node--action .node-kind { color: #155b3a; background: #d9f1e2; }
+.node--relation .node-kind { color: #5a3180; background: #ede1f8; }
 .ontology-node strong { display: block; overflow-wrap: anywhere; font-size: 12px; }
 .ontology-node small { display: block; margin-top: 4px; color: #92a49a; font-size: 10px; }
 .react-flow__edge-text { font-size: 10px; fill: #5a7164; }

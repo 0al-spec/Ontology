@@ -26,16 +26,18 @@ supplies reusable vocabulary, structural checks and bounded review experiments.
 
 ## Explore the model in Ontology Viewer
 
-[![Ontology Viewer showing a zoomed fragment of the NormLab ontology, an imported Motive declaration in the inspector, and the local YAML workspace.](Examples/package-visualization/ontology-viewer.png)](tools/ontology-viewer/LAUNCH.md)
+[![Ontology Viewer with the type catalog on the left and a canvas showing the subject, action and object ports of addsRepositoryTo. The AddRepository action has a separate port for its Repository reference.](Examples/package-visualization/ontology-viewer.png)](tools/ontology-viewer/LAUNCH.md)
 
 **Browse the model, inspect its sources, and edit YAML with compiler feedback.**
-The standalone Viewer provides an interactive canvas, search, and filters for
-node types, relationships and packages. Hide or dim context without moving nodes.
+The catalog lists the types and relationships in the loaded model. Select one to
+find it on the canvas, or hide and dim other declarations with the filters.
 Open an exported JSON graph for read-only exploration, or use a local workspace
 to edit YAML and see compiler diagnostics.
 
-*Shown: a zoomed fragment of the NormLab full graph, with the imported
-`motivcore:Motive` declaration selected and the root YAML below.*
+*In the [repository membership example](Examples/repository-membership/package.yaml),
+the `addsRepositoryTo` relationship connects the subject `User`, the action
+`AddRepository` and the object `Project`. A separate wire connects the action's
+`repository: Ref<Repository>` port to the `Repository` type.*
 
 [Launch the Viewer](tools/ontology-viewer/LAUNCH.md) ·
 [Viewer capabilities and editing behavior](tools/ontology-viewer/README.md)

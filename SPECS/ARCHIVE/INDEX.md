@@ -206,3 +206,4 @@
 - [ONT-072 Executable relationship subjects](ONT-072_Contextual_Actor/ONT-072_Executable_Subject.md)
 - [ONT-073 Typed action reference pilot](ONT-073_Typed_References/Validation.md)
 - [ONT-074 Navigable action inspector](ONT-074_Viewer_Inspector/Validation.md)
+- [ONT-075 Action relationships and typed ports on the Viewer canvas](ONT-075_Action_Canvas/Validation.md)

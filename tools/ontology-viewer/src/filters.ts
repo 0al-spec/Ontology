@@ -2,14 +2,14 @@ import type { ViewerEdge, ViewerNode } from './graph';
 import { edgePackage, nodePackage } from './packages';
 
 export const nodeTypeOptions = [
-  ['class', 'Classes'], ['protocol', 'Protocols'], ['policy', 'Policies'],
+  ['class', 'Classes'], ['relation', 'Relationships'], ['protocol', 'Protocols'], ['policy', 'Policies'],
   ['machine', 'State machines'], ['state', 'States'],
 ] as const;
 export const originOptions = [
   ['local', 'Local'], ['imported', 'Imported'], ['unresolved', 'Unresolved'],
 ] as const;
 export const edgeKindOptions = [
-  ['relation', 'Ontology relations'], ['extends', 'Inheritance'], ['implements', 'Conformance'],
+  ['relation', 'Ontology relations'], ['field-ref', 'Field references'], ['extends', 'Inheritance'], ['implements', 'Conformance'],
   ['appliesTo', 'Policy application'], ['lifecycle', 'Lifecycle'], ['contains', 'Containment'],
   ['transition', 'Transitions'],
 ] as const;
@@ -58,7 +58,8 @@ export function graphVisibility(
   graph: { nodes: ViewerNode[]; edges: ViewerEdge[] }, filters: GraphFilters, packageId: string,
 ): GraphVisibility {
   const nodeIds = new Set(graph.nodes.filter((node) =>
-    filters.packages[nodePackage(node)] !== false && filters.nodeTypes[nodeFilterType(node)] && filters.origins[nodeOrigin(node, packageId)],
+    filters.packages[nodePackage(node)] !== false && filters.nodeTypes[nodeFilterType(node)] && filters.origins[nodeOrigin(node, packageId)] &&
+      (node.data.kind !== 'relation' || filters.edgeKinds.relation),
   ).map((node) => node.id));
   const edgeIds = new Set(graph.edges.filter((edge) => {
     const kind = edge.data?.kind as EdgeFilterKind | undefined;

@@ -53,7 +53,7 @@ describe('graph visibility', () => {
     const graph = { nodes: [node('a', 'class', 'root'), node('p', 'policy', 'dep'), node('s', 'state', 'dep')],
       edges: [edge('oneOf/0', 'a', 'p', 'relation'), edge('oneOf/1', 'a', 's', 'relation')] };
     const counts = graphFilterCounts(graph, 'root');
-    expect(counts.nodeTypes).toEqual({ class: 1, protocol: 0, policy: 1, machine: 0, state: 1 });
+    expect(counts.nodeTypes).toEqual({ class: 1, relation: 0, protocol: 0, policy: 1, machine: 0, state: 1 });
     expect(counts.origins).toEqual({ local: 1, imported: 2, unresolved: 0 });
     expect(counts.edgeKinds.relation).toBe(2);
     expect(counts.edgeKinds.transition).toBe(0);

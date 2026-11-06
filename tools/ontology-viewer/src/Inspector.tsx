@@ -11,10 +11,10 @@ export function Inspector({ selection, filtered = false, classReferences, onSele
   </aside>;
   const data = selection.data;
   const label = selection.type === 'node' ? selection.data.label : selection.data.semanticId;
-  const kind = selection.type === 'node' ? selection.data.kind : selection.data.kind;
+  const kind = selection.type === 'node' && selection.data.isAction ? 'Action' : data.kind === 'relation' ? 'Relationship' : data.kind;
   const record = data.record;
   const description = record && typeof record.description === 'string' ? record.description : '';
-  const action = selection.type === 'edge' && data.kind === 'relation' && typeof record?.action === 'string' ? record.action : '';
+  const action = data.kind === 'relation' && typeof record?.action === 'string' ? record.action : '';
   const reference = (fqid: string, text = fqid) => classReferences.has(fqid)
     ? <button type="button" className="inspector-reference" title={fqid} onClick={() => onSelectClass(fqid)}>{text}</button>
     : <span title={fqid}>{text}</span>;
@@ -33,19 +33,22 @@ export function Inspector({ selection, filtered = false, classReferences, onSele
       {selection.data.origin ? ` from ${selection.data.origin}` : ''}. Its declaration has not been loaded.
     </p>}
     {description && <p>{description}</p>}
-    {action && record && <dl>
+    {data.kind === 'relation' && record && <dl>
       {typeof record.domain === 'string' && <><dt>Subject</dt><dd>{record.domain}</dd></>}
-      <dt>Action</dt><dd>{reference(action)}</dd>
+      {action && <><dt>Action</dt><dd>{reference(action)}</dd></>}
       {typeof range === 'string' ? <><dt>Object</dt><dd>{range}</dd></> : choices.length > 0 && <>
         <dt>Object (oneOf)</dt><dd>{choices.join(' | ')}</dd>
       </>}
     </dl>}
-    {selection.type === 'edge' && record && !action && <dl>
-      {typeof record.domain === 'string' && <><dt>Domain</dt><dd>{record.domain}</dd></>}
-      {record.range !== undefined && <><dt>Range</dt><dd>{typeof record.range === 'string' ? record.range : JSON.stringify(record.range)}</dd></>}
+    {selection.type === 'edge' && record && data.kind === 'field-ref' && <dl>
+      {typeof record.id === 'string' && <><dt>Field</dt><dd>{record.id}</dd></>}
+      {typeof record.target === 'string' && <><dt>Target</dt><dd>{record.target}</dd></>}
+      {typeof record.type === 'string' && <><dt>Type</dt><dd>{record.type}</dd></>}
     </dl>}
     {fields.length > 0 && <dl><dt>Fields</dt>{fields.map((field) => <dd key={field.id}><code>
-      {reference(field.target, `${field.id}: Ref<${field.target.split(':').pop() || field.target}>`)}
+      {selection.type === 'node' && selection.data.fieldTargets?.[field.id]
+        ? reference(selection.data.fieldTargets[field.id], `${field.id}: Ref<${field.target.split(':').pop() || field.target}>`)
+        : <span title={field.target}>{`${field.id}: Ref<${field.target.split(':').pop() || field.target}>`}</span>}
     </code></dd>)}</dl>}
     {data.source && <section className="source-box">
       <div className="section-label">SOURCE</div>

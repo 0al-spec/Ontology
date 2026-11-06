@@ -18,19 +18,26 @@ neither must already be on PATH. It also explains full/relations profiles,
 ports, shutdown and troubleshooting. This directory contains the frontend;
 it is not a globally installed `npm` command.
 
-Search finds nodes and relations; select a result to focus the canvas and inspect
-its declaration. Drag nodes, zoom and pan to explore. Visual links from one
-`oneOf` relation lead to the same underlying relation record. Imported classes
-are tinted blue; unresolved external references are gray and never presented as
-loaded declarations. The inspector shows the owning package, logical YAML pointer
-and byte digest where a declaration is available.
+The left panel lists the declarations in the loaded projection. Select a type
+or a relationship to inspect it. Search narrows the list. Imported declarations
+carry their package identity, and unloaded references appear separately.
+Drag cards, zoom or pan to explore. The inspector shows the owning package,
+logical YAML pointer and byte digest where source information is available.
 
-For a relationship with an action, the inspector shows **Subject**, **Action**
-and **Object**. In the [repository membership example](../../Examples/repository-membership/package.yaml),
-select `addsRepositoryTo`, follow `AddRepository`, then follow its `repository`
-field to the `Repository` declaration. Reference targets are displayed by type;
-navigation requires a loaded declaration. Ordinary binary relations retain
-their **Domain** and **Range** labels.
+In the [repository membership example](../../Examples/repository-membership/package.yaml),
+the `addsRepositoryTo` relationship has three ports. Follow **subject** to
+`User`, **action** to `AddRepository`, and **object** to `Project`. The
+`repository: Ref<Repository>` field on the action connects to `Repository`.
+These wires describe the allowed types. Several relationships can share the
+same action card, and multiple object alternatives belong to the same relationship.
+The inspector labels the endpoints of every relationship **Subject** and **Object**.
+It also shows **Action** when the relationship declares one.
+
+Use **Line type** on the canvas to switch between rectangular (**Rect**, the
+default) and Bézier (**Curve**) wires. Relationships that share the same ports
+get separate paths and labels in both modes. For example, select either
+`examcalc:allows` or `examcalc:denies` directly between the policy profile and
+the calculator function. Switching line type keeps your layout and selection.
 
 Open **Filters** to enable or disable node types, their origin (local, imported,
 unresolved), and relationship kinds independently. **Hide** removes inactive
@@ -67,8 +74,10 @@ for this application's styling. This is source-level reuse, not a published npm
 package or a SpecSpace integration. The projection contains type declarations,
 not runtime instances, proof of factual truth or approval of manual policies.
 
-Current node positions are local display state. The viewer's file-open mode is
-read-only; the optional local workspace below edits source text.
+The initial layout places adjacent, unshared inputs to one relationship in port
+order when they occupy the same layout column. You can then drag any card;
+its position is local display state. The viewer's file-open mode is read-only;
+the optional local workspace below edits source text.
 
 ## Local YAML workspace
 

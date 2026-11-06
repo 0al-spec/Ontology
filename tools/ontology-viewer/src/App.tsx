@@ -30,18 +30,19 @@ export default function App() {
   const packages = useMemo(() => graph && projection ? graphPackages(graph, projection) : [], [graph, projection]);
   const matches = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query || !graph || !visibility) return [];
-    const nodes = graph.nodes.filter((node) => visibility.nodeIds.has(node.id) && node.data.label.toLowerCase().includes(query))
-      .map((node) => ({ id: node.id, label: node.data.label, kind: node.data.kind, focusNode: node.id, selection: { type: 'node', id: node.id, data: node.data } as Selection }));
+    if (!graph || !visibility) return [];
+    const nodes = graph.nodes.filter((node) => (!query || visibility.nodeIds.has(node.id)) && node.data.label.toLowerCase().includes(query))
+      .map((node) => ({ id: node.id, label: node.data.label, kind: node.data.isAction ? 'action' : node.data.kind, focusNode: node.id,
+        hidden: !visibility.nodeIds.has(node.id), selection: { type: 'node', id: node.id, data: node.data } as Selection }));
     const seen = new Set<string>();
-    const relations = graph.edges.filter((edge) => {
+    const relations = [...graph.edges].sort((a, b) => Number(visibility.edgeIds.has(b.id)) - Number(visibility.edgeIds.has(a.id))).filter((edge) => {
       const data = edge.data;
-      if (!data || !visibility.edgeIds.has(edge.id) || data.kind !== 'relation' || !data.semanticId.toLowerCase().includes(query) || seen.has(data.semanticId)) return false;
+      if (!data || !edge.id.startsWith('relation/') || (query && !visibility.edgeIds.has(edge.id)) || data.kind !== 'relation' || !data.semanticId.toLowerCase().includes(query) || seen.has(data.semanticId)) return false;
       seen.add(data.semanticId);
       return true;
-    }).map((edge) => ({ id: edge.id, label: edge.data!.semanticId, kind: 'relation', focusNode: edge.source,
+    }).map((edge) => ({ id: edge.id, label: edge.data!.semanticId, kind: 'relation', focusNode: edge.source, hidden: !visibility.edgeIds.has(edge.id),
       selection: { type: 'edge', id: edge.id, source: edge.source, target: edge.target, data: edge.data! } as Selection }));
-    return [...nodes, ...relations].slice(0, 50);
+    return [...nodes, ...relations];
   }, [graph, search, visibility]);
   const selectionFiltered = useMemo(() => {
     if (!selection || !graph || !visibility) return false;
@@ -117,17 +118,21 @@ export default function App() {
           placeholder="Type a name…" aria-describedby="filter-search-note" />
         <small id="filter-search-note" className="filter-search-note">Search includes enabled elements.</small>
         <FilterPanel packages={packages} counts={filterCounts} view={projection.view} filters={filters} onChange={setFilters} onReset={() => setFilters(defaultFilters())} />
-        {search.trim() ? <div className="search-results" aria-label="Search results">
-          <span className="section-label">{matches.length} MATCHES</span>
-          {matches.map((match) => <button key={match.id} onClick={() => { setSelection(match.selection); setFocusNode({ id: match.focusNode }); }}>
-            <span>{match.label}</span><small>{match.kind}</small>
-          </button>)}
-        </div> : <div className="legend">
-          <div><i className="legend-class" /> Class</div><div><i className="legend-imported" /> Imported class</div>
-          <div><i className="legend-other" /> Protocol / policy</div>
-          <div><i className="legend-external" /> Unloaded reference</div>
-          <p>Drag nodes to arrange the view. Select a line to inspect its relation.</p>
-        </div>}
+        <div className="search-results declaration-catalog" aria-label={search.trim() ? 'Search results' : 'Declaration catalog'}>
+          <span className="section-label">{search.trim() ? `${matches.length} MATCHES` : `DECLARATIONS · ${matches.filter((item) => item.kind !== 'external').length}`}</span>
+          {(['action', 'class', 'imported', 'relation', 'protocol', 'policy', 'machine', 'state', 'external'] as const).map((kind) => {
+            const items = matches.filter((match) => match.kind === kind);
+            if (!items.length) return null;
+            const titles: Record<string, string> = { action: 'Actions', class: 'Classes', imported: 'Imported classes', relation: 'Relationships',
+              protocol: 'Protocols', policy: 'Policies', machine: 'State machines', state: 'States', external: 'Unloaded references' };
+            return <details key={kind} open={Boolean(search.trim()) || ['action', 'class', 'relation'].includes(kind)}>
+              <summary>{titles[kind]} <span>{items.length}</span></summary>
+              {items.map((match) => <button key={match.id} onClick={() => { setSelection(match.selection); if (!match.hidden) setFocusNode({ id: match.focusNode }); }}>
+                <span>{match.label}</span><small>{match.kind}{match.hidden ? ' · hidden by filters' : ''}</small>
+              </button>)}
+            </details>;
+          })}
+        </div>
         <div className="sidebar-footer">Enabled: {visibility?.nodeIds.size} / {graph.nodes.length} nodes <span>·</span> {visibility?.edgeIds.size} / {graph.edges.length} visual links</div>
       </section>
       <GraphCanvas graph={graph} identity={`${projection.id}@${projection.version}`} search={search} focusNode={focusNode}

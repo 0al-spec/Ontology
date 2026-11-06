@@ -9,6 +9,8 @@ export interface SourceLocation {
 }
 
 export type Declaration = JsonObject & { id: string; fqid: string; source: SourceLocation };
+type ClassField = JsonObject & { source?: SourceLocation };
+type ClassDeclaration = Declaration & { fields?: ClassField[] };
 export type Relation = Declaration & { domain: string; range: string | { oneOf: string[] } };
 export interface Projection {
   schemaVersion: 'ontology.diagram-projection/v1';
@@ -18,7 +20,7 @@ export interface Projection {
   view: 'full' | 'relations';
   sources: JsonObject[];
   imports: JsonObject[];
-  classes: Declaration[];
+  classes: ClassDeclaration[];
   relations: Relation[];
   protocols: Declaration[];
   policies: Declaration[];
@@ -63,6 +65,39 @@ function declarations(value: unknown, path: string): Declaration[] {
     if (seen.has(fqid)) throw new Error(`${path}: duplicate declaration ${fqid}`);
     seen.add(fqid);
     return { ...entry, id: text(entry.id, `${itemPath}.id`), fqid, source: location(entry.source, `${itemPath}.source`) };
+  });
+}
+
+function samePackageSource(packageSource: JsonObject | SourceLocation, source: SourceLocation): boolean {
+  return packageSource.id === source.id && packageSource.version === source.version &&
+    packageSource.sourceDigest === source.sourceDigest && packageSource.sourceByteDigest === source.sourceByteDigest;
+}
+
+function pointerComponent(id: string): string {
+  return id.replaceAll('~', '~0').replaceAll('/', '~1');
+}
+
+function classes(value: unknown): ClassDeclaration[] {
+  return declarations(value, 'classes').map(({ fields, ...owner }) => {
+    if (owner.source.pointer !== `/spec/classes/${pointerComponent(owner.id)}`) {
+      throw new Error(`${owner.fqid}: source pointer does not match the class`);
+    }
+    if (fields === undefined) return owner;
+    const path = `${owner.fqid}.fields`;
+    const parsed = objects(fields, path).map(({ source, ...field }, index) => {
+      if (source === undefined) return field;
+      const id = text(field.id, `${path}[${index}].id`);
+      const sourcePath = `${path}.${id}.source`;
+      const fieldSource = location(source, sourcePath);
+      if (!samePackageSource(owner.source, fieldSource)) {
+        throw new Error(`${sourcePath} does not match the owning class package, version or digests`);
+      }
+      if (fieldSource.pointer !== `${owner.source.pointer}/fields/${pointerComponent(id)}`) {
+        throw new Error(`${sourcePath}.pointer does not match the field`);
+      }
+      return { ...field, source: fieldSource };
+    });
+    return { ...owner, fields: parsed };
   });
 }
 
@@ -111,7 +146,7 @@ export function parseProjection(value: unknown): Projection {
     id, namespace, version,
     view: graph.view,
     sources, imports: objects(graph.imports, 'imports'),
-    classes: declarations(graph.classes, 'classes'), relations: relations(graph.relations),
+    classes: classes(graph.classes), relations: relations(graph.relations),
     protocols: declarations(graph.protocols, 'protocols'), policies: declarations(graph.policies, 'policies'),
     stateMachines: declarations(graph.stateMachines, 'stateMachines'),
   };
@@ -120,8 +155,8 @@ export function parseProjection(value: unknown): Projection {
     for (const record of records) {
       const source = record.source;
       if (!source.pointer.startsWith(`/spec/${section}/`)) throw new Error(`${record.fqid}: source pointer does not match ${section}`);
-      if (!sources.some((item) => item.id === source.id && item.version === source.version &&
-          item.sourceDigest === source.sourceDigest && item.sourceByteDigest === source.sourceByteDigest)) {
+      if (!sources.some((item) => samePackageSource(item, source) &&
+          (section !== 'classes' || record.fqid === `${item.alias}:${record.id}`))) {
         throw new Error(`${record.fqid}: source does not match a loaded package`);
       }
     }
