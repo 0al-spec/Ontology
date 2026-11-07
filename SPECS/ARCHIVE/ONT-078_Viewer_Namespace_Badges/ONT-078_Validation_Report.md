@@ -29,3 +29,11 @@ full namespace in its title; the inspector retains the complete identifier.
 No ontology, project data, release or deployed site was modified. Screenshots
 and local browser runs are not evidence of a hosted deployment. Coverage was
 not measured; Linux and hosted CI were not run locally.
+
+## CI follow-up
+
+The first hosted browser-smoke run exposed an existing test that searched for
+`ext:Shared` as one text node inside a card. The namespace and name are now
+separate, so the test selects the class and protocol using their distinct graph
+IDs. With the ONT-077 review fix integrated, all 41 Viewer unit tests and all
+28 Viewer browser tests pass locally, including the formerly failing scenario.
