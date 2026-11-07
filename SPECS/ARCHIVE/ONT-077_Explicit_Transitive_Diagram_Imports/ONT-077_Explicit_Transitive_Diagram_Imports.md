@@ -58,3 +58,7 @@ standalone compiler's external symbol-verification guarantee.
 Resolving remote registries, silently supplying missing packages, changing
 ontology truth/authority, automatically approving terms, migrating SpecGraph
 pins, or publishing a release.
+
+---
+**Archived:** 2026-11-07
+**Verdict:** PASS (local; hosted CI and review are separate)

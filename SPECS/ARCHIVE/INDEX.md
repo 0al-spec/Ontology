@@ -1,11 +1,12 @@
 # Tasks Archive
 
-**Last Updated:** 2026-11-04
+**Last Updated:** 2026-11-07
 
 ## Archived Tasks
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-077 | [ONT-077_Explicit_Transitive_Diagram_Imports/](ONT-077_Explicit_Transitive_Diagram_Imports/) | 2026-11-07 | PASS (local; CI and review separate) |
 | ONT-076 | [ONT-076_Examcalc_Outcome/](ONT-076_Examcalc_Outcome/) | 2026-11-04 | PASS (local typed model and two-exam execution) |
 | ONT-070 | [ONT-070_Viewer_README_Showcase/](ONT-070_Viewer_README_Showcase/) | 2026-10-31 | PASS (documentation and inspected screenshot) |
 | ONT-068 | [ONT-068_Viewer_Launch_Manual/](ONT-068_Viewer_Launch_Manual/) | 2026-10-31 | PASS (local launch walkthrough) |
@@ -78,6 +79,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-07 | ONT-077 | Archived explicit transitive diagram imports and validation (local PASS) |
 | 2026-11-04 | ONT-076 | Archived exam calculator rewrite, validation (PASS) and [review](ONT-076_Examcalc_Outcome/REVIEW_ONT-076.md) |
 | 2026-10-31 | ONT-068 | Archived [self-review](ONT-068_Viewer_Launch_Manual/REVIEW_ONT-068.md); ONT-069 records dependency follow-up |
 | 2026-10-31 | ONT-068 | Archived viewer launch manual and bounded validation |
