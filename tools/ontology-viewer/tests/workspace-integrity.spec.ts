@@ -122,8 +122,10 @@ test('keeps the selected unresolved protocol when a same-named class also exists
   try {
     await page.goto(server.url);
     const inspector = page.getByLabel('Inspector');
-    const protocol = page.locator('.react-flow__node').filter({ hasText: 'ext:Shared' }).last();
-    await expect(page.locator('.react-flow__node').filter({ hasText: 'ext:Shared' })).toHaveCount(2);
+    const classNode = page.locator('[data-id="external/classes/ext:Shared"]');
+    const protocol = page.locator('[data-id="external/protocols/ext:Shared"]');
+    await expect(classNode).toBeVisible();
+    await expect(protocol).toBeVisible();
     await protocol.click({ force: true });
     await expect(inspector).toContainText('unloaded reference (protocol)');
     await fs.writeFile(source, original.replace('A proposal submitted for review.', 'Updated description.'));
