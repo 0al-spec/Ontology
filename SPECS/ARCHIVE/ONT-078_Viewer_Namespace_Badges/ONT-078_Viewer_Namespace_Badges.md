@@ -24,3 +24,7 @@ leaving the declaration name easier to read beneath the node kind.
   selecting by full ID; inspect desktop and mobile layout and port geometry.
 - Viewer tests and build; repository quality checks per AGENTS.md.
 - Cross-repository source hash check and SpecSpace focused UI checks.
+
+---
+**Archived:** 2026-11-07
+**Verdict:** PASS (local; hosted CI and review are separate)

@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-078 | [ONT-078_Viewer_Namespace_Badges/](ONT-078_Viewer_Namespace_Badges/) | 2026-11-07 | PASS (local; CI and review separate) |
 | ONT-077 | [ONT-077_Explicit_Transitive_Diagram_Imports/](ONT-077_Explicit_Transitive_Diagram_Imports/) | 2026-11-07 | PASS (local; CI and review separate) |
 | ONT-076 | [ONT-076_Examcalc_Outcome/](ONT-076_Examcalc_Outcome/) | 2026-11-04 | PASS (local typed model and two-exam execution) |
 | ONT-070 | [ONT-070_Viewer_README_Showcase/](ONT-070_Viewer_README_Showcase/) | 2026-10-31 | PASS (documentation and inspected screenshot) |
@@ -79,6 +80,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-07 | ONT-078 | Archived viewer namespace badges and validation (local PASS) |
 | 2026-11-07 | ONT-077 | Archived [self-review](ONT-077_Explicit_Transitive_Diagram_Imports/REVIEW_ONT-077.md); local FOLLOW-UP skipped |
 | 2026-11-07 | ONT-077 | Archived explicit transitive diagram imports and validation (local PASS) |
 | 2026-11-04 | ONT-076 | Archived exam calculator rewrite, validation (PASS) and [review](ONT-076_Examcalc_Outcome/REVIEW_ONT-076.md) |

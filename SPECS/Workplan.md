@@ -1344,6 +1344,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - [Validation report](ARCHIVE/ONT-077_Explicit_Transitive_Diagram_Imports/ONT-077_Validation_Report.md).
 
 ## ONT-078: Viewer namespace badges
-- **Status:** Selected — planning
+- **Status:** Complete — local validation passed; hosted CI and review separate
 - **Source:** Operator request to move the namespace to a top-right badge.
 - **Goal:** Improve node-name readability without changing graph semantics.
+- [Validation report](ARCHIVE/ONT-078_Viewer_Namespace_Badges/ONT-078_Validation_Report.md).

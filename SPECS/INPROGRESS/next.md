@@ -1,11 +1,3 @@
-# Active Task: ONT-078 — Viewer Namespace Badges
-
-**Status:** Selected; plan before implementation
-**Scope:** Separate the namespace and name visually in ontology graph nodes,
-without changing identity, ports, filtering, search, or inspection.
-
----
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -40,6 +32,9 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-078 separates graph-node namespaces into badges. [Validation](../ARCHIVE/ONT-078_Viewer_Namespace_Badges/ONT-078_Validation_Report.md)
+  passed locally in the standalone Viewer and SpecSpace; hosted CI is separate.
 
 - ONT-077 resolves explicitly supplied transitive diagram imports by exact package
   identity and local namespace. [Validation](../ARCHIVE/ONT-077_Explicit_Transitive_Diagram_Imports/ONT-077_Validation_Report.md)
