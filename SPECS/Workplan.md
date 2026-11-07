@@ -1342,3 +1342,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
   own namespace and exact dependency identity/version, while retaining safe
   handling of unresolved references and existing direct-import compatibility.
 - [Validation report](ARCHIVE/ONT-077_Explicit_Transitive_Diagram_Imports/ONT-077_Validation_Report.md).
+
+## ONT-078: Viewer namespace badges
+- **Status:** Selected — planning
+- **Source:** Operator request to move the namespace to a top-right badge.
+- **Goal:** Improve node-name readability without changing graph semantics.

@@ -1,3 +1,11 @@
+# Active Task: ONT-078 — Viewer Namespace Badges
+
+**Status:** Selected; plan before implementation
+**Scope:** Separate the namespace and name visually in ontology graph nodes,
+without changing identity, ports, filtering, search, or inspection.
+
+---
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
