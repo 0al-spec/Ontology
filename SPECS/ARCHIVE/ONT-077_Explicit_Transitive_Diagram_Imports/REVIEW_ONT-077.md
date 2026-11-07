@@ -30,7 +30,7 @@ Both were reproduced, fixed and regression-tested before the final quality gate.
 
 ## Verification
 
-See [validation](../ARCHIVE/ONT-077_Explicit_Transitive_Diagram_Imports/ONT-077_Validation_Report.md):
+See [validation](ONT-077_Validation_Report.md):
 251 Swift XCTest cases, 40 Viewer unit tests, one browser regression, real
 SpecGraph graph inputs and standalone Viewer checks. Coverage was not measured;
 the project parameters specify no numerical coverage threshold. Linux CI was

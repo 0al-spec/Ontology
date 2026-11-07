@@ -79,6 +79,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-07 | ONT-077 | Archived [self-review](ONT-077_Explicit_Transitive_Diagram_Imports/REVIEW_ONT-077.md); local FOLLOW-UP skipped |
 | 2026-11-07 | ONT-077 | Archived explicit transitive diagram imports and validation (local PASS) |
 | 2026-11-04 | ONT-076 | Archived exam calculator rewrite, validation (PASS) and [review](ONT-076_Examcalc_Outcome/REVIEW_ONT-076.md) |
 | 2026-10-31 | ONT-068 | Archived [self-review](ONT-068_Viewer_Launch_Manual/REVIEW_ONT-068.md); ONT-069 records dependency follow-up |
