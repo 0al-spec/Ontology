@@ -22,7 +22,7 @@ export type PackageOption = { key: string; label: string; loaded: boolean; nodeC
 
 /** Discover identities and counts from the entire graph, never the current selection. */
 export function graphPackages(
-  graph: { nodes: ViewerNode[]; edges: ViewerEdge[] }, projection: Pick<Projection, 'sources' | 'imports' | 'id' | 'version'>,
+  graph: { nodes: ViewerNode[]; edges: ViewerEdge[] }, projection: Pick<Projection, 'sources' | 'imports' | 'externalImports' | 'id' | 'version'>,
 ): PackageOption[] {
   const entries = new Map<string, PackageOption>();
   const ensure = (key: string, loaded = false) => {
@@ -33,7 +33,7 @@ export function graphPackages(
     } else if (loaded) entry.loaded = true;
     return entry;
   };
-  for (const [records, loaded] of [[projection.sources, true], [projection.imports, false]] as const) {
+  for (const [records, loaded] of [[projection.sources, true], [projection.imports, false], [projection.externalImports || [], false]] as const) {
     for (const record of records) {
       if (typeof record.id === 'string' && record.id && typeof record.version === 'string' && record.version) {
         ensure(packageIdentity({ id: record.id, version: record.version }), loaded);

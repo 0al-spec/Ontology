@@ -65,7 +65,7 @@ final class DiagramFullProjectionTests: XCTestCase {
         }
     }
 
-    func testVisibleRelationRejectsActionOutsideRootImportScope() throws {
+    func testVisibleRelationRetainsActionOutsideRootImportScopeAsExternal() throws {
         try fixture { root, child in
             let text = try String(contentsOf: child.url, encoding: .utf8)
                 .replacingOccurrences(of: "  classes:", with: """
@@ -77,9 +77,14 @@ final class DiagramFullProjectionTests: XCTestCase {
                 .replacingOccurrences(of: "      range: Evidence", with: "      range: Evidence\n      action: current:Action")
             try text.write(to: child.url, atomically: true, encoding: .utf8)
             let options = OntologyDiagramOptions(view: .relations, imports: [child], expandedTypes: ["dep:Proposal", "dep:Evidence"])
-            XCTAssertThrowsError(try OntologyCompiler().diagramProjection(path: root, options: options)) {
-                XCTAssertTrue(String(describing: $0).contains("Cannot bind imported reference current:Action"))
-            }
+            let graph = try OntologyCompiler().diagramProjection(path: root, options: options)
+            let external = try XCTUnwrap((graph["externalImports"] as? [[String: Any]])?.first {
+                $0["id"] as? String == "ontology.foundation" && $0["version"] as? String == "0.2.0"
+            })
+            let alias = try XCTUnwrap(external["alias"] as? String)
+            let relation = try XCTUnwrap((graph["relations"] as? [[String: Any]])?.first { $0["fqid"] as? String == "dep:cites" })
+            XCTAssertEqual(relation["action"] as? String, "\(alias):Action")
+            XCTAssertFalse((graph["sources"] as? [[String: Any]] ?? []).contains { $0["id"] as? String == "ontology.foundation" })
         }
     }
 
@@ -107,9 +112,13 @@ final class DiagramFullProjectionTests: XCTestCase {
             let text = try String(contentsOf: child.url, encoding: .utf8)
                 .replacingOccurrences(of: "specgraph.foundation", with: "example.private")
             try text.write(to: child.url, atomically: true, encoding: .utf8)
-            XCTAssertThrowsError(try OntologyCompiler().diagramProjection(path: root, options: OntologyDiagramOptions(imports: [child]))) {
-                XCTAssertTrue(String(describing: $0).contains("Cannot bind imported reference"))
-            }
+            let graph = try OntologyCompiler().diagramProjection(path: root, options: OntologyDiagramOptions(imports: [child]))
+            let external = try XCTUnwrap((graph["externalImports"] as? [[String: Any]])?.first { $0["id"] as? String == "example.private" })
+            let alias = try XCTUnwrap(external["alias"] as? String)
+            XCTAssertNotEqual(alias, "base")
+            let proposal = try XCTUnwrap((graph["classes"] as? [[String: Any]])?.first { $0["fqid"] as? String == "dep:Proposal" })
+            XCTAssertEqual(proposal["extends"] as? String, "\(alias):DomainEntity")
+            XCTAssertFalse((graph["sources"] as? [[String: Any]] ?? []).contains { $0["id"] as? String == "example.private" })
         }
     }
 

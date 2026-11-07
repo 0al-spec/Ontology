@@ -1,6 +1,6 @@
 import Foundation
 
-/// Full diagrams load all declarations of explicit direct imports, without fetching.
+/// Full diagrams load all declarations of explicitly supplied reachable imports, without fetching.
 struct DiagramFullProjection {
     let root: JSONObject
     let imported: [DiagramImportedPackage]
@@ -25,14 +25,16 @@ extension DiagramImportedPackage {
         let qualified = value.contains(":") ? value : "\(ir["namespace"] as? String ?? ""):\(value)"
         guard let mapped = rebase(qualified) else {
             throw OntologyCompilerError.invalidArgument(
-                "Cannot bind imported reference \(qualified) from \(ir["id"] as? String ?? ""); declare its dependency in the root scope"
+                "Cannot bind imported reference \(qualified) from \(ir["id"] as? String ?? ""); check dependency identity, version and namespace bindings"
             )
         }
         return mapped
     }
 
-    func fullDeclarations(_ section: String) throws -> [JSONObject] {
-        try (ir[section] as? [JSONObject] ?? []).map { definition in
+    func fullDeclarations(_ section: String, matching selected: Set<String>? = nil) throws -> [JSONObject] {
+        try (ir[section] as? [JSONObject] ?? []).filter { definition in
+            selected?.contains("\(namespace):\(definition["id"] as? String ?? "")") ?? true
+        }.map { definition in
             var result = definition
             result["fqid"] = "\(namespace):\(definition["id"] as? String ?? "")"
             result["diagramOrigin"] = "\(ir["id"] as? String ?? "")@\(ir["version"] as? String ?? "")"

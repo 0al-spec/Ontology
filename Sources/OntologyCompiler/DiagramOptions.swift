@@ -28,7 +28,7 @@ public struct OntologyDiagramOptions: Sendable {
 }
 
 extension OntologyCompiler {
-    /// Projects a validated package and explicitly selected direct local imports.
+    /// Projects a validated package and explicitly supplied reachable local imports.
     public func diagramDOT(path: OntologySourcePath, options: OntologyDiagramOptions) throws -> String {
         let projection = try diagramProjection(path: path, options: options)
         var diagram = PackageDiagram(ir: projection, view: options.view)
@@ -47,15 +47,9 @@ extension OntologyCompiler {
             throw OntologyCompilerError.invalidArgument(decision?.message ?? "Unknown diagram selection")
         }
         let root = try diagramIR(path: path)
-        var imported = [DiagramImportedPackage]()
-        for path in options.imports {
-            let ir = try diagramIR(path: path)
-            let namespace = try diagramImportNamespace(ir: ir, root: root)
-            guard !imported.contains(where: { $0.namespace == namespace }) else {
-                throw OntologyCompilerError.invalidArgument("Duplicate supplied import for namespace \(namespace)")
-            }
-            imported.append(try DiagramImportedPackage(namespace: namespace, ir: ir, root: root))
-        }
+        let supplied = try options.imports.map { try diagramIR(path: $0) }
+        let scope = try DiagramDependencyScope(root: root, supplied: supplied, digest: sha256)
+        let imported = scope.imported
         var projection = try options.view == .relations
             ? DiagramRelationsProjection(root: root, imported: imported).select(options.expandedTypes)
             : DiagramFullProjection(root: root, imported: imported).select()
@@ -69,6 +63,7 @@ extension OntologyCompiler {
         projection.removeValue(forKey: "diagnostics")
         projection["sources"] = [diagramSource(root, alias: root["namespace"] as? String ?? "")]
             + imported.sorted { $0.namespace < $1.namespace }.map { diagramSource($0.ir, alias: $0.namespace) }
+        if !scope.externalImports.isEmpty { projection["externalImports"] = scope.externalImports }
         return projection
     }
 
@@ -100,27 +95,13 @@ extension OntologyCompiler {
         ir["sourceByteDigest"] = sha256(data)
         return diagramAttachSources(ir)
     }
-
-    private func diagramImportNamespace(ir: JSONObject, root: JSONObject) throws -> String {
-        let context = DiagramImportBindingContext(
-            packageId: string(ir["id"]) ?? "", version: string(ir["version"]) ?? "",
-            rootNamespace: string(root["namespace"]) ?? "", imports: diagramImports(root)
-        )
-        let identity = "\(context.packageId.rawValue)@\(context.version.rawValue)"
-        switch DiagramImportBindingSpec().decide(context) {
-        case .matched(let namespace): return namespace
-        case .missing: throw OntologyCompilerError.invalidArgument("Supplied package \(identity) is not an exact direct import")
-        case .ambiguous: throw OntologyCompilerError.invalidArgument("Ambiguous direct import binding for \(identity)")
-        case .invalidNamespace, nil:
-            throw OntologyCompilerError.invalidArgument("Invalid or shadowed namespace for \(identity)")
-        }
-    }
 }
 
 func diagramImports(_ ir: JSONObject) -> [DiagramImportDeclaration] {
     (ir["imports"] as? [JSONObject] ?? []).map {
-        DiagramImportDeclaration(id: $0["id"] as? String ?? "", version: $0["version"] as? String ?? "",
-                                 namespace: $0["namespace"] as? String ?? "")
+        let id = $0["id"] as? String ?? ""
+        let namespace = $0["namespace"] as? String ?? FoundationExports.current.defaultNamespace(forPackageID: id) ?? ""
+        return DiagramImportDeclaration(id: id, version: $0["version"] as? String ?? "", namespace: namespace)
     }
 }
 

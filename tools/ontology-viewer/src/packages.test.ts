@@ -12,6 +12,14 @@ const edge = (id: string, owner: string, from = 'a', to = 'b'): ViewerEdge => ({
 });
 
 describe('package filtering', () => {
+  it('lists declared transitive placeholders as unloaded package identities', () => {
+    const options = graphPackages({ nodes: [], edges: [] }, {
+      id: 'root', version: '1.0.0', sources: [{ id: 'root', version: '1.0.0' }], imports: [],
+      externalImports: [{ id: 'example.transitive', version: '2.0.0', alias: 'pkg-transitive-1234' }],
+    });
+    expect(options.find((item) => item.key === 'example.transitive@2.0.0')).toMatchObject({ loaded: false, nodeCount: 0 });
+  });
+
   it('uses source identity for states and aliases, and distinguishes versions', () => {
     const state = node('alias:review/states/draft', 'example.dep');
     state.data.kind = 'state'; state.data.origin = 'alias:review';

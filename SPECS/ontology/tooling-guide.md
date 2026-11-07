@@ -88,9 +88,10 @@ references with the declared package version. See the
 
 `--view relations` retains domain relation edges and their endpoint classes.
 Supply `--import <local-package.yaml>` and `--expand <alias:Class,...>` to include
-a selected subgraph from exact direct import identities/versions. Both flags are
-repeatable. The worked example documents a motivation-core / events-core slice
-and the induced-subgraph rule for imported `oneOf` relations.
+a selected subgraph from exact reachable import identities/versions. Both flags
+are repeatable; every file is supplied explicitly. The worked example documents
+a motivation-core / events-core slice, transitive diagram aliases, and the
+induced-subgraph rule for imported `oneOf` relations.
 
 Save repeated selections in a local versioned JSON profile and run
 `ontologyviz --profile profile.json --out diagrams`. Package/import paths are

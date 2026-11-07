@@ -22,6 +22,43 @@ const graph = {
 };
 
 describe('ontology graph projection adapter', () => {
+  it('labels an unloaded transitive dependency by exact package identity', () => {
+    const missing = { id: 'example.transitive', version: '2.0.0', alias: 'dep-1234' };
+    const input = {
+      ...graph,
+      externalImports: [missing],
+      relations: [{ ...graph.relations[0], range: 'dep-1234:Missing' }],
+    };
+    const flow = buildGraph(parseProjection(input));
+    expect(flow.nodes.find((node) => node.data.label === 'dep-1234:Missing')?.data).toMatchObject({
+      kind: 'external', origin: 'example.transitive@2.0.0',
+    });
+  });
+
+  it('rejects an external transitive alias that shadows an existing source', () => {
+    expect(() => parseProjection({
+      ...graph, externalImports: [{ id: 'example.transitive', version: '2.0.0', alias: 'test' }],
+    })).toThrow(/alias/i);
+  });
+
+  it('rejects conflicting or malformed external dependency bindings', () => {
+    const missing = { id: 'example.transitive', version: '2.0.0', alias: 'dep-1234' };
+    expect(() => parseProjection({ ...graph, externalImports: [missing, { ...missing, alias: 'dep-5678' }] })).toThrow(/identity/i);
+    expect(() => parseProjection({ ...graph, externalImports: [{ ...missing, alias: 'ext' }] })).toThrow(/alias/i);
+    expect(() => parseProjection({ ...graph, externalImports: [{ ...missing, alias: 'bad:alias' }] })).toThrow(/alias/i);
+    expect(() => parseProjection({ ...graph, externalImports: [{ ...missing, id: 'example.external', version: '1.0.0' }] })).toThrow(/bound/i);
+    expect(() => parseProjection({ ...graph, imports: [{ id: 'ontology.foundation', version: '0.2.0' }],
+      externalImports: [{ ...missing, alias: 'ont' }] })).toThrow(/alias/i);
+  });
+
+  it('labels a foundation reference when its namespace uses the compiler default', () => {
+    const flow = buildGraph(parseProjection({ ...graph,
+      imports: [{ id: 'ontology.foundation', version: '0.2.0' }],
+      relations: [{ ...graph.relations[0], range: 'ont:DomainEntity' }],
+    }));
+    expect(flow.nodes.find((node) => node.data.label === 'ont:DomainEntity')?.data.origin).toBe('ontology.foundation@0.2.0');
+  });
+
   it('retains one semantic relation for multiple oneOf edges and labels unloaded references', () => {
     const flow = buildGraph(parseProjection(graph));
     const choices = flow.edges.filter((edge) => edge.data?.semanticId === 'test:cites');

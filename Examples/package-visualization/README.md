@@ -97,11 +97,13 @@ swift run ontologyviz \
   --out diagrams/motivation-relations
 ```
 
-`--import` and `--expand` can be repeated. Each supplied package must match one
-direct root import by exact id/version, with an unambiguous namespace. Use the
-root import alias in selectors, even when the supplied package uses a different
-canonical namespace. Unknown classes, duplicate supplied imports, wrong versions
-and ambiguous aliases are errors. In relations view these options must be supplied together. Inputs are explicit local files; no network or sibling
+`--import` and `--expand` can be repeated. Each supplied package must match an
+exact id/version reachable through the root and the other supplied packages.
+Use the root import alias for a direct dependency. A transitive package receives
+a deterministic diagram alias listed in a full projection's `sources`; use that
+alias for `--expand`. Unknown classes, duplicate supplied identities, unreachable
+versions and ambiguous direct aliases are errors. In relations view these options
+must be supplied together. Inputs are explicit local files; no network or sibling
 directory discovery occurs.
 
 For imported packages, the displayed relations form the induced subgraph of the
@@ -217,15 +219,18 @@ the executables and set `ONTOLOGYC_TEST_BINARY_PATH` to that directory's
 `debug/ontologyc`; the CLI tests find `ontologyviz` beside it.
 
 
-## Full view with direct imports
+## Full view with imports
 
 Use `--view full --import dependency.yaml` (repeatable) or a profile with
 `"view": "full"` and `"imports": [...]`. Full view includes every declaration
-family from each supplied direct package, including policies and state machines.
-Omit `expand`; it remains a relations-only class selector. Nothing is fetched
-or loaded recursively. Referenced nested namespaces must bind by exact
-identity/version in the root scope. Declaration sources retain their original
-package identities, pointers and digests.
+family from each explicitly supplied reachable package, including transitive
+packages, policies and state machines. Omit `expand`; it remains a relations-only
+class selector. Nothing is fetched or loaded from an implicit path. A dependency
+declared by a supplied package but not supplied as a file remains an external
+reference with its declared package identity and version. The root's own imports
+do not change; declaration sources retain their original identities, pointers and
+digests. See the [projection contract](../../SPECS/ontology/diagram-projection.md)
+for synthetic diagram aliases and unresolved bindings.
 
 A ready-to-use [full motivation/events profile](motivation-full.profile.json):
 

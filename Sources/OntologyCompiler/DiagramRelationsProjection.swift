@@ -6,28 +6,9 @@ struct DiagramImportedPackage {
     let ir: JSONObject
     let namespaces: [String: String]
 
-    init(namespace: String, ir: JSONObject, root: JSONObject) throws {
+    init(namespace: String, ir: JSONObject, namespaces: [String: String]) {
         self.namespace = namespace
         self.ir = ir
-        var namespaces = [ir["namespace"] as? String ?? "": namespace]
-        let scope = DiagramImportBindingContext(packageId: ir["id"] as? String ?? "", version: ir["version"] as? String ?? "",
-                                              rootNamespace: ir["namespace"] as? String ?? "", imports: diagramImports(ir))
-        guard DiagramImportScopeSpec().isSatisfiedBy(scope) else {
-            throw OntologyCompilerError.invalidArgument("Ambiguous namespace scope in supplied package \(scope.packageId.rawValue)")
-        }
-        for dependency in diagramImports(ir) {
-            if dependency.id.rawValue == root["id"] as? String, dependency.version.rawValue == root["version"] as? String {
-                namespaces[dependency.namespace.rawValue] = root["namespace"] as? String
-                continue
-            }
-            let context = DiagramImportBindingContext(
-                packageId: dependency.id.rawValue, version: dependency.version.rawValue,
-                rootNamespace: root["namespace"] as? String ?? "", imports: diagramImports(root)
-            )
-            if case .matched(let alias) = DiagramImportBindingSpec().decide(context) {
-                namespaces[dependency.namespace.rawValue] = alias
-            }
-        }
         self.namespaces = namespaces
     }
 
@@ -86,8 +67,8 @@ struct DiagramRelationsProjection {
             [definition["domain"], definition["action"]].compactMap { $0 as? String } + diagramRangeReferences(definition["range"])
         })
         var result = root
-        result["classes"] = (rootClasses.filter { incident.contains($0["fqid"] as? String ?? "") }
-            + importedClasses.filter { selected.contains($0["fqid"] as? String ?? "") })
+        let selectedImported = try imported.flatMap { try $0.fullDeclarations("classes", matching: selected) }
+        result["classes"] = (rootClasses.filter { incident.contains($0["fqid"] as? String ?? "") } + selectedImported)
             .sorted { ($0["fqid"] as? String ?? "") < ($1["fqid"] as? String ?? "") }
         result["relations"] = relations
         return result
