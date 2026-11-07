@@ -10,11 +10,18 @@ import type { ViewerEdge, ViewerNode } from './graph';
 import type { Selection } from './selection';
 
 function OntologyNode({ data }: NodeProps<ViewerNode>) {
+  const separator = data.label.indexOf(':');
+  const qualified = separator > 0 && separator < data.label.length - 1;
+  const namespace = qualified ? data.label.slice(0, separator) : '';
+  const name = qualified ? data.label.slice(separator + 1) : data.label;
   return <>
     {data.kind !== 'relation' && <Handle type="target" position={Position.Left} style={{ top: 38 }} isConnectable={false} />}
     <div className="node-header">
-      <span className="node-kind">{data.kind === 'external' ? 'External reference' : data.kind === 'relation' ? 'Relationship' : data.isAction ? 'Action' : data.kind}</span>
-      <strong>{data.label}</strong>
+      <div className="node-meta">
+        <span className="node-kind">{data.kind === 'external' ? 'External reference' : data.kind === 'relation' ? 'Relationship' : data.isAction ? 'Action' : data.kind}</span>
+        {namespace && <span className="node-namespace" title={namespace} aria-label={`Namespace: ${namespace}`}>{namespace}</span>}
+      </div>
+      <strong title={data.label}>{name}</strong>
       {data.origin && <small>{data.origin}</small>}
     </div>
     {data.kind !== 'relation' && <Handle type="source" position={Position.Right} style={{ top: 38 }} isConnectable={false} />}
