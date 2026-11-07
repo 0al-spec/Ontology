@@ -17,7 +17,7 @@ value in the accessible label and title.
 
 ## Verification and boundaries
 
-See [validation](../ARCHIVE/ONT-078_Viewer_Namespace_Badges/ONT-078_Validation_Report.md).
+See [validation](ONT-078_Validation_Report.md).
 The local browser checks cover action, relationship, unqualified state and
 external nodes, geometry at desktop and mobile sizes, and ports in existing
 SpecSpace layouts. Linux, hosted CI, independent review and production

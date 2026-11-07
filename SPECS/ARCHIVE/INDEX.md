@@ -80,6 +80,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-07 | ONT-078 | Archived [self-review](ONT-078_Viewer_Namespace_Badges/REVIEW_ONT-078.md); FOLLOW-UP skipped |
 | 2026-11-07 | ONT-078 | Archived viewer namespace badges and validation (local PASS) |
 | 2026-11-07 | ONT-077 | Archived [self-review](ONT-077_Explicit_Transitive_Diagram_Imports/REVIEW_ONT-077.md); local FOLLOW-UP skipped |
 | 2026-11-07 | ONT-077 | Archived explicit transitive diagram imports and validation (local PASS) |
