@@ -1,3 +1,14 @@
+# Active Task: ONT-077 — Explicit Transitive Diagram Imports
+
+**Priority:** P1 — operator-approved SpecGraph integration follow-up
+**Status:** Selected; plan before implementation
+**Scope:** Project explicitly supplied transitive ontology dependencies without
+rewriting the root package's declared imports or guessing namespace bindings.
+
+After this bounded task, return to the existing ONT-045 candidate below.
+
+---
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
