@@ -33,6 +33,9 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-078 separates graph-node namespaces into badges. [Validation](../ARCHIVE/ONT-078_Viewer_Namespace_Badges/ONT-078_Validation_Report.md)
+  passed locally in the standalone Viewer and SpecSpace; hosted CI is separate.
+
 - ONT-077 resolves explicitly supplied transitive diagram imports by exact package
   identity and local namespace. [Validation](../ARCHIVE/ONT-077_Explicit_Transitive_Diagram_Imports/ONT-077_Validation_Report.md)
   passed locally; current SpecSpace still needs the additive metadata update.

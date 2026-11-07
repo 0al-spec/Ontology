@@ -76,8 +76,10 @@ button { cursor: pointer; }
 .react-flow__node.node--protocol, .react-flow__node.node--policy { border-color: #cfc4e5; background: #fcfaff; }
 .react-flow__node.node--machine, .react-flow__node.node--state { border-color: #a4d5d1; background: #f6fffd; }
 .react-flow__node.filter-dim, .react-flow__edge.filter-dim, .react-flow__minimap-node.filter-dim { opacity: .15; }
-.ontology-node .node-kind { display: block; text-transform: uppercase; letter-spacing: .1em; color: #819c8d; font-size: 9px; font-weight: 800; margin-bottom: 7px; }
-.node--action .node-kind, .node--relation .node-kind { display: table; border-radius: 4px; padding: 3px 6px; font-size: 11px; letter-spacing: .06em; margin: -3px 0 4px; }
+.ontology-node .node-meta { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 7px; min-width: 0; }
+.ontology-node .node-kind { display: block; flex: 0 0 auto; text-transform: uppercase; letter-spacing: .1em; color: #819c8d; font-size: 9px; font-weight: 800; }
+.ontology-node .node-namespace { display: block; margin-left: auto; min-width: 0; max-width: 60%; padding: 2px 5px; border-radius: 4px; background: #edf3ef; color: #567565; font-size: 10px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.node--action .node-kind, .node--relation .node-kind { display: table; border-radius: 4px; padding: 3px 6px; font-size: 11px; letter-spacing: .06em; margin: -3px 0 0; }
 .node--action .node-kind { color: #155b3a; background: #d9f1e2; }
 .node--relation .node-kind { color: #5a3180; background: #ede1f8; }
 .ontology-node strong { display: block; overflow-wrap: anywhere; font-size: 12px; }
