@@ -83,7 +83,8 @@ export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges
   const known = new Map<string, ViewerNode>();
   const actions = new Set(projection.relations.map((item) => string(item.action)).filter(Boolean));
   const foundation = [...projection.imports.filter((item) => item.id === 'ontology.foundation' && item.version === '0.2.0').map(importNamespace),
-    ...projection.sources.filter((item) => item.id === 'ontology.foundation' && item.version === '0.2.0').map((item) => string(item.alias))];
+    ...projection.sources.filter((item) => item.id === 'ontology.foundation' && item.version === '0.2.0').map((item) => string(item.alias)),
+    ...(projection.externalImports || []).filter((item) => item.id === 'ontology.foundation' && item.version === '0.2.0').map((item) => string(item.alias))];
   const isFoundationAction = (ref: string) => foundation.some((alias) => alias && ref === `${alias}:Action`);
   let changed = true;
   while (changed) {

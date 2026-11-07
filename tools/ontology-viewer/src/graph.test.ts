@@ -114,6 +114,24 @@ describe('ontology graph projection adapter', () => {
     expect(flow.nodes.find((node) => node.id === 'classes/test:Action')?.data.isAction).toBe(false);
   });
 
+  it('recognizes inherited actions from an unloaded transitive foundation by its exact identity', () => {
+    const classes = [...graph.classes,
+      { id: 'Base', fqid: 'test:Base', extends: 'pkg-foundation-1234:Action', source: source('/spec/classes/Base') },
+      { id: 'Child', fqid: 'test:Child', extends: 'test:Base', source: source('/spec/classes/Child') },
+      { id: 'Other', fqid: 'test:Other', extends: 'pkg-unrelated-1234:Action', source: source('/spec/classes/Other') },
+      { id: 'Old', fqid: 'test:Old', extends: 'pkg-foundation-old:Action', source: source('/spec/classes/Old') },
+    ];
+    const flow = buildGraph(parseProjection({ ...graph, classes, externalImports: [
+      { id: 'ontology.foundation', version: '0.2.0', alias: 'pkg-foundation-1234' },
+      { id: 'example.unrelated', version: '0.2.0', alias: 'pkg-unrelated-1234' },
+      { id: 'ontology.foundation', version: '0.1.0', alias: 'pkg-foundation-old' },
+    ] }));
+    expect(flow.nodes.find((node) => node.id === 'classes/test:Base')?.data.isAction).toBe(true);
+    expect(flow.nodes.find((node) => node.id === 'classes/test:Child')?.data.isAction).toBe(true);
+    expect(flow.nodes.find((node) => node.id === 'classes/test:Other')?.data.isAction).toBe(false);
+    expect(flow.nodes.find((node) => node.id === 'classes/test:Old')?.data.isAction).toBe(false);
+  });
+
   it('disambiguates colliding port names and does not bind imported field refs in the wrong scope', () => {
     const importedSource = { ...source('/spec/classes/Imported'), id: 'example.imported' };
     const imported = { id: 'Imported', fqid: 'dep:Imported', source: importedSource, diagramOrigin: 'example.imported@1.0.0',

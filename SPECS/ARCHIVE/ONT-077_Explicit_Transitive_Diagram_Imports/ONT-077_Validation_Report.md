@@ -60,3 +60,11 @@ the missing transitive package identity; this task changes the standalone
 Ontology Viewer only. The parser check used a local Node harness, not the hosted
 SpecSpace deployment. No release, pin update, network dependency fetching,
 deployment or external-symbol truth verification was performed.
+
+## Review follow-up
+
+An unloaded transitive `ontology.foundation@0.2.0` is now considered when
+identifying Action subclasses, including descendants not named by a relation.
+The regression also checks that an unrelated package and a different foundation
+version are not inferred to be that foundation. All 41 standalone Viewer unit
+tests pass; the Viewer build was rerun.
