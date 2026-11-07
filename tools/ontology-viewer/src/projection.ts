@@ -20,11 +20,20 @@ export interface Projection {
   view: 'full' | 'relations';
   sources: JsonObject[];
   imports: JsonObject[];
+  externalImports?: JsonObject[];
   classes: ClassDeclaration[];
   relations: Relation[];
   protocols: Declaration[];
   policies: Declaration[];
   stateMachines: Declaration[];
+}
+
+/** Foundation imports may use their compiler-defined default namespace. */
+export function importNamespace(entry: JsonObject): string {
+  if (typeof entry.namespace === 'string' && entry.namespace) return entry.namespace;
+  if (entry.id === 'ontology.foundation') return 'ont';
+  if (entry.id === 'specgraph.foundation') return 'sg';
+  return '';
 }
 
 function object(value: unknown, path: string): JsonObject {
@@ -141,11 +150,27 @@ export function parseProjection(value: unknown): Projection {
   const root = sources[0];
   if (root.id !== id || root.version !== version || root.namespace !== namespace || root.alias !== namespace ||
       root.sourceDigest !== sourceDigest || root.sourceByteDigest !== sourceByteDigest) throw new Error('sources[0] does not match the root package');
+  const imports = objects(graph.imports, 'imports');
+  const externalImports = graph.externalImports === undefined ? undefined : objects(graph.externalImports, 'externalImports');
+  const externalIdentities = new Set<string>();
+  for (const [index, entry] of (externalImports || []).entries()) {
+    const path = `externalImports[${index}]`;
+    const id = text(entry.id, `${path}.id`);
+    const version = text(entry.version, `${path}.version`);
+    const alias = text(entry.alias, `${path}.alias`);
+    if (!/^[a-z][a-z0-9-]*$/.test(alias)) throw new Error(`${path}: invalid alias ${alias}`);
+    if (aliases.has(alias) || imports.some((item) => importNamespace(item) === alias)) throw new Error(`${path}: duplicate alias ${alias}`);
+    if ([...sources, ...imports].some((item) => item.id === id && item.version === version)) throw new Error(`${path}: package is already bound`);
+    const identity = `${id}@${version}`;
+    if (externalIdentities.has(identity)) throw new Error(`${path}: duplicate package identity ${identity}`);
+    externalIdentities.add(identity);
+    aliases.add(alias);
+  }
   const result: Projection = {
     schemaVersion: graph.schemaVersion,
     id, namespace, version,
     view: graph.view,
-    sources, imports: objects(graph.imports, 'imports'),
+    sources, imports, ...(externalImports ? { externalImports } : {}),
     classes: classes(graph.classes), relations: relations(graph.relations),
     protocols: declarations(graph.protocols, 'protocols'), policies: declarations(graph.policies, 'policies'),
     stateMachines: declarations(graph.stateMachines, 'stateMachines'),

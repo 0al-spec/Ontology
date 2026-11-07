@@ -1,6 +1,7 @@
 import dagre from '@dagrejs/dagre';
 import { MarkerType, type Edge, type Node } from '@xyflow/react';
 import type { Declaration, JsonObject, Projection, SourceLocation } from './projection';
+import { importNamespace } from './projection';
 
 export { parseProjection } from './projection';
 
@@ -81,8 +82,9 @@ export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges
   const displayRef = (ref: string) => { const name = ref.split(':').pop() || ref; return shortNames.get(name) === 1 ? name : ref; };
   const known = new Map<string, ViewerNode>();
   const actions = new Set(projection.relations.map((item) => string(item.action)).filter(Boolean));
-  const foundation = [...projection.imports.filter((item) => item.id === 'ontology.foundation' && item.version === '0.2.0').map((item) => string(item.namespace)),
-    ...projection.sources.filter((item) => item.id === 'ontology.foundation' && item.version === '0.2.0').map((item) => string(item.alias))];
+  const foundation = [...projection.imports.filter((item) => item.id === 'ontology.foundation' && item.version === '0.2.0').map(importNamespace),
+    ...projection.sources.filter((item) => item.id === 'ontology.foundation' && item.version === '0.2.0').map((item) => string(item.alias)),
+    ...(projection.externalImports || []).filter((item) => item.id === 'ontology.foundation' && item.version === '0.2.0').map((item) => string(item.alias))];
   const isFoundationAction = (ref: string) => foundation.some((alias) => alias && ref === `${alias}:Action`);
   let changed = true;
   while (changed) {
@@ -125,7 +127,8 @@ export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges
     if (known.has(loaded)) return loaded;
     const id = `external/${loaded}`;
     const namespace = ref.split(':', 1)[0];
-    const imported = projection.imports.find((item) => item.namespace === namespace);
+    const imported = projection.imports.find((item) => importNamespace(item) === namespace) ||
+      projection.externalImports?.find((item) => item.alias === namespace);
     const origin = imported ? `${string(imported.id)}@${string(imported.version)}` : undefined;
     addNode(id, { label: ref, kind: 'external', origin });
     return id;

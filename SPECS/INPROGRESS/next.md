@@ -33,6 +33,10 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-077 resolves explicitly supplied transitive diagram imports by exact package
+  identity and local namespace. [Validation](../ARCHIVE/ONT-077_Explicit_Transitive_Diagram_Imports/ONT-077_Validation_Report.md)
+  passed locally; current SpecSpace still needs the additive metadata update.
+
 - ONT-075 shows the type catalog and wired action declarations in the Viewer. The next Viewer slice is a supplied instance record against its type map. See [validation](../ARCHIVE/ONT-075_Action_Canvas/Validation.md).
 
 - ONT-074 adds inspector navigation for executable action relationships and typed field targets. See the [validation](../ARCHIVE/ONT-074_Viewer_Inspector/Validation.md).

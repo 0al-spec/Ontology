@@ -1333,3 +1333,12 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-076: Exam calculator from the human outcome
 - The [exam calculator](../Examples/examcalc/README.md) models two typed actions. The [checks](ARCHIVE/ONT-076_Examcalc_Outcome/ONT-076_Validation_Report.md) compare two exam selections and confirm that a tablet can compute only for its currently active exam and set.
+
+## ONT-077: Explicit transitive diagram imports
+- **Status:** Complete — local validation passed; hosted CI and review separate
+- **Source:** SpecGraph promotion-model composition and operator approval to
+  handle explicitly provided transitive packages without implicit network access.
+- **Goal:** Render reachable package relationships using the declaring package's
+  own namespace and exact dependency identity/version, while retaining safe
+  handling of unresolved references and existing direct-import compatibility.
+- [Validation report](ARCHIVE/ONT-077_Explicit_Transitive_Diagram_Imports/ONT-077_Validation_Report.md).

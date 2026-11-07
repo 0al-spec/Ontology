@@ -22,6 +22,43 @@ const graph = {
 };
 
 describe('ontology graph projection adapter', () => {
+  it('labels an unloaded transitive dependency by exact package identity', () => {
+    const missing = { id: 'example.transitive', version: '2.0.0', alias: 'dep-1234' };
+    const input = {
+      ...graph,
+      externalImports: [missing],
+      relations: [{ ...graph.relations[0], range: 'dep-1234:Missing' }],
+    };
+    const flow = buildGraph(parseProjection(input));
+    expect(flow.nodes.find((node) => node.data.label === 'dep-1234:Missing')?.data).toMatchObject({
+      kind: 'external', origin: 'example.transitive@2.0.0',
+    });
+  });
+
+  it('rejects an external transitive alias that shadows an existing source', () => {
+    expect(() => parseProjection({
+      ...graph, externalImports: [{ id: 'example.transitive', version: '2.0.0', alias: 'test' }],
+    })).toThrow(/alias/i);
+  });
+
+  it('rejects conflicting or malformed external dependency bindings', () => {
+    const missing = { id: 'example.transitive', version: '2.0.0', alias: 'dep-1234' };
+    expect(() => parseProjection({ ...graph, externalImports: [missing, { ...missing, alias: 'dep-5678' }] })).toThrow(/identity/i);
+    expect(() => parseProjection({ ...graph, externalImports: [{ ...missing, alias: 'ext' }] })).toThrow(/alias/i);
+    expect(() => parseProjection({ ...graph, externalImports: [{ ...missing, alias: 'bad:alias' }] })).toThrow(/alias/i);
+    expect(() => parseProjection({ ...graph, externalImports: [{ ...missing, id: 'example.external', version: '1.0.0' }] })).toThrow(/bound/i);
+    expect(() => parseProjection({ ...graph, imports: [{ id: 'ontology.foundation', version: '0.2.0' }],
+      externalImports: [{ ...missing, alias: 'ont' }] })).toThrow(/alias/i);
+  });
+
+  it('labels a foundation reference when its namespace uses the compiler default', () => {
+    const flow = buildGraph(parseProjection({ ...graph,
+      imports: [{ id: 'ontology.foundation', version: '0.2.0' }],
+      relations: [{ ...graph.relations[0], range: 'ont:DomainEntity' }],
+    }));
+    expect(flow.nodes.find((node) => node.data.label === 'ont:DomainEntity')?.data.origin).toBe('ontology.foundation@0.2.0');
+  });
+
   it('retains one semantic relation for multiple oneOf edges and labels unloaded references', () => {
     const flow = buildGraph(parseProjection(graph));
     const choices = flow.edges.filter((edge) => edge.data?.semanticId === 'test:cites');
@@ -75,6 +112,24 @@ describe('ontology graph projection adapter', () => {
       imports: [{ id: 'ontology.foundation', version: '0.2.0', namespace: 'foundation' }] }));
     expect(flow.nodes.find((node) => node.id === 'classes/test:Child')?.data.isAction).toBe(true);
     expect(flow.nodes.find((node) => node.id === 'classes/test:Action')?.data.isAction).toBe(false);
+  });
+
+  it('recognizes inherited actions from an unloaded transitive foundation by its exact identity', () => {
+    const classes = [...graph.classes,
+      { id: 'Base', fqid: 'test:Base', extends: 'pkg-foundation-1234:Action', source: source('/spec/classes/Base') },
+      { id: 'Child', fqid: 'test:Child', extends: 'test:Base', source: source('/spec/classes/Child') },
+      { id: 'Other', fqid: 'test:Other', extends: 'pkg-unrelated-1234:Action', source: source('/spec/classes/Other') },
+      { id: 'Old', fqid: 'test:Old', extends: 'pkg-foundation-old:Action', source: source('/spec/classes/Old') },
+    ];
+    const flow = buildGraph(parseProjection({ ...graph, classes, externalImports: [
+      { id: 'ontology.foundation', version: '0.2.0', alias: 'pkg-foundation-1234' },
+      { id: 'example.unrelated', version: '0.2.0', alias: 'pkg-unrelated-1234' },
+      { id: 'ontology.foundation', version: '0.1.0', alias: 'pkg-foundation-old' },
+    ] }));
+    expect(flow.nodes.find((node) => node.id === 'classes/test:Base')?.data.isAction).toBe(true);
+    expect(flow.nodes.find((node) => node.id === 'classes/test:Child')?.data.isAction).toBe(true);
+    expect(flow.nodes.find((node) => node.id === 'classes/test:Other')?.data.isAction).toBe(false);
+    expect(flow.nodes.find((node) => node.id === 'classes/test:Old')?.data.isAction).toBe(false);
   });
 
   it('disambiguates colliding port names and does not bind imported field refs in the wrong scope', () => {

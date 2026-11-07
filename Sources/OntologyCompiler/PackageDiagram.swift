@@ -158,8 +158,10 @@ struct PackageDiagram {
         if records(kind).contains(where: { text($0, "fqid") == ref }) { return nodeID(kind, ref) }
         let id = "external/\(kind)/\(ref)"
         let importNamespace = ref.split(separator: ":").first.map(String.init) ?? ""
-        let imported = records("imports").first { text($0, "namespace") == importNamespace } ?? [:]
-        let origin = "\(text(imported, "id"))@\(text(imported, "version"))"
+        let direct = diagramImports(ir).first { $0.namespace.rawValue == importNamespace }
+        let external = records("externalImports").first { text($0, "alias") == importNamespace } ?? [:]
+        let origin = direct.map { "\($0.id.rawValue)@\($0.version.rawValue)" }
+            ?? "\(text(external, "id"))@\(text(external, "version"))"
         externalNodes[id] = node(id, label: "«external reference»\n\(ref)\n\(origin)",
                                  fill: "#f1f5f9", extra: ", style=\"rounded,dashed,filled\"")
         return id
