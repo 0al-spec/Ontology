@@ -1,11 +1,12 @@
 # Tasks Archive
 
-**Last Updated:** 2026-11-07
+**Last Updated:** 2026-11-09
 
 ## Archived Tasks
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-079 | [ONT-079_Imported_Typed_References/](ONT-079_Imported_Typed_References/) | 2026-11-09 | PASS (local; CI and review separate) |
 | ONT-078 | [ONT-078_Viewer_Namespace_Badges/](ONT-078_Viewer_Namespace_Badges/) | 2026-11-07 | PASS (local; CI and review separate) |
 | ONT-077 | [ONT-077_Explicit_Transitive_Diagram_Imports/](ONT-077_Explicit_Transitive_Diagram_Imports/) | 2026-11-07 | PASS (local; CI and review separate) |
 | ONT-076 | [ONT-076_Examcalc_Outcome/](ONT-076_Examcalc_Outcome/) | 2026-11-04 | PASS (local typed model and two-exam execution) |
@@ -80,6 +81,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-09 | ONT-079 | Archived [self-review](ONT-079_Imported_Typed_References/REVIEW_ONT-079.md); follow-ups ONT-080 and ONT-081 recorded |
+| 2026-11-09 | ONT-079 | Archived imported typed references and validation (local PASS) |
 | 2026-11-07 | ONT-078 | Archived [self-review](ONT-078_Viewer_Namespace_Badges/REVIEW_ONT-078.md); FOLLOW-UP skipped |
 | 2026-11-07 | ONT-078 | Archived viewer namespace badges and validation (local PASS) |
 | 2026-11-07 | ONT-077 | Archived [self-review](ONT-077_Explicit_Transitive_Diagram_Imports/REVIEW_ONT-077.md); local FOLLOW-UP skipped |

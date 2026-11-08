@@ -2,7 +2,7 @@ import Foundation
 import OntologyRules
 
 extension OntologyCompiler {
-    func normalize(_ package: LoadedPackage) -> JSONObject {
+    func normalize(_ package: LoadedPackage, suppliedImports: [LoadedPackage] = []) -> JSONObject {
         let spec = package.spec
         var ir: JSONObject = [
             "id": package.id,
@@ -10,7 +10,7 @@ extension OntologyCompiler {
             "version": package.version,
             "sourceDigest": sha256(package.source),
             "imports": normalizeImports(spec),
-            "classes": normalizeClasses(spec, package: package),
+            "classes": normalizeClasses(spec, package: package, suppliedImports: suppliedImports),
             "relations": normalizeRelations(spec, package: package),
             "protocols": normalizeProtocols(spec, package: package),
             "policies": normalizePolicies(spec, package: package),
@@ -41,7 +41,7 @@ extension OntologyCompiler {
             }
     }
 
-    private func normalizeClasses(_ spec: JSONObject, package: LoadedPackage) -> [JSONObject] {
+    private func normalizeClasses(_ spec: JSONObject, package: LoadedPackage, suppliedImports: [LoadedPackage]) -> [JSONObject] {
         let classesObject = spec["classes"] as? JSONObject ?? [:]
         return classesObject.keys.sorted().map { name -> JSONObject in
             let definition = classesObject[name] as? JSONObject ?? [:]
@@ -61,7 +61,8 @@ extension OntologyCompiler {
                 normalized["lifecycle"] = lifecycle
             }
             copyLayer(from: definition, to: &normalized)
-            let fields = normalizeFields(definition["fields"], namespace: package.namespace)
+            let fields = normalizeFields(definition["fields"], namespace: package.namespace,
+                                         imports: spec["imports"] as? [JSONObject] ?? [], supplied: suppliedImports)
             if !fields.isEmpty {
                 normalized["fields"] = fields
             }
@@ -69,7 +70,7 @@ extension OntologyCompiler {
         }
     }
 
-    private func normalizeFields(_ value: Any?, namespace: String) -> [JSONObject] {
+    private func normalizeFields(_ value: Any?, namespace: String, imports: [JSONObject], supplied: [LoadedPackage]) -> [JSONObject] {
         guard let fieldsObject = value as? JSONObject else { return [] }
         return fieldsObject.keys.sorted().map { name -> JSONObject in
             let definition = fieldsObject[name] as? JSONObject ?? [:]
@@ -80,6 +81,16 @@ extension OntologyCompiler {
             ]
             if let target = string(definition["target"]) {
                 normalized["target"] = normalizeRef(target, namespace: namespace)
+                let parts = target.split(separator: ":", maxSplits: 1).map(String.init)
+                if parts.count == 2, parts[0] != namespace,
+                   let binding = imports.first(where: {
+                       ontologyImportNamespace(packageID: string($0["id"]), explicit: string($0["namespace"])) == parts[0]
+                   }),
+                   let match = supplied.first(where: { $0.id == string(binding["id"]) && $0.version == string(binding["version"]) }) {
+                    normalized["targetType"] = "\(match.namespace):\(parts[1])"
+                    normalized["targetUri"] = "ontology://\(match.id)/\(match.version)/classes/\(parts[1])"
+                    normalized["targetSourceDigest"] = sha256(match.source)
+                }
             }
             if let description = string(definition["description"]) {
                 normalized["description"] = description

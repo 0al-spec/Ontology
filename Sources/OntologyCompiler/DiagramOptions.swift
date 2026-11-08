@@ -46,8 +46,18 @@ extension OntologyCompiler {
         guard decision == .valid else {
             throw OntologyCompilerError.invalidArgument(decision?.message ?? "Unknown diagram selection")
         }
-        let root = try diagramIR(path: path)
-        let supplied = try options.imports.map { try diagramIR(path: $0) }
+        let loaded = try ([path] + options.imports).map { try diagramLoad(path: $0) }
+        for (index, item) in loaded.enumerated() {
+            let dependencies = loaded.enumerated().filter { $0.offset != index }.map { $0.element.package }
+            validate(item.package, suppliedImports: dependencies)
+        }
+        guard !hasErrors(diagnostics) else { throw OntologyCompilerError.packageError(diagnostics) }
+        let records = loaded.enumerated().map { index, item in
+            let dependencies = loaded.enumerated().filter { $0.offset != index }.map { $0.element.package }
+            return diagramIR(package: item.package, byteDigest: item.byteDigest, suppliedImports: dependencies)
+        }
+        let root = records[0]
+        let supplied = Array(records.dropFirst())
         let scope = try DiagramDependencyScope(root: root, supplied: supplied, digest: sha256)
         let imported = scope.imported
         var projection = try options.view == .relations
@@ -76,7 +86,7 @@ extension OntologyCompiler {
         return String(decoding: data, as: UTF8.self) + "\n"
     }
 
-    private func diagramIR(path: OntologySourcePath) throws -> JSONObject {
+    private func diagramLoad(path: OntologySourcePath) throws -> (package: LoadedPackage, byteDigest: String) {
         let data: Data
         do {
             data = try Data(contentsOf: path.url)
@@ -89,10 +99,12 @@ extension OntologyCompiler {
             throw OntologyCompilerError.packageError(diagnostics)
         }
         guard let package = load(source: source, path: path.path) else { throw OntologyCompilerError.packageError(diagnostics) }
-        validate(package)
-        guard !hasErrors(diagnostics) else { throw OntologyCompilerError.packageError(diagnostics) }
-        var ir = normalize(package)
-        ir["sourceByteDigest"] = sha256(data)
+        return (package, sha256(data))
+    }
+
+    private func diagramIR(package: LoadedPackage, byteDigest: String, suppliedImports: [LoadedPackage]) -> JSONObject {
+        var ir = normalize(package, suppliedImports: suppliedImports)
+        ir["sourceByteDigest"] = byteDigest
         return diagramAttachSources(ir)
     }
 }
@@ -100,7 +112,7 @@ extension OntologyCompiler {
 func diagramImports(_ ir: JSONObject) -> [DiagramImportDeclaration] {
     (ir["imports"] as? [JSONObject] ?? []).map {
         let id = $0["id"] as? String ?? ""
-        let namespace = $0["namespace"] as? String ?? FoundationExports.current.defaultNamespace(forPackageID: id) ?? ""
+        let namespace = ontologyImportNamespace(packageID: id, explicit: $0["namespace"] as? String) ?? ""
         return DiagramImportDeclaration(id: id, version: $0["version"] as? String ?? "", namespace: namespace)
     }
 }

@@ -1348,3 +1348,31 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Source:** Operator request to move the namespace to a top-right badge.
 - **Goal:** Improve node-name readability without changing graph semantics.
 - [Validation report](ARCHIVE/ONT-078_Viewer_Namespace_Badges/ONT-078_Validation_Report.md).
+
+## ONT-079: Imported typed reference targets
+
+- **Status:** Complete locally. [Task](ARCHIVE/ONT-079_Imported_Typed_References/ONT-079_Imported_Typed_References.md); [validation](ARCHIVE/ONT-079_Imported_Typed_References/ONT-079_Validation_Report.md). Hosted CI and review remain separate.
+- **Purpose:** Let action fields reference classes in an explicitly imported
+  ontology package, so consumers can reuse shared concepts without duplicating
+  their declarations. Preserve target identity through validation, SDK and diagram.
+- **Dependencies:** ONT-073 typed references and ONT-077 explicit diagram imports.
+
+## ONT-080: Index-bound imports for staged package advice
+
+- **Status:** Candidate; identified in the ONT-079 review.
+- **Problem:** `advise-staged` cannot receive imported sources and reports an
+  unresolved `Ref` for packages that pass `ontologyc check --import`.
+- **Outcome:** Permit explicit imports from the active Git index, check their
+  exact package identity and version, and distinguish unavailable dependencies
+  from invalid targets. Never substitute unstaged worktree bytes. Exercise the
+  behavior using an alternate index and a mismatched worktree.
+- **Dependency:** ONT-079.
+
+## ONT-081: Imported references in compatibility and publication workflows
+
+- **Status:** Candidate; identified in the ONT-079 review.
+- **Problem:** `diff`, registry `publish` and related commands do not accept
+  the import sources required to validate imported `Ref` fields.
+- **Outcome:** Define explicit source-bound inputs and compatibility behavior
+  for imported targets; test changed versions, absent sources and target types.
+- **Dependency:** ONT-079.

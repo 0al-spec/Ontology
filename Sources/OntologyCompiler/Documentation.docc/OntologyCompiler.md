@@ -20,6 +20,9 @@ with the expected status code.
 
 `check` parses a `DomainOntologyPackage`, validates metadata, imports, classes,
 relations, policies, protocols, and state machines, then emits diagnostics.
+Imported typed-reference targets additionally require explicit matching package
+sources supplied to `check` or `compile`; the compiler checks the package ID,
+version and target class without fetching dependencies from the network.
 
 ```bash
 swift run ontologyc check \

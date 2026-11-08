@@ -34,10 +34,10 @@ Run `ontologyc <command> --help` for command-specific usage.
 """
 
 let commandUsage: [String: String] = [
-    "check": "Usage:\n  ontologyc check <package.yaml> [--format text|json]",
+    "check": "Usage:\n  ontologyc check <package.yaml> [--format text|json] [--import <package.yaml> ...]",
     "advise-staged": "Usage:\n  ontologyc advise-staged",
     "export-foundation": "Usage:\n  ontologyc export-foundation",
-    "compile": "Usage:\n  ontologyc compile <package.yaml> --target typescript --out <directory>",
+    "compile": "Usage:\n  ontologyc compile <package.yaml> --target typescript --out <directory> [--import <package.yaml> ...]",
     "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory> [--source-uri <uri>] [--source-ref <ref>]",
     "validate-instances": "Usage:\n  ontologyc validate-instances <graph.json> --ontology-ir <ontology.normalized.json> [--profile eventcore-v1|eventcore-provenance-v1] [--provenance-authority <trusted-authority.json>] [--out <report.json>]",
     "export-instance-contract": "Usage:\n  ontologyc export-instance-contract --ontology-ir <ontology.normalized.json> [--profile eventcore-v1|eventcore-provenance-v1] --out <directory>",
@@ -56,6 +56,7 @@ let commandUsage: [String: String] = [
 struct ParsedArguments {
     let positional: [String]
     let options: [String: String]
+    let repeatedOptions: [String: [String]]
 }
 
 func printHelp(_ text: String) -> Never {
@@ -69,13 +70,29 @@ func usageError(_ message: String, command: String? = nil) -> Never {
     exit(2)
 }
 
+func recordOption(
+    _ name: String,
+    value: String,
+    repeatableOptions: Set<String>,
+    options: inout [String: String],
+    repeatedOptions: inout [String: [String]]
+) {
+    if repeatableOptions.contains(name) {
+        repeatedOptions[name, default: []].append(value)
+    } else {
+        options[name] = value
+    }
+}
+
 func parseArguments(
     _ raw: ArraySlice<String>,
     allowedOptions: Set<String>,
-    command: String
+    command: String,
+    repeatableOptions: Set<String> = []
 ) -> ParsedArguments {
     var positional: [String] = []
     var options: [String: String] = [:]
+    var repeatedOptions: [String: [String]] = [:]
     var index = raw.startIndex
 
     while index < raw.endIndex {
@@ -94,7 +111,8 @@ func parseArguments(
                 guard !parts[1].isEmpty else {
                     usageError("missing value for \(optionName)", command: command)
                 }
-                options[optionName] = parts[1]
+                recordOption(optionName, value: parts[1], repeatableOptions: repeatableOptions,
+                             options: &options, repeatedOptions: &repeatedOptions)
                 index = raw.index(after: index)
                 continue
             }
@@ -105,7 +123,8 @@ func parseArguments(
             if raw[next].hasPrefix("--"), allowedOptions.contains(raw[next]) {
                 usageError("missing value for \(optionName)", command: command)
             }
-            options[optionName] = raw[next]
+            recordOption(optionName, value: raw[next], repeatableOptions: repeatableOptions,
+                         options: &options, repeatedOptions: &repeatedOptions)
             index = raw.index(after: next)
         } else if value.hasPrefix("-") {
             usageError("unknown option \(value)", command: command)
@@ -115,7 +134,7 @@ func parseArguments(
         }
     }
 
-    return ParsedArguments(positional: positional, options: options)
+    return ParsedArguments(positional: positional, options: options, repeatedOptions: repeatedOptions)
 }
 
 func requireOption(_ name: String, in parsed: ParsedArguments, command: String) -> String {

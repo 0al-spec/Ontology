@@ -26,19 +26,25 @@ public final class OntologyCompiler {
     public init() {}
 
     /// Parses and validates one ontology package, returning sorted diagnostics without writing output files.
-    public func check(path: OntologySourcePath) -> [Diagnostic] {
+    public func check(path: OntologySourcePath, imports: [OntologySourcePath] = []) -> [Diagnostic] {
         diagnostics = []
-        return checked(load(path: path.path))
+        return checked(load(path: path.path), imports: imports)
     }
 
     /// Validate supplied bytes decoded as UTF-8, using their source path for diagnostics.
-    public func check(source: String, path: OntologySourcePath) -> [Diagnostic] {
+    public func check(source: String, path: OntologySourcePath, imports: [OntologySourcePath] = []) -> [Diagnostic] {
         diagnostics = []
-        return checked(load(source: source, path: path.path))
+        return checked(load(source: source, path: path.path), imports: imports)
     }
 
-    private func checked(_ package: LoadedPackage?) -> [Diagnostic] {
-        if let package { validate(package) }
+    private func checked(_ package: LoadedPackage?, imports: [OntologySourcePath]) -> [Diagnostic] {
+        let supplied = imports.compactMap { load(path: $0.path) }
+        for imported in supplied {
+            var dependencies = supplied.filter { $0.path != imported.path }
+            if let package, package.path != imported.path { dependencies.append(package) }
+            validate(imported, suppliedImports: dependencies)
+        }
+        if let package { validate(package, suppliedImports: supplied) }
         return diagnostics.sorted {
             [$0.path, $0.code, $0.message].joined(separator: "\u{1f}") <
                 [$1.path, $1.code, $1.message].joined(separator: "\u{1f}")
@@ -46,17 +52,23 @@ public final class OntologyCompiler {
     }
 
     /// Validates one ontology package and emits normalized IR plus generated TypeScript artifacts.
-    public func compile(path: OntologySourcePath, outDirectory: OntologyOutputDirectory) throws -> [Diagnostic] {
+    public func compile(path: OntologySourcePath, outDirectory: OntologyOutputDirectory, imports: [OntologySourcePath] = []) throws -> [Diagnostic] {
         diagnostics = []
         guard let package = load(path: path.path) else {
             return diagnostics
         }
-        validate(package)
+        let supplied = imports.compactMap { load(path: $0.path) }
+        for imported in supplied {
+            var dependencies = supplied.filter { $0.path != imported.path }
+            if package.path != imported.path { dependencies.append(package) }
+            validate(imported, suppliedImports: dependencies)
+        }
+        validate(package, suppliedImports: supplied)
         if hasErrors(diagnostics) {
             return diagnostics
         }
 
-        let ir = normalize(package)
+        let ir = normalize(package, suppliedImports: supplied)
         try emit(ir: ir, to: outDirectory.path)
         return diagnostics
     }

@@ -134,14 +134,26 @@ asynchronous completion. Parsing and construction perform no action.
 
 An action can carry a reference to another instance. Declare a class field
 such as `repository: {type: ref, target: Repository, required: true}`.
-The target must name a class declared in the same package. The normalized field
-retains its qualified target. Changing that target is a breaking field-type change.
+The target can name a class declared in the same package, or a qualified class
+from an explicitly declared import. For imported targets, provide the exact
+package source to `check` or `compile` with repeatable `--import <package.yaml>`
+options. Missing sources, mismatched versions and missing classes fail validation;
+the compiler never fetches imports implicitly. The normalized field retains the
+local qualified target and records the imported class's canonical type, URI and
+source digest. The existing `diff` contract classifies local target changes as
+breaking; imported target comparison is not yet supported.
 The SDK exposes the field as `Ref<Repository>`. Its record contains a `target`
 discriminator and a required JSON `locator`. The consumer chooses the locator
 format and resolves it before applying the action. A successful record parse
 checks the discriminator and JSON shape; it cannot establish instance existence.
 The [repository membership example](../../Examples/repository-membership/membership.ts)
 executes the same action with a database key and a revision-scoped graph address.
+The [imported reference example](../../Examples/imported-typed-reference/consumer.ts)
+also checks TypeScript and runtime identity when an import alias differs from
+the imported package's namespace. `diff`, registry `publish` and
+`advise-staged` do not yet take import sources. They cannot confirm an imported
+`Ref`: the advisory may report an unresolved target even when `check --import`
+passes. Use the strict check with explicitly supplied sources in this case.
 
 ### `ontologyc compile`
 
