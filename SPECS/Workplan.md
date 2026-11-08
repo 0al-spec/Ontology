@@ -1351,7 +1351,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-079: Imported typed reference targets
 
-- **Status:** Selected for planning.
+- **Status:** Planned. [Task](INPROGRESS/ONT-079_Imported_Typed_References.md).
 - **Purpose:** Let action fields reference classes in an explicitly imported
   ontology package, so consumers can reuse shared concepts without duplicating
   their declarations. Preserve target identity through validation, SDK and diagram.

@@ -1,9 +1,9 @@
 # Active: ONT-079 — Imported Typed References
 
 **Priority:** P1 — unblock a single shared SpecGraph vocabulary.
-**Status:** Selected for planning.
-**Next step:** Specify imported `Ref` target validation, generated SDK identity,
-and diagram projection with explicit package provenance.
+**Status:** Planned.
+**Next step:** Implement [ONT-079](ONT-079_Imported_Typed_References.md) with
+explicit local package inputs and source-bound target validation.
 
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
