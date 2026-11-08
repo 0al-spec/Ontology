@@ -1,3 +1,9 @@
+# Active: ONT-082 — Resolve imported Ref targets in the viewer
+
+**Priority:** P1 — remove false external nodes for loaded imported types.
+**Status:** Selected.
+**Next step:** Plan source-bound target resolution and negative cases.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
