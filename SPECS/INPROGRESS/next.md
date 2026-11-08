@@ -1,9 +1,3 @@
-# Active: ONT-080 — Index-bound imports for staged package advice
-
-**Priority:** P1 — make commit-time advice useful for imported typed references.
-**Status:** Selected.
-**Next step:** Plan explicit import inputs that read only the active Git index.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -38,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-080 adds explicit index-bound imports to staged advice. [Validation](../ARCHIVE/ONT-080_Index_Bound_Import_Advice/ONT-080_Validation_Report.md) passed locally; hosted CI and review are separate.
 
 - ONT-079 adds source-bound imported typed references. [Validation](../ARCHIVE/ONT-079_Imported_Typed_References/ONT-079_Validation_Report.md) passed locally; hosted CI and review are separate.
 

@@ -29,3 +29,7 @@ import source without silently consulting the working tree.
    behave correctly. Existing advice and strict compiler tests remain green.
 4. No automatic discovery, network access, canonical acceptance or runtime
    instance resolution is implied.
+
+---
+**Archived:** 2026-11-09
+**Verdict:** PASS (local; hosted CI and review separate)
