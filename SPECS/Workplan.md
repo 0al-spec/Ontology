@@ -1348,3 +1348,11 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Source:** Operator request to move the namespace to a top-right badge.
 - **Goal:** Improve node-name readability without changing graph semantics.
 - [Validation report](ARCHIVE/ONT-078_Viewer_Namespace_Badges/ONT-078_Validation_Report.md).
+
+## ONT-079: Imported typed reference targets
+
+- **Status:** Selected for planning.
+- **Purpose:** Let action fields reference classes in an explicitly imported
+  ontology package, so consumers can reuse shared concepts without duplicating
+  their declarations. Preserve target identity through validation, SDK and diagram.
+- **Dependencies:** ONT-073 typed references and ONT-077 explicit diagram imports.
