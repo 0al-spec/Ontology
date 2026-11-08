@@ -1359,7 +1359,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-080: Index-bound imports for staged package advice
 
-- **Status:** Candidate; identified in the ONT-079 review.
+- **Status:** Selected; identified in the ONT-079 review.
 - **Problem:** `advise-staged` cannot receive imported sources and reports an
   unresolved `Ref` for packages that pass `ontologyc check --import`.
 - **Outcome:** Permit explicit imports from the active Git index, check their

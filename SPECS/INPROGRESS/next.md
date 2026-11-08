@@ -1,3 +1,9 @@
+# Active: ONT-080 — Index-bound imports for staged package advice
+
+**Priority:** P1 — make commit-time advice useful for imported typed references.
+**Status:** Selected.
+**Next step:** Plan explicit import inputs that read only the active Git index.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
