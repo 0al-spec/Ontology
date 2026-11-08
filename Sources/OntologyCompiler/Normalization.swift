@@ -83,7 +83,9 @@ extension OntologyCompiler {
                 normalized["target"] = normalizeRef(target, namespace: namespace)
                 let parts = target.split(separator: ":", maxSplits: 1).map(String.init)
                 if parts.count == 2, parts[0] != namespace,
-                   let binding = imports.first(where: { string($0["namespace"]) == parts[0] }),
+                   let binding = imports.first(where: {
+                       ontologyImportNamespace(packageID: string($0["id"]), explicit: string($0["namespace"])) == parts[0]
+                   }),
                    let match = supplied.first(where: { $0.id == string(binding["id"]) && $0.version == string(binding["version"]) }) {
                     normalized["targetType"] = "\(match.namespace):\(parts[1])"
                     normalized["targetUri"] = "ontology://\(match.id)/\(match.version)/classes/\(parts[1])"

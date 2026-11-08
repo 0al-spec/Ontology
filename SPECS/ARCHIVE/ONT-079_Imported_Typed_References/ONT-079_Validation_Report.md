@@ -6,9 +6,9 @@
 ## Executed checks
 
 - `bash tools/swift-quality.sh`: SwiftFormat, SwiftLint and the explicit Swift
-  dependency-import build passed; 59 OntologyRules and 197 OntologyCompiler
-  tests passed on macOS. SwiftPM scratch, package cache and temporary files
-  were routed to TB5. Coverage was not measured locally.
+  dependency-import build passed; 59 OntologyRules and 198 OntologyCompiler
+  tests passed on macOS. SwiftPM scratch and package caches were routed to
+  TB5. Coverage was not measured locally.
 - `bash tools/typescript-smoke.sh <fresh ontologyc>` in a TB5 source snapshot:
   TypeScript typechecking, existing SDK examples and the new imported-reference
   consumer passed. The latter rejects a same-named local type and accepts only
@@ -17,6 +17,9 @@
   undeclared alias, duplicate inputs, ambiguous canonical namespace, local
   namesakes, a BOM-normalized source digest, and full projection through a
   transitive import with rebased aliases.
+- The review regression first failed for default `ont` and `sg` import aliases
+  because normalized targets lost canonical identity. Both now retain the
+  canonical type, URI and source digest, including in generated TypeScript/Zod.
 - An isolated copy of the SpecGraph review composition compiled after replacing
   four repeated class declarations and six repeated relations with references
   to core; the generated graph retained all five action relationships. This is

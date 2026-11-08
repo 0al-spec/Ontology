@@ -79,6 +79,51 @@ final class ImportedTypedReferenceTests: XCTestCase {
         }
     }
 
+    func testDefaultFoundationAliasesPreserveImportedIdentity() throws {
+        try fixture { model, shared, _, directory in
+            let originalModel = try String(contentsOf: model, encoding: .utf8)
+            let originalShared = try String(contentsOf: shared, encoding: .utf8)
+            for (id, version, alias) in [("ontology.foundation", "0.2.0", "ont"), ("specgraph.foundation", "0.1.0", "sg")] {
+                let foundation = directory.appendingPathComponent("\(alias)-foundation.yaml")
+                let source = originalShared.replacingOccurrences(
+                    of: "id: example.shared, namespace: canonical, version: 1.0.0",
+                    with: "id: \(id), namespace: canonical, version: \(version)"
+                )
+                try source.write(to: foundation, atomically: true, encoding: .utf8)
+                let sourceModel = originalModel
+                    .replacingOccurrences(of: "{id: ontology.foundation, namespace: ont, version: 0.2.0}",
+                                          with: "{id: \(id), version: \(version)}")
+                    .replacingOccurrences(of: "    - {id: example.shared, namespace: shared, version: 1.0.0}\n", with: "")
+                    .replacingOccurrences(of: "extends: ont:Action", with: "extends: ont:DomainEntity")
+                    .replacingOccurrences(of: "ont:", with: "\(alias):")
+                    .replacingOccurrences(of: "shared:Item", with: "\(alias):Item")
+                try sourceModel.write(to: model, atomically: true, encoding: .utf8)
+                let output = directory.appendingPathComponent("generated-\(alias)")
+                let diagnostics = try OntologyCompiler().compile(
+                    path: OntologySourcePath(url: model), outDirectory: OntologyOutputDirectory(path: output.path),
+                    imports: [OntologySourcePath(url: foundation)]
+                )
+                guard diagnostics.isEmpty else {
+                    XCTFail("\(diagnostics)")
+                    continue
+                }
+                let data = try Data(contentsOf: output.appendingPathComponent("ontology.normalized.json"))
+                let ir = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+                let classes = try XCTUnwrap(ir["classes"] as? [[String: Any]])
+                let action = try XCTUnwrap(classes.first { $0["fqid"] as? String == "draft:Use" })
+                let fields = try XCTUnwrap(action["fields"] as? [[String: Any]])
+                XCTAssertEqual(fields.first?["target"] as? String, "\(alias):Item")
+                XCTAssertEqual(fields.first?["targetType"] as? String, "canonical:Item")
+                XCTAssertEqual(fields.first?["targetUri"] as? String, "ontology://\(id)/\(version)/classes/Item")
+                XCTAssertNotNil(fields.first?["targetSourceDigest"])
+                let types = try String(contentsOf: output.appendingPathComponent("types.ts"), encoding: .utf8)
+                let schemas = try String(contentsOf: output.appendingPathComponent("schemas.ts"), encoding: .utf8)
+                XCTAssertTrue(types.contains("Ref<{ readonly $type: \"canonical:Item\" }>"), types)
+                XCTAssertTrue(schemas.contains("target: z.literal(\"canonical:Item\")"), schemas)
+            }
+        }
+    }
+
     func testTransitiveDiagramRebindsImportedFieldToExactPackage() throws {
         try fixture { model, shared, overview, _ in
             let imports = [OntologySourcePath(url: model), OntologySourcePath(url: shared)]

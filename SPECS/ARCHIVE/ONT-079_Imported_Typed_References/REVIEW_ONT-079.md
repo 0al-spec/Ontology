@@ -27,7 +27,7 @@ A resolved type does not establish an instance or a semantic equivalence.
 
 ## Tests
 
-[Local validation](ONT-079_Validation_Report.md) covers Swift quality, 256
+[Local validation](ONT-079_Validation_Report.md) covers Swift quality, 257
 Swift tests, SDK consumers, a transitive diagram, and an isolated real
 SpecGraph composition. Coverage was not measured locally. CI, independent
 review and release remain separate.

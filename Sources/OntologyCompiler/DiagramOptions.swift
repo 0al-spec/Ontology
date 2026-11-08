@@ -112,7 +112,7 @@ extension OntologyCompiler {
 func diagramImports(_ ir: JSONObject) -> [DiagramImportDeclaration] {
     (ir["imports"] as? [JSONObject] ?? []).map {
         let id = $0["id"] as? String ?? ""
-        let namespace = $0["namespace"] as? String ?? FoundationExports.current.defaultNamespace(forPackageID: id) ?? ""
+        let namespace = ontologyImportNamespace(packageID: id, explicit: $0["namespace"] as? String) ?? ""
         return DiagramImportDeclaration(id: id, version: $0["version"] as? String ?? "", namespace: namespace)
     }
 }

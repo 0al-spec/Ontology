@@ -1,5 +1,9 @@
 import OntologyRules
 
+func ontologyImportNamespace(packageID: String?, explicit: String?) -> String? {
+    explicit ?? FoundationExports.current.defaultNamespace(forPackageID: packageID)
+}
+
 struct PackageImportBindings {
     var namespaces = Set<String>()
     var foundations: [String: FoundationExports] = [:]
@@ -25,7 +29,7 @@ extension OntologyCompiler {
             let id = requiredString(entry, "id", path: "\(path).id", code: "imports.required")
             let version = requiredString(entry, "version", path: "\(path).version", code: "imports.required")
             let catalog = FoundationExports.catalog(packageID: id, version: version)
-            let defaultNamespace = FoundationExports.current.defaultNamespace(forPackageID: id)
+            let defaultNamespace = ontologyImportNamespace(packageID: id, explicit: nil)
             let isFoundation = defaultNamespace != nil
             if isFoundation, let version, catalog == nil {
                 add("imports.foundation.version.unavailable", "\(path).version", "No foundation export catalog for version \(version)")
