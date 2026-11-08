@@ -57,6 +57,11 @@ before. Alias collisions and multiple versions retain distinct bindings; duplica
 supplied identities and unreachable supplied files are rejected. Cycles are
 bounded by package identity. No dependency file is discovered or fetched.
 
+Imported `Ref` field targets are stricter than ordinary external relation
+references: their exact source package must be supplied and contain the target
+class. The field's display target is rebased to the diagram alias, while its
+canonical type, URI and source digest retain the imported package's identity.
+
 `relations` follows the
 existing visualizer selection: root relations and incident root classes plus
 explicitly selected classes from exact reachable local imports; imported relations

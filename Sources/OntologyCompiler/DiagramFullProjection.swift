@@ -31,6 +31,24 @@ extension DiagramImportedPackage {
         return mapped
     }
 
+    func scopedTransitions(_ transitions: [JSONObject]) throws -> [JSONObject] {
+        try transitions.map { transition in
+            var mapped = transition
+            for key in ["command", "event"] {
+                if let ref = transition[key] as? String { mapped[key] = try scopedReference(ref) }
+            }
+            return mapped
+        }
+    }
+
+    func scopedFields(_ fields: [JSONObject]) throws -> [JSONObject] {
+        try fields.map { field in
+            var mapped = field
+            if let target = field["target"] as? String { mapped["target"] = try scopedReference(target) }
+            return mapped
+        }
+    }
+
     func fullDeclarations(_ section: String, matching selected: Set<String>? = nil) throws -> [JSONObject] {
         try (ir[section] as? [JSONObject] ?? []).filter { definition in
             selected?.contains("\(namespace):\(definition["id"] as? String ?? "")") ?? true
@@ -50,13 +68,10 @@ extension DiagramImportedPackage {
                 result["range"] = ["oneOf": try alternatives.map(scopedReference)]
             }
             if let transitions = definition["transitions"] as? [JSONObject] {
-                result["transitions"] = try transitions.map { transition in
-                    var mapped = transition
-                    for key in ["command", "event"] {
-                        if let ref = transition[key] as? String { mapped[key] = try scopedReference(ref) }
-                    }
-                    return mapped
-                }
+                result["transitions"] = try scopedTransitions(transitions)
+            }
+            if section == "classes", let fields = definition["fields"] as? [JSONObject] {
+                result["fields"] = try scopedFields(fields)
             }
             if section == "relations" { result["id"] = result["fqid"] }
             return result

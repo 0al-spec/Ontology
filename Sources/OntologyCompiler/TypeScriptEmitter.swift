@@ -78,6 +78,7 @@ extension OntologyCompiler {
 
     func emitTypes(_ ir: JSONObject) -> String {
         let classes = ir["classes"] as? [JSONObject] ?? []
+        let localNamespace = string(ir["namespace"]) ?? ""
         let localProtocolFqids = Set((ir["protocols"] as? [JSONObject] ?? []).compactMap { string($0["fqid"]) })
         var referencedProtoNames = [String]()
         var importedProtoRefs = [String]()
@@ -103,7 +104,7 @@ extension OntologyCompiler {
             }
             let extendsClause = localProtos.isEmpty ? "" : " extends \(localProtos.joined(separator: ", "))"
             let fieldLines = emittedClassFields(item).map {
-                "  readonly \(fieldId($0))\(fieldRequired($0) ? "" : "?"): \(tsFieldType($0));"
+                "  readonly \(fieldId($0))\(fieldRequired($0) ? "" : "?"): \(tsFieldType($0, localNamespace: localNamespace));"
             }
             let interfaceBody = ([
                 "  readonly $type: \"\(fqid)\";",
@@ -318,10 +319,18 @@ extension OntologyCompiler {
         (field["required"] as? Bool) ?? false
     }
 
-    private func tsFieldType(_ field: JSONObject) -> String {
+    private func tsFieldType(_ field: JSONObject, localNamespace: String) -> String {
         switch fieldType(field) {
         case "ref":
-            return "import(\"./refs\").Ref<\(refName(string(field["target"]) ?? ""))>"
+            if let target = string(field["targetType"]) {
+                return "import(\"./refs\").Ref<{ readonly $type: \"\(target)\" }>"
+            }
+            let target = string(field["target"]) ?? ""
+            let parts = target.split(separator: ":", maxSplits: 1).map(String.init)
+            if parts.count == 2, parts[0] != localNamespace {
+                return "import(\"./refs\").Ref<{ readonly $type: \"\(target)\" }>"
+            }
+            return "import(\"./refs\").Ref<\(refName(target))>"
         case "boolean":
             return "boolean"
         case "integer", "number":
@@ -335,7 +344,7 @@ extension OntologyCompiler {
         let base: String
         switch fieldType(field) {
         case "ref":
-            let target = string(field["target"]) ?? ""
+            let target = string(field["targetType"]) ?? string(field["target"]) ?? ""
             base = "z.object({ target: z.literal(\"\(target)\"), locator: z.json() })"
         case "boolean":
             base = "z.boolean()"

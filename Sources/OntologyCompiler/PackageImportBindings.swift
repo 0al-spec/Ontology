@@ -3,6 +3,9 @@ import OntologyRules
 struct PackageImportBindings {
     var namespaces = Set<String>()
     var foundations: [String: FoundationExports] = [:]
+    var suppliedClasses: [String: Set<String>] = [:]
+    var suppliedNamespaces: [String: String] = [:]
+    var suppliedPackageIdentities: [String: String] = [:]
 
     func exports(for role: OntologyReferenceRole) -> [String: Set<String>] {
         foundations.mapValues { $0.names(for: role) }
@@ -10,7 +13,7 @@ struct PackageImportBindings {
 }
 
 extension OntologyCompiler {
-    func collectImportBindings(_ imports: [Any], package: LoadedPackage) -> PackageImportBindings {
+    func collectImportBindings(_ imports: [Any], package: LoadedPackage, supplied: [LoadedPackage] = []) -> PackageImportBindings {
         var bindings = PackageImportBindings()
         for (index, item) in imports.enumerated() {
             let path = "spec.imports[\(index)]"
@@ -39,6 +42,14 @@ extension OntologyCompiler {
             }
             if let catalog {
                 bindings.foundations[alias] = catalog
+            }
+            let matches = supplied.filter { $0.id == id && $0.version == version }
+            if matches.count > 1 {
+                add("imports.source.duplicate", path, "Duplicate supplied import for \(id ?? "")@\(version ?? "")")
+            } else if let match = matches.first, let classes = match.spec["classes"] as? JSONObject {
+                bindings.suppliedClasses[alias] = Set(classes.keys)
+                bindings.suppliedNamespaces[alias] = match.namespace
+                bindings.suppliedPackageIdentities[alias] = "\(match.id)@\(match.version)"
             }
         }
         return bindings

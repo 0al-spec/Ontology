@@ -14,7 +14,7 @@ struct TriggerNames {
 }
 
 extension OntologyCompiler {
-    func validate(_ package: LoadedPackage) {
+    func validate(_ package: LoadedPackage, suppliedImports: [LoadedPackage] = []) {
         let spec = package.spec
         validateKnownKeys(
             spec,
@@ -23,7 +23,7 @@ extension OntologyCompiler {
         )
 
         let imports = requiredArray(spec, "imports", path: "spec.imports", code: "spec.required")
-        let bindings = collectImportBindings(imports, package: package)
+        let bindings = collectImportBindings(imports, package: package, supplied: suppliedImports)
         let classes = requiredObject(spec, "classes", path: "spec.classes", code: "spec.required") ?? [:]
         let relations = requiredObject(spec, "relations", path: "spec.relations", code: "spec.required") ?? [:]
         let policies = optionalDefinitionSection(spec, key: "policies")
@@ -166,11 +166,18 @@ extension OntologyCompiler {
         }
         guard type == "ref",
               let target = requiredString(field, "target", path: "\(path).target", code: "class.field.target.required") else { return }
-        let reference = ConceptRefResolutionContext(
-            ref: target, localNames: context.classNames, packageNamespace: context.packageNamespace, importNamespaces: []
+        let reference = ImportedTypedRefContext(
+            reference: target, localNames: context.classNames, localNamespace: context.packageNamespace,
+            declaredAliases: context.bindings.namespaces, classesByAlias: context.bindings.suppliedClasses,
+            namespacesByAlias: context.bindings.suppliedNamespaces,
+            identitiesByAlias: context.bindings.suppliedPackageIdentities
         )
-        if ConceptRefResolutionDecisionSpec().decide(reference) != .local {
-            add("class.field.target.unresolved", "\(path).target", "Reference target \(target) must name a class in this package")
+        switch ImportedTypedRefDecisionSpec().decide(reference) {
+        case .local, .imported: return
+        case .namespaceConflict:
+            add("class.field.target.namespace_conflict", "\(path).target", "Imported reference target \(target) has an ambiguous canonical type namespace")
+        case .unresolved, nil:
+            add("class.field.target.unresolved", "\(path).target", "Reference target \(target) must name a local class or a class in an explicitly supplied matching import")
         }
     }
 

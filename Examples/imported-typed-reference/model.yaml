@@ -1,0 +1,16 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: example.model, namespace: draft, version: 1.0.0}
+spec:
+  imports:
+    - {id: ontology.foundation, namespace: ont, version: 0.2.0}
+    - {id: example.shared, namespace: shared, version: 1.0.0}
+  classes:
+    Item: {extends: 'ont:DomainEntity', description: A different local item.}
+    Use:
+      extends: ont:Action
+      description: Use the shared item.
+      fields:
+        target: {type: ref, target: 'shared:Item', required: true}
+  relations:
+    uses: {domain: Item, range: Item, description: Relation.}

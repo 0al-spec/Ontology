@@ -1,0 +1,10 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: example.shared, namespace: canonical, version: 1.0.0}
+spec:
+  imports:
+    - {id: ontology.foundation, namespace: ont, version: 0.2.0}
+  classes:
+    Item: {extends: 'ont:DomainEntity', description: Shared item.}
+  relations:
+    contains: {domain: Item, range: Item, description: Relation.}

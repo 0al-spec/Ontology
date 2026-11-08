@@ -38,12 +38,13 @@ case "export-foundation":
     printJSON(FoundationExports.current)
 
 case "check":
-    let parsed = parseArguments(commandArgs, allowedOptions: ["--format"], command: command)
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--format", "--import"], command: command, repeatableOptions: ["--import"])
     requirePositionals(1, in: parsed, command: command)
     let path = parsed.positional[0]
     let format = parsed.options["--format"] ?? "text"
     guard ["text", "json"].contains(format) else { usageError("expected --format text or json", command: command) }
-    let diagnostics = compiler.check(path: OntologySourcePath(path: path))
+    let imports = (parsed.repeatedOptions["--import"] ?? []).map { OntologySourcePath(path: $0) }
+    let diagnostics = compiler.check(path: OntologySourcePath(path: path), imports: imports)
     if format == "json" {
         printJSON(diagnostics)
         exit(compiler.hasErrors(diagnostics) ? 1 : 0)
@@ -55,7 +56,7 @@ case "check":
     print("ontologyc check: PASS \(path)")
 
 case "compile":
-    let parsed = parseArguments(commandArgs, allowedOptions: ["--target", "--out"], command: command)
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--target", "--out", "--import"], command: command, repeatableOptions: ["--import"])
     requirePositionals(1, in: parsed, command: command)
     let path = parsed.positional[0]
     let target = requireOption("--target", in: parsed, command: command)
@@ -66,7 +67,8 @@ case "compile":
     do {
         let diagnostics = try compiler.compile(
             path: OntologySourcePath(path: path),
-            outDirectory: OntologyOutputDirectory(path: outDirectory)
+            outDirectory: OntologyOutputDirectory(path: outDirectory),
+            imports: (parsed.repeatedOptions["--import"] ?? []).map { OntologySourcePath(path: $0) }
         )
         if compiler.hasErrors(diagnostics) {
             compiler.printDiagnostics(diagnostics)

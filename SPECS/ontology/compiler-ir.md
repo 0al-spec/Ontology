@@ -67,6 +67,18 @@ export interface NormalizedClass {
   readonly central: boolean;
   readonly lifecycle?: string;
   readonly aliases: readonly string[];
+  readonly fields?: readonly NormalizedField[];
+}
+
+export interface NormalizedField {
+  readonly id: string;
+  readonly type: string;
+  readonly required: boolean;
+  readonly description?: string;
+  readonly target?: string;
+  readonly targetType?: string;
+  readonly targetUri?: string;
+  readonly targetSourceDigest?: string;
 }
 ```
 
@@ -76,6 +88,12 @@ Rules:
 2. `uri` MUST include ontology id, version, and class id.
 3. `extends` MUST resolve to a foundation or imported class.
 4. `implements` MUST resolve to protocols.
+5. An imported `ref` field preserves `target` in the declaring package's
+   namespace bindings. `targetType` is the source package's canonical
+   namespace and class, `targetUri` includes its exact package ID and version,
+   and `targetSourceDigest` is the imported package's `sourceDigest`: the
+   SHA-256 of its UTF-8 source text after optional BOM removal. These three
+   properties are present only after the imported class is validated.
 
 ## Protocol IR
 
