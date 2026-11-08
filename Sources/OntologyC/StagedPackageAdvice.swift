@@ -20,6 +20,34 @@ private func gitOutput(_ arguments: [String]) throws -> Data {
     return bytes
 }
 
+private func gitBlobSource(_ oid: String) throws -> String? {
+    let sizeText = try String(decoding: gitOutput(["cat-file", "-s", oid]), as: UTF8.self)
+    guard let size = Int(sizeText.trimmingCharacters(in: .whitespacesAndNewlines)), size <= 4 * 1024 * 1024 else {
+        throw OntologyCompilerError.invalidArgument("blob exceeds the 4 MiB advisory limit; use ontologyc check for the full file")
+    }
+    return try String(data: gitOutput(["cat-file", "blob", oid]), encoding: .utf8)
+}
+
+private func stagedImport(_ path: String) throws -> OntologySourceSnapshot {
+    guard !path.isEmpty, !path.hasPrefix("/"), !path.split(separator: "/").contains("..") else {
+        throw OntologyCompilerError.invalidArgument("import \(path.debugDescription) must be repository-root-relative")
+    }
+    let data = try gitOutput(["ls-files", "--stage", "--full-name", "-z", "--", ":(top,literal)\(path)"])
+    let records = data.split(separator: 0)
+    guard records.count == 1, let record = records.first, let tab = record.firstIndex(of: 9) else {
+        throw OntologyCompilerError.invalidArgument("import \(path.debugDescription) is missing or unmerged in the active index")
+    }
+    let fields = String(decoding: record[..<tab], as: UTF8.self).split(separator: " ")
+    let indexedPath = String(decoding: record[record.index(after: tab)...], as: UTF8.self)
+    guard fields.count == 3, fields[0].hasPrefix("100"), fields[2] == "0", indexedPath == path else {
+        throw OntologyCompilerError.invalidArgument("import \(path.debugDescription) is not a resolved regular index file")
+    }
+    guard let source = try gitBlobSource(String(fields[1])) else {
+        throw OntologyCompilerError.invalidArgument("import \(path.debugDescription) is not UTF-8")
+    }
+    return OntologySourceSnapshot(source: source, path: OntologySourcePath(path: path))
+}
+
 private struct StagedYAML {
     let path: String
     let blob: String
@@ -39,32 +67,28 @@ private struct StagedYAML {
         return stem == "domain-ontology-package" || stem == "domain-ontology-package-draft" || stem.hasSuffix(".ontology")
     }
 
-    private func readSource(_ oid: String) throws -> String? {
-        let sizeText = try String(decoding: gitOutput(["cat-file", "-s", oid]), as: UTF8.self)
-        guard let size = Int(sizeText.trimmingCharacters(in: .whitespacesAndNewlines)), size <= 4 * 1024 * 1024 else {
-            throw OntologyCompilerError.invalidArgument("blob exceeds the 4 MiB advisory limit; use ontologyc check for the full file")
-        }
-        return try String(data: gitOutput(["cat-file", "blob", oid]), encoding: .utf8)
-    }
-
-    func report(using compiler: OntologyCompiler) throws {
-        let source = try readSource(blob)
+    func packageSource(using compiler: OntologyCompiler) throws -> String? {
+        let source = try gitBlobSource(blob)
         if !hasPackageFilename, !(source.map(compiler.declaresPackage) ?? false) {
             guard let previousBlob,
-                  let previous = try readSource(previousBlob),
-                  compiler.declaresPackage(previous) else { return }
+                  let previous = try gitBlobSource(previousBlob),
+                  compiler.declaresPackage(previous) else { return nil }
         }
         guard let source else {
             writeDiagnostic("[ontology advice] \(path.debugDescription) could not be checked: expected UTF-8 YAML\n")
-            return
+            return nil
         }
-        for finding in compiler.check(source: source, path: OntologySourcePath(path: path)) {
+        return source
+    }
+
+    func report(_ source: String, using compiler: OntologyCompiler, imports: [OntologySourceSnapshot]) {
+        for finding in compiler.check(source: source, path: OntologySourcePath(path: path), importSources: imports) {
             writeDiagnostic("[ontology advice] \(path.debugDescription) \(finding.severity) \(finding.code) at \(finding.path.debugDescription): \(finding.message.debugDescription)\n")
         }
     }
 }
 
-func runStagedPackageAdvice(_ compiler: OntologyCompiler) {
+func runStagedPackageAdvice(_ compiler: OntologyCompiler, imports: [String]) {
     do {
         let diff = try gitOutput([
             "diff", "--cached", "--raw", "--no-abbrev", "--no-renames", "--no-ext-diff", "--no-textconv",
@@ -73,10 +97,13 @@ func runStagedPackageAdvice(_ compiler: OntologyCompiler) {
         ])
         let records = diff.split(separator: 0)
         var entries = records.makeIterator()
+        var snapshots: [OntologySourceSnapshot]?
         while let header = entries.next(), let path = entries.next() {
             guard let file = StagedYAML(header: header, path: path) else { continue }
             do {
-                try file.report(using: compiler)
+                guard let source = try file.packageSource(using: compiler) else { continue }
+                if snapshots == nil { snapshots = try imports.map(stagedImport) }
+                file.report(source, using: compiler, imports: snapshots ?? [])
             } catch {
                 writeDiagnostic("[ontology advice] \(file.path.debugDescription) could not be checked: \(error)\n")
             }

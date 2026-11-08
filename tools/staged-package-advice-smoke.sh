@@ -2,6 +2,7 @@
 set -euo pipefail
 
 # Accept the same prebuilt executable that the portability gate tests.
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 compiler="$(cd "$(dirname "${1:?supply ontologyc}")" && pwd)/$(basename "$1")"
 base="$(mktemp -d "${TMPDIR:-/tmp}/ontology-advice.XXXXXXXX")"
 trap 'rm -rf "$base"' EXIT
@@ -121,6 +122,51 @@ dd if=/dev/zero of=large.yaml bs=1048576 count=5 2>/dev/null
 git add large.yaml
 commit 'large YAML'
 grep -F 'large.yaml' "$base/log" | grep -F '4 MiB' >/dev/null
+
+# Imported targets use the selected Git index, never similarly named worktree files.
+mkdir -p 'imported deps'
+cp "$root/Examples/imported-typed-reference/model.yaml" 'imported deps/model.yaml'
+cp "$root/Examples/imported-typed-reference/shared.yaml" 'imported deps/shared.yaml'
+git add -- 'imported deps/model.yaml' 'imported deps/shared.yaml'
+printf 'not a package\n' > 'imported deps/model.yaml'
+printf 'not a package\n' > 'imported deps/shared.yaml'
+"$compiler" advise-staged --import 'imported deps/shared.yaml' > "$base/log" 2>&1
+quiet
+
+cp .git/index "$base/import-index"
+sed 's/shared:Item/shared:Missing/g' "$root/Examples/imported-typed-reference/model.yaml" > 'imported deps/model.yaml'
+GIT_INDEX_FILE="$base/import-index" git add -- 'imported deps/model.yaml'
+GIT_INDEX_FILE="$base/import-index" "$compiler" advise-staged --import 'imported deps/shared.yaml' > "$base/log" 2>&1
+grep -F 'class.field.target.unresolved' "$base/log" >/dev/null
+"$compiler" advise-staged --import 'imported deps/shared.yaml' > "$base/log" 2>&1
+quiet
+
+cp "$root/Examples/imported-typed-reference/model.yaml" 'imported deps/model.yaml'
+sed 's/version: 1.0.0/version: 2.0.0/' "$root/Examples/imported-typed-reference/shared.yaml" > 'imported deps/shared.yaml'
+GIT_INDEX_FILE="$base/import-index" git add -- 'imported deps/model.yaml' 'imported deps/shared.yaml'
+GIT_INDEX_FILE="$base/import-index" "$compiler" advise-staged --import 'imported deps/shared.yaml' > "$base/log" 2>&1
+grep -F 'class.field.target.unresolved' "$base/log" >/dev/null
+"$compiler" advise-staged --import 'imported deps/shared.yaml' > "$base/log" 2>&1
+quiet
+
+"$compiler" advise-staged --import 'imported deps/missing.yaml' > "$base/log" 2>&1
+grep -F 'could not be checked' "$base/log" | grep -F 'missing' >/dev/null
+printf '\377' > 'imported deps/non-utf8.yaml'
+git add -- 'imported deps/non-utf8.yaml'
+"$compiler" advise-staged --import 'imported deps/non-utf8.yaml' > "$base/log" 2>&1
+grep -F 'could not be checked' "$base/log" | grep -F 'not UTF-8' >/dev/null
+ln -s shared.yaml 'imported deps/symlink.yaml'
+git add -- 'imported deps/symlink.yaml'
+"$compiler" advise-staged --import 'imported deps/symlink.yaml' > "$base/log" 2>&1
+grep -F 'could not be checked' "$base/log" | grep -F 'regular index file' >/dev/null
+
+blob=$(git rev-parse ':imported deps/shared.yaml')
+GIT_INDEX_FILE="$base/import-index" git update-index --force-remove 'imported deps/shared.yaml'
+printf '100644 %s 1\t%s\n100644 %s 2\t%s\n' "$blob" 'imported deps/shared.yaml' "$blob" 'imported deps/shared.yaml' | \
+    GIT_INDEX_FILE="$base/import-index" git update-index --index-info
+GIT_INDEX_FILE="$base/import-index" "$compiler" advise-staged --import 'imported deps/shared.yaml' > "$base/log" 2>&1
+grep -F 'could not be checked' "$base/log" | grep -F 'unmerged' >/dev/null
+git reset -q -- 'imported deps/model.yaml' 'imported deps/shared.yaml' 'imported deps/non-utf8.yaml' 'imported deps/symlink.yaml'
 
 touch veto
 if "${commit_cmd[@]}" --allow-empty -qm 'independent hook must block'; then exit 1; fi

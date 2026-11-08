@@ -61,6 +61,20 @@ A pinned absolute path to the executable also works. Confirm `ontologyc advise-s
 
 `ontologyc advise-staged` reads changed regular `.yaml` and `.yml` blobs from the active Git index. It recognizes a top-level `kind: DomainOntologyPackage` in either the staged or previous version. The names `domain-ontology-package.yaml`, `domain-ontology-package-draft.yaml` and `*.ontology.yaml` (also `.yml`) identify new packages even with a broken header. For a new custom filename, keep the `kind` header recognizable or use one of these naming conventions.
 
+For models with imported `Ref` fields, supply each dependency as an explicit
+repository-root-relative index path. The advisory reads the selected blob from
+the same active index, including an alternate `GIT_INDEX_FILE`, and never
+substitutes unstaged working-tree content. For example:
+
+```bash
+ontologyc advise-staged --import ontology/packages/core/domain-ontology-package.yaml
+```
+
+The same arguments can be added to the configured hook command. A missing,
+unmerged, non-regular, oversized or non-UTF-8 import reports that the affected
+package could not be checked; it does not block the commit. The strict
+`ontologyc check --import` command instead reads the supplied filesystem files.
+
 Commit output includes the staged filename and each compiler diagnostic, for example:
 
 ```text
@@ -150,10 +164,9 @@ The [repository membership example](../../Examples/repository-membership/members
 executes the same action with a database key and a revision-scoped graph address.
 The [imported reference example](../../Examples/imported-typed-reference/consumer.ts)
 also checks TypeScript and runtime identity when an import alias differs from
-the imported package's namespace. `diff`, registry `publish` and
-`advise-staged` do not yet take import sources. They cannot confirm an imported
-`Ref`: the advisory may report an unresolved target even when `check --import`
-passes. Use the strict check with explicitly supplied sources in this case.
+the imported package's namespace. `diff` and registry `publish` do not yet take
+import sources and therefore cannot confirm an imported `Ref`. The optional
+commit-time advisory accepts explicitly supplied imports from the Git index.
 
 ### `ontologyc compile`
 

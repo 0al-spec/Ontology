@@ -18,6 +18,17 @@ public struct OntologySourcePath: Equatable, Hashable, Sendable {
     }
 }
 
+/// Explicit source text and its logical path, for an immutable caller-selected snapshot.
+public struct OntologySourceSnapshot: Equatable, Sendable {
+    public let source: String
+    public let path: OntologySourcePath
+
+    public init(source: String, path: OntologySourcePath) {
+        self.source = source
+        self.path = path
+    }
+}
+
 /// Filesystem directory where compiler workflows write generated artifacts.
 public struct OntologyOutputDirectory: Equatable, Hashable, Sendable {
     public let path: String
