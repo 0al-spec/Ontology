@@ -1379,7 +1379,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-082: Resolve imported Ref targets in the viewer
 
-- **Status:** Selected.
+- **Status:** Complete locally; [validation](ARCHIVE/ONT-082_Viewer_Imported_Ref_Bindings/ONT-082_Validation_Report.md). Hosted CI and review remain separate.
 - **Problem:** a compiled diagram can bind a typed action field to an imported
   class, while the viewer treats the target as an unresolved external node even
   when that exact class is loaded.

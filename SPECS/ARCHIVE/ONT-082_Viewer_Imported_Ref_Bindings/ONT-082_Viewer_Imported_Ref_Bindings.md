@@ -27,3 +27,7 @@ adds a false external node and prevents inspector navigation.
    field remains external. Tests include the real SpecGraph composition.
 4. The Viewer remains read-only; matching graph metadata does not authenticate
    a source or establish instance existence or semantic approval.
+
+---
+**Archived:** 2026-11-09
+**Verdict:** PASS (local; hosted CI and review separate)

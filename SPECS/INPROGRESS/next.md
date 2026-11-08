@@ -1,9 +1,3 @@
-# Active: ONT-082 — Resolve imported Ref targets in the viewer
-
-**Priority:** P1 — remove false external nodes for loaded imported types.
-**Status:** Selected.
-**Next step:** Plan source-bound target resolution and negative cases.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -38,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-082 connects imported typed references to exact loaded sources. [Validation](../ARCHIVE/ONT-082_Viewer_Imported_Ref_Bindings/ONT-082_Validation_Report.md) passed locally; CI and consumer integration are separate.
 
 - ONT-080 adds explicit index-bound imports to staged advice. [Validation](../ARCHIVE/ONT-080_Index_Bound_Import_Advice/ONT-080_Validation_Report.md) passed locally; hosted CI and review are separate.
 
