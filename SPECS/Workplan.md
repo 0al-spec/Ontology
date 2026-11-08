@@ -1376,3 +1376,14 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Outcome:** Define explicit source-bound inputs and compatibility behavior
   for imported targets; test changed versions, absent sources and target types.
 - **Dependency:** ONT-079.
+
+## ONT-082: Resolve imported Ref targets in the viewer
+
+- **Status:** Complete locally; [validation](ARCHIVE/ONT-082_Viewer_Imported_Ref_Bindings/ONT-082_Validation_Report.md). Hosted CI and review remain separate.
+- **Problem:** a compiled diagram can bind a typed action field to an imported
+  class, while the viewer treats the target as an unresolved external node even
+  when that exact class is loaded.
+- **Outcome:** bind a field to a loaded class only when the projection's target
+  identity matches the loaded source; preserve safe unresolved behavior for
+  older projections and conflicting metadata.
+- **Dependency:** ONT-079.

@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-082 | [ONT-082_Viewer_Imported_Ref_Bindings/](ONT-082_Viewer_Imported_Ref_Bindings/) | 2026-11-09 | PASS (local; CI and review separate) |
 | ONT-080 | [ONT-080_Index_Bound_Import_Advice/](ONT-080_Index_Bound_Import_Advice/) | 2026-11-09 | PASS (local; CI and review separate) |
 | ONT-079 | [ONT-079_Imported_Typed_References/](ONT-079_Imported_Typed_References/) | 2026-11-09 | PASS (local; CI and review separate) |
 | ONT-078 | [ONT-078_Viewer_Namespace_Badges/](ONT-078_Viewer_Namespace_Badges/) | 2026-11-07 | PASS (local; CI and review separate) |
@@ -82,6 +83,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-09 | ONT-082 | Archived [self-review](ONT-082_Viewer_Imported_Ref_Bindings/REVIEW_ONT-082.md); FOLLOW-UP skipped |
+| 2026-11-09 | ONT-082 | Archived source-bound Viewer Ref bindings and validation (local PASS) |
 | 2026-11-09 | ONT-080 | Archived [self-review](ONT-080_Index_Bound_Import_Advice/REVIEW_ONT-080.md); FOLLOW-UP skipped |
 | 2026-11-09 | ONT-080 | Archived index-bound import advice and validation (local PASS) |
 | 2026-11-09 | ONT-079 | Archived [self-review](ONT-079_Imported_Typed_References/REVIEW_ONT-079.md); follow-ups ONT-080 and ONT-081 recorded |

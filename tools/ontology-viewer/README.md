@@ -28,6 +28,10 @@ In the [repository membership example](../../Examples/repository-membership/pack
 the `addsRepositoryTo` relationship has three ports. Follow **subject** to
 `User`, **action** to `AddRepository`, and **object** to `Project`. The
 `repository: Ref<Repository>` field on the action connects to `Repository`.
+For an imported target, the viewer connects to a loaded class when its graph
+alias, canonical type, package URI and normalized source digest all match the
+field's identity. Incomplete, mismatched or older unverified cross-package
+references remain visibly unresolved instead of binding by name alone.
 These wires describe the allowed types. Several relationships can share the
 same action card, and multiple object alternatives belong to the same relationship.
 The inspector labels the endpoints of every relationship **Subject** and **Object**.

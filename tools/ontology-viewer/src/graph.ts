@@ -36,6 +36,19 @@ function objects(value: unknown): JsonObject[] {
   return Array.isArray(value) ? value.filter((item): item is JsonObject => typeof item === 'object' && item !== null && !Array.isArray(item)) : [];
 }
 
+/** Resolve only an explicitly identified loaded class, never a same-named guess. */
+function verifiedFieldTarget(projection: Projection, field: JsonObject, target: string): string | undefined {
+  const candidate = projection.classes.find((item) => item.fqid === target);
+  if (!candidate) return undefined;
+  const source = projection.sources.find((item) => item.id === candidate.source.id && item.version === candidate.source.version &&
+    item.sourceDigest === candidate.source.sourceDigest && item.sourceByteDigest === candidate.source.sourceByteDigest);
+  if (!source) return undefined;
+  const uri = `ontology://${candidate.source.id}/${candidate.source.version}/classes/${candidate.id}`;
+  const type = `${string(source.namespace)}:${candidate.id}`;
+  return field.targetUri === uri && field.targetType === type && field.targetSourceDigest === candidate.source.sourceDigest
+    ? `classes/${candidate.fqid}` : undefined;
+}
+
 function layoutWithPortOrder(layout: dagre.graphlib.Graph, edges: ViewerEdge[]) {
   // Role edges are emitted in declaration order: subject, action, then object alternatives.
   const inputs = new Map<string, string[]>();
@@ -169,14 +182,20 @@ export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges
   for (const record of projection.classes) {
     const from = nodeId('classes', record.fqid);
     const ownerNode = known.get(from);
-    const owner = projection.sources.find((item) => item.id === record.source.id && item.version === record.source.version);
+    const owner = projection.sources.find((item) => item.id === record.source.id && item.version === record.source.version &&
+      item.sourceDigest === record.source.sourceDigest && item.sourceByteDigest === record.source.sourceByteDigest);
     for (const field of record.fields ?? []) {
       if (field.type !== 'ref' || !string(field.id) || !string(field.target)) continue;
       const target = string(field.target);
       let targetNode: string;
-      if (owner && owner.alias !== projection.namespace) {
+      const identified = ['targetType', 'targetUri', 'targetSourceDigest'].some((key) => key in field);
+      if (identified) {
+        const match = verifiedFieldTarget(projection, field, target);
+        targetNode = match || `external/scoped/${record.fqid}/${target}`;
+        if (!match) addNode(targetNode, { label: target, kind: 'external', origin: `Unresolved in ${record.source.id}@${record.source.version}` });
+      } else if (owner && owner.alias !== projection.namespace) {
         const [namespace, local] = target.split(':');
-        if (namespace === owner.namespace && local) targetNode = reference('classes', `${string(owner.alias)}:${local}`);
+        if ((namespace === owner.namespace || namespace === owner.alias) && local) targetNode = reference('classes', `${string(owner.alias)}:${local}`);
         else {
           targetNode = `external/scoped/${record.fqid}/${target}`;
           addNode(targetNode, { label: target, kind: 'external', origin: `Unresolved in ${record.source.id}@${record.source.version}` });
