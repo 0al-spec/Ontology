@@ -83,6 +83,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-09 | ONT-082 | Archived [self-review](ONT-082_Viewer_Imported_Ref_Bindings/REVIEW_ONT-082.md); FOLLOW-UP skipped |
 | 2026-11-09 | ONT-082 | Archived source-bound Viewer Ref bindings and validation (local PASS) |
 | 2026-11-09 | ONT-080 | Archived [self-review](ONT-080_Index_Bound_Import_Advice/REVIEW_ONT-080.md); FOLLOW-UP skipped |
 | 2026-11-09 | ONT-080 | Archived index-bound import advice and validation (local PASS) |
