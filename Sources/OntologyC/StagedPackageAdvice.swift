@@ -48,6 +48,14 @@ private func stagedImport(_ path: String) throws -> OntologySourceSnapshot {
     return OntologySourceSnapshot(source: source, path: OntologySourcePath(path: path))
 }
 
+private struct StagedFindingKey: Hashable {
+    let source: String
+    let severity: String
+    let code: String
+    let location: String
+    let message: String
+}
+
 private struct StagedYAML {
     let path: String
     let blob: String
@@ -81,9 +89,14 @@ private struct StagedYAML {
         return source
     }
 
-    func report(_ source: String, using compiler: OntologyCompiler, imports: [OntologySourceSnapshot]) {
-        for finding in compiler.check(source: source, path: OntologySourcePath(path: path), importSources: imports) {
-            writeDiagnostic("[ontology advice] \(path.debugDescription) \(finding.severity) \(finding.code) at \(finding.path.debugDescription): \(finding.message.debugDescription)\n")
+    func report(_ source: String, using compiler: OntologyCompiler, imports: [OntologySourceSnapshot], seen: inout Set<StagedFindingKey>) {
+        let snapshot = OntologySourceSnapshot(source: source, path: OntologySourcePath(path: path))
+        for result in compiler.checkSources(source: snapshot, imports: imports) {
+            let finding = result.diagnostic
+            let key = StagedFindingKey(source: result.source.path, severity: finding.severity, code: finding.code,
+                                       location: finding.path, message: finding.message)
+            guard seen.insert(key).inserted else { continue }
+            writeDiagnostic("[ontology advice] \(result.source.path.debugDescription) \(finding.severity) \(finding.code) at \(finding.path.debugDescription): \(finding.message.debugDescription)\n")
         }
     }
 }
@@ -98,12 +111,13 @@ func runStagedPackageAdvice(_ compiler: OntologyCompiler, imports: [String]) {
         let records = diff.split(separator: 0)
         var entries = records.makeIterator()
         var snapshots: [OntologySourceSnapshot]?
+        var seen = Set<StagedFindingKey>()
         while let header = entries.next(), let path = entries.next() {
             guard let file = StagedYAML(header: header, path: path) else { continue }
             do {
                 guard let source = try file.packageSource(using: compiler) else { continue }
                 if snapshots == nil { snapshots = try imports.map(stagedImport) }
-                file.report(source, using: compiler, imports: snapshots ?? [])
+                file.report(source, using: compiler, imports: snapshots ?? [], seen: &seen)
             } catch {
                 writeDiagnostic("[ontology advice] \(file.path.debugDescription) could not be checked: \(error)\n")
             }

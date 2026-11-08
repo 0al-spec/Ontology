@@ -72,7 +72,9 @@ ontologyc advise-staged --import ontology/packages/core/domain-ontology-package.
 
 The same arguments can be added to the configured hook command. A missing,
 unmerged, non-regular, oversized or non-UTF-8 import reports that the affected
-package could not be checked; it does not block the commit. The strict
+package could not be checked; it does not block the commit. Diagnostics from a
+supplied import name that import's index path and are not repeated for each
+dependent package. The strict
 `ontologyc check --import` command instead reads the supplied filesystem files.
 
 Commit output includes the staged filename and each compiler diagnostic, for example:

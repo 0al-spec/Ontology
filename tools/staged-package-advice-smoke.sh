@@ -149,6 +149,12 @@ grep -F 'class.field.target.unresolved' "$base/log" >/dev/null
 "$compiler" advise-staged --import 'imported deps/shared.yaml' > "$base/log" 2>&1
 quiet
 
+sed 's/ont:DomainEntity/ont:Typo/g' "$root/Examples/imported-typed-reference/shared.yaml" > 'imported deps/shared.yaml'
+GIT_INDEX_FILE="$base/import-index" git add -- 'imported deps/shared.yaml'
+GIT_INDEX_FILE="$base/import-index" "$compiler" advise-staged --import 'imported deps/shared.yaml' > "$base/log" 2>&1
+test "$(grep -c 'class.extends.unresolved' "$base/log")" = 1
+grep -F '"imported deps/shared.yaml" error class.extends.unresolved' "$base/log" >/dev/null
+
 "$compiler" advise-staged --import 'imported deps/missing.yaml' > "$base/log" 2>&1
 grep -F 'could not be checked' "$base/log" | grep -F 'missing' >/dev/null
 printf '\377' > 'imported deps/non-utf8.yaml'

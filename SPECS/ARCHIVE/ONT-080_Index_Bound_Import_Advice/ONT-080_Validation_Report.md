@@ -14,6 +14,9 @@
   files, and confirms advice remains quiet. A separate alternate index with an
   invalid reference or wrong import version reports `class.field.target.unresolved`
   while the original index still passes. Paths contain spaces.
+- An invalid supplied package is reported once under its own staged path,
+  even when a second staged package depends on it. This regression was added
+  after a local review exposed duplicate, incorrectly attributed diagnostics.
 - Missing, unmerged, symlink and non-UTF-8 import paths report the affected
   package could not be checked; no worktree substitution occurs. Existing
   malformed-package, 4 MiB bound and independent hook veto checks still pass.

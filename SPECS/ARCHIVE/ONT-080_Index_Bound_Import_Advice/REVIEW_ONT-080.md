@@ -8,7 +8,10 @@
 
 ## Findings
 
-No unresolved local correctness or safety findings. The advisory loads only
+Local review found that a diagnostic in an imported source was repeated under
+the dependent model's filename. It now retains the emitting snapshot's path and
+is emitted once; the staged smoke reproduces this case. No unresolved local
+correctness or safety findings remain. The advisory loads only
 explicit index paths, requires a single regular stage-0 blob and never reads
 an import from the working tree. Missing or unreadable imports say that the
 package could not be checked. The existing advisory remains non-blocking.

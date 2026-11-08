@@ -17,6 +17,12 @@ public struct Diagnostic: Encodable, Sendable {
     public let hint: String?
 }
 
+/// A diagnostic paired with the snapshot that produced it.
+public struct OntologySourcedDiagnostic: Sendable {
+    public let source: OntologySourcePath
+    public let diagnostic: Diagnostic
+}
+
 struct LoadedPackageMetadata {
     let id: OntologyPackageId
     let namespace: OntologyNamespace

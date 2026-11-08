@@ -13,12 +13,27 @@ extension OntologyCompiler {
         return checked(load(source: source, path: path.path), imports: imports)
     }
 
-    /// Validate a source and explicitly supplied snapshots without reading those imports from disk.
-    public func check(source: String, path: OntologySourcePath, importSources: [OntologySourceSnapshot]) -> [Diagnostic] {
-        diagnostics = []
-        let package = load(source: source, path: path.path)
-        let supplied = importSources.compactMap { load(source: $0.source, path: $0.path.path) }
-        return checked(package, supplied: supplied)
+    /// Validate explicitly supplied snapshots without reading their paths from disk.
+    public func checkSources(source: OntologySourceSnapshot, imports: [OntologySourceSnapshot]) -> [OntologySourcedDiagnostic] {
+        let sources = [source] + imports.filter { $0.path != source.path }
+        var findings: [OntologySourcedDiagnostic] = []
+        var packages: [LoadedPackage] = []
+        for snapshot in sources {
+            diagnostics = []
+            let package = load(source: snapshot.source, path: snapshot.path.path)
+            findings += diagnostics.map { OntologySourcedDiagnostic(source: snapshot.path, diagnostic: $0) }
+            if let package { packages.append(package) }
+        }
+        for (index, package) in packages.enumerated() {
+            diagnostics = []
+            let dependencies = packages.enumerated().filter { $0.offset != index }.map(\.element)
+            validate(package, suppliedImports: dependencies)
+            findings += diagnostics.map { OntologySourcedDiagnostic(source: OntologySourcePath(path: package.path), diagnostic: $0) }
+        }
+        return findings.sorted {
+            [$0.source.path, $0.diagnostic.path, $0.diagnostic.code, $0.diagnostic.message].joined(separator: "\u{1f}") <
+                [$1.source.path, $1.diagnostic.path, $1.diagnostic.code, $1.diagnostic.message].joined(separator: "\u{1f}")
+        }
     }
 
     private func checked(_ package: LoadedPackage?, imports: [OntologySourcePath]) -> [Diagnostic] {
