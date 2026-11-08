@@ -1,10 +1,3 @@
-# Active: ONT-079 — Imported Typed References
-
-**Priority:** P1 — unblock a single shared SpecGraph vocabulary.
-**Status:** Planned.
-**Next step:** Implement [ONT-079](ONT-079_Imported_Typed_References.md) with
-explicit local package inputs and source-bound target validation.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -39,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-079 adds source-bound imported typed references. [Validation](../ARCHIVE/ONT-079_Imported_Typed_References/ONT-079_Validation_Report.md) passed locally; hosted CI and review are separate.
 
 - ONT-078 separates graph-node namespaces into badges. [Validation](../ARCHIVE/ONT-078_Viewer_Namespace_Badges/ONT-078_Validation_Report.md)
   passed locally in the standalone Viewer and SpecSpace; hosted CI is separate.

@@ -35,3 +35,7 @@ identity and a correctly typed SDK and diagram connection.
 
 Automatic package discovery, network fetching, project-wide semantic
 deduplication and migration of SpecGraph's existing model are separate work.
+
+---
+**Archived:** 2026-11-09
+**Verdict:** PASS (local; hosted CI and review separate)
