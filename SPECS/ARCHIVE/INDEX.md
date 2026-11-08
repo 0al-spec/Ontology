@@ -82,6 +82,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-09 | ONT-080 | Archived [self-review](ONT-080_Index_Bound_Import_Advice/REVIEW_ONT-080.md); FOLLOW-UP skipped |
 | 2026-11-09 | ONT-080 | Archived index-bound import advice and validation (local PASS) |
 | 2026-11-09 | ONT-079 | Archived [self-review](ONT-079_Imported_Typed_References/REVIEW_ONT-079.md); follow-ups ONT-080 and ONT-081 recorded |
 | 2026-11-09 | ONT-079 | Archived imported typed references and validation (local PASS) |
