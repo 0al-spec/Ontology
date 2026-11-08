@@ -28,9 +28,9 @@ case "validate-instances", "export-instance-contract":
     runInstanceGraphCommand(command, arguments: commandArgs, compiler: compiler)
 
 case "advise-staged":
-    let parsed = parseArguments(commandArgs, allowedOptions: [], command: command)
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--import"], command: command, repeatableOptions: ["--import"])
     requirePositionals(0, in: parsed, command: command)
-    runStagedPackageAdvice(compiler)
+    runStagedPackageAdvice(compiler, imports: parsed.repeatedOptions["--import"] ?? [])
 
 case "export-foundation":
     let parsed = parseArguments(commandArgs, allowedOptions: [], command: command)

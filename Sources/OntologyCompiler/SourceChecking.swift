@@ -1,0 +1,56 @@
+import Foundation
+
+extension OntologyCompiler {
+    /// Parses and validates one ontology package, returning sorted diagnostics without writing output files.
+    public func check(path: OntologySourcePath, imports: [OntologySourcePath] = []) -> [Diagnostic] {
+        diagnostics = []
+        return checked(load(path: path.path), imports: imports)
+    }
+
+    /// Validate supplied bytes decoded as UTF-8, using their source path for diagnostics.
+    public func check(source: String, path: OntologySourcePath, imports: [OntologySourcePath] = []) -> [Diagnostic] {
+        diagnostics = []
+        return checked(load(source: source, path: path.path), imports: imports)
+    }
+
+    /// Validate explicitly supplied snapshots without reading their paths from disk.
+    public func checkSources(source: OntologySourceSnapshot, imports: [OntologySourceSnapshot]) -> [OntologySourcedDiagnostic] {
+        let sources = [source] + imports.filter { $0.path != source.path }
+        var findings: [OntologySourcedDiagnostic] = []
+        var packages: [LoadedPackage] = []
+        for snapshot in sources {
+            diagnostics = []
+            let package = load(source: snapshot.source, path: snapshot.path.path)
+            findings += diagnostics.map { OntologySourcedDiagnostic(source: snapshot.path, diagnostic: $0) }
+            if let package { packages.append(package) }
+        }
+        for (index, package) in packages.enumerated() {
+            diagnostics = []
+            let dependencies = packages.enumerated().filter { $0.offset != index }.map(\.element)
+            validate(package, suppliedImports: dependencies)
+            findings += diagnostics.map { OntologySourcedDiagnostic(source: OntologySourcePath(path: package.path), diagnostic: $0) }
+        }
+        return findings.sorted {
+            [$0.source.path, $0.diagnostic.path, $0.diagnostic.code, $0.diagnostic.message].joined(separator: "\u{1f}") <
+                [$1.source.path, $1.diagnostic.path, $1.diagnostic.code, $1.diagnostic.message].joined(separator: "\u{1f}")
+        }
+    }
+
+    private func checked(_ package: LoadedPackage?, imports: [OntologySourcePath]) -> [Diagnostic] {
+        let supplied = imports.compactMap { load(path: $0.path) }
+        return checked(package, supplied: supplied)
+    }
+
+    private func checked(_ package: LoadedPackage?, supplied: [LoadedPackage]) -> [Diagnostic] {
+        for imported in supplied {
+            var dependencies = supplied.filter { $0.path != imported.path }
+            if let package, package.path != imported.path { dependencies.append(package) }
+            validate(imported, suppliedImports: dependencies)
+        }
+        if let package { validate(package, suppliedImports: supplied) }
+        return diagnostics.sorted {
+            [$0.path, $0.code, $0.message].joined(separator: "\u{1f}") <
+                [$1.path, $1.code, $1.message].joined(separator: "\u{1f}")
+        }
+    }
+}

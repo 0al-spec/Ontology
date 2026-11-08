@@ -35,7 +35,7 @@ Run `ontologyc <command> --help` for command-specific usage.
 
 let commandUsage: [String: String] = [
     "check": "Usage:\n  ontologyc check <package.yaml> [--format text|json] [--import <package.yaml> ...]",
-    "advise-staged": "Usage:\n  ontologyc advise-staged",
+    "advise-staged": "Usage:\n  ontologyc advise-staged [--import <index-path> ...]",
     "export-foundation": "Usage:\n  ontologyc export-foundation",
     "compile": "Usage:\n  ontologyc compile <package.yaml> --target typescript --out <directory> [--import <package.yaml> ...]",
     "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory> [--source-uri <uri>] [--source-ref <ref>]",
