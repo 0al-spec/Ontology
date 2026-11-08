@@ -149,6 +149,59 @@ describe('ontology graph projection adapter', () => {
     expect(flow.nodes.find((node) => node.id === 'classes/dep:Imported')?.data.fieldTargets).toBeUndefined();
   });
 
+  it.each(['full', 'relations'])('binds an imported field to its exact loaded target in %s view', (view) => {
+    const importedSource = { ...source('/spec/classes/Imported'), id: 'example.imported' };
+    const imported = { id: 'Imported', fqid: 'dep:Imported', source: importedSource, diagramOrigin: 'example.imported@1.0.0',
+      fields: [{ id: 'other', type: 'ref', target: 'test:Evidence', targetType: 'test:Evidence',
+        targetUri: 'ontology://example.test/1.0.0/classes/Evidence', targetSourceDigest: digest }] };
+    const flow = buildGraph(parseProjection({ ...graph, view, classes: [...graph.classes, imported],
+      sources: [...graph.sources, { id: 'example.imported', version: '1.0.0', namespace: 'original', alias: 'dep', sourceDigest: digest, sourceByteDigest: digest }] }));
+    const edge = flow.edges.find((item) => item.id === 'field/dep:Imported/other');
+    expect(edge?.source).toBe('classes/test:Evidence');
+    expect(flow.nodes.find((node) => node.id === 'classes/dep:Imported')?.data.fieldTargets?.other).toBe('test:Evidence');
+    expect(flow.nodes.some((node) => node.id === 'external/scoped/dep:Imported/test:Evidence')).toBe(false);
+  });
+
+  it('uses the source namespace when the target has a different composition alias', () => {
+    const importedSource = { ...source('/spec/classes/Evidence'), id: 'example.imported' };
+    const evidence = { id: 'Evidence', fqid: 'dep:Evidence', source: importedSource };
+    const owner = { ...graph.classes[0], fields: [{ id: 'other', type: 'ref', target: 'dep:Evidence',
+      targetType: 'original:Evidence', targetUri: 'ontology://example.imported/1.0.0/classes/Evidence', targetSourceDigest: digest }] };
+    const flow = buildGraph(parseProjection({ ...graph, classes: [owner, ...graph.classes.slice(1), evidence],
+      sources: [...graph.sources, { id: 'example.imported', version: '1.0.0', namespace: 'original', alias: 'dep', sourceDigest: digest, sourceByteDigest: digest }] }));
+    expect(flow.edges.find((item) => item.id === 'field/test:Proposal/other')?.source).toBe('classes/dep:Evidence');
+    expect(flow.nodes.find((node) => node.id === 'classes/test:Proposal')?.data.fieldTargets?.other).toBe('dep:Evidence');
+  });
+
+  it.each([
+    ['package', { targetUri: 'ontology://example.other/1.0.0/classes/Evidence' }],
+    ['version', { targetUri: 'ontology://example.test/2.0.0/classes/Evidence' }],
+    ['digest', { targetSourceDigest: `sha256:${'b'.repeat(64)}` }],
+    ['canonical type', { targetType: 'wrong:Evidence' }],
+    ['partial metadata', { targetUri: null }],
+    ['missing class', { target: 'test:Missing' }],
+  ])('keeps an imported field unresolved when its %s does not match', (_, mismatch) => {
+    const importedSource = { ...source('/spec/classes/Imported'), id: 'example.imported' };
+    const field = { id: 'other', type: 'ref', target: 'test:Evidence', targetType: 'test:Evidence',
+      targetUri: 'ontology://example.test/1.0.0/classes/Evidence', targetSourceDigest: digest, ...mismatch };
+    const imported = { id: 'Imported', fqid: 'dep:Imported', source: importedSource, fields: [field] };
+    const flow = buildGraph(parseProjection({ ...graph, classes: [...graph.classes, imported],
+      sources: [...graph.sources, { id: 'example.imported', version: '1.0.0', namespace: 'original', alias: 'dep', sourceDigest: digest, sourceByteDigest: digest }] }));
+    const edge = flow.edges.find((item) => item.id === 'field/dep:Imported/other');
+    expect(edge?.source).toBe(`external/scoped/dep:Imported/${field.target}`);
+    expect(flow.nodes.find((node) => node.id === 'classes/dep:Imported')?.data.fieldTargets).toBeUndefined();
+  });
+
+  it('keeps local field references connected after their package alias is rebased', () => {
+    const importedSource = { ...source('/spec/classes/Imported'), id: 'example.imported' };
+    const imported = { id: 'Imported', fqid: 'dep:Imported', source: importedSource,
+      fields: [{ id: 'other', type: 'ref', target: 'dep:Evidence' }] };
+    const evidence = { id: 'Evidence', fqid: 'dep:Evidence', source: { ...importedSource, pointer: '/spec/classes/Evidence' } };
+    const flow = buildGraph(parseProjection({ ...graph, classes: [...graph.classes, imported, evidence],
+      sources: [...graph.sources, { id: 'example.imported', version: '1.0.0', namespace: 'original', alias: 'dep', sourceDigest: digest, sourceByteDigest: digest }] }));
+    expect(flow.edges.find((item) => item.id === 'field/dep:Imported/other')?.source).toBe('classes/dep:Evidence');
+  });
+
   it('rejects invalid versions, malformed relations, and duplicate declarations', () => {
     expect(() => parseProjection({ ...graph, schemaVersion: 'unknown' })).toThrow(/schemaVersion/);
     expect(() => parseProjection({ ...graph, relations: [{ ...graph.relations[0], range: { oneOf: [] } }] })).toThrow(/range/);
