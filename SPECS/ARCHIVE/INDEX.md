@@ -81,6 +81,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-09 | ONT-079 | Archived [self-review](ONT-079_Imported_Typed_References/REVIEW_ONT-079.md); follow-ups ONT-080 and ONT-081 recorded |
 | 2026-11-09 | ONT-079 | Archived imported typed references and validation (local PASS) |
 | 2026-11-07 | ONT-078 | Archived [self-review](ONT-078_Viewer_Namespace_Badges/REVIEW_ONT-078.md); FOLLOW-UP skipped |
 | 2026-11-07 | ONT-078 | Archived viewer namespace badges and validation (local PASS) |
