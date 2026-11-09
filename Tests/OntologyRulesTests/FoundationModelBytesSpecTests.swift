@@ -12,4 +12,14 @@ final class FoundationModelBytesSpecTests: XCTestCase {
         XCTAssertFalse(spec.isSatisfiedBy(.init(version: "0.2.0", digest: "sha256:modified")))
         XCTAssertFalse(spec.isSatisfiedBy(.init(version: "0.3.0", digest: old)))
     }
+
+    func testInputCountAndByteBounds() {
+        let size = FoundationModelSizeSpec(), count = FoundationModelCountSpec()
+        XCTAssertTrue(size.isSatisfiedBy(FoundationModelSizeSpec.maximum))
+        XCTAssertFalse(size.isSatisfiedBy(FoundationModelSizeSpec.maximum + 1))
+        XCTAssertFalse(size.isSatisfiedBy(-1))
+        XCTAssertTrue(count.isSatisfiedBy(FoundationModelCountSpec.maximum))
+        XCTAssertFalse(count.isSatisfiedBy(FoundationModelCountSpec.maximum + 1))
+        XCTAssertFalse(count.isSatisfiedBy(-1))
+    }
 }

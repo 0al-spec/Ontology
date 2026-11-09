@@ -33,6 +33,12 @@ final class DiagramFoundationModelsTests: XCTestCase {
         try bytes.write(to: modified)
         XCTAssertThrowsError(try compiler.diagramProjection(path: example, options: .init(foundationModels: [.init(url: modified)])))
         XCTAssertThrowsError(try compiler.diagramProjection(path: example, options: .init(foundationModels: [.init(url: temporary.appendingPathComponent("missing.json"))])))
+        let oversized = temporary.appendingPathComponent("oversized.json")
+        try Data(repeating: 0x20, count: 1024 * 1024 + 1).write(to: oversized)
+        XCTAssertThrowsError(try compiler.diagramProjection(path: example, options: .init(foundationModels: [.init(url: oversized)]))) {
+            XCTAssertTrue(String(describing: $0).contains("Foundation model exceeds 1048576 bytes"))
+        }
+        XCTAssertThrowsError(try compiler.diagramProjection(path: example, options: .init(foundationModels: Array(repeating: model("0.1.0"), count: 17))))
     }
 
     func testTransitiveModelUsesRebasedAliasAndKeepsBothVersions() throws {

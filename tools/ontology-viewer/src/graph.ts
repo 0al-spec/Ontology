@@ -8,7 +8,7 @@ export { parseProjection } from './projection';
 export type NodeKind = 'class' | 'imported' | 'protocol' | 'policy' | 'machine' | 'state' | 'external' | 'relation';
 export type NodePort = { id: string; role: 'subject' | 'action' | 'object' | 'field'; label: string; title: string };
 export type FoundationLocation = {
-  id: string; version: string; pointer: string; catalogByteDigest: string; modelRevision: string; modelDigest: string;
+  id: string; catalogId: string; version: string; pointer: string; catalogByteDigest: string; modelRevision: string; modelDigest: string;
 };
 export type ViewerNodeData = {
   label: string;
@@ -155,7 +155,7 @@ export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges
       addNode(loaded, {
         label: ref, kind: section === 'classes' ? 'imported' : section === 'protocols' ? 'protocol' : 'policy',
         record: record as JsonObject, origin: `${binding.id}@${binding.version}`, isAction: isFoundationAction(ref),
-        foundation: { id: binding.id, version: binding.version, pointer, catalogByteDigest: binding.catalogByteDigest,
+        foundation: { id: binding.id, catalogId: string(binding.catalog.id), version: binding.version, pointer, catalogByteDigest: binding.catalogByteDigest,
           modelRevision: string(modelSource.revision), modelDigest: string(modelSource.sha256) },
       });
       return loaded;

@@ -17,6 +17,25 @@ const run = (command, args) => new Promise((resolve) => {
 
 class InputPathChanged extends Error {}
 class SnapshotChanged extends Error {}
+const maxFoundationModels = 16;
+const maxFoundationModelBytes = 1024 * 1024;
+
+async function readFoundationModel(file) {
+  const handle = await fs.open(file, 'r');
+  try {
+    const chunks = [];
+    let size = 0;
+    while (size <= maxFoundationModelBytes) {
+      const chunk = Buffer.allocUnsafe(Math.min(64 * 1024, maxFoundationModelBytes + 1 - size));
+      const { bytesRead } = await handle.read(chunk, 0, chunk.length, null);
+      if (!bytesRead) break;
+      chunks.push(chunk.subarray(0, bytesRead));
+      size += bytesRead;
+    }
+    if (size > maxFoundationModelBytes) throw new InputPathChanged('Foundation model exceeds 1 MiB');
+    return Buffer.concat(chunks, size);
+  } finally { await handle.close(); }
+}
 
 function optionsFromArgs(args) {
   const options = {};
@@ -46,7 +65,8 @@ async function resolveInputs(options) {
   const doc = JSON.parse(decode(bytes));
   const modelSelections = doc.foundationModels === undefined ? [] : doc.foundationModels;
   if (typeof doc.package !== 'string' || !Array.isArray(doc.imports || []) || (doc.imports || []).some((item) => typeof item !== 'string') ||
-      !Array.isArray(modelSelections) || modelSelections.some((item) => typeof item !== 'string' || !item.trim())) {
+      !Array.isArray(modelSelections) || modelSelections.length > maxFoundationModels ||
+      modelSelections.some((item) => typeof item !== 'string' || !item.trim())) {
     throw new Error('Invalid profile package, imports or foundation models');
   }
   const rootPath = path.resolve(path.dirname(profile), doc.package);
@@ -95,8 +115,11 @@ export async function startWorkspace(options) {
       catch { throw new InputPathChanged('A selected input path is unavailable; restore it or restart the workspace'); }
       if (resolved !== pinned) throw new InputPathChanged('A selected input path now points elsewhere; restore it or restart the workspace');
     }
-    const [root, ...other] = await Promise.all([inputs.root, ...inputs.imports, ...inputs.models].map((item) => fs.readFile(item)));
-    const imports = other.slice(0, inputs.imports.length), models = other.slice(inputs.imports.length);
+    const [sources, models] = await Promise.all([
+      Promise.all([inputs.root, ...inputs.imports].map((item) => fs.readFile(item))),
+      Promise.all(inputs.models.map(readFoundationModel)),
+    ]);
+    const [root, ...imports] = sources;
     if (inputs.profile && hash(await fs.readFile(inputs.profile)) !== inputs.profileDigest) throw new InputPathChanged('Profile changed; restart the workspace');
     return { root, imports, models, key: [hash(root), ...imports.map(hash), ...models.map(hash), inputs.profileDigest || ''].join('|') };
   }

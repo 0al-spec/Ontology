@@ -10,6 +10,7 @@ test('shows the supplied foundation model declaration and its provenance', async
   await page.locator('[data-id="classes/sg:DomainEntity"]').click();
   const inspector = page.getByLabel('Inspector');
   await expect(inspector).toContainText('specgraph.foundation');
+  await expect(inspector).toContainText('ontology.foundation@0.1.0');
   await expect(inspector).toContainText('/classes/DomainEntity');
   await expect(inspector).toContainText('does not authenticate');
   await inspector.getByText('Declaration data').click();

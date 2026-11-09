@@ -39,7 +39,8 @@ describe('ontology graph projection adapter', () => {
     const flow = buildGraph(projection);
     const entity = flow.nodes.find((node) => node.id === 'classes/base:DomainEntity');
     expect(entity?.data).toMatchObject({ kind: 'imported', origin: 'specgraph.foundation@0.1.0',
-      foundation: { id: 'specgraph.foundation', version: '0.1.0', pointer: '/classes/DomainEntity', catalogByteDigest: digest } });
+      foundation: { id: 'specgraph.foundation', catalogId: 'ontology.foundation', version: '0.1.0',
+        pointer: '/classes/DomainEntity', catalogByteDigest: digest } });
     expect(entity && nodePackage(entity)).toBe('specgraph.foundation@0.1.0');
     expect(entity && nodeOrigin(entity, input.id)).toBe('imported');
     expect(flow.nodes.find((node) => node.id === 'policies/base:Policy')?.data.foundation?.pointer).toBe('/classes/Policy');

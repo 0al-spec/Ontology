@@ -37,7 +37,9 @@ ontologyviz Examples/package-visualization/domain-ontology-package.yaml \
 Repeat `--foundation-model` for different imported versions, or list local
 paths in a profile's `foundationModels` array. Only known exact catalog bytes
 and reachable foundation identities are accepted. Unprovided definitions stay
-unresolved. DOT and image formats reject this option until they support it.
+unresolved. Inputs are limited to 16 catalogs of at most 1 MiB each; the
+workspace enforces the same bounds. DOT and image formats reject this option
+until they support it.
 The projection records the input-byte digest and original source revision; the
 Viewer shows these as reported provenance and does not authenticate them.
 

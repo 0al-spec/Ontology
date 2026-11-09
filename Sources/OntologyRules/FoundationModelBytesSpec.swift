@@ -24,3 +24,19 @@ public struct FoundationModelBytesSpec: Specification {
         return expected[context.version] == context.digest
     }
 }
+
+/// Keep explicit catalog input bounded before parsing or hashing it.
+public struct FoundationModelSizeSpec: Specification {
+    public typealias T = Int
+    public static let maximum = 1024 * 1024
+    public init() {}
+    public func isSatisfiedBy(_ count: Int) -> Bool { count >= 0 && count <= Self.maximum }
+}
+
+/// A diagram never needs an unlimited number of distinct model files.
+public struct FoundationModelCountSpec: Specification {
+    public typealias T = Int
+    public static let maximum = 16
+    public init() {}
+    public func isSatisfiedBy(_ count: Int) -> Bool { count >= 0 && count <= Self.maximum }
+}

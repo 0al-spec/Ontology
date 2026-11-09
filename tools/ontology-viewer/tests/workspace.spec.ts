@@ -49,6 +49,10 @@ test('tracks foundation catalog bytes and rejects a retargeted profile input', a
     expect(changed.graph).toBeNull();
     expect(changed.graphError).toContain('modified foundation model');
     expect(changed.graphKey).not.toBe(original.graphKey);
+    await fs.writeFile(model, Buffer.alloc(1024 * 1024 + 1));
+    const oversized = await session();
+    expect(oversized.status).toBe(409);
+    expect((await oversized.json()).error).toContain('exceeds 1 MiB');
     await fs.writeFile(model, bytes);
     expect((await (await session()).json()).graph.foundationCatalogs).toHaveLength(1);
     await fs.unlink(link);

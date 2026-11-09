@@ -154,6 +154,18 @@ extension OntologyVizCLITests {
         }
     }
 
+    func testOversizedFoundationModelFailsWithoutWritingOutput() throws {
+        try inTemporaryDirectory { temp in
+            let model = temp.appendingPathComponent("large.json")
+            let output = temp.appendingPathComponent("output")
+            try Data(repeating: 0x20, count: 1024 * 1024 + 1).write(to: model)
+            let result = try run([example.path, "--foundation-model", model.path, "--format", "json", "--out", output.path])
+            XCTAssertEqual(result.status, 1)
+            XCTAssertTrue(result.stderr.contains("Foundation model exceeds 1048576 bytes"), result.stderr)
+            XCTAssertFalse(FileManager.default.fileExists(atPath: output.path))
+        }
+    }
+
     private func writeProfile(_ fields: [String: Any], to path: URL) throws {
         try JSONSerialization.data(withJSONObject: fields, options: [.sortedKeys]).write(to: path)
     }

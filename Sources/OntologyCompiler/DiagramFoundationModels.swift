@@ -6,11 +6,17 @@ struct DiagramFoundationModels {
     let bindings: [JSONObject]
 
     init(paths: [OntologySourcePath], imports: [DiagramImportDeclaration], digest: (Data) -> String) throws {
+        guard FoundationModelCountSpec().isSatisfiedBy(paths.count) else {
+            throw OntologyCompilerError.invalidArgument("Too many foundation models (maximum \(FoundationModelCountSpec.maximum))")
+        }
         var models = [String: (JSONObject, String)]()
         for path in paths {
             let data: Data
-            do { data = try Data(contentsOf: path.url) } catch {
+            do { data = try Self.readBounded(path.url) } catch {
                 throw OntologyCompilerError.invalidArgument("Cannot read foundation model \(path.path): \(error.localizedDescription)")
+            }
+            guard FoundationModelSizeSpec().isSatisfiedBy(data.count) else {
+                throw OntologyCompilerError.invalidArgument("Foundation model exceeds \(FoundationModelSizeSpec.maximum) bytes: \(path.path)")
             }
             guard let model = try JSONSerialization.jsonObject(with: data) as? JSONObject,
                   model["schemaVersion"] as? String == "ontology.foundation-model/v1",
@@ -37,5 +43,18 @@ struct DiagramFoundationModels {
             return ["id": item.id.rawValue, "version": item.version.rawValue, "alias": item.namespace.rawValue,
                     "catalogByteDigest": hash, "policyBases": exports.policyBases, "catalog": model]
         }
+    }
+
+    private static func readBounded(_ url: URL) throws -> Data {
+        let file = try FileHandle(forReadingFrom: url)
+        defer { try? file.close() }
+        var data = Data()
+        let maximum = FoundationModelSizeSpec.maximum
+        while data.count <= maximum {
+            let chunk = try file.read(upToCount: min(64 * 1024, maximum + 1 - data.count)) ?? Data()
+            if chunk.isEmpty { break }
+            data.append(chunk)
+        }
+        return data
     }
 }

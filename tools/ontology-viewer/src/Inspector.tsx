@@ -59,6 +59,7 @@ export function Inspector({ selection, filtered = false, classReferences, onSele
     {selection.type === 'node' && selection.data.foundation && <section className="source-box">
       <div className="section-label">FOUNDATION MODEL SOURCE</div>
       <strong>{selection.data.foundation.id} <span>@ {selection.data.foundation.version}</span></strong>
+      <small>Catalog: {selection.data.foundation.catalogId}@{selection.data.foundation.version}</small>
       <code>{selection.data.foundation.pointer}</code>
       <small title={selection.data.foundation.catalogByteDigest}>Catalog SHA-256 · {selection.data.foundation.catalogByteDigest.slice(7, 19)}…</small>
       <small title={selection.data.foundation.modelDigest}>Model source revision · {selection.data.foundation.modelRevision.slice(0, 12)}…</small>
