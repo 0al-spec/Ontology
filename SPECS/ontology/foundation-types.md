@@ -5,6 +5,9 @@
 The foundation model defines the stable semantic target for product ontologies. YAML ontology packages declare semantic inheritance and protocol implementation; generated TypeScript projects those declarations into typed references, interfaces, relations, policies, state machines, and validators.
 
 New packages import `ontology.foundation@0.2.0` with the default namespace `ont`. For the compiler-owned names and their export roles, see the [versioned foundation catalog](foundation/0.2.0/exports.json) or run `ontologyc export-foundation`.
+The [foundation model catalogs](foundation/README.md) additionally provide
+source-attributed machine-readable interface declarations for both supported
+foundation versions.
 
 In a named relationship the subject is the Actor for its declared action and
 object. Ivan and Anna can both be People. To appoint Anna, Ivan must be able

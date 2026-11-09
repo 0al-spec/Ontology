@@ -33,6 +33,9 @@ An import of `ontology.foundation@0.2.0` (default namespace `ont`) uses the embe
 table to check symbols in their declaration roles. `ontologyc export-foundation`
 prints the canonical catalog. Existing `specgraph.foundation@0.1.0` imports keep
 their default namespace `sg` and receive the same symbol checks.
+Versioned `ontology.foundation-model/v1` JSON catalogs additionally retain
+the published class and protocol interfaces with source revision and byte digest.
+They are terminal foundation catalogs, not `DomainOntologyPackage` documents.
 `ontologyc check <package.yaml> --format json` emits structured
 diagnostics with the field path and stable diagnostic code. Other package
 namespaces retain the existing external-reference compatibility behavior.
