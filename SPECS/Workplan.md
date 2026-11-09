@@ -1418,3 +1418,16 @@ This workplan tracks the specification work for the Ontology repository. The ini
   identity/version and test it against the interactive projection. Until then,
   requests that combine these inputs and image formats fail explicitly.
 - **Dependency:** ONT-084.
+
+## ONT-086: TypeScript SDK inheritance
+
+- **Status:** Selected.
+- **Source:** SpecGraph's GraphInvariant defect record, 2026-11-09.
+- **Problem:** generated instance interfaces and schemas ignore semantic
+  ancestry, while the foundation model contract describes a projection of it.
+- **Outcome:** preserve authored instance fields through class inheritance,
+  with verifiable discriminator and source-bound import behavior. Distinguish
+  instance shapes from foundation declaration metadata; do not fabricate
+  fields or claim resolution for unavailable sources.
+- **Dependencies:** ONT-079 explicit imported sources; ONT-083 foundation
+  declaration catalogs.
