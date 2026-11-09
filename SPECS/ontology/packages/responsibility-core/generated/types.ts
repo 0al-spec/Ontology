@@ -2,119 +2,128 @@
 
 export type OntologyEntityId = string;
 
-export interface ActionRequirement {
-  readonly $type: "respcore:ActionRequirement";
+declare const $ontologyFoundationType: unique symbol;
+
+/** Type-only semantic base; foundation declaration fields are not instance fields. */
+export interface $OntologyFoundationInstance<$Foundation extends string, $OntologyType extends string = string> {
+  readonly $type: $OntologyType;
+  readonly id?: string;
+  readonly [$ontologyFoundationType]?: $Foundation;
+}
+
+export interface ActionRequirement<$OntologyType extends string = "respcore:ActionRequirement"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly requirementKey: string;
 }
 
-export interface AttributionContext {
-  readonly $type: "respcore:AttributionContext";
+export interface AttributionContext<$OntologyType extends string = "respcore:AttributionContext"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly contextKey: string;
 }
 
-export interface CertificateReference {
-  readonly $type: "respcore:CertificateReference";
+export interface CertificateReference<$OntologyType extends string = "respcore:CertificateReference"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly artifactDigest: string;
   readonly artifactRef: string;
   readonly certificateKey: string;
 }
 
-export interface CitedSupport {
-  readonly $type: "respcore:CitedSupport";
+export interface CitedSupport<$OntologyType extends string = "respcore:CitedSupport"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly supportKey: string;
 }
 
-export interface Condition {
-  readonly $type: "respcore:Condition";
+export interface Condition<$OntologyType extends string = "respcore:Condition"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly conditionKey: string;
   readonly meaningRef: string;
 }
 
-export interface Deadline {
-  readonly $type: "respcore:Deadline";
+export interface Deadline<$OntologyType extends string = "respcore:Deadline"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly clockKey: string;
   readonly deadlineKey: string;
   readonly dueAt: number;
 }
 
-export interface DutySpecification {
-  readonly $type: "respcore:DutySpecification";
+export interface DutySpecification<$OntologyType extends string = "respcore:DutySpecification"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly dutyKey: string;
 }
 
-export interface GroundAssessment {
-  readonly $type: "respcore:GroundAssessment";
+export interface GroundAssessment<$OntologyType extends string = "respcore:GroundAssessment"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly groundKey: string;
 }
 
-export interface OperatorSupport {
-  readonly $type: "respcore:OperatorSupport";
+export interface OperatorSupport<$OntologyType extends string = "respcore:OperatorSupport"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly rationale: string;
   readonly supportKey: string;
 }
 
-export interface ProfileConsequenceCandidate {
-  readonly $type: "respcore:ProfileConsequenceCandidate";
+export interface ProfileConsequenceCandidate<$OntologyType extends string = "respcore:ProfileConsequenceCandidate"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly consequenceKey: string;
   readonly symbolRef: string;
 }
 
-export interface ProfileDefinition {
-  readonly $type: "respcore:ProfileDefinition";
+export interface ProfileDefinition<$OntologyType extends string = "respcore:ProfileDefinition"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly mappingRef: string;
   readonly profileKey: string;
   readonly sourceRevision: string;
 }
 
-export interface RejectAssessment {
-  readonly $type: "respcore:RejectAssessment";
+export interface RejectAssessment<$OntologyType extends string = "respcore:RejectAssessment"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface ResponseCandidate {
-  readonly $type: "respcore:ResponseCandidate";
+export interface ResponseCandidate<$OntologyType extends string = "respcore:ResponseCandidate"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly responseKey: string;
 }
 
-export interface ResponseRule {
-  readonly $type: "respcore:ResponseRule";
+export interface ResponseRule<$OntologyType extends string = "respcore:ResponseRule"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly meaningRef: string;
   readonly ruleKey: string;
 }
 
-export interface ResponsibilityAssessment {
-  readonly $type: "respcore:ResponsibilityAssessment";
+export interface ResponsibilityAssessment<$OntologyType extends string = "respcore:ResponsibilityAssessment"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly assessmentKey: string;
   readonly mode: string;
 }
 
-export interface ResponsibleRelation {
-  readonly $type: "respcore:ResponsibleRelation";
+export interface ResponsibleRelation<$OntologyType extends string = "respcore:ResponsibleRelation"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly relationKey: string;
 }
 
-export interface ReviewAssessment {
-  readonly $type: "respcore:ReviewAssessment";
+export interface ReviewAssessment<$OntologyType extends string = "respcore:ReviewAssessment"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface StateRequirement {
-  readonly $type: "respcore:StateRequirement";
+export interface StateRequirement<$OntologyType extends string = "respcore:StateRequirement"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly requirementKey: string;
 }

@@ -2,20 +2,31 @@
 
 export type OntologyEntityId = string;
 
-export interface Encoder {
-  readonly $type: "imagepilot:Encoder";
+declare const $ontologyFoundationType: unique symbol;
+
+/** Type-only semantic base; foundation declaration fields are not instance fields. */
+export interface $OntologyFoundationInstance<$Foundation extends string, $OntologyType extends string = string> {
+  readonly $type: $OntologyType;
   readonly id?: string;
+  readonly [$ontologyFoundationType]?: $Foundation;
+}
+
+export interface Encoder<$OntologyType extends string = "imagepilot:Encoder"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
+  readonly id?: string;
+  readonly label?: string;
   readonly quality: number;
 }
 
-export interface ImageDocument {
-  readonly $type: "imagepilot:ImageDocument";
+export interface ImageDocument<$OntologyType extends string = "imagepilot:ImageDocument"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly entityKey: string;
+  readonly label?: string;
 }
 
-export interface ImageState {
-  readonly $type: "imagepilot:ImageState";
+export interface ImageState<$OntologyType extends string = "imagepilot:ImageState"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly byteLength: number;
   readonly contentSHA256: string;
@@ -24,16 +35,16 @@ export interface ImageState {
   readonly width: number;
 }
 
-export interface Reencode {
-  readonly $type: "imagepilot:Reencode";
+export interface Reencode<$OntologyType extends string = "imagepilot:Reencode"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly actionKind: string;
   readonly dimensions: string;
   readonly identityMode: string;
 }
 
-export interface SizeGoal {
-  readonly $type: "imagepilot:SizeGoal";
+export interface SizeGoal<$OntologyType extends string = "imagepilot:SizeGoal"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly basis: string;
   readonly comparison: string;

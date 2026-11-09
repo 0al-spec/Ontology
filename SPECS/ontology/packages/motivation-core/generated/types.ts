@@ -2,34 +2,43 @@
 
 export type OntologyEntityId = string;
 
-export interface MotivationHypothesis {
-  readonly $type: "motivcore:MotivationHypothesis";
+declare const $ontologyFoundationType: unique symbol;
+
+/** Type-only semantic base; foundation declaration fields are not instance fields. */
+export interface $OntologyFoundationInstance<$Foundation extends string, $OntologyType extends string = string> {
+  readonly $type: $OntologyType;
+  readonly id?: string;
+  readonly [$ontologyFoundationType]?: $Foundation;
+}
+
+export interface MotivationHypothesis<$OntologyType extends string = "motivcore:MotivationHypothesis"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly contributionKind: string;
   readonly hypothesisKey: string;
 }
 
-export interface Motive {
-  readonly $type: "motivcore:Motive";
+export interface Motive<$OntologyType extends string = "motivcore:Motive"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly description: string;
   readonly label?: string;
   readonly motiveKey: string;
 }
 
-export interface OperatorMotivationSupport {
-  readonly $type: "motivcore:OperatorMotivationSupport";
+export interface OperatorMotivationSupport<$OntologyType extends string = "motivcore:OperatorMotivationSupport"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly rationale: string;
   readonly supportKey: string;
 }
 
-export interface RejectMotivation {
-  readonly $type: "motivcore:RejectMotivation";
+export interface RejectMotivation<$OntologyType extends string = "motivcore:RejectMotivation"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface ReviewMotivation {
-  readonly $type: "motivcore:ReviewMotivation";
+export interface ReviewMotivation<$OntologyType extends string = "motivcore:ReviewMotivation"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }

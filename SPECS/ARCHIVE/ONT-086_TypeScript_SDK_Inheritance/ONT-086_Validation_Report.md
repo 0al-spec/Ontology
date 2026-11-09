@@ -14,6 +14,12 @@
   missing fields, the wrong type or reference, and invalid JSON records.
 - `tools/generate_foundation_models.py --check` and four catalog tests passed;
   the versioned foundation model sources and published catalogs are unchanged.
+- `tools/portable-contract-smoke.sh` passed after refreshing the tracked SDK
+  baselines for all eight packages. Each normalized IR remained byte-identical.
+  The image-encoding baseline uses the explicit events-core 0.2.0 source so its
+  inherited `Entity.label` field is verified rather than silently omitted.
+  The earlier hosted run failed this baseline comparison; the revised head must
+  be rechecked by CI.
 - Focused compiler tests cover multiple inheritance levels, distinct alias
   scopes across transitive imports, wrong/missing source versions, cycles and
   incompatible field overrides. The normalized source IR remains unchanged.

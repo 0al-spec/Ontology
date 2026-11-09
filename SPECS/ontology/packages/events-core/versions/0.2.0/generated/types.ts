@@ -2,25 +2,34 @@
 
 export type OntologyEntityId = string;
 
-export interface ActionKind {
-  readonly $type: "eventcore:ActionKind";
+declare const $ontologyFoundationType: unique symbol;
+
+/** Type-only semantic base; foundation declaration fields are not instance fields. */
+export interface $OntologyFoundationInstance<$Foundation extends string, $OntologyType extends string = string> {
+  readonly $type: $OntologyType;
+  readonly id?: string;
+  readonly [$ontologyFoundationType]?: $Foundation;
+}
+
+export interface ActionKind<$OntologyType extends string = "eventcore:ActionKind"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly actionKey: string;
 }
 
-export interface CausalHypothesis {
-  readonly $type: "eventcore:CausalHypothesis";
+export interface CausalHypothesis<$OntologyType extends string = "eventcore:CausalHypothesis"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly profileRef: string;
 }
 
-export interface Delta {
-  readonly $type: "eventcore:Delta";
+export interface Delta<$OntologyType extends string = "eventcore:Delta"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface DirectObservationOrigin {
-  readonly $type: "eventcore:DirectObservationOrigin";
+export interface DirectObservationOrigin<$OntologyType extends string = "eventcore:DirectObservationOrigin"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly artifactDigest: string;
   readonly artifactRef: string;
@@ -30,61 +39,61 @@ export interface DirectObservationOrigin {
   readonly originKey: string;
 }
 
-export interface Entity {
-  readonly $type: "eventcore:Entity";
+export interface Entity<$OntologyType extends string = "eventcore:Entity"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly label?: string;
 }
 
-export interface Episode {
-  readonly $type: "eventcore:Episode";
+export interface Episode<$OntologyType extends string = "eventcore:Episode"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly scopeKey: string;
 }
 
-export interface EventCandidate {
-  readonly $type: "eventcore:EventCandidate";
+export interface EventCandidate<$OntologyType extends string = "eventcore:EventCandidate"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly candidateKey: string;
   readonly description?: string;
 }
 
-export interface EventRegistry {
-  readonly $type: "eventcore:EventRegistry";
+export interface EventRegistry<$OntologyType extends string = "eventcore:EventRegistry"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly registryKey: string;
   readonly revisionKey: string;
 }
 
-export interface Fact {
-  readonly $type: "eventcore:Fact";
+export interface Fact<$OntologyType extends string = "eventcore:Fact"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly polarity: string;
   readonly propositionKey: string;
 }
 
-export interface Interpretation {
-  readonly $type: "eventcore:Interpretation";
+export interface Interpretation<$OntologyType extends string = "eventcore:Interpretation"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly interpretationKey: string;
 }
 
-export interface InterpretationCandidate {
-  readonly $type: "eventcore:InterpretationCandidate";
+export interface InterpretationCandidate<$OntologyType extends string = "eventcore:InterpretationCandidate"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly candidateKey: string;
 }
 
-export interface OperatorSnapshotOrigin {
-  readonly $type: "eventcore:OperatorSnapshotOrigin";
+export interface OperatorSnapshotOrigin<$OntologyType extends string = "eventcore:OperatorSnapshotOrigin"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly operatorKey: string;
   readonly originKey: string;
   readonly rationale: string;
 }
 
-export interface RecordedEvent {
-  readonly $type: "eventcore:RecordedEvent";
+export interface RecordedEvent<$OntologyType extends string = "eventcore:RecordedEvent"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Event", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly clockKey: string;
   readonly intervalFinish: number;
@@ -92,30 +101,30 @@ export interface RecordedEvent {
   readonly recordKey: string;
 }
 
-export interface RejectProposal {
-  readonly $type: "eventcore:RejectProposal";
+export interface RejectProposal<$OntologyType extends string = "eventcore:RejectProposal"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface RelationInstance {
-  readonly $type: "eventcore:RelationInstance";
+export interface RelationInstance<$OntologyType extends string = "eventcore:RelationInstance"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly relationType: string;
 }
 
-export interface ReviewProposal {
-  readonly $type: "eventcore:ReviewProposal";
+export interface ReviewProposal<$OntologyType extends string = "eventcore:ReviewProposal"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface RoleBinding {
-  readonly $type: "eventcore:RoleBinding";
+export interface RoleBinding<$OntologyType extends string = "eventcore:RoleBinding"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly roleName: string;
 }
 
-export interface SourceAssertion {
-  readonly $type: "eventcore:SourceAssertion";
+export interface SourceAssertion<$OntologyType extends string = "eventcore:SourceAssertion"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly endOffset: number;
   readonly quote: string;
@@ -126,21 +135,21 @@ export interface SourceAssertion {
   readonly startOffset: number;
 }
 
-export interface SourceSnapshotOrigin {
-  readonly $type: "eventcore:SourceSnapshotOrigin";
+export interface SourceSnapshotOrigin<$OntologyType extends string = "eventcore:SourceSnapshotOrigin"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly extractionMethod: string;
   readonly originKey: string;
 }
 
-export interface StateObservation {
-  readonly $type: "eventcore:StateObservation";
+export interface StateObservation<$OntologyType extends string = "eventcore:StateObservation"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly availability: string;
 }
 
-export interface StateSnapshot {
-  readonly $type: "eventcore:StateSnapshot";
+export interface StateSnapshot<$OntologyType extends string = "eventcore:StateSnapshot"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly projectionKey: string;
   readonly schemaKey: string;

@@ -65,6 +65,10 @@ does not assert execution, completion, criterion satisfaction or runtime history
 and the staged authoring artifacts explain the boundary. The domain package and
 `authoring/domain-ontology-package-draft.yaml` are identical JSON-compatible YAML.
 The generated IR/SDK are derived artifacts, not additional sources of intent.
+The SDK baseline is generated with the explicit
+`events-core/versions/0.2.0/domain-ontology-package.yaml` import so inherited
+`eventcore:Entity` instance fields are included. Without that source, the
+compiler warns that the instance projection is incomplete.
 
 Verification of this draft: `ontologyc check` and staged `validate-draft` passed.
 Two independent TypeScript compilations produced identical bytes for all ten

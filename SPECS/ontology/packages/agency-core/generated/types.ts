@@ -2,8 +2,17 @@
 
 export type OntologyEntityId = string;
 
-export interface AgencyContext {
-  readonly $type: "agencycore:AgencyContext";
+declare const $ontologyFoundationType: unique symbol;
+
+/** Type-only semantic base; foundation declaration fields are not instance fields. */
+export interface $OntologyFoundationInstance<$Foundation extends string, $OntologyType extends string = string> {
+  readonly $type: $OntologyType;
+  readonly id?: string;
+  readonly [$ontologyFoundationType]?: $Foundation;
+}
+
+export interface AgencyContext<$OntologyType extends string = "agencycore:AgencyContext"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly contextKey: string;
   readonly contributionKind: string;
@@ -13,61 +22,61 @@ export interface AgencyContext {
   readonly reportClockKey?: string;
 }
 
-export interface AnticipationHypothesis {
-  readonly $type: "agencycore:AnticipationHypothesis";
+export interface AnticipationHypothesis<$OntologyType extends string = "agencycore:AnticipationHypothesis"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly expectation: string;
   readonly hypothesisKey: string;
 }
 
-export interface AwarenessHypothesis {
-  readonly $type: "agencycore:AwarenessHypothesis";
+export interface AwarenessHypothesis<$OntologyType extends string = "agencycore:AwarenessHypothesis"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly hypothesisKey: string;
   readonly value: string;
 }
 
-export interface GoalHypothesis {
-  readonly $type: "agencycore:GoalHypothesis";
+export interface GoalHypothesis<$OntologyType extends string = "agencycore:GoalHypothesis"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly direction: string;
   readonly hypothesisKey: string;
 }
 
-export interface IntentionHypothesis {
-  readonly $type: "agencycore:IntentionHypothesis";
+export interface IntentionHypothesis<$OntologyType extends string = "agencycore:IntentionHypothesis"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly hypothesisKey: string;
 }
 
-export interface OperatorAgencySupport {
-  readonly $type: "agencycore:OperatorAgencySupport";
+export interface OperatorAgencySupport<$OntologyType extends string = "agencycore:OperatorAgencySupport"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly rationale: string;
   readonly supportKey: string;
 }
 
-export interface OutcomeAttitudeHypothesis {
-  readonly $type: "agencycore:OutcomeAttitudeHypothesis";
+export interface OutcomeAttitudeHypothesis<$OntologyType extends string = "agencycore:OutcomeAttitudeHypothesis"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly attitude: string;
   readonly hypothesisKey: string;
 }
 
-export interface PropositionContent {
-  readonly $type: "agencycore:PropositionContent";
+export interface PropositionContent<$OntologyType extends string = "agencycore:PropositionContent"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/ValueObject", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly contentKey: string;
   readonly description: string;
   readonly meaningRef?: string;
 }
 
-export interface RejectAgency {
-  readonly $type: "agencycore:RejectAgency";
+export interface RejectAgency<$OntologyType extends string = "agencycore:RejectAgency"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface ReviewAgency {
-  readonly $type: "agencycore:ReviewAgency";
+export interface ReviewAgency<$OntologyType extends string = "agencycore:ReviewAgency"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }

@@ -6,6 +6,7 @@ import { z } from "zod";
 export const EncoderSchema = z.object({
   $type: z.literal("imagepilot:Encoder"),
   id: z.string().optional(),
+  label: z.string().optional(),
   quality: z.number().int(),
 });
 
@@ -13,6 +14,7 @@ export const ImageDocumentSchema = z.object({
   $type: z.literal("imagepilot:ImageDocument"),
   id: z.string().optional(),
   entityKey: z.string(),
+  label: z.string().optional(),
 });
 
 export const ImageStateSchema = z.object({

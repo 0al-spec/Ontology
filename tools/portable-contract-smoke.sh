@@ -20,8 +20,16 @@ python3 Examples/theatre-casting/probe_relationship.py "$compiler"
 # These are package/structural checks, not proof of source truth or causation.
 for name in examcalc specgraph-core events-core events-core/versions/0.2.0 responsibility-core motivation-core agency-core image-encoding-pilot; do
     package="SPECS/ontology/packages/$name"
-    "$compiler" check "$package/domain-ontology-package.yaml"
-    "$compiler" compile "$package/domain-ontology-package.yaml" --target typescript --out "$output/$name"
+    if [[ "$name" == image-encoding-pilot ]]; then
+        # The image classes inherit fields from this exact events-core source.
+        events_source="SPECS/ontology/packages/events-core/versions/0.2.0/domain-ontology-package.yaml"
+        "$compiler" check "$package/domain-ontology-package.yaml" --import "$events_source"
+        "$compiler" compile "$package/domain-ontology-package.yaml" --import "$events_source" \
+            --target typescript --out "$output/$name"
+    else
+        "$compiler" check "$package/domain-ontology-package.yaml"
+        "$compiler" compile "$package/domain-ontology-package.yaml" --target typescript --out "$output/$name"
+    fi
     diff -ru "$package/generated" "$output/$name"
 done
 
