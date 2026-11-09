@@ -19,6 +19,46 @@ final class ProtocolConformanceTests: XCTestCase {
         }
     }
 
+    func testDiagramAndViewerManifestRejectInvalidProtocolConformance() throws {
+        try withFixture { root in
+            let package = try writePackage(root, name: "local", classes: """
+                Document: {extends: 'ont:DomainEntity', implements: [Signed], description: Document.}
+            """, protocols: "Signed: {description: Signed., requiredFields: [signature]}", relations: """
+                signature: {domain: Document, range: Anchor, description: Not an instance field.}
+            """)
+            XCTAssertThrowsError(try OntologyCompiler().diagramProjection(path: .init(url: package))) { error in
+                XCTAssertTrue(String(describing: error).contains("protocol.field.missing"), "\(error)")
+            }
+            let manifest = root.appendingPathComponent("manifest.json")
+            XCTAssertThrowsError(try OntologyCompiler().exportViewerArchiveManifest(
+                packagePath: .init(url: package), generatedDirectory: .init(path: root.path), outPath: .init(path: manifest.path)
+            )) { error in
+                XCTAssertTrue(String(describing: error).contains("protocol.field.missing"), "\(error)")
+            }
+            XCTAssertFalse(FileManager.default.fileExists(atPath: manifest.path))
+        }
+    }
+
+    func testDraftValidationRejectsInvalidProtocolConformance() throws {
+        try withFixture { root in
+            let repo = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            let fixture = repo.appendingPathComponent("SPECS/ontology/fixtures/induction-drafts/valid/voice-recorder")
+            let draft = root.appendingPathComponent("draft")
+            try FileManager.default.copyItem(at: fixture, to: draft)
+            let package = try writePackage(root, name: "local", classes: """
+                Document: {extends: 'ont:DomainEntity', implements: [Signed], description: Document.}
+            """, protocols: "Signed: {description: Signed., requiredFields: [signature]}", relations: """
+                signature: {domain: Document, range: Anchor, description: Not an instance field.}
+            """)
+            let source = try String(contentsOf: package, encoding: .utf8)
+                .replacingOccurrences(of: "version: 1.0.0}", with: "version: 1.0.0, approvalStatus: draft}")
+            try source.write(to: draft.appendingPathComponent("domain-ontology-package-draft.yaml"), atomically: true, encoding: .utf8)
+            let result = try OntologyCompiler().validateInductionDraft(directory: .init(url: draft), outPath: nil)
+            XCTAssertFalse(result.passed, "\(result.diagnostics)")
+            XCTAssertTrue(result.diagnostics.contains { $0.code == "protocol.field.missing" }, "\(result.diagnostics)")
+        }
+    }
+
     func testExplicitRequiredFieldSatisfiesProtocolWithoutMatchingRelation() throws {
         try withFixture { root in
             let package = try writePackage(root, name: "local", classes: """

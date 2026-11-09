@@ -4,8 +4,13 @@
   relation masked a missing instance field, an explicitly declared field was
   rejected without such a relation, and imported protocol relations were not
   checked. The regressions now pass.
+- A follow-up entry-point audit found that draft validation, diagram export
+  and viewer manifest export bypassed semantic protocol checking after the
+  move to source-bound validation. Regression tests reproduced the omissions;
+  all three paths now reject the same invalid conformance as `check`.
 - `RUN_COVERAGE=1 tools/swift-quality.sh` passed SwiftFormat, SwiftLint and the
-  complete Swift suite; aggregate line coverage was 90.51%.
+  complete Swift suite after the entry-point fixes; aggregate line coverage was
+  90.52%.
 - The TypeScript/Zod and portable package smoke suites passed with the task
   compiler. Existing SDK examples now declare their required instance fields;
   the built-in SDK `id` remains a protocol-requirable special case.

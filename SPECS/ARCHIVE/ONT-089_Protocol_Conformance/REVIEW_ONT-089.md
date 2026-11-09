@@ -9,8 +9,11 @@
 
 ## Findings
 
-No additional actionable defects found in this local review; FOLLOW-UP is
-skipped. Validation now distinguishes required string instance fields from
+The entry-point audit found that draft validation, diagram export and viewer
+manifest export bypassed semantic protocol checking. The change now invokes
+the source-bound semantic validation on those paths and includes regression
+tests. No further actionable defects were identified; FOLLOW-UP is skipped.
+Validation now distinguishes required string instance fields from
 named relations, and checks imported protocol requirements against exact
 source identities and class ancestry. A missing source is not treated as
 verified; same-named classes in different packages are not interchangeable.
