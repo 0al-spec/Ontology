@@ -1370,7 +1370,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-081: Imported references in compatibility and publication workflows
 
-- **Status:** Candidate; identified in the ONT-079 review.
+- **Status:** Complete locally; [validation](ARCHIVE/ONT-081_Imported_Reference_Workflows/ONT-081_Validation_Report.md). Hosted CI and review remain separate.
 - **Problem:** `diff`, registry `publish` and related commands do not accept
   the import sources required to validate imported `Ref` fields.
 - **Outcome:** Define explicit source-bound inputs and compatibility behavior

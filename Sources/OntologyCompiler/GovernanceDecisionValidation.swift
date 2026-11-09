@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 import Yams
 
 public struct GovernanceDecisionValidationResult {
@@ -13,7 +14,8 @@ extension OntologyCompiler {
         decisionPath: OntologySourcePath,
         packagePath: OntologySourcePath?,
         goldenReportPath: OntologySourcePath?,
-        outPath: OntologyOutputPath?
+        outPath: OntologyOutputPath?,
+        imports: [OntologySourcePath] = []
     ) throws -> GovernanceDecisionValidationResult {
         diagnostics = []
         guard let decision = loadGovernanceDecision(path: decisionPath.path) else {
@@ -29,8 +31,13 @@ extension OntologyCompiler {
         }
 
         validateGovernanceDecisionShape(decision)
+        if !GovernanceImportScopeSpec().isSatisfiedBy(
+            GovernanceImportScope(hasPackage: packagePath != nil, hasImports: !imports.isEmpty)
+        ) {
+            add("governance.imports.package.required", "decision", "imports require a supplied package")
+        }
         if let packagePath {
-            validateGovernanceDecisionPackage(decision, packagePath: packagePath.path)
+            validateGovernanceDecisionPackage(decision, packagePath: packagePath, imports: imports)
         }
         if let goldenReportPath {
             validateGovernanceDecisionGoldenReport(decision, goldenReportPath: goldenReportPath.path)
@@ -240,11 +247,10 @@ extension OntologyCompiler {
         _ = requiredString(ref, "uri", path: "\(path).uri", code: "\(code).uri")
     }
 
-    private func validateGovernanceDecisionPackage(_ decision: JSONObject, packagePath: String) {
-        guard let package = load(path: packagePath) else { return }
+    private func validateGovernanceDecisionPackage(_ decision: JSONObject, packagePath: OntologySourcePath, imports: [OntologySourcePath]) {
+        guard let loaded = loadValidatedPackage(path: packagePath, imports: imports) else { return }
         if hasErrors(diagnostics) { return }
-        validate(package)
-        if hasErrors(diagnostics) { return }
+        let package = loaded.package
         let target = ((decision["spec"] as? JSONObject)?["targetPackage"] as? JSONObject) ?? [:]
         compareTarget(string(target["id"]), expected: package.id, path: "decision.spec.targetPackage.id")
         compareTarget(string(target["namespace"]), expected: package.namespace, path: "decision.spec.targetPackage.namespace")

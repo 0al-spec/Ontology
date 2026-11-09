@@ -21,7 +21,7 @@ with the expected status code.
 `check` parses a `DomainOntologyPackage`, validates metadata, imports, classes,
 relations, policies, protocols, and state machines, then emits diagnostics.
 Imported typed-reference targets additionally require explicit matching package
-sources supplied to `check` or `compile`; the compiler checks the package ID,
+sources supplied to the command; the compiler checks the package ID,
 version and target class without fetching dependencies from the network.
 
 ```bash
@@ -75,6 +75,11 @@ swift run ontologyc validate-specgraph \
 
 `diff` compares package versions and emits an
 `OntologyCompatibilityReport` describing compatible and breaking changes.
+Use repeatable `--from-import` and `--to-import` options to provide the exact
+dependency snapshots for each version. A changed imported target URI or canonical target type is
+breaking; a change in source digest alone is not treated as a type change.
+Registry `publish`, `compat-check`, and package-bound governance validation
+accept repeatable `--import` sources; they do not fetch dependencies implicitly.
 
 ### Package Visualization
 

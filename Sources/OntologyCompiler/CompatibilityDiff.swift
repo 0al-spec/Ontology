@@ -205,6 +205,12 @@ extension OntologyCompiler {
     }
 
     private func comparableFieldType(_ field: JSONObject) -> String {
+        // The canonical URI includes package identity and version; the source
+        // digest is provenance and does not itself change the declared type.
+        if let target = string(field["targetUri"]) {
+            let targetType = string(field["targetType"]) ?? ""
+            return "ref<\(target)|\(targetType)>"
+        }
         if let target = string(field["target"]) { return "ref<\(target)>" }
         return string(field["type"]) ?? ""
     }
