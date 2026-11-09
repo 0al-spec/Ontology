@@ -90,6 +90,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-10 | ONT-089 | Archived [self-review](ONT-089_Protocol_Conformance/REVIEW_ONT-089.md); no follow-up findings |
 | 2026-11-10 | ONT-089 | Archived source-bound protocol conformance and validation (local PASS) |
 | 2026-11-10 | ONT-088 | Archived [self-review](ONT-088_Imported_Protocol_Obligations/REVIEW_ONT-088.md); follow-up ONT-089 recorded |
 | 2026-11-10 | ONT-088 | Archived imported protocol obligations and validation (local PASS) |
