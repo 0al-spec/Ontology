@@ -1,0 +1,15 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: example.shared-inheritance, namespace: canonical, version: 1.0.0}
+spec:
+  imports:
+    - {id: ontology.foundation, version: 0.2.0}
+  classes:
+    Base:
+      extends: ont:DomainEntity
+      description: A shared base with instance data.
+      fields:
+        serial: {type: string, required: true}
+        related: {type: ref, target: Base, required: true}
+  relations:
+    links: {domain: Base, range: Base, description: Shared relation.}

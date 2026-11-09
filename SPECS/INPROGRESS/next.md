@@ -1,3 +1,13 @@
+# Next Candidate: ONT-087 — Validate Semantic Inheritance
+
+**Priority:** P1
+**Status:** Not selected; ONT-086 review follow-up
+**Next step:** Move cycle and field-compatibility checks into source validation
+with correct imported-source attribution; exercise `check`, `checkSources`,
+and commit-time advice.
+
+## Deferred candidate
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -32,6 +42,10 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-086 projects verified instance ancestry into the TypeScript SDK and
+  schemas. [Validation](../ARCHIVE/ONT-086_TypeScript_SDK_Inheritance/ONT-086_Validation_Report.md)
+  passed locally; hosted review and downstream release integration are separate.
 
 - ONT-084 connects explicit foundation model catalogs to a source-attributed
   Viewer projection. [Validation](../ARCHIVE/ONT-084_Foundation_Viewer/ONT-084_Validation_Report.md)

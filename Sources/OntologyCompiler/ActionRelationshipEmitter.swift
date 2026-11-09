@@ -129,8 +129,9 @@ struct ActionRelationshipEmitter {
         let schema = "\(name)Schema"
         // JSON can omit an optional property, but it cannot contain undefined.
         let fields = item["fields"] as? [JSONObject] ?? []
-        let optional = fields.filter { $0["required"] as? Bool != true }.compactMap { $0["id"] as? String }
-        let overrides = ["id: z.string().exactOptional()"] + optional.map { "\($0): \(schema).shape.\($0).unwrap().exactOptional()" }
+        let idRequired = fields.contains { $0["id"] as? String == "id" && $0["required"] as? Bool == true }
+        let optional = fields.filter { $0["required"] as? Bool != true }.compactMap { $0["id"] as? String }.filter { $0 != "id" }
+        let overrides = ["id: z.string()\(idRequired ? "" : ".exactOptional()")"] + optional.map { "\($0): \(schema).shape.\($0).unwrap().exactOptional()" }
         let jsonSchema = "\(schema).extend({ \(overrides.joined(separator: ", ")) })"
         // Generated class interfaces inherit required string fields from local protocols.
         let inherited = (item["implements"] as? [String] ?? []).flatMap { protocolFields[$0] ?? [] }

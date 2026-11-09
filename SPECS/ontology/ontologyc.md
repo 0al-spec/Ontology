@@ -205,6 +205,34 @@ Behavior:
 4. Emit runtime validators.
 5. Preserve deterministic output order for all generated files.
 
+#### Instance inheritance and supplied ancestors
+
+`types.ts` describes instances, not the ontology declarations in the
+foundation model. In particular, the declaration properties `kind` and
+`appliesTo` do not become instance fields merely because a class extends a
+foundation type. An instance inherits the fields explicitly declared by its
+verified domain-package ancestors; `schemas.ts` enforces the same fields.
+The generated type-only `$OntologyFoundationInstance` marker retains the
+verified foundation package, version and class URI without requiring an
+additional property in runtime instance data. It is not a runtime validator.
+
+Each generated interface defaults to its own exact `$type` discriminator. For
+example, `Child` retains `"example:Child"`, while a caller that accepts
+specializations can use `Parent<string>` as a structural instance supertype.
+The generic form does not verify that an arbitrary `$type` names a real
+descendant; use a concrete interface and its schema for exact identity.
+
+Pass the exact source for every non-foundation ancestor using `--import`.
+Aliases are resolved in the package that declares them, against the imported
+package ID and version. If an ancestor source is unavailable, the compiler
+reports `sdk.inheritance.source_unavailable` and marks the generated types and
+schemas as incomplete; it does not infer the missing fields. Imported protocol
+obligations are likewise reported as unverified. Cycles and incompatible
+inherited field definitions are errors and do not produce an SDK.
+
+This instance projection does not add inherited fields to normalized IR: the
+IR preserves the declarations and their semantic `extends` references.
+
 ## Required Generated Files
 
 | File | Purpose |

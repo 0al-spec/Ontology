@@ -1418,3 +1418,38 @@ This workplan tracks the specification work for the Ontology repository. The ini
   identity/version and test it against the interactive projection. Until then,
   requests that combine these inputs and image formats fail explicitly.
 - **Dependency:** ONT-084.
+
+## ONT-086: TypeScript SDK inheritance
+
+- **Status:** Complete locally; hosted review and downstream release integration are separate.
+- **Source:** SpecGraph's GraphInvariant defect record, 2026-11-09.
+- **Problem:** generated instance interfaces and schemas ignore semantic
+  ancestry, while the foundation model contract describes a projection of it.
+- **Outcome:** preserve authored instance fields through class inheritance,
+  with verifiable discriminator and source-bound import behavior. Distinguish
+  instance shapes from foundation declaration metadata; do not fabricate
+  fields or claim resolution for unavailable sources.
+- **Dependencies:** ONT-079 explicit imported sources; ONT-083 foundation
+  declaration catalogs.
+- [Validation](ARCHIVE/ONT-086_TypeScript_SDK_Inheritance/ONT-086_Validation_Report.md).
+
+## ONT-087: Validate semantic inheritance before SDK generation
+
+- **Status:** Candidate; found in ONT-086 review.
+- **Problem:** `ontologyc check` and `advise-staged` accept cyclic class
+  inheritance even though `compile` rejects it. Conflicting inherited fields
+  likewise need a source-attributed check without requiring SDK generation.
+- **Outcome:** reuse named inheritance rules during source validation, retain
+  exact package identity and source attribution across imports, and cover
+  strict CLI and index-bound advisory paths with positive and negative cases.
+- **Dependency:** ONT-086.
+
+## ONT-088: Imported protocol obligations in the TypeScript SDK
+
+- **Status:** Candidate; found in ONT-086 review.
+- **Problem:** explicitly supplied ancestors may implement imported protocols;
+  their instance obligations are currently reported as unverified in SDK output.
+- **Outcome:** project verified, source-bound protocol obligations into types
+  and schemas without guessing aliases or adding declaration metadata to
+  instances. Preserve an explicit warning when the exact source is unavailable.
+- **Dependency:** ONT-086.

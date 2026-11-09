@@ -31,7 +31,7 @@ final class TypeScriptEmitterTests: XCTestCase {
             types.contains("import type { Auditable, Signable } from \"./protocols\";"),
             types
         )
-        XCTAssertTrue(types.contains("export interface Exam extends Signable, Auditable"), types)
+        XCTAssertTrue(types.contains("export interface Exam<$OntologyType extends string = \"examcalc:Exam\"> extends Signable, Auditable"), types)
     }
 
     func testJsonTextRejectsInvalidJSONWithoutForceCast() {
@@ -57,7 +57,7 @@ final class TypeScriptEmitterTests: XCTestCase {
             types.contains("Warning: imported protocol refs are not emitted as local TypeScript interfaces: external:Signable."),
             types
         )
-        XCTAssertTrue(types.contains("export interface Exam {"), types)
+        XCTAssertTrue(types.contains("export interface Exam<$OntologyType extends string = \"examcalc:Exam\"> {"), types)
     }
 
     func testInvalidNormalizedRangeFailsBeforeCreatingSDK() {

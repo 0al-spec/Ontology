@@ -4,69 +4,78 @@
 
 export type OntologyEntityId = string;
 
-export interface AuditLogEntry {
-  readonly $type: "examcalc:AuditLogEntry";
+declare const $ontologyFoundationType: unique symbol;
+
+/** Type-only semantic base; foundation declaration fields are not instance fields. */
+export interface $OntologyFoundationInstance<$Foundation extends string, $OntologyType extends string = string> {
+  readonly $type: $OntologyType;
+  readonly id?: string;
+  readonly [$ontologyFoundationType]?: $Foundation;
+}
+
+export interface AuditLogEntry<$OntologyType extends string = "examcalc:AuditLogEntry"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface CalculatorFunction {
-  readonly $type: "examcalc:CalculatorFunction";
+export interface CalculatorFunction<$OntologyType extends string = "examcalc:CalculatorFunction"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Capability", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface EndExamMode {
-  readonly $type: "examcalc:EndExamMode";
+export interface EndExamMode<$OntologyType extends string = "examcalc:EndExamMode"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Exam {
-  readonly $type: "examcalc:Exam";
+export interface Exam<$OntologyType extends string = "examcalc:Exam"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly durationMinutes?: number;
   readonly title: string;
 }
 
-export interface ExamModeSession {
-  readonly $type: "examcalc:ExamModeSession";
+export interface ExamModeSession<$OntologyType extends string = "examcalc:ExamModeSession"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface ExamPolicyProfile {
-  readonly $type: "examcalc:ExamPolicyProfile";
+export interface ExamPolicyProfile<$OntologyType extends string = "examcalc:ExamPolicyProfile"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface ExamSession {
-  readonly $type: "examcalc:ExamSession";
+export interface ExamSession<$OntologyType extends string = "examcalc:ExamSession"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface FunctionSet {
-  readonly $type: "examcalc:FunctionSet";
+export interface FunctionSet<$OntologyType extends string = "examcalc:FunctionSet"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface LockCalculator {
-  readonly $type: "examcalc:LockCalculator";
+export interface LockCalculator<$OntologyType extends string = "examcalc:LockCalculator"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface PolicyViolation {
-  readonly $type: "examcalc:PolicyViolation";
+export interface PolicyViolation<$OntologyType extends string = "examcalc:PolicyViolation"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Event", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface StartExamMode {
-  readonly $type: "examcalc:StartExamMode";
+export interface StartExamMode<$OntologyType extends string = "examcalc:StartExamMode"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface TabletDevice {
-  readonly $type: "examcalc:TabletDevice";
+export interface TabletDevice<$OntologyType extends string = "examcalc:TabletDevice"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface VerifyDeviceAndPolicy {
-  readonly $type: "examcalc:VerifyDeviceAndPolicy";
+export interface VerifyDeviceAndPolicy<$OntologyType extends string = "examcalc:VerifyDeviceAndPolicy"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
