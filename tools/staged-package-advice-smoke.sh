@@ -237,6 +237,19 @@ GIT_INDEX_FILE="$base/import-index" "$compiler" advise-staged --import 'imported
 grep -F 'could not be checked' "$base/log" | grep -F 'unmerged' >/dev/null
 git reset -q -- 'imported deps/model.yaml' 'imported deps/shared.yaml' 'imported deps/non-utf8.yaml' 'imported deps/symlink.yaml'
 
+# Protocol conformance advice must inspect the selected index, including the
+# explicitly supplied transitive sources, even when the worktree is repaired.
+mkdir -p 'protocol deps'
+cp "$root/Examples/typescript-imported-protocol/model.yaml" 'protocol deps/model.yaml'
+cp "$root/Examples/typescript-imported-protocol/contracts.yaml" 'protocol deps/contracts.yaml'
+sed '/trace: {type: string, required: true}/d' "$root/Examples/typescript-imported-protocol/parent.yaml" > 'protocol deps/parent.yaml'
+git add -- 'protocol deps/model.yaml' 'protocol deps/contracts.yaml' 'protocol deps/parent.yaml'
+cp "$root/Examples/typescript-imported-protocol/parent.yaml" 'protocol deps/parent.yaml'
+"$compiler" advise-staged --import 'protocol deps/parent.yaml' --import 'protocol deps/contracts.yaml' > "$base/log" 2>&1
+grep -F '"protocol deps/parent.yaml" error protocol.field.missing' "$base/log" >/dev/null || { cat "$base/log" >&2; exit 1; }
+grep -F '"protocol deps/model.yaml" error protocol.field.missing' "$base/log" >/dev/null || { cat "$base/log" >&2; exit 1; }
+git reset -q -- 'protocol deps/model.yaml' 'protocol deps/contracts.yaml' 'protocol deps/parent.yaml'
+
 touch veto
 if "${commit_cmd[@]}" --allow-empty -qm 'independent hook must block'; then exit 1; fi
 rm veto

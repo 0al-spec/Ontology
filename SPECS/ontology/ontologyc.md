@@ -241,17 +241,31 @@ reports `sdk.inheritance.source_unavailable` and marks the generated types and
 schemas as incomplete; it does not infer the missing fields. A protocol
 implemented by a local or imported ancestor is resolved in the declaring
 package's own namespace against its exact imported package ID and version.
-Pass each protocol source with `--import` to project its `requiredFields`
-into the instance interface and schema using the existing required-string
-contract. When that exact source is unavailable, `sdk.inheritance.protocol_unavailable`
-marks the output incomplete; if it is supplied but lacks the named protocol,
-the compiler reports `protocol.unresolved`. Imported protocol interfaces are
-not separately emitted: their verified fields are projected structurally.
+Pass each protocol source with `--import` to check its obligations. In the
+current package format `requiredFields` names required string instance fields:
+the implementing class must declare them or inherit them from a verified
+ancestor. The exception is the built-in optional string `id`: a protocol can
+make this existing SDK field required, without a class `fields.id` entry.
+An identically named relation does not supply an instance field.
+An incompatible or optional field is an error. The compiler projects actual
+declared fields into TypeScript and Zod; the protocol declaration does not
+fabricate fields. Imported protocol interfaces are not separately emitted.
 
-The compiler does not turn protocol `requiredRelations` or foundation
-declaration metadata into instance fields. Supplying a protocol source does
-not by itself establish conformance to imported relation requirements. Cycles
-and incompatible inherited field definitions are errors and do not produce an SDK.
+`requiredRelations` names relations declared for the implementing class or a
+verified ancestor. Their subject/domain is resolved in the relation owner's
+scope, including exact imported package identity and version. A same-named
+class from another package does not satisfy the obligation. The required name
+is an unqualified structural role matched in the implementing or ancestor
+package; it is not a reference to a relation in the protocol's own package.
+Foundation declaration properties are not treated as instance fields.
+
+When a protocol source is unavailable, `sdk.inheritance.protocol_unavailable`
+marks the output incomplete; if it is supplied but lacks the named protocol,
+the compiler reports `protocol.unresolved`. A required field or relation that
+could be inherited from an unavailable ancestor is reported as unverified,
+not as missing. Unverified local protocol fields do not appear as asserted
+properties in the generated interface or schema. Cycles and incompatible
+inherited field definitions are errors and do not produce an SDK.
 
 This instance projection does not add inherited fields to normalized IR: the
 IR preserves the declarations and their semantic `extends` references.

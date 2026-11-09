@@ -12,7 +12,9 @@ was never declared by an implementing class.
 In the current package format a protocol's `requiredFields` names mandatory
 string instance fields. A class implementing it must explicitly declare each
 field as required and string, or inherit such a declaration from a verified
-ancestor. Protocol declarations alone do not invent fields in instances.
+ancestor. A protocol may require the SDK's existing optional string `id`,
+which is reserved for the generator and is not authored as `fields.id`.
+Protocol declarations do not invent other fields in instances.
 `requiredRelations` names relation declarations whose subject/domain is the
 implementing class or a verified ancestor. Relations and instance fields are
 separate obligations even when their names are the same.
