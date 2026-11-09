@@ -1,3 +1,12 @@
+# Next Candidate: ONT-089 — Source-Bound Protocol Conformance
+
+**Priority:** P1
+**Status:** Not selected; ONT-088 review follow-up
+**Next step:** Clarify `requiredFields` semantics, then validate imported and
+inherited protocol conformance from exact supplied sources.
+
+## Deferred candidate
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
