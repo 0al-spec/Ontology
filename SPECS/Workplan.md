@@ -1432,3 +1432,24 @@ This workplan tracks the specification work for the Ontology repository. The ini
 - **Dependencies:** ONT-079 explicit imported sources; ONT-083 foundation
   declaration catalogs.
 - [Validation](ARCHIVE/ONT-086_TypeScript_SDK_Inheritance/ONT-086_Validation_Report.md).
+
+## ONT-087: Validate semantic inheritance before SDK generation
+
+- **Status:** Candidate; found in ONT-086 review.
+- **Problem:** `ontologyc check` and `advise-staged` accept cyclic class
+  inheritance even though `compile` rejects it. Conflicting inherited fields
+  likewise need a source-attributed check without requiring SDK generation.
+- **Outcome:** reuse named inheritance rules during source validation, retain
+  exact package identity and source attribution across imports, and cover
+  strict CLI and index-bound advisory paths with positive and negative cases.
+- **Dependency:** ONT-086.
+
+## ONT-088: Imported protocol obligations in the TypeScript SDK
+
+- **Status:** Candidate; found in ONT-086 review.
+- **Problem:** explicitly supplied ancestors may implement imported protocols;
+  their instance obligations are currently reported as unverified in SDK output.
+- **Outcome:** project verified, source-bound protocol obligations into types
+  and schemas without guessing aliases or adding declaration metadata to
+  instances. Preserve an explicit warning when the exact source is unavailable.
+- **Dependency:** ONT-086.

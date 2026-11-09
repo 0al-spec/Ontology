@@ -1,3 +1,13 @@
+# Next Candidate: ONT-087 — Validate Semantic Inheritance
+
+**Priority:** P1
+**Status:** Not selected; ONT-086 review follow-up
+**Next step:** Move cycle and field-compatibility checks into source validation
+with correct imported-source attribution; exercise `check`, `checkSources`,
+and commit-time advice.
+
+## Deferred candidate
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
