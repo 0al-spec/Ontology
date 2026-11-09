@@ -1,10 +1,8 @@
-# Selected: ONT-087 — Validate Semantic Inheritance
+# Next Candidate: ONT-088 — Imported Protocol Obligations
 
 **Priority:** P1
-**Status:** In progress; stacked on ONT-086
-**Next step:** Move cycle and field-compatibility checks into source validation
-with correct imported-source attribution; exercise `check`, `checkSources`,
-and commit-time advice.
+**Status:** Not selected; ONT-086 review follow-up
+**Next step:** Project protocol obligations only from exact supplied sources; retain warnings for missing sources.
 
 ## Deferred candidate
 
@@ -42,6 +40,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-087 validates semantic inheritance during source checks and index advice. [Validation](../ARCHIVE/ONT-087_Semantic_Inheritance_Validation/ONT-087_Validation_Report.md) passed locally; CI and review remain separate.
 
 - ONT-086 projects verified instance ancestry into the TypeScript SDK and
   schemas. [Validation](../ARCHIVE/ONT-086_TypeScript_SDK_Inheritance/ONT-086_Validation_Report.md)
