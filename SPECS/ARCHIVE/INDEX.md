@@ -89,6 +89,7 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-10 | ONT-088 | Archived [self-review](ONT-088_Imported_Protocol_Obligations/REVIEW_ONT-088.md); follow-up ONT-089 recorded |
 | 2026-11-10 | ONT-088 | Archived imported protocol obligations and validation (local PASS) |
 | 2026-11-09 | ONT-087 | Archived semantic inheritance validation (local PASS) |
 | 2026-11-09 | ONT-086 | Archived [self-review](ONT-086_TypeScript_SDK_Inheritance/REVIEW_ONT-086.md); follow-ups ONT-087 and ONT-088 recorded |
