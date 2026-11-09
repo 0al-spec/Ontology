@@ -27,10 +27,9 @@ final class OntologyCRegressionTests: XCTestCase {
         ])
 
         XCTAssertEqual(result.status, 0, result.combinedOutput)
-        XCTAssertEqual(
-            result.stdout.trimmingCharacters(in: .whitespacesAndNewlines),
-            "ontologyc check: PASS SPECS/ontology/packages/examcalc/domain-ontology-package.yaml"
-        )
+        XCTAssertTrue(result.stdout.contains("warning sdk.inheritance.protocol_unavailable"), result.stdout)
+        XCTAssertEqual(result.stdout.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: "\n").last,
+                       "ontologyc check: PASS SPECS/ontology/packages/examcalc/domain-ontology-package.yaml")
     }
 
     func testRootHelpPrintsCommandSummary() throws {
@@ -72,10 +71,9 @@ final class OntologyCRegressionTests: XCTestCase {
         ])
 
         XCTAssertEqual(result.status, 0, result.combinedOutput)
-        XCTAssertEqual(
-            result.stdout.trimmingCharacters(in: .whitespacesAndNewlines),
-            "ontologyc compile: PASS \(output.path)"
-        )
+        XCTAssertTrue(result.stdout.contains("warning sdk.inheritance.protocol_unavailable"), result.stdout)
+        XCTAssertEqual(result.stdout.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: "\n").last,
+                       "ontologyc compile: PASS \(output.path)")
         XCTAssertTrue(FileManager.default.fileExists(atPath: output.appendingPathComponent("schemas.ts").path))
     }
 
@@ -163,10 +161,9 @@ final class OntologyCRegressionTests: XCTestCase {
         ])
 
         XCTAssertEqual(result.status, 0, result.combinedOutput)
-        XCTAssertEqual(
-            result.stdout.trimmingCharacters(in: .whitespacesAndNewlines),
-            "ontologyc compile: PASS \(output.path)"
-        )
+        XCTAssertTrue(result.stdout.contains("warning sdk.inheritance.protocol_unavailable"), result.stdout)
+        XCTAssertEqual(result.stdout.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: "\n").last,
+                       "ontologyc compile: PASS \(output.path)")
 
         for file in expectedGeneratedFiles {
             let actual = output.appendingPathComponent(file)
@@ -175,11 +172,11 @@ final class OntologyCRegressionTests: XCTestCase {
                 .appendingPathComponent(file)
 
             XCTAssertTrue(FileManager.default.fileExists(atPath: actual.path), "Missing \(file)")
-            XCTAssertEqual(
-                try Data(contentsOf: actual),
-                try Data(contentsOf: expected),
-                "\(file) drifted from committed baseline"
-            )
+            if file == "types.ts" || file == "schemas.ts" {
+                let text = try String(contentsOf: actual, encoding: .utf8)
+                XCTAssertTrue(text.contains(": Unverified protocol "), text)
+            }
+            XCTAssertEqual(try Data(contentsOf: actual), try Data(contentsOf: expected), "\(file) drifted from committed baseline")
         }
 
         let ir = output.appendingPathComponent("ontology.normalized.json")

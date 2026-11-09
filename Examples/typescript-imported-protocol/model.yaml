@@ -1,0 +1,11 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: example.protocol-consumer, namespace: consumer, version: 1.0.0}
+spec:
+  imports:
+    - {id: ontology.foundation, version: 0.2.0}
+    - {id: example.protocol-parent, namespace: source, version: 1.0.0}
+  classes:
+    Child: {extends: 'source:Base', description: An inherited tracked entity.}
+  relations:
+    links: {domain: Child, range: Child, description: A local relation.}
