@@ -32,8 +32,9 @@ struct DiagramFoundationModels {
                 throw OntologyCompilerError.invalidArgument("Duplicate foundation model version \(version)")
             }
         }
+        let eligibility = FoundationModelImportEligibilitySpec()
         for version in models.keys {
-            guard imports.contains(where: { $0.version.rawValue == version }) else {
+            guard eligibility.isSatisfiedBy(.init(version: version, imports: imports)) else {
                 throw OntologyCompilerError.invalidArgument("Foundation model \(version) is not imported by this diagram")
             }
         }

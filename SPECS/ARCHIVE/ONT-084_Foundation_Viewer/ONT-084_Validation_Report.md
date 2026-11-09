@@ -6,6 +6,9 @@ Verdict: PASS locally on 2026-11-09; hosted CI and external review are separate.
   full Swift tests and coverage. The reported overall line coverage was 89.59%.
   The full suite was rerun after input bounds (203 compiler tests); the final
   error-message change and new CLI regression passed focused tests and lint.
+- After review feedback, `FoundationImportEligibilitySpecTests` independently
+  covers exact and unrelated identities/versions; focused compiler tests,
+  SwiftFormat and SwiftLint passed again.
 - `DiagramFoundationModelsTests` checks legacy identity, unchanged old output,
   duplicate, modified, missing and wrong-version models, deterministic order,
   and a transitive dependency using a rebased alias. CLI tests check profile
