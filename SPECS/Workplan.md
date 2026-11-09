@@ -1448,10 +1448,11 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-088: Imported protocol obligations in the TypeScript SDK
 
-- **Status:** Candidate; found in ONT-086 review.
+- **Status:** PASS locally; hosted CI and review remain separate.
 - **Problem:** explicitly supplied ancestors may implement imported protocols;
   their instance obligations are currently reported as unverified in SDK output.
 - **Outcome:** project verified, source-bound protocol obligations into types
   and schemas without guessing aliases or adding declaration metadata to
   instances. Preserve an explicit warning when the exact source is unavailable.
 - **Dependency:** ONT-086.
+- [Validation](ARCHIVE/ONT-088_Imported_Protocol_Obligations/ONT-088_Validation_Report.md).

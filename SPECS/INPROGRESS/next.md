@@ -1,11 +1,3 @@
-# Selected: ONT-088 — Imported Protocol Obligations
-
-**Priority:** P1
-**Status:** Selected; ONT-086 review follow-up
-**Next step:** Plan source-bound protocol projection and regression checks.
-
-## Deferred candidate
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
