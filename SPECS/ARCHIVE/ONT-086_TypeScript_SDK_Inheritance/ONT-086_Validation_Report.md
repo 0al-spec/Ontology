@@ -3,8 +3,8 @@
 **Verdict:** PASS locally; hosted CI and independent review remain separate.
 
 - `tools/swift-quality.sh` with `RUN_COVERAGE=1` passed: SwiftFormat and
-  SwiftLint reported no violations; 275 Swift tests passed. The aggregate
-  report measured 89.65% line coverage, including vendor sources. SwiftPM
+  SwiftLint reported no violations; 277 Swift tests passed. The aggregate
+  report measured 89.73% line coverage, including vendor sources. SwiftPM
   scratch and cache were on the external build volume.
 - `tools/typescript-smoke.sh <new ontologyc>` passed with TypeScript 6.0.3,
   tsx 4.22.4 and Zod 4.4.3. The new consumer checks local and imported
@@ -17,6 +17,9 @@
 - Focused compiler tests cover multiple inheritance levels, distinct alias
   scopes across transitive imports, wrong/missing source versions, cycles and
   incompatible field overrides. The normalized source IR remains unchanged.
+- Named `OntologyRules` specifications cover cycle identity and inherited-field
+  compatibility. A cyclic package currently still passes `ontologyc check`
+  but fails `compile` with `class.inheritance.cycle`; see the review follow-up.
 
 An unavailable non-foundation ancestor is a visible warning and leaves the
 emitted instance projection incomplete. Imported protocol obligations remain

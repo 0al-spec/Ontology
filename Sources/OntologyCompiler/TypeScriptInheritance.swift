@@ -47,7 +47,8 @@ struct TypeScriptInheritance {
 
     private func fields(of name: String, in package: SDKPackage, visiting: Set<String>, warnings: inout Set<String>) -> [JSONObject] {
         let key = "\(package.id)@\(package.version):\(name)"
-        guard !visiting.contains(key) else {
+        let acyclic = AcyclicInheritanceSpec().isSatisfiedBy(.init(candidate: key, visited: visiting))
+        guard acyclic else {
             compiler.add("class.inheritance.cycle", "spec.classes.\(name).extends", "Class inheritance contains a cycle at \(key)")
             return []
         }
@@ -75,7 +76,7 @@ struct TypeScriptInheritance {
             }
             let fieldID = field["id"] as? String ?? ""
             if let previous = inherited.first(where: { $0["id"] as? String == fieldID }) {
-                if !sameField(previous, field) {
+                if !CompatibleInheritedFieldSpec().isSatisfiedBy((signature(previous), signature(field))) {
                     compiler.add("class.inheritance.field_conflict", "spec.classes.\(name).fields.\(fieldID)",
                                  "Inherited field \(fieldID) has an incompatible type or requiredness")
                 }
@@ -109,11 +110,9 @@ struct TypeScriptInheritance {
         return fields(of: name, in: parent, visiting: visiting, warnings: &warnings)
     }
 
-    private func sameField(_ left: JSONObject, _ right: JSONObject) -> Bool {
-        (left["type"] as? String) == (right["type"] as? String) &&
-            (left["required"] as? Bool ?? false) == (right["required"] as? Bool ?? false) &&
-            ((left["targetType"] as? String) ?? (left["target"] as? String)) ==
-            ((right["targetType"] as? String) ?? (right["target"] as? String))
+    private func signature(_ field: JSONObject) -> InheritedFieldSignature {
+        InheritedFieldSignature(type: field["type"] as? String, required: field["required"] as? Bool ?? false,
+                                target: (field["targetType"] as? String) ?? (field["target"] as? String))
     }
 }
 
