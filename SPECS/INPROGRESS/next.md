@@ -1,9 +1,8 @@
-# Next Candidate: ONT-089 — Source-Bound Protocol Conformance
+# Selected: ONT-089 — Source-Bound Protocol Conformance
 
 **Priority:** P1
-**Status:** Not selected; ONT-088 review follow-up
-**Next step:** Clarify `requiredFields` semantics, then validate imported and
-inherited protocol conformance from exact supplied sources.
+**Status:** Selected; ONT-088 review follow-up
+**Next step:** Plan explicit field and relation conformance across exact imports.
 
 ## Deferred candidate
 
