@@ -7,11 +7,14 @@ inheritance projector diagnostics, CLI output, index-bound advisory and tests.
 
 ## Findings
 
-No additional blocking defect was found in the reviewed local changes. The
-regression tests demonstrate local and imported cycles, incompatible inherited
+Integration review found and corrected a false namespace conflict when two
+versions were supplied but only one was reachable from the checked package.
+The regression tests demonstrate local and imported cycles, incompatible inherited
 fields and source paths. The staged smoke checks the selected Git index rather
 than relying on the working file, and confirms strict `diff`/`publish` reject
 the same cycle before writing output.
+
+No other blocking defect was found in the reviewed local changes.
 
 ## Limits and follow-up
 

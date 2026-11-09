@@ -52,7 +52,9 @@ The same available-source inheritance checks run for `check`, `compile`,
 and ambiguous reference targets are errors. A finding reached through an
 imported ancestor identifies the affected class's `extends` in the source
 being checked and names the ancestor; separately supplied sources are checked
-at their own declaration locations. An unavailable ancestor source produces an
+at their own declaration locations. Target identity considers only packages in
+the checked source's exact transitive import closure, not unrelated supplied
+versions. An unavailable ancestor source produces an
 `sdk.inheritance.source_unavailable` warning, not a claim that its fields were
 verified. Text-mode `check` prints these inheritance warnings as well as PASS.
 Imported protocol obligations can still be unverified; see ONT-088.

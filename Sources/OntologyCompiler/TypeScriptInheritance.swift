@@ -5,13 +5,36 @@ import OntologyRules
 struct TypeScriptInheritance {
     let compiler: OntologyCompiler
     let packages: [SDKPackage]
+    let reachablePackages: [SDKPackage]
 
     init(compiler: OntologyCompiler, root: LoadedPackage, imports: [LoadedPackage], rootIR: JSONObject) {
         self.compiler = compiler
         let sources = [root] + imports.filter { $0.path != root.path }
-        packages = sources.map { source in
+        let available = sources.map { source in
             let ir = source.path == root.path ? rootIR : compiler.normalize(source, suppliedImports: sources.filter { $0.path != source.path })
             return SDKPackage(source: source, ir: ir)
+        }
+        packages = available
+        reachablePackages = Self.reachablePackages(available)
+    }
+
+    private static func reachablePackages(_ packages: [SDKPackage]) -> [SDKPackage] {
+        guard let root = packages.first else { return [] }
+        let indexed = Dictionary(grouping: packages, by: \.identity)
+        var pending = [root.identity]
+        var reachable = Set<DiagramPackageIdentity>()
+        while let current = pending.popLast() {
+            guard reachable.insert(current).inserted else { continue }
+            for package in indexed[current] ?? [] {
+                for binding in package.imports {
+                    guard let id = binding["id"] as? String, let version = binding["version"] as? String else { continue }
+                    let identity = DiagramPackageIdentity(id: id, version: version)
+                    if indexed[identity] != nil { pending.append(identity) }
+                }
+            }
+        }
+        return packages.filter {
+            DiagramReachableImportSpec().isSatisfiedBy(.init(supplied: $0.identity, reachable: reachable))
         }
     }
 
@@ -137,7 +160,7 @@ struct TypeScriptInheritance {
               let target = (field["targetType"] as? String) ?? (field["target"] as? String) else { return }
         let parts = target.split(separator: ":", maxSplits: 1).map(String.init)
         guard parts.count == 2 else { return }
-        let candidates = Set(packages.filter { $0.namespace == parts[0] && $0.classes[parts[1]] != nil }.map {
+        let candidates = Set(reachablePackages.filter { $0.namespace == parts[0] && $0.classes[parts[1]] != nil }.map {
             "ontology://\($0.id)/\($0.version)/classes/\(parts[1])"
         })
         let expected = (field["targetUri"] as? String) ?? "ontology://\(owner.id)/\(owner.version)/classes/\(parts[1])"
@@ -193,6 +216,8 @@ struct SDKPackage {
     let imports: [JSONObject]
     let classes: [String: JSONObject]
     let protocolFields: [String: [String]]
+
+    var identity: DiagramPackageIdentity { DiagramPackageIdentity(id: id, version: version) }
 
     init(source: LoadedPackage, ir: JSONObject) {
         id = source.id

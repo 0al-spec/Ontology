@@ -3,6 +3,48 @@ import XCTest
 @testable import OntologyCompiler
 
 final class InheritanceValidationTests: XCTestCase {
+    func testUnrelatedVersionDoesNotConflictWithSelectedImport() throws {
+        try withFixture { root in
+            let oldDirectory = root.appendingPathComponent("old")
+            let newDirectory = root.appendingPathComponent("new")
+            try FileManager.default.createDirectory(at: oldDirectory, withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
+            let classes = "Target: {extends: 'ont:DomainEntity', description: Target.}"
+            let old = try writePackage(oldDirectory, name: "shared", classes: classes)
+            let new = try writePackage(newDirectory, name: "shared", classes: classes)
+            let text = try String(contentsOf: new, encoding: .utf8)
+            try text.replacingOccurrences(of: "version: 1.0.0}", with: "version: 2.0.0}")
+                .write(to: new, atomically: true, encoding: .utf8)
+            let child = try writePackage(root, name: "child", imports: "    - {id: example.shared, namespace: alias, version: 2.0.0}\n", classes: """
+                Leaf:
+                  extends: ont:DomainEntity
+                  description: Child.
+                  fields: {target: {type: ref, target: 'alias:Target', required: true}}
+            """)
+            let compiler = OntologyCompiler()
+            let imports = [OntologySourcePath(url: old), OntologySourcePath(url: new)]
+            let findings = compiler.check(path: OntologySourcePath(url: child), imports: imports)
+            XCTAssertFalse(compiler.hasErrors(findings), "\(findings)")
+            let output = root.appendingPathComponent("sdk")
+            let compiled = try compiler.compile(path: OntologySourcePath(url: child), outDirectory: OntologyOutputDirectory(url: output), imports: imports)
+            XCTAssertFalse(compiler.hasErrors(compiled), "\(compiled)")
+            XCTAssertTrue(FileManager.default.fileExists(atPath: output.appendingPathComponent("types.ts").path))
+
+            let bothVersions = try writePackage(root, name: "both", imports: """
+                - {id: example.shared, namespace: older, version: 1.0.0}
+                - {id: example.shared, namespace: newer, version: 2.0.0}
+
+            """, classes: """
+                Leaf:
+                  extends: ont:DomainEntity
+                  description: Child.
+                  fields: {target: {type: ref, target: 'newer:Target', required: true}}
+            """)
+            let ambiguous = compiler.check(path: OntologySourcePath(url: bothVersions), imports: imports)
+            XCTAssertTrue(ambiguous.contains { $0.code == "class.field.target.namespace_conflict" }, "\(ambiguous)")
+        }
+    }
+
     func testCheckAndSnapshotCheckRejectCycleAndIncompatibleFields() throws {
         let examples: [(String, String)] = [
             ("A: {extends: B, description: A.}\nB: {extends: A, description: B.}", "class.inheritance.cycle"),
