@@ -25,7 +25,7 @@ model is supplied.
 
 ## Validation and remaining work
 
-See [validation](../ARCHIVE/ONT-084_Foundation_Viewer/ONT-084_Validation_Report.md).
+See [validation](ONT-084_Validation_Report.md).
 The deployed site still requires a released Ontology version, a regenerated
 SpecGraph graph, and a SpecSpace update. DOT and image generation do not yet
 display model-backed definitions; the CLI rejects that combination explicitly.
