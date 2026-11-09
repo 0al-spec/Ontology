@@ -23,3 +23,7 @@ Catalogs expose published declarations, not invented domain packages,
 inheritance edges, semantic approval, or execution evidence. A subsequent
 visualizer/consumer slice will read them using their own source pointers;
 this task alone does not claim the website has loaded the definitions.
+
+---
+**Archived:** 2026-11-09
+**Verdict:** PASS (local; hosted CI and review separate)

@@ -1,8 +1,3 @@
-# Active task: ONT-083 — Source-attributed foundation model catalogs
-
-Record exact published foundation model interfaces for downstream consumers.
-The NormLab candidate below remains queued.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -37,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-083 provides source-attributed foundation model catalogs. [Validation](../ARCHIVE/ONT-083_Foundation_Model_Catalogs/ONT-083_Validation_Report.md) passed locally; Viewer integration is separate.
 
 - ONT-082 connects imported typed references to exact loaded sources. [Validation](../ARCHIVE/ONT-082_Viewer_Imported_Ref_Bindings/ONT-082_Validation_Report.md) passed locally; CI and consumer integration are separate.
 

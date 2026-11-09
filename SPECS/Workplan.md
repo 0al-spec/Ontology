@@ -1390,7 +1390,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-083: Source-attributed foundation model catalogs
 
-- **Status:** In progress.
+- **Status:** Complete locally; [validation](ARCHIVE/ONT-083_Foundation_Model_Catalogs/ONT-083_Validation_Report.md). Hosted CI and review remain separate.
 - **Problem:** versioned foundation export tables list names but do not provide
   machine-readable declarations for viewers and downstream tools.
 - **Outcome:** preserve the published version-specific foundation model sources
