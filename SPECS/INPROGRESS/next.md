@@ -1,3 +1,8 @@
+# Active task: ONT-081 — Imported references in compatibility and publication
+
+Implement source-bound imports for compatibility and registry workflows.
+See the ONT-081 plan. Preserve the ONT-045 candidate below.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
