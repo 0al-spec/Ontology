@@ -178,6 +178,9 @@ extension OntologyCompiler {
             return artifactStatus(artifact, from: start)
         }
         validate(package)
+        if !diagnostics.dropFirst(start).contains(where: { $0.severity == "error" }) {
+            validateSemanticInheritance(package, suppliedImports: [])
+        }
         if string(package.metadata["approvalStatus"]) != "draft" {
             add(
                 "inductionDraft.package.approvalStatus.invalid",

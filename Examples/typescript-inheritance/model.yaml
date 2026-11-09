@@ -12,6 +12,7 @@ spec:
       implements: [Tracked, Identified]
       fields:
         note: {type: string, required: false}
+        trace: {type: string, required: true}
     ChildAction:
       extends: BaseAction
       description: An action inheriting both obligations.
@@ -31,8 +32,6 @@ spec:
       description: A specialization of T.
   relations:
     links: {domain: Parent, range: Child, description: Local relation.}
-    trace: {domain: BaseAction, range: Parent, description: Required protocol relation.}
-    id: {domain: BaseAction, range: Parent, description: Required identity relation.}
     acts: {subject: Parent, action: ChildAction, object: Child, description: Action relationship.}
   protocols:
     Tracked: {description: Requires a trace., requiredFields: [trace]}

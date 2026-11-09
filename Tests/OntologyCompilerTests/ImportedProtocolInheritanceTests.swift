@@ -6,7 +6,7 @@ final class ImportedProtocolInheritanceTests: XCTestCase {
     func testInheritedProtocolUsesSuppliedAncestorSource() throws {
         try withFixture { root in
             let parent = try writePackage(root, name: "shared", classes: """
-                Base: {extends: 'ont:DomainEntity', description: Base., implements: [Tracked]}
+                Base: {extends: 'ont:DomainEntity', description: Base., implements: [Tracked], fields: {trace: {type: string, required: true}}}
             """, protocols: "Tracked: {description: Tracked., requiredFields: [trace]}",
             extraRelations: "trace: {domain: Base, range: TestRoot, description: Trace.}")
             let child = try writePackage(root, name: "child", imports: "    - {id: example.shared, namespace: parent, version: 1.0.0}\n", classes: """
@@ -34,12 +34,12 @@ final class ImportedProtocolInheritanceTests: XCTestCase {
                 Tracked: {description: Child protocol., requiredFields: [childTrace]}
             """)
             let parent = try writePackage(root, name: "shared", imports: "    - {id: example.definitions, namespace: contract, version: 1.0.0}\n", classes: """
-                Base: {extends: 'ont:DomainEntity', description: Base., implements: ['contract:Tracked']}
-            """)
+                Base: {extends: 'ont:DomainEntity', description: Base., implements: ['contract:Tracked'], fields: {ancestorTrace: {type: string, required: true}}}
+            """, extraRelations: "declaredRelation: {domain: Base, range: TestRoot, description: Required.}")
             let child = try writePackage(root, name: "child", imports:
                 "    - {id: example.shared, namespace: parent, version: 1.0.0}\n" +
                 "    - {id: example.other, namespace: contract, version: 1.0.0}\n", classes: """
-                Child: {extends: 'parent:Base', description: Child., implements: ['contract:Tracked']}
+                Child: {extends: 'parent:Base', description: Child., implements: ['contract:Tracked'], fields: {childTrace: {type: string, required: true}}}
             """)
             let output = root.appendingPathComponent("out")
             let diagnostics = try OntologyCompiler().compile(

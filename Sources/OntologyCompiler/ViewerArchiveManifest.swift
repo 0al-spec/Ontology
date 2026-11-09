@@ -18,6 +18,10 @@ extension OntologyCompiler {
         if hasErrors(diagnostics) {
             throw OntologyCompilerError.packageError(diagnostics)
         }
+        validateSemanticInheritance(package, suppliedImports: [])
+        if hasErrors(diagnostics) {
+            throw OntologyCompilerError.packageError(diagnostics)
+        }
 
         let packageURL = packagePath.url.standardizedFileURL
         let generatedURL = generatedDirectory.url.standardizedFileURL

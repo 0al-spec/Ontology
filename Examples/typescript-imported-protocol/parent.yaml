@@ -12,5 +12,6 @@ spec:
       description: A tracked entity from another package.
       fields:
         serial: {type: string, required: true}
+        trace: {type: string, required: true}
   relations:
     auditLink: {domain: Base, range: Base, description: A declaration-level relation.}

@@ -75,12 +75,6 @@ extension OntologyCompiler {
         if let modelApplicability = spec["modelApplicability"] {
             validateModelApplicability(modelApplicability, path: "spec.modelApplicability")
         }
-        validateProtocolConformance(
-            classes: classes,
-            protocols: protocols,
-            relations: relations,
-            packageNamespace: package.namespace
-        )
     }
 
     private func optionalDefinitionSection(_ spec: JSONObject, key: String) -> JSONObject {

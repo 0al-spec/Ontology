@@ -58,6 +58,11 @@ extension OntologyCompiler {
             validate(item.package, suppliedImports: dependencies)
         }
         guard !hasErrors(diagnostics) else { throw OntologyCompilerError.packageError(diagnostics) }
+        for (index, item) in loaded.enumerated() {
+            let dependencies = loaded.enumerated().filter { $0.offset != index }.map { $0.element.package }
+            validateSemanticInheritance(item.package, suppliedImports: dependencies)
+        }
+        guard !hasErrors(diagnostics) else { throw OntologyCompilerError.packageError(diagnostics) }
         let records = loaded.enumerated().map { index, item in
             let dependencies = loaded.enumerated().filter { $0.offset != index }.map { $0.element.package }
             return diagramIR(package: item.package, byteDigest: item.byteDigest, suppliedImports: dependencies)

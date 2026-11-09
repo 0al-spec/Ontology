@@ -49,7 +49,7 @@ final class PackageValidationTests: XCTestCase {
         XCTAssertEqual(package.packageMetadata.version.rawValue, "0.1.0")
     }
 
-    func testProtocolRequiredFieldsMustBeClassRelationDomains() throws {
+    func testProtocolRequiredFieldsMustBeDeclaredInstanceFields() throws {
         let packageURL = try writePackage("""
         apiVersion: ontology.specgraph.io/v1alpha1
         kind: DomainOntologyPackage
