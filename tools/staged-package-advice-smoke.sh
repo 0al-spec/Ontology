@@ -71,6 +71,69 @@ git add -- "$model"
 package Typo '' > "$model"
 commit 'good index, bad worktree'
 quiet
+
+# The strict CLI and nonblocking index advice must agree on semantic cycles.
+cat > cycle.ontology.yml <<'EOF'
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: test.cycle, namespace: cycle, version: 0.1.0}
+spec:
+  imports: [{id: ontology.foundation, namespace: ont, version: 0.2.0}]
+  classes:
+    A: {extends: B, description: First.}
+    B: {extends: A, description: Second.}
+  relations:
+    relates: {domain: A, range: B, description: Example.}
+EOF
+git add cycle.ontology.yml
+if "$compiler" check cycle.ontology.yml > "$base/check-log" 2>&1; then
+    echo 'Strict check unexpectedly accepted a cycle.' >&2
+    exit 1
+fi
+grep -F 'class.inheritance.cycle' "$base/check-log" >/dev/null
+if "$compiler" check cycle.ontology.yml --format json > "$base/check-json"; then
+    echo 'JSON check unexpectedly accepted a cycle.' >&2
+    exit 1
+fi
+python3 - "$base/check-json" <<'PY'
+import json, sys
+assert any(item['code'] == 'class.inheritance.cycle' and item['severity'] == 'error'
+           for item in json.load(open(sys.argv[1])))
+PY
+if "$compiler" diff --from cycle.ontology.yml --to cycle.ontology.yml --out "$base/diff.yaml" > "$base/diff-log" 2>&1; then
+    echo 'Diff unexpectedly accepted a cycle.' >&2
+    exit 1
+fi
+grep -F 'class.inheritance.cycle' "$base/diff-log" >/dev/null
+test ! -e "$base/diff.yaml"
+if "$compiler" publish cycle.ontology.yml --registry "file://$base/registry" > "$base/publish-log" 2>&1; then
+    echo 'Publish unexpectedly accepted a cycle.' >&2
+    exit 1
+fi
+grep -F 'class.inheritance.cycle' "$base/publish-log" >/dev/null
+test ! -e "$base/registry"
+# Advice reads the staged cycle, even if the working file has been repaired.
+package ValueObject '' > cycle.ontology.yml
+"$compiler" advise-staged > "$base/log" 2>&1
+grep -F 'cycle.ontology.yml' "$base/log" | grep -F 'class.inheritance.cycle' >/dev/null
+git reset -q -- cycle.ontology.yml
+rm cycle.ontology.yml
+
+cat > missing-ancestor.yaml <<'EOF'
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: test.missing, namespace: sample, version: 0.1.0}
+spec:
+  imports: [{id: test.other, namespace: other, version: 1.0.0}]
+  classes:
+    Leaf: {extends: 'other:Base', description: Child.}
+  relations:
+    relates: {domain: Leaf, range: Leaf, description: Example.}
+EOF
+"$compiler" check missing-ancestor.yaml > "$base/warning-log"
+grep -F 'warning sdk.inheritance.source_unavailable' "$base/warning-log" >/dev/null
+grep -F 'ontologyc check: PASS' "$base/warning-log" >/dev/null
+rm missing-ancestor.yaml
 # Commit only an unrelated YAML, leaving the unstaged package error in place.
 printf 'example:\n  kind: DomainOntologyPackage\n' > unrelated.yaml
 git add unrelated.yaml

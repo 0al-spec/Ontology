@@ -146,6 +146,8 @@ final class TypeScriptInheritanceTests: XCTestCase {
             )
             XCTAssertTrue(diagnostics.contains { $0.code == "class.field.target.namespace_conflict" }, "\(diagnostics)")
             XCTAssertFalse(FileManager.default.fileExists(atPath: output.path))
+            let checked = compiler.check(path: OntologySourcePath(url: child), imports: [OntologySourcePath(url: parent)])
+            XCTAssertTrue(checked.contains { $0.code == "class.field.target.namespace_conflict" }, "\(checked)")
         }
     }
 

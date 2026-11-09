@@ -53,6 +53,7 @@ case "check":
         compiler.printDiagnostics(diagnostics)
         exit(1)
     }
+    compiler.printDiagnostics(diagnostics.filter { $0.code.hasPrefix("sdk.inheritance.") })
     print("ontologyc check: PASS \(path)")
 
 case "compile":

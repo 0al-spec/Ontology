@@ -42,6 +42,13 @@ public final class OntologyCompiler {
             return diagnostics
         }
 
+        for imported in supplied {
+            var dependencies = supplied.filter { $0.path != imported.path }
+            if package.path != imported.path { dependencies.append(package) }
+            validateSemanticInheritance(imported, suppliedImports: dependencies)
+        }
+        if hasErrors(diagnostics) { return diagnostics }
+
         let ir = normalize(package, suppliedImports: supplied)
         let sdkIR = TypeScriptInheritance(compiler: self, root: package, imports: supplied, rootIR: ir).project(ir)
         if hasErrors(diagnostics) { return diagnostics }
