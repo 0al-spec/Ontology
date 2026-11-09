@@ -156,8 +156,9 @@ package source to `check` or `compile` with repeatable `--import <package.yaml>`
 options. Missing sources, mismatched versions and missing classes fail validation;
 the compiler never fetches imports implicitly. The normalized field retains the
 local qualified target and records the imported class's canonical type, URI and
-source digest. The existing `diff` contract classifies local target changes as
-breaking; imported target comparison is not yet supported.
+source digest. `diff` classifies a changed imported target URI, including its
+package version, or canonical target type as breaking. The digest identifies the validated source bytes
+but a digest change alone does not change the target type.
 The SDK exposes the field as `Ref<Repository>`. Its record contains a `target`
 discriminator and a required JSON `locator`. The consumer chooses the locator
 format and resolves it before applying the action. A successful record parse
@@ -166,9 +167,27 @@ The [repository membership example](../../Examples/repository-membership/members
 executes the same action with a database key and a revision-scoped graph address.
 The [imported reference example](../../Examples/imported-typed-reference/consumer.ts)
 also checks TypeScript and runtime identity when an import alias differs from
-the imported package's namespace. `diff` and registry `publish` do not yet take
-import sources and therefore cannot confirm an imported `Ref`. The optional
-commit-time advisory accepts explicitly supplied imports from the Git index.
+the imported package's namespace. Compatibility and registry workflows accept
+explicit local imports as well; the optional commit-time advisory accepts imports
+from the Git index.
+
+For a comparison, provide the sources of each side separately:
+
+```bash
+ontologyc diff --from old.yaml --to new.yaml --out diff.yaml \
+  --from-import shared-v1.yaml --to-import shared-v2.yaml
+ontologyc publish new.yaml --registry file:///path/to/registry --import shared-v2.yaml
+ontologyc compat-check new.yaml --against example.model@1.0.0 \
+  --registry file:///path/to/registry --import shared-v2.yaml
+```
+
+Import options are repeatable. Sources are validated and bound to the identity
+and version declared on that side; no dependency is fetched automatically. If
+required sources or targets are missing, the command fails before writing a
+report or publishing. `validate-governance-decision` also accepts `--import`
+when `--package` is supplied, and trusted publication uses those same imports.
+For registry IR predating source-bound target metadata, a comparison against a
+source-bound target is conservatively breaking rather than inferred equivalent.
 
 ### `ontologyc compile`
 

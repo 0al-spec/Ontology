@@ -135,20 +135,22 @@ public final class OntologyCompiler {
     public func diffPackages(
         from fromPath: OntologySourcePath,
         to toPath: OntologySourcePath,
-        outPath: OntologyOutputPath
+        outPath: OntologyOutputPath,
+        fromImports: [OntologySourcePath] = [],
+        toImports: [OntologySourcePath] = []
     ) throws -> [Diagnostic] {
         diagnostics = []
-        guard let fromPackage = load(path: fromPath.path), let toPackage = load(path: toPath.path) else {
+        let from = loadValidatedPackage(path: fromPath, imports: fromImports)
+        let to = loadValidatedPackage(path: toPath, imports: toImports)
+        guard let from, let to else {
             return diagnostics
         }
-        validate(fromPackage)
-        validate(toPackage)
         if hasErrors(diagnostics) {
             return diagnostics
         }
 
-        let fromIR = normalize(fromPackage)
-        let toIR = normalize(toPackage)
+        let fromIR = normalize(from.package, suppliedImports: from.imports)
+        let toIR = normalize(to.package, suppliedImports: to.imports)
         let report = compatibilityReport(fromIR: fromIR, toIR: toIR)
         try writeYAML(report, to: outPath.url)
         return diagnostics
@@ -161,7 +163,8 @@ public final class OntologyCompiler {
         token: String?,
         channel: OntologyPublishChannel = .candidate,
         governanceDecisionPath: OntologySourcePath? = nil,
-        goldenReportPath: OntologySourcePath? = nil
+        goldenReportPath: OntologySourcePath? = nil,
+        imports: [OntologySourcePath] = []
     ) throws -> (diagnostics: [Diagnostic], packageRef: OntologyPackageReference) {
         try publishPackage(
             request: RegistryPublishRequest(
@@ -170,7 +173,8 @@ public final class OntologyCompiler {
                 token: token,
                 channel: channel,
                 governanceDecisionPath: governanceDecisionPath,
-                goldenReportPath: goldenReportPath
+                goldenReportPath: goldenReportPath,
+                imports: imports
             ),
             put: { url, data, token in try RegistryClient().put(url: url, body: data, token: token) }
         )
@@ -183,6 +187,7 @@ public final class OntologyCompiler {
         let channel: OntologyPublishChannel
         let governanceDecisionPath: OntologySourcePath?
         let goldenReportPath: OntologySourcePath?
+        var imports: [OntologySourcePath] = []
     }
 
     func publishPackage(
@@ -190,10 +195,9 @@ public final class OntologyCompiler {
         put: (URL, Data, String?) throws -> Void
     ) throws -> (diagnostics: [Diagnostic], packageRef: OntologyPackageReference) {
         diagnostics = []
-        guard let package = load(path: request.path.path) else {
+        guard let loaded = loadValidatedPackage(path: request.path, imports: request.imports) else {
             throw OntologyCompilerError.packageError(diagnostics)
         }
-        validate(package)
         if hasErrors(diagnostics) {
             throw OntologyCompilerError.packageError(diagnostics)
         }
@@ -201,9 +205,10 @@ public final class OntologyCompiler {
             channel: request.channel,
             decisionPath: request.governanceDecisionPath,
             packagePath: request.path,
-            goldenReportPath: request.goldenReportPath
+            goldenReportPath: request.goldenReportPath,
+            imports: request.imports
         )
-        let ir = normalize(package)
+        let ir = normalize(loaded.package, suppliedImports: loaded.imports)
         let id = string(ir["id"]) ?? ""
         let version = string(ir["version"]) ?? ""
         let packageRef = OntologyPackageReference(id: id, version: version)
@@ -229,7 +234,8 @@ public final class OntologyCompiler {
         channel: OntologyPublishChannel,
         decisionPath: OntologySourcePath?,
         packagePath: OntologySourcePath,
-        goldenReportPath: OntologySourcePath?
+        goldenReportPath: OntologySourcePath?,
+        imports: [OntologySourcePath]
     ) throws {
         guard channel == .trusted || decisionPath != nil || goldenReportPath != nil else { return }
         guard let decisionPath else {
@@ -245,7 +251,8 @@ public final class OntologyCompiler {
             decisionPath: decisionPath,
             packagePath: packagePath,
             goldenReportPath: goldenReportPath,
-            outPath: nil
+            outPath: nil,
+            imports: imports
         )
         diagnostics = result.diagnostics
         if channel == .trusted, result.decisionState != "approved" {
@@ -280,17 +287,17 @@ public final class OntologyCompiler {
         against ref: OntologyPackageReference,
         registry: RegistryBaseURL,
         token: String?,
-        outPath: OntologyOutputPath?
+        outPath: OntologyOutputPath?,
+        imports: [OntologySourcePath] = []
     ) throws -> Bool {
         diagnostics = []
-        guard let toPackage = load(path: path.path) else {
+        guard let loaded = loadValidatedPackage(path: path, imports: imports) else {
             throw OntologyCompilerError.packageError(diagnostics)
         }
-        validate(toPackage)
         if hasErrors(diagnostics) {
             throw OntologyCompilerError.packageError(diagnostics)
         }
-        let toIR = normalize(toPackage)
+        let toIR = normalize(loaded.package, suppliedImports: loaded.imports)
 
         let irData = try pullPackageData(ref: ref, registry: registry, token: token)
         guard let fromIR = try JSONSerialization.jsonObject(with: irData) as? JSONObject else {

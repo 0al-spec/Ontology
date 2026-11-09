@@ -41,14 +41,14 @@ let commandUsage: [String: String] = [
     "validate-specgraph": "Usage:\n  ontologyc validate-specgraph <binding.yaml> --ontology-ir <ontology.normalized.json> --out <directory> [--source-uri <uri>] [--source-ref <ref>]",
     "validate-instances": "Usage:\n  ontologyc validate-instances <graph.json> --ontology-ir <ontology.normalized.json> [--profile eventcore-v1|eventcore-provenance-v1] [--provenance-authority <trusted-authority.json>] [--out <report.json>]",
     "export-instance-contract": "Usage:\n  ontologyc export-instance-contract --ontology-ir <ontology.normalized.json> [--profile eventcore-v1|eventcore-provenance-v1] --out <directory>",
-    "diff": "Usage:\n  ontologyc diff --from <old-package.yaml> --to <new-package.yaml> --out <report.yaml>",
-    "publish": "Usage:\n  ontologyc publish <package.yaml> --registry <url|file-url> [--token <token>] [--channel candidate|trusted] [--decision <decision.yaml>] [--golden-report <report.yaml>]",
+    "diff": "Usage:\n  ontologyc diff --from <old-package.yaml> --to <new-package.yaml> --out <report.yaml> [--from-import <package.yaml> ...] [--to-import <package.yaml> ...]",
+    "publish": "Usage:\n  ontologyc publish <package.yaml> --registry <url|file-url> [--token <token>] [--channel candidate|trusted] [--decision <decision.yaml>] [--golden-report <report.yaml>] [--import <package.yaml> ...]",
     "pull": "Usage:\n  ontologyc pull <id>@<version> --registry <url|file-url> --out <directory> [--token <token>]",
-    "compat-check": "Usage:\n  ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url|file-url> [--out <report.yaml>] [--token <token>]",
+    "compat-check": "Usage:\n  ontologyc compat-check <package.yaml> --against <id>@<version> --registry <url|file-url> [--out <report.yaml>] [--token <token>] [--import <package.yaml> ...]",
     "import-hypercode": "Usage:\n  ontologyc import-hypercode <hypercode-ir.json> --out <draft.yaml> --id <package-id> --namespace <namespace> --version <semver>",
     "validate-draft": "Usage:\n  ontologyc validate-draft <draft-directory> [--out <report.yaml>]",
     "validate-golden-intent": "Usage:\n  ontologyc validate-golden-intent <expectation.yaml> --candidate <package.yaml> [--out <report.yaml>]",
-    "validate-governance-decision": "Usage:\n  ontologyc validate-governance-decision <decision.yaml> [--package <package.yaml>] [--golden-report <report.yaml>] [--out <report.yaml>]",
+    "validate-governance-decision": "Usage:\n  ontologyc validate-governance-decision <decision.yaml> [--package <package.yaml>] [--golden-report <report.yaml>] [--out <report.yaml>] [--import <package.yaml> ...]",
     "export-specgraph-owner-decisions": "Usage:\n  ontologyc export-specgraph-owner-decisions <decisions.yaml> --out <report.json>",
     "export-viewer-archive-manifest": "Usage:\n  ontologyc export-viewer-archive-manifest <package.yaml> --generated <directory> --out <manifest.json>"
 ]

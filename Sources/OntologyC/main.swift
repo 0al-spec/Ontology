@@ -105,7 +105,8 @@ case "validate-specgraph":
     }
 
 case "diff":
-    let parsed = parseArguments(commandArgs, allowedOptions: ["--from", "--to", "--out"], command: command)
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--from", "--to", "--out", "--from-import", "--to-import"], command: command,
+                                repeatableOptions: ["--from-import", "--to-import"])
     requirePositionals(0, in: parsed, command: command)
     let from = requireOption("--from", in: parsed, command: command)
     let to = requireOption("--to", in: parsed, command: command)
@@ -114,7 +115,9 @@ case "diff":
         let diagnostics = try compiler.diffPackages(
             from: OntologySourcePath(path: from),
             to: OntologySourcePath(path: to),
-            outPath: OntologyOutputPath(path: outPath)
+            outPath: OntologyOutputPath(path: outPath),
+            fromImports: (parsed.repeatedOptions["--from-import"] ?? []).map { OntologySourcePath(path: $0) },
+            toImports: (parsed.repeatedOptions["--to-import"] ?? []).map { OntologySourcePath(path: $0) }
         )
         if compiler.hasErrors(diagnostics) {
             compiler.printDiagnostics(diagnostics)
@@ -129,8 +132,8 @@ case "diff":
 case "publish":
     let parsed = parseArguments(
         commandArgs,
-        allowedOptions: ["--registry", "--token", "--channel", "--decision", "--golden-report"],
-        command: command
+        allowedOptions: ["--registry", "--token", "--channel", "--decision", "--golden-report", "--import"],
+        command: command, repeatableOptions: ["--import"]
     )
     requirePositionals(1, in: parsed, command: command)
     let publishPath = parsed.positional[0]
@@ -143,7 +146,8 @@ case "publish":
             token: authToken(from: parsed),
             channel: channel,
             governanceDecisionPath: parsed.options["--decision"].map(OntologySourcePath.init(path:)),
-            goldenReportPath: parsed.options["--golden-report"].map(OntologySourcePath.init(path:))
+            goldenReportPath: parsed.options["--golden-report"].map(OntologySourcePath.init(path:)),
+            imports: (parsed.repeatedOptions["--import"] ?? []).map { OntologySourcePath(path: $0) }
         )
         print("ontologyc publish: PASS \(result.packageRef.rawValue) channel=\(channel.rawValue)")
     } catch let compilerError as OntologyCompilerError {
@@ -177,8 +181,8 @@ case "pull":
 case "compat-check":
     let parsed = parseArguments(
         commandArgs,
-        allowedOptions: ["--against", "--registry", "--out", "--token"],
-        command: command
+        allowedOptions: ["--against", "--registry", "--out", "--token", "--import"],
+        command: command, repeatableOptions: ["--import"]
     )
     requirePositionals(1, in: parsed, command: command)
     let compatPath = parsed.positional[0]
@@ -190,7 +194,8 @@ case "compat-check":
             against: packageReference(compatRef, command: command),
             registry: registryBaseURL(compatRegistry, command: command),
             token: authToken(from: parsed),
-            outPath: parsed.options["--out"].map(OntologyOutputPath.init(path:))
+            outPath: parsed.options["--out"].map(OntologyOutputPath.init(path:)),
+            imports: (parsed.repeatedOptions["--import"] ?? []).map { OntologySourcePath(path: $0) }
         )
         if !compatible {
             writeDiagnostic("ontologyc compat-check: BREAKING CHANGES DETECTED in \(compatPath)\n")
@@ -286,7 +291,8 @@ case "validate-golden-intent":
     }
 
 case "validate-governance-decision":
-    let parsed = parseArguments(commandArgs, allowedOptions: ["--package", "--golden-report", "--out"], command: command)
+    let parsed = parseArguments(commandArgs, allowedOptions: ["--package", "--golden-report", "--out", "--import"], command: command,
+                                repeatableOptions: ["--import"])
     requirePositionals(1, in: parsed, command: command)
     let decisionPath = parsed.positional[0]
     do {
@@ -294,7 +300,8 @@ case "validate-governance-decision":
             decisionPath: OntologySourcePath(path: decisionPath),
             packagePath: parsed.options["--package"].map(OntologySourcePath.init(path:)),
             goldenReportPath: parsed.options["--golden-report"].map(OntologySourcePath.init(path:)),
-            outPath: parsed.options["--out"].map(OntologyOutputPath.init(path:))
+            outPath: parsed.options["--out"].map(OntologyOutputPath.init(path:)),
+            imports: (parsed.repeatedOptions["--import"] ?? []).map { OntologySourcePath(path: $0) }
         )
         let reportTarget = parsed.options["--out"].map { " report=\($0)" } ?? ""
         if !result.passed {

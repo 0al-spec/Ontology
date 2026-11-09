@@ -1,6 +1,19 @@
 import Foundation
 
 extension OntologyCompiler {
+    /// Load and validate the package and all explicit dependency snapshots together.
+    func loadValidatedPackage(path: OntologySourcePath, imports: [OntologySourcePath]) -> (package: LoadedPackage, imports: [LoadedPackage])? {
+        guard let package = load(path: path.path) else { return nil }
+        let supplied = imports.compactMap { load(path: $0.path) }
+        for imported in supplied {
+            var dependencies = supplied.filter { $0.path != imported.path }
+            if package.path != imported.path { dependencies.append(package) }
+            validate(imported, suppliedImports: dependencies)
+        }
+        validate(package, suppliedImports: supplied)
+        return (package, supplied)
+    }
+
     /// Parses and validates one ontology package, returning sorted diagnostics without writing output files.
     public func check(path: OntologySourcePath, imports: [OntologySourcePath] = []) -> [Diagnostic] {
         diagnostics = []
