@@ -12,6 +12,9 @@ export type Declaration = JsonObject & { id: string; fqid: string; source: Sourc
 type ClassField = JsonObject & { source?: SourceLocation };
 type ClassDeclaration = Declaration & { fields?: ClassField[] };
 export type Relation = Declaration & { domain: string; range: string | { oneOf: string[] } };
+export type FoundationCatalog = {
+  id: string; version: string; alias: string; catalogByteDigest: string; policyBases: string[]; catalog: JsonObject;
+};
 export interface Projection {
   schemaVersion: 'ontology.diagram-projection/v1';
   id: string;
@@ -21,6 +24,7 @@ export interface Projection {
   sources: JsonObject[];
   imports: JsonObject[];
   externalImports?: JsonObject[];
+  foundationCatalogs?: FoundationCatalog[];
   classes: ClassDeclaration[];
   relations: Relation[];
   protocols: Declaration[];
@@ -126,6 +130,39 @@ function relations(value: unknown): Relation[] {
   });
 }
 
+function foundationCatalogs(value: unknown, imports: JsonObject[], external: JsonObject[]): FoundationCatalog[] {
+  const seen = new Set<string>();
+  return objects(value, 'foundationCatalogs').map((entry, index) => {
+    const path = `foundationCatalogs[${index}]`;
+    const id = text(entry.id, `${path}.id`), version = text(entry.version, `${path}.version`);
+    const alias = text(entry.alias, `${path}.alias`);
+    if (seen.has(alias)) throw new Error(`${path}: duplicate alias ${alias}`);
+    seen.add(alias);
+    const candidates: JsonObject[] = [...imports.map((item) => ({ ...item, alias: importNamespace(item) })), ...external];
+    const matches = candidates
+      .filter((item) => item.id === id && item.version === version && item.alias === alias);
+    if (matches.length !== 1) throw new Error(`${path}: foundation identity is not an exact import binding`);
+    if (!(id === 'ontology.foundation' && ['0.1.0', '0.2.0'].includes(version)) &&
+        !(id === 'specgraph.foundation' && version === '0.1.0')) throw new Error(`${path}: unsupported foundation identity`);
+    const catalog = object(entry.catalog, `${path}.catalog`);
+    if (catalog.schemaVersion !== 'ontology.foundation-model/v1' || catalog.id !== 'ontology.foundation' ||
+        catalog.version !== version || catalog.namespace !== 'ont') throw new Error(`${path}: mismatched model identity`);
+    const source = object(catalog.source, `${path}.catalog.source`);
+    if (!/^[0-9a-f]{64}$/.test(text(source.sha256, `${path}.catalog.source.sha256`))) throw new Error(`${path}: invalid source digest`);
+    text(source.path, `${path}.catalog.source.path`); text(source.revision, `${path}.catalog.source.revision`);
+    for (const section of ['classes', 'protocols']) {
+      const declarations = object(catalog[section], `${path}.catalog.${section}`);
+      for (const [name, declaration] of Object.entries(declarations)) {
+        text(name, `${path}.${section}.name`);
+        text(object(declaration, `${path}.${section}.${name}`).declaration, `${path}.${section}.${name}.declaration`);
+      }
+    }
+    if (!Array.isArray(entry.policyBases)) throw new Error(`${path}.policyBases must be an array`);
+    const policyBases = entry.policyBases.map((item, i) => text(item, `${path}.policyBases[${i}]`));
+    return { id, version, alias, catalogByteDigest: digest(entry.catalogByteDigest, `${path}.catalogByteDigest`), policyBases, catalog };
+  });
+}
+
 /** Parse only the supported version and reject malformed inputs before replacing a view. */
 export function parseProjection(value: unknown): Projection {
   const graph = object(value, 'graph');
@@ -171,6 +208,7 @@ export function parseProjection(value: unknown): Projection {
     id, namespace, version,
     view: graph.view,
     sources, imports, ...(externalImports ? { externalImports } : {}),
+    ...(graph.foundationCatalogs === undefined ? {} : { foundationCatalogs: foundationCatalogs(graph.foundationCatalogs, imports, externalImports || []) }),
     classes: classes(graph.classes), relations: relations(graph.relations),
     protocols: declarations(graph.protocols, 'protocols'), policies: declarations(graph.policies, 'policies'),
     stateMachines: declarations(graph.stateMachines, 'stateMachines'),

@@ -114,7 +114,7 @@ it refreshes; if the human has unsaved changes, those remain visible and saving
 is disabled until the conflict is reconciled. Reload asks before discarding an
 unsaved draft.
 
-The workspace pins the resolved root, import and profile paths at startup. If a
+The workspace pins the resolved root, import, foundation model and profile paths at startup. If a
 selected symlink is retargeted or the profile changes, it stops saving and marks
 the graph stale; restore the original input or restart the workspace to select
 the new one. A snapshot interrupted by a concurrent edit is retried, as is a
@@ -146,11 +146,15 @@ relations fixture expected by the browser tests and use explicit tool paths:
 "$VIEWER_BIN/ontologyviz" \
   --profile "$VIEWER_REPO/Examples/package-visualization/motivation-relations.profile.json" \
   --format json --out "$VIEWER_BUILD/test-graph"
+"$VIEWER_BIN/ontologyviz" "$VIEWER_REPO/Examples/package-visualization/domain-ontology-package.yaml" \
+  --foundation-model "$VIEWER_REPO/SPECS/ontology/foundation/0.1.0/model.json" \
+  --format json --out "$VIEWER_BUILD/foundation-graph"
 cd "$VIEWER_REPO/tools/ontology-viewer"
 npm test
 ONTOLOGY_VIEWER_DIST="$VIEWER_DIST" npm run build
 npx playwright install chromium
 ONTOLOGY_GRAPH_FIXTURE="$VIEWER_BUILD/test-graph/ontology.graph.json" \
+  ONTOLOGY_FOUNDATION_GRAPH_FIXTURE="$VIEWER_BUILD/foundation-graph/ontology.graph.json" \
   ONTOLOGY_COMPILER="$VIEWER_BIN/ontologyc" ONTOLOGY_VIZ="$VIEWER_BIN/ontologyviz" \
   ONTOLOGY_VIEWER_DIST="$VIEWER_DIST" npm run test:e2e
 ```

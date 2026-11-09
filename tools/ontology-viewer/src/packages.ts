@@ -10,6 +10,7 @@ export function packageIdentity(source: Pick<SourceLocation, 'id' | 'version'>):
 /** State nodes inherit their machine source; their display origin is not a package. */
 export function nodePackage(node: ViewerNode): string {
   if (node.data.source) return packageIdentity(node.data.source);
+  if (node.data.foundation) return packageIdentity(node.data.foundation);
   if (node.data.kind === 'external' && node.data.origin && /^.+@[^@]+$/.test(node.data.origin)) return node.data.origin;
   return unattributedPackage;
 }
@@ -22,7 +23,7 @@ export type PackageOption = { key: string; label: string; loaded: boolean; nodeC
 
 /** Discover identities and counts from the entire graph, never the current selection. */
 export function graphPackages(
-  graph: { nodes: ViewerNode[]; edges: ViewerEdge[] }, projection: Pick<Projection, 'sources' | 'imports' | 'externalImports' | 'id' | 'version'>,
+  graph: { nodes: ViewerNode[]; edges: ViewerEdge[] }, projection: Pick<Projection, 'sources' | 'imports' | 'externalImports' | 'foundationCatalogs' | 'id' | 'version'>,
 ): PackageOption[] {
   const entries = new Map<string, PackageOption>();
   const ensure = (key: string, loaded = false) => {
@@ -40,6 +41,7 @@ export function graphPackages(
       }
     }
   }
+  for (const catalog of projection.foundationCatalogs || []) ensure(packageIdentity(catalog), true);
   for (const node of graph.nodes) ensure(nodePackage(node)).nodeCount++;
   for (const edge of graph.edges) ensure(edgePackage(edge)).edgeCount++;
   const root = packageIdentity(projection);

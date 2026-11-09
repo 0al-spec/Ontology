@@ -35,6 +35,10 @@ jobs:
           "$RUNNER_TEMP/ontology-viewer-swift/debug/ontologyviz" \
             --profile Examples/package-visualization/motivation-relations.profile.json \
             --format json --out "$RUNNER_TEMP/ontology-viewer-fixture"
+          "$RUNNER_TEMP/ontology-viewer-swift/debug/ontologyviz" \
+            Examples/package-visualization/domain-ontology-package.yaml \
+            --foundation-model SPECS/ontology/foundation/0.1.0/model.json \
+            --format json --out "$RUNNER_TEMP/ontology-foundation-fixture"
       - name: Install browser
         working-directory: tools/ontology-viewer
         run: npx playwright install --with-deps chromium
@@ -42,6 +46,7 @@ jobs:
         working-directory: tools/ontology-viewer
         env:
           ONTOLOGY_GRAPH_FIXTURE: ${{ runner.temp }}/ontology-viewer-fixture/ontology.graph.json
+          ONTOLOGY_FOUNDATION_GRAPH_FIXTURE: ${{ runner.temp }}/ontology-foundation-fixture/ontology.graph.json
           ONTOLOGY_COMPILER: ${{ runner.temp }}/ontology-viewer-swift/debug/ontologyc
           ONTOLOGY_VIZ: ${{ runner.temp }}/ontology-viewer-swift/debug/ontologyviz
           ONTOLOGY_VIEWER_DIST: ${{ github.workspace }}/tools/ontology-viewer/dist

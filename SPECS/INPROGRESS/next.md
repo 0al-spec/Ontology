@@ -33,6 +33,10 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-084 connects explicit foundation model catalogs to a source-attributed
+  Viewer projection. [Validation](../ARCHIVE/ONT-084_Foundation_Viewer/ONT-084_Validation_Report.md)
+  passed locally; SpecGraph and SpecSpace integration remains separate.
+
 - ONT-083 provides source-attributed foundation model catalogs. [Validation](../ARCHIVE/ONT-083_Foundation_Model_Catalogs/ONT-083_Validation_Report.md) passed locally; Viewer integration is separate.
 
 - ONT-082 connects imported typed references to exact loaded sources. [Validation](../ARCHIVE/ONT-082_Viewer_Imported_Ref_Bindings/ONT-082_Validation_Report.md) passed locally; CI and consumer integration are separate.

@@ -1398,3 +1398,23 @@ This workplan tracks the specification work for the Ontology repository. The ini
   Do not represent these catalogs as DomainOntologyPackage files.
 - **Dependencies:** ONT-057 foundation exports; followed by visualizer and
   consumer integration.
+
+## ONT-084: Foundation definitions in the Viewer
+
+- **Status:** Complete locally; [validation](ARCHIVE/ONT-084_Foundation_Viewer/ONT-084_Validation_Report.md). Hosted CI and review remain separate.
+- **Problem:** diagrams show foundation types as unloaded references even when
+  their versioned model declarations are available offline.
+- **Outcome:** accept explicit, exact foundation model catalogs and preserve the
+  package identity, alias and source provenance in the projection and Viewer.
+  Missing catalogs stay unresolved; malformed or mismatched catalogs fail closed.
+- **Dependencies:** ONT-083.
+
+## ONT-085: Foundation model parity for static diagrams
+
+- **Status:** Candidate, identified in the ONT-084 review.
+- **Problem:** explicit source-attributed foundation models are visible in
+  JSON Viewer projections but are not rendered in DOT, SVG or PNG.
+- **Outcome:** provide a source-faithful static representation with exact
+  identity/version and test it against the interactive projection. Until then,
+  requests that combine these inputs and image formats fail explicitly.
+- **Dependency:** ONT-084.
