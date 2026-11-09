@@ -33,6 +33,8 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
+- ONT-083 provides source-attributed foundation model catalogs. [Validation](../ARCHIVE/ONT-083_Foundation_Model_Catalogs/ONT-083_Validation_Report.md) passed locally; Viewer integration is separate.
+
 - ONT-082 connects imported typed references to exact loaded sources. [Validation](../ARCHIVE/ONT-082_Viewer_Imported_Ref_Bindings/ONT-082_Validation_Report.md) passed locally; CI and consumer integration are separate.
 
 - ONT-080 adds explicit index-bound imports to staged advice. [Validation](../ARCHIVE/ONT-080_Index_Bound_Import_Advice/ONT-080_Validation_Report.md) passed locally; hosted CI and review are separate.

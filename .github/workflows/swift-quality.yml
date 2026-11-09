@@ -45,6 +45,11 @@ jobs:
       - name: Install diagram renderer
         run: brew install graphviz
 
+      - name: Verify pinned foundation model catalogs
+        run: |
+          python3 tools/generate_foundation_models.py --check
+          python3 -m unittest tools.tests.test_foundation_models
+
       - name: Run Swift quality checks
         env:
           RUN_COVERAGE: "1"

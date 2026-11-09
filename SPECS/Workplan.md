@@ -1387,3 +1387,14 @@ This workplan tracks the specification work for the Ontology repository. The ini
   identity matches the loaded source; preserve safe unresolved behavior for
   older projections and conflicting metadata.
 - **Dependency:** ONT-079.
+
+## ONT-083: Source-attributed foundation model catalogs
+
+- **Status:** Complete locally; [validation](ARCHIVE/ONT-083_Foundation_Model_Catalogs/ONT-083_Validation_Report.md). Hosted CI and review remain separate.
+- **Problem:** versioned foundation export tables list names but do not provide
+  machine-readable declarations for viewers and downstream tools.
+- **Outcome:** preserve the published version-specific foundation model sources
+  and derive verifiable catalogs of their existing class and protocol interfaces.
+  Do not represent these catalogs as DomainOntologyPackage files.
+- **Dependencies:** ONT-057 foundation exports; followed by visualizer and
+  consumer integration.
