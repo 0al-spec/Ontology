@@ -212,6 +212,9 @@ foundation model. In particular, the declaration properties `kind` and
 `appliesTo` do not become instance fields merely because a class extends a
 foundation type. An instance inherits the fields explicitly declared by its
 verified domain-package ancestors; `schemas.ts` enforces the same fields.
+The generated type-only `$OntologyFoundationInstance` marker retains the
+verified foundation package, version and class URI without requiring an
+additional property in runtime instance data. It is not a runtime validator.
 
 Each generated interface defaults to its own exact `$type` discriminator. For
 example, `Child` retains `"example:Child"`, while a caller that accepts

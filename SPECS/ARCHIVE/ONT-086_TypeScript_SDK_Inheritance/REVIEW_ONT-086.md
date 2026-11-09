@@ -27,6 +27,17 @@ declarations are distinct from instance fields. The generated Zod schemas and
 action-relationship records are checked alongside actual TypeScript consumers.
 Source IR and pinned foundation catalogs remain unchanged.
 
-The local quality gate passed 277 Swift tests with 89.73% line coverage, and
+The local quality gate passed 280 Swift tests with 89.68% line coverage, and
 the SDK TypeScript/Zod smoke passed. CI, independent review, downstream pins,
 publication, and deployment are separate.
+
+## PR review corrections
+
+- Local protocol requirements now reach standalone class schemas, including
+  inherited `id`; the real TypeScript/Zod consumer tests presence, retention,
+  and missing-field rejection.
+- Inherited `Ref` targets now fail SDK generation if another supplied package
+  or the root supplies a distinct class with the same canonical runtime name.
+  Regressions cover collisions with local and other imported classes.
+- A type-only foundation instance marker preserves the exact foundation URI
+  without treating declaration metadata as runtime instance fields.

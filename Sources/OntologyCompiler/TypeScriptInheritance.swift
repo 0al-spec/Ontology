@@ -21,14 +21,57 @@ struct TypeScriptInheritance {
         var warnings = Set<String>()
         projected["classes"] = root.classes.keys.sorted().compactMap { name -> JSONObject? in
             guard var item = root.classes[name] else { return nil }
-            let inherited = fields(of: name, in: root, visiting: [], warnings: &warnings)
-            if !inherited.isEmpty { item["fields"] = inherited }
+            var inherited = fields(of: name, in: root, visiting: [], warnings: &warnings)
             let protocols = localProtocols(of: name, in: root, visiting: [])
             if !protocols.isEmpty { item["implements"] = protocols }
+            inherited = addProtocolFields(protocols, to: inherited, in: root, className: name)
+            if !inherited.isEmpty { item["fields"] = inherited }
+            if let foundation = foundationBase(of: name, in: root, visiting: []) {
+                item["sdkFoundationBase"] = foundation
+            }
             return item
         }
         if !warnings.isEmpty { projected["sdkInheritanceWarnings"] = warnings.sorted() }
         return projected
+    }
+
+    private func addProtocolFields(_ refs: [String], to fields: [JSONObject], in package: SDKPackage, className: String) -> [JSONObject] {
+        var result = fields
+        for ref in refs {
+            for name in package.protocolFields[ref] ?? [] {
+                let required: JSONObject = ["id": name, "type": "string", "required": true]
+                if let existing = result.first(where: { $0["id"] as? String == name }) {
+                    if !CompatibleInheritedFieldSpec().isSatisfiedBy((signature(existing), signature(required))) {
+                        compiler.add("class.inheritance.protocol_field_conflict", "spec.classes.\(className).fields.\(name)",
+                                     "Protocol field \(name) conflicts with the declared instance field")
+                    }
+                } else {
+                    result.append(required)
+                }
+            }
+        }
+        return result.sorted { ($0["id"] as? String ?? "") < ($1["id"] as? String ?? "") }
+    }
+
+    private func foundationBase(of name: String, in package: SDKPackage, visiting: Set<String>) -> String? {
+        let key = "\(package.id)@\(package.version):\(name)"
+        guard !visiting.contains(key), let item = package.classes[name],
+              let base = item["extends"] as? String else { return nil }
+        let parts = base.split(separator: ":", maxSplits: 1).map(String.init)
+        guard parts.count == 2 else { return nil }
+        var next = visiting
+        next.insert(key)
+        if parts[0] == package.namespace {
+            return foundationBase(of: parts[1], in: package, visiting: next)
+        }
+        guard let binding = package.imports.first(where: {
+            ontologyImportNamespace(packageID: $0["id"] as? String, explicit: $0["namespace"] as? String) == parts[0]
+        }), let id = binding["id"] as? String, let version = binding["version"] as? String else { return nil }
+        if FoundationExports.catalog(packageID: id, version: version) != nil {
+            return "ontology://\(id)/\(version)/classes/\(parts[1])"
+        }
+        guard let parent = packages.first(where: { $0.id == id && $0.version == version }) else { return nil }
+        return foundationBase(of: parts[1], in: parent, visiting: next)
     }
 
     private func localProtocols(of name: String, in package: SDKPackage, visiting: Set<String>) -> [String] {
@@ -75,6 +118,7 @@ struct TypeScriptInheritance {
                 }
             }
             let fieldID = field["id"] as? String ?? ""
+            validateReference(field, owner: package, className: name, fieldID: fieldID)
             if let previous = inherited.first(where: { $0["id"] as? String == fieldID }) {
                 if !CompatibleInheritedFieldSpec().isSatisfiedBy((signature(previous), signature(field))) {
                     compiler.add("class.inheritance.field_conflict", "spec.classes.\(name).fields.\(fieldID)",
@@ -85,6 +129,22 @@ struct TypeScriptInheritance {
             }
         }
         return inherited.sorted { ($0["id"] as? String ?? "") < ($1["id"] as? String ?? "") }
+    }
+
+    private func validateReference(_ field: JSONObject, owner: SDKPackage, className: String, fieldID: String) {
+        guard field["type"] as? String == "ref",
+              let target = (field["targetType"] as? String) ?? (field["target"] as? String) else { return }
+        let parts = target.split(separator: ":", maxSplits: 1).map(String.init)
+        guard parts.count == 2 else { return }
+        let candidates = Set(packages.filter { $0.namespace == parts[0] && $0.classes[parts[1]] != nil }.map {
+            "ontology://\($0.id)/\($0.version)/classes/\(parts[1])"
+        })
+        let expected = (field["targetUri"] as? String) ?? "ontology://\(owner.id)/\(owner.version)/classes/\(parts[1])"
+        let context = RuntimeReferenceIdentityContext(expectedURI: expected, candidateURIs: candidates)
+        if !UnambiguousRuntimeReferenceSpec().isSatisfiedBy(context) {
+            compiler.add("class.field.target.namespace_conflict", "spec.classes.\(className).fields.\(fieldID).target",
+                         "Reference target \(target) does not uniquely identify \(expected) among supplied packages")
+        }
     }
 
     private func parentFields(_ item: JSONObject, package: SDKPackage, visiting: Set<String>, warnings: inout Set<String>) -> [JSONObject] {
@@ -122,6 +182,7 @@ struct SDKPackage {
     let namespace: String
     let imports: [JSONObject]
     let classes: [String: JSONObject]
+    let protocolFields: [String: [String]]
 
     init(source: LoadedPackage, ir: JSONObject) {
         id = source.id
@@ -131,6 +192,10 @@ struct SDKPackage {
         classes = Dictionary(uniqueKeysWithValues: (ir["classes"] as? [JSONObject] ?? []).compactMap { item in
             guard let name = item["id"] as? String else { return nil }
             return (name, item)
+        })
+        protocolFields = Dictionary(uniqueKeysWithValues: (ir["protocols"] as? [JSONObject] ?? []).compactMap { item in
+            guard let ref = item["fqid"] as? String else { return nil }
+            return (ref, item["requiredFields"] as? [String] ?? [])
         })
     }
 }

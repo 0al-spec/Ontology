@@ -2,72 +2,81 @@
 
 export type OntologyEntityId = string;
 
-export interface AcceptanceCriterion<$OntologyType extends string = "sgcore:AcceptanceCriterion"> {
+declare const $ontologyFoundationType: unique symbol;
+
+/** Type-only semantic base; foundation declaration fields are not instance fields. */
+export interface $OntologyFoundationInstance<$Foundation extends string, $OntologyType extends string = string> {
+  readonly $type: $OntologyType;
+  readonly id?: string;
+  readonly [$ontologyFoundationType]?: $Foundation;
+}
+
+export interface AcceptanceCriterion<$OntologyType extends string = "sgcore:AcceptanceCriterion"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface CodeSurface<$OntologyType extends string = "sgcore:CodeSurface"> {
+export interface CodeSurface<$OntologyType extends string = "sgcore:CodeSurface"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Constraint<$OntologyType extends string = "sgcore:Constraint"> {
+export interface Constraint<$OntologyType extends string = "sgcore:Constraint"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Decision<$OntologyType extends string = "sgcore:Decision"> {
+export interface Decision<$OntologyType extends string = "sgcore:Decision"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/Command", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Edge<$OntologyType extends string = "sgcore:Edge"> {
+export interface Edge<$OntologyType extends string = "sgcore:Edge"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Evidence<$OntologyType extends string = "sgcore:Evidence"> {
+export interface Evidence<$OntologyType extends string = "sgcore:Evidence"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Intent<$OntologyType extends string = "sgcore:Intent"> {
+export interface Intent<$OntologyType extends string = "sgcore:Intent"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Invariant<$OntologyType extends string = "sgcore:Invariant"> {
+export interface Invariant<$OntologyType extends string = "sgcore:Invariant"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Node<$OntologyType extends string = "sgcore:Node"> {
+export interface Node<$OntologyType extends string = "sgcore:Node"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Release<$OntologyType extends string = "sgcore:Release"> {
+export interface Release<$OntologyType extends string = "sgcore:Release"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Requirement<$OntologyType extends string = "sgcore:Requirement"> {
+export interface Requirement<$OntologyType extends string = "sgcore:Requirement"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Spec<$OntologyType extends string = "sgcore:Spec"> {
+export interface Spec<$OntologyType extends string = "sgcore:Spec"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface SpecGraph<$OntologyType extends string = "sgcore:SpecGraph"> {
+export interface SpecGraph<$OntologyType extends string = "sgcore:SpecGraph"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Test<$OntologyType extends string = "sgcore:Test"> {
+export interface Test<$OntologyType extends string = "sgcore:Test"> extends $OntologyFoundationInstance<"ontology://specgraph.foundation/0.1.0/classes/DomainEntity", $OntologyType> {
   readonly $type: $OntologyType;
   readonly id?: string;
 }

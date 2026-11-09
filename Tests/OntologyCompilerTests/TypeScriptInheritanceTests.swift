@@ -29,6 +29,7 @@ final class TypeScriptInheritanceTests: XCTestCase {
             let schemas = try String(contentsOf: output.appendingPathComponent("schemas.ts"), encoding: .utf8)
             XCTAssertTrue(types.contains("interface Child<$OntologyType extends string = \"local:Child\"> extends Base<$OntologyType>"), types)
             XCTAssertTrue(types.contains("interface Leaf<$OntologyType extends string = \"local:Leaf\"> extends Child<$OntologyType>"), types)
+            XCTAssertTrue(types.contains("$OntologyFoundationInstance<\"ontology://ontology.foundation/0.2.0/classes/DomainEntity\", $OntologyType>"), types)
             let leaf = try XCTUnwrap(schemas.components(separatedBy: "export const LeafSchema").last)
             XCTAssertTrue(leaf.contains("name: z.string(),"), leaf)
             XCTAssertTrue(leaf.contains("count: z.number().int().optional(),"), leaf)
@@ -107,6 +108,7 @@ final class TypeScriptInheritanceTests: XCTestCase {
             let types = try String(contentsOf: output.appendingPathComponent("types.ts"), encoding: .utf8)
             XCTAssertTrue(types.contains("readonly firstField: string;"), types)
             XCTAssertTrue(types.contains("readonly secondField: number;"), types)
+            XCTAssertTrue(types.contains("$OntologyFoundationInstance<\"ontology://ontology.foundation/0.2.0/classes/DomainEntity\", $OntologyType>"), types)
 
             let incomplete = root.appendingPathComponent("incomplete")
             let warnings = try OntologyCompiler().compile(
@@ -117,6 +119,64 @@ final class TypeScriptInheritanceTests: XCTestCase {
             let partial = try String(contentsOf: incomplete.appendingPathComponent("types.ts"), encoding: .utf8)
             XCTAssertTrue(partial.contains("readonly secondField: number;"), partial)
             XCTAssertFalse(partial.contains("readonly firstField: string;"), partial)
+        }
+    }
+
+    func testInheritedReferenceRejectsCanonicalNamespaceCollision() throws {
+        try withFixture { root in
+            let parent = try writePackage(root, name: "shared", classes: """
+                Base:
+                  extends: ont:DomainEntity
+                  description: Imported base.
+                  fields: {related: {type: ref, target: Target, required: true}}
+                Target: {extends: 'ont:DomainEntity', description: Imported target.}
+            """)
+            let child = try writePackage(root, name: "child", imports: "    - {id: example.shared, namespace: alias, version: 1.0.0}\n", classes: """
+                Derived: {extends: 'alias:Base', description: Derived class.}
+                Target: {extends: 'ont:DomainEntity', description: Unrelated local target.}
+            """)
+            let text = try String(contentsOf: child, encoding: .utf8)
+            try text.replacingOccurrences(of: "namespace: child", with: "namespace: shared")
+                .write(to: child, atomically: true, encoding: .utf8)
+            let output = root.appendingPathComponent("collision")
+            let compiler = OntologyCompiler()
+            let diagnostics = try compiler.compile(
+                path: OntologySourcePath(url: child), outDirectory: OntologyOutputDirectory(path: output.path),
+                imports: [OntologySourcePath(url: parent)]
+            )
+            XCTAssertTrue(diagnostics.contains { $0.code == "class.field.target.namespace_conflict" }, "\(diagnostics)")
+            XCTAssertFalse(FileManager.default.fileExists(atPath: output.path))
+        }
+    }
+
+    func testInheritedReferenceRejectsCollisionWithAnotherImportedPackage() throws {
+        try withFixture { root in
+            let parent = try writePackage(root, name: "shared", classes: """
+                Base:
+                  extends: ont:DomainEntity
+                  description: Imported base.
+                  fields: {related: {type: ref, target: Target, required: true}}
+                Target: {extends: 'ont:DomainEntity', description: Imported target.}
+            """)
+            let other = try writePackage(root, name: "other", classes: """
+                Target: {extends: 'ont:DomainEntity', description: Different target.}
+            """)
+            let text = try String(contentsOf: other, encoding: .utf8)
+            try text.replacingOccurrences(of: "namespace: other", with: "namespace: shared")
+                .write(to: other, atomically: true, encoding: .utf8)
+            let imports = "    - {id: example.shared, namespace: first, version: 1.0.0}\n" +
+                "    - {id: example.other, namespace: second, version: 1.0.0}\n"
+            let child = try writePackage(root, name: "child", imports: imports, classes: """
+                Derived: {extends: 'first:Base', description: Derived class.}
+            """)
+            let output = root.appendingPathComponent("collision")
+            let compiler = OntologyCompiler()
+            let diagnostics = try compiler.compile(
+                path: OntologySourcePath(url: child), outDirectory: OntologyOutputDirectory(path: output.path),
+                imports: [OntologySourcePath(url: parent), OntologySourcePath(url: other)]
+            )
+            XCTAssertTrue(diagnostics.contains { $0.code == "class.field.target.namespace_conflict" }, "\(diagnostics)")
+            XCTAssertFalse(FileManager.default.fileExists(atPath: output.path))
         }
     }
 

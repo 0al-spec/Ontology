@@ -1,6 +1,6 @@
 import type { Base } from "./base-generated/types";
-import type { Child, FromT, Parent, T } from "./generated/types";
-import { ChildSchema } from "./generated/schemas";
+import type { $OntologyFoundationInstance, Child, FromT, Parent, T } from "./generated/types";
+import { ChildActionSchema, ChildSchema } from "./generated/schemas";
 import { ActionRelationshipRecordSchema } from "./generated/validators";
 
 const child: Child = {
@@ -10,8 +10,15 @@ const child: Child = {
 };
 const parentShape: Parent<string> = child;
 const sharedShape: Base<string> = child;
+type DomainEntity = $OntologyFoundationInstance<"ontology://ontology.foundation/0.2.0/classes/DomainEntity">;
+type FoundationAction = $OntologyFoundationInstance<"ontology://ontology.foundation/0.2.0/classes/Action">;
+const foundationBase: DomainEntity = child;
+// @ts-expect-error The verified foundation base is DomainEntity, not Action.
+const wrongFoundation: FoundationAction = child;
 void parentShape;
 void sharedShape;
+void foundationBase;
+void wrongFoundation;
 const fromT: FromT = { $type: "sample:FromT" };
 const tShape: T<string> = fromT;
 void tShape;
@@ -35,9 +42,17 @@ if (ChildSchema.safeParse({ ...child, related: { target: "sample:Parent", locato
 const relationship = {
   relation: "sample:acts",
   subject: { $type: "sample:Parent", serial: "one", related: child.related },
-  action: { $type: "sample:ChildAction", trace: "evidence" },
+  action: { $type: "sample:ChildAction", id: "action", trace: "evidence" },
   object: child,
 } as const;
+if (ChildActionSchema.safeParse({ $type: "sample:ChildAction" }).success) {
+  throw new Error("Class schema accepted an action without the inherited protocol field");
+}
+if (ChildActionSchema.safeParse({ $type: "sample:ChildAction", trace: "evidence" }).success) {
+  throw new Error("Class schema accepted an action without its inherited identity");
+}
+const parsedAction = ChildActionSchema.parse(relationship.action);
+if (parsedAction.trace !== "evidence") throw new Error("Class schema discarded the inherited protocol field");
 if (!ActionRelationshipRecordSchema.safeParse(relationship).success) throw new Error("Valid relationship was rejected");
 if (ActionRelationshipRecordSchema.safeParse({ ...relationship, action: { $type: "sample:ChildAction" } }).success) {
   throw new Error("Inherited protocol obligation was not checked");

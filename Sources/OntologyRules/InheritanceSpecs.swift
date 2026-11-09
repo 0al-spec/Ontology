@@ -41,3 +41,23 @@ public struct CompatibleInheritedFieldSpec: Specification {
         candidate.0 == candidate.1
     }
 }
+
+/// A runtime reference target and all supplied package URIs sharing its type name.
+public struct RuntimeReferenceIdentityContext {
+    public let expectedURI: String
+    public let candidateURIs: Set<String>
+
+    public init(expectedURI: String, candidateURIs: Set<String>) {
+        self.expectedURI = expectedURI
+        self.candidateURIs = candidateURIs
+    }
+}
+
+/// One runtime reference type must not denote different supplied package classes.
+public struct UnambiguousRuntimeReferenceSpec: Specification {
+    public typealias T = RuntimeReferenceIdentityContext
+    public init() {}
+    public func isSatisfiedBy(_ candidate: T) -> Bool {
+        candidate.candidateURIs == [candidate.expectedURI]
+    }
+}

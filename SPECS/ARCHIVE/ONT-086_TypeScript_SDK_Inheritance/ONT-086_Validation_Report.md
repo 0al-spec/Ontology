@@ -3,8 +3,8 @@
 **Verdict:** PASS locally; hosted CI and independent review remain separate.
 
 - `tools/swift-quality.sh` with `RUN_COVERAGE=1` passed: SwiftFormat and
-  SwiftLint reported no violations; 277 Swift tests passed. The aggregate
-  report measured 89.73% line coverage, including vendor sources. SwiftPM
+  SwiftLint reported no violations; 280 Swift tests passed. The aggregate
+  report measured 89.68% line coverage, including vendor sources. SwiftPM
   scratch and cache were on the external build volume.
 - `tools/typescript-smoke.sh <new ontologyc>` passed with TypeScript 6.0.3,
   tsx 4.22.4 and Zod 4.4.3. The new consumer checks local and imported
@@ -20,6 +20,12 @@
 - Named `OntologyRules` specifications cover cycle identity and inherited-field
   compatibility. A cyclic package currently still passes `ontologyc check`
   but fails `compile` with `class.inheritance.cycle`; see the review follow-up.
+- Review regressions verify that class schemas retain inherited local-protocol
+  fields, and that inherited references cannot silently bind to a different
+  supplied class sharing the same canonical namespace and name. The real
+  SpecGraph 0.4.0 `GraphInvariant` is assignable to the exact foundation
+  `Invariant` instance marker in TypeScript; an unrelated foundation base is
+  rejected, and the generated normalized IR matches the published snapshot.
 
 An unavailable non-foundation ancestor is a visible warning and leaves the
 emitted instance projection incomplete. Imported protocol obligations remain

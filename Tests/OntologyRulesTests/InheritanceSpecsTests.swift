@@ -16,4 +16,12 @@ final class InheritanceSpecsTests: XCTestCase {
         XCTAssertFalse(spec.isSatisfiedBy((field, .init(type: "ref", required: false, target: "shared:Item"))))
         XCTAssertFalse(spec.isSatisfiedBy((field, .init(type: "ref", required: true, target: "other:Item"))))
     }
+
+    func testReferenceIdentityRejectsDistinctOwnersAndUnavailableTargets() {
+        let spec = UnambiguousRuntimeReferenceSpec()
+        let owner = "ontology://example.shared/1.0.0/classes/Target"
+        XCTAssertTrue(spec.isSatisfiedBy(.init(expectedURI: owner, candidateURIs: [owner])))
+        XCTAssertFalse(spec.isSatisfiedBy(.init(expectedURI: owner, candidateURIs: [])))
+        XCTAssertFalse(spec.isSatisfiedBy(.init(expectedURI: owner, candidateURIs: [owner, "ontology://example.other/1.0.0/classes/Target"])))
+    }
 }

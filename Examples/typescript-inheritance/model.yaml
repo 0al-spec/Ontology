@@ -9,7 +9,7 @@ spec:
     BaseAction:
       extends: ont:Action
       description: An action with a protocol and an optional field.
-      implements: [Tracked]
+      implements: [Tracked, Identified]
       fields:
         note: {type: string, required: false}
     ChildAction:
@@ -32,6 +32,8 @@ spec:
   relations:
     links: {domain: Parent, range: Child, description: Local relation.}
     trace: {domain: BaseAction, range: Parent, description: Required protocol relation.}
+    id: {domain: BaseAction, range: Parent, description: Required identity relation.}
     acts: {subject: Parent, action: ChildAction, object: Child, description: Action relationship.}
   protocols:
     Tracked: {description: Requires a trace., requiredFields: [trace]}
+    Identified: {description: Requires an identity., requiredFields: [id]}
