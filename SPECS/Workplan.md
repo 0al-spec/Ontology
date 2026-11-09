@@ -1459,7 +1459,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-089: Source-bound protocol conformance
 
-- **Status:** Candidate; found in ONT-088 review.
+- **Status:** PASS locally; hosted CI and review remain separate.
 - **Problem:** protocol conformance validation skips imported protocols and
   their `requiredRelations`. Local `requiredFields` are checked against
   relation names, while the SDK projects those names as required instance
@@ -1470,3 +1470,4 @@ This workplan tracks the specification work for the Ontology repository. The ini
   or declaration-only foundation sources as unverified; do not invent instance
   fields or silently assert semantic conformance.
 - **Dependency:** ONT-088.
+- [Validation](ARCHIVE/ONT-089_Protocol_Conformance/ONT-089_Validation_Report.md).

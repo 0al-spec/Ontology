@@ -1,11 +1,3 @@
-# Selected: ONT-089 — Source-Bound Protocol Conformance
-
-**Priority:** P1
-**Status:** Selected; ONT-088 review follow-up
-**Next step:** Plan explicit field and relation conformance across exact imports.
-
-## Deferred candidate
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
