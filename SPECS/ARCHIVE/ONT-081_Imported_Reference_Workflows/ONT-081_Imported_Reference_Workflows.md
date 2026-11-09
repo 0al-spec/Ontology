@@ -25,3 +25,7 @@ Those workflows validate without the supplied dependency snapshots.
 Exercise local and CLI paths with two versions of a dependency, unchanged and
 changed imported targets, missing and mismatched sources, local registry
 round-trips, and trusted governance. Preserve existing no-import behavior.
+
+---
+**Archived:** 2026-11-09
+**Verdict:** PASS (local; hosted CI and review separate)

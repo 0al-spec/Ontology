@@ -1,8 +1,3 @@
-# Active task: ONT-081 — Imported references in compatibility and publication
-
-Implement source-bound imports for compatibility and registry workflows.
-See the ONT-081 plan. Preserve the ONT-045 candidate below.
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -37,6 +32,8 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-081 adds source-bound imports to compatibility and publication. [Validation](../ARCHIVE/ONT-081_Imported_Reference_Workflows/ONT-081_Validation_Report.md) passed locally; CI and review remain separate.
 
 - ONT-082 connects imported typed references to exact loaded sources. [Validation](../ARCHIVE/ONT-082_Viewer_Imported_Ref_Bindings/ONT-082_Validation_Report.md) passed locally; CI and consumer integration are separate.
 
