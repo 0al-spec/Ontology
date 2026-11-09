@@ -13,3 +13,6 @@ Verdict: PASS locally on 2026-11-09; hosted CI and review are separate.
   publication. No network fetch of dependencies is introduced.
 - This checks compatibility of declared target identities; it does not prove
   the imported package's behavioral or semantic compatibility.
+- Review follow-up: `GovernanceImportScopeSpec` covers all four package/import
+  combinations in isolation. The complete quality gate passed after adding it;
+  focused rule and workflow tests passed after wiring the predicate.

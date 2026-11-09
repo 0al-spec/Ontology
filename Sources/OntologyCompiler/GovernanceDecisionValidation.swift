@@ -1,4 +1,5 @@
 import Foundation
+import OntologyRules
 import Yams
 
 public struct GovernanceDecisionValidationResult {
@@ -30,10 +31,13 @@ extension OntologyCompiler {
         }
 
         validateGovernanceDecisionShape(decision)
+        if !GovernanceImportScopeSpec().isSatisfiedBy(
+            GovernanceImportScope(hasPackage: packagePath != nil, hasImports: !imports.isEmpty)
+        ) {
+            add("governance.imports.package.required", "decision", "imports require a supplied package")
+        }
         if let packagePath {
             validateGovernanceDecisionPackage(decision, packagePath: packagePath, imports: imports)
-        } else if !imports.isEmpty {
-            add("governance.imports.package.required", "decision", "imports require a supplied package")
         }
         if let goldenReportPath {
             validateGovernanceDecisionGoldenReport(decision, goldenReportPath: goldenReportPath.path)
