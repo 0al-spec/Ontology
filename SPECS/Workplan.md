@@ -1401,7 +1401,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-084: Foundation definitions in the Viewer
 
-- **Status:** Selected.
+- **Status:** Complete locally; [validation](ARCHIVE/ONT-084_Foundation_Viewer/ONT-084_Validation_Report.md). Hosted CI and review remain separate.
 - **Problem:** diagrams show foundation types as unloaded references even when
   their versioned model declarations are available offline.
 - **Outcome:** accept explicit, exact foundation model catalogs and preserve the

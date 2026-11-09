@@ -1,11 +1,5 @@
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
-## Selected: ONT-084 — Foundation definitions in the Viewer
-
-Use the ONT-083 versioned source catalogs in explicit local diagram projections;
-retain exact package identity and namespace in the Viewer. Branches from ONT-083
-because the catalog is the required input for this dependent layer.
-
 **Priority:** P1
 **Phase:** Event and Responsibility Core
 **Dependencies:** ONT-043 and ONT-044 merged; ONT-047 is available for explicit provenance admission
@@ -38,6 +32,10 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-084 connects explicit foundation model catalogs to a source-attributed
+  Viewer projection. [Validation](../ARCHIVE/ONT-084_Foundation_Viewer/ONT-084_Validation_Report.md)
+  passed locally; SpecGraph and SpecSpace integration remains separate.
 
 - ONT-083 provides source-attributed foundation model catalogs. [Validation](../ARCHIVE/ONT-083_Foundation_Model_Catalogs/ONT-083_Validation_Report.md) passed locally; Viewer integration is separate.
 
