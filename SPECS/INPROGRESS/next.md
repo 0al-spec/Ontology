@@ -1,8 +1,8 @@
-# Next Candidate: ONT-088 — Imported Protocol Obligations
+# Selected: ONT-088 — Imported Protocol Obligations
 
 **Priority:** P1
-**Status:** Not selected; ONT-086 review follow-up
-**Next step:** Project protocol obligations only from exact supplied sources; retain warnings for missing sources.
+**Status:** Selected; ONT-086 review follow-up
+**Next step:** Plan source-bound protocol projection and regression checks.
 
 ## Deferred candidate
 
