@@ -5,13 +5,36 @@ import OntologyRules
 struct TypeScriptInheritance {
     let compiler: OntologyCompiler
     let packages: [SDKPackage]
+    let reachablePackages: [SDKPackage]
 
     init(compiler: OntologyCompiler, root: LoadedPackage, imports: [LoadedPackage], rootIR: JSONObject) {
         self.compiler = compiler
         let sources = [root] + imports.filter { $0.path != root.path }
-        packages = sources.map { source in
+        let available = sources.map { source in
             let ir = source.path == root.path ? rootIR : compiler.normalize(source, suppliedImports: sources.filter { $0.path != source.path })
             return SDKPackage(source: source, ir: ir)
+        }
+        packages = available
+        reachablePackages = Self.reachablePackages(available)
+    }
+
+    private static func reachablePackages(_ packages: [SDKPackage]) -> [SDKPackage] {
+        guard let root = packages.first else { return [] }
+        let indexed = Dictionary(grouping: packages, by: \.identity)
+        var pending = [root.identity]
+        var reachable = Set<DiagramPackageIdentity>()
+        while let current = pending.popLast() {
+            guard reachable.insert(current).inserted else { continue }
+            for package in indexed[current] ?? [] {
+                for binding in package.imports {
+                    guard let id = binding["id"] as? String, let version = binding["version"] as? String else { continue }
+                    let identity = DiagramPackageIdentity(id: id, version: version)
+                    if indexed[identity] != nil { pending.append(identity) }
+                }
+            }
+        }
+        return packages.filter {
+            DiagramReachableImportSpec().isSatisfiedBy(.init(supplied: $0.identity, reachable: reachable))
         }
     }
 
@@ -21,7 +44,7 @@ struct TypeScriptInheritance {
         var warnings = Set<String>()
         projected["classes"] = root.classes.keys.sorted().compactMap { name -> JSONObject? in
             guard var item = root.classes[name] else { return nil }
-            var inherited = fields(of: name, in: root, visiting: [], warnings: &warnings)
+            var inherited = fields(of: name, in: root, rootClass: name, visiting: [], warnings: &warnings)
             let protocols = localProtocols(of: name, in: root, visiting: [])
             if !protocols.isEmpty { item["implements"] = protocols }
             inherited = addProtocolFields(protocols, to: inherited, in: root, className: name)
@@ -88,27 +111,27 @@ struct TypeScriptInheritance {
         return Array(Set(refs)).sorted()
     }
 
-    private func fields(of name: String, in package: SDKPackage, visiting: Set<String>, warnings: inout Set<String>) -> [JSONObject] {
+    private func fields(of name: String, in package: SDKPackage, rootClass: String, visiting: Set<String>, warnings: inout Set<String>) -> [JSONObject] {
         let key = "\(package.id)@\(package.version):\(name)"
         let acyclic = AcyclicInheritanceSpec().isSatisfiedBy(.init(candidate: key, visited: visiting))
         guard acyclic else {
-            compiler.add("class.inheritance.cycle", "spec.classes.\(name).extends", "Class inheritance contains a cycle at \(key)")
+            compiler.add("class.inheritance.cycle", "spec.classes.\(rootClass).extends", "Class inheritance contains a cycle at \(key)")
             return []
         }
         guard let item = package.classes[name] else {
-            compiler.add("class.extends.unresolved", "spec.classes.\(name)", "Class \(key) is absent from the supplied package")
+            compiler.add("class.extends.unresolved", "spec.classes.\(rootClass).extends", "Class \(key) is absent from the supplied package")
             return []
         }
         if (package.id != packages.first?.id || package.version != packages.first?.version),
            let protocols = item["implements"] as? [String], !protocols.isEmpty {
             let message = "Unverified inherited protocol obligations from \(key): \(protocols.sorted().joined(separator: ", "))"
             if warnings.insert(message).inserted {
-                compiler.warn("sdk.inheritance.protocol_unavailable", "spec.classes", message)
+                compiler.warn("sdk.inheritance.protocol_unavailable", "spec.classes.\(rootClass).extends", message)
             }
         }
         var next = visiting
         next.insert(key)
-        var inherited = parentFields(item, package: package, visiting: next, warnings: &warnings)
+        var inherited = parentFields(item, package: package, rootClass: rootClass, visiting: next, warnings: &warnings)
         let own = item["fields"] as? [JSONObject] ?? []
         for var field in own {
             if package.id != packages.first?.id || package.version != packages.first?.version {
@@ -118,11 +141,12 @@ struct TypeScriptInheritance {
                 }
             }
             let fieldID = field["id"] as? String ?? ""
-            validateReference(field, owner: package, className: name, fieldID: fieldID)
+            validateReference(field, owner: package, className: name, rootClass: rootClass, fieldID: fieldID)
             if let previous = inherited.first(where: { $0["id"] as? String == fieldID }) {
                 if !CompatibleInheritedFieldSpec().isSatisfiedBy((signature(previous), signature(field))) {
-                    compiler.add("class.inheritance.field_conflict", "spec.classes.\(name).fields.\(fieldID)",
-                                 "Inherited field \(fieldID) has an incompatible type or requiredness")
+                    let location = fieldLocation(package: package, className: name, rootClass: rootClass, fieldID: fieldID)
+                    compiler.add("class.inheritance.field_conflict", location,
+                                 "Inherited field \(fieldID) in \(key) has an incompatible type or requiredness")
                 }
             } else {
                 inherited.append(field)
@@ -131,30 +155,39 @@ struct TypeScriptInheritance {
         return inherited.sorted { ($0["id"] as? String ?? "") < ($1["id"] as? String ?? "") }
     }
 
-    private func validateReference(_ field: JSONObject, owner: SDKPackage, className: String, fieldID: String) {
+    private func validateReference(_ field: JSONObject, owner: SDKPackage, className: String, rootClass: String, fieldID: String) {
         guard field["type"] as? String == "ref",
               let target = (field["targetType"] as? String) ?? (field["target"] as? String) else { return }
         let parts = target.split(separator: ":", maxSplits: 1).map(String.init)
         guard parts.count == 2 else { return }
-        let candidates = Set(packages.filter { $0.namespace == parts[0] && $0.classes[parts[1]] != nil }.map {
+        let candidates = Set(reachablePackages.filter { $0.namespace == parts[0] && $0.classes[parts[1]] != nil }.map {
             "ontology://\($0.id)/\($0.version)/classes/\(parts[1])"
         })
         let expected = (field["targetUri"] as? String) ?? "ontology://\(owner.id)/\(owner.version)/classes/\(parts[1])"
         let context = RuntimeReferenceIdentityContext(expectedURI: expected, candidateURIs: candidates)
         if !UnambiguousRuntimeReferenceSpec().isSatisfiedBy(context) {
-            compiler.add("class.field.target.namespace_conflict", "spec.classes.\(className).fields.\(fieldID).target",
-                         "Reference target \(target) does not uniquely identify \(expected) among supplied packages")
+            let location = fieldLocation(package: owner, className: className, rootClass: rootClass, fieldID: fieldID)
+            let suffix = location.hasSuffix(".fields.\(fieldID)") ? ".target" : ""
+            compiler.add("class.field.target.namespace_conflict", location + suffix,
+                         "Reference \(owner.id)@\(owner.version):\(className).\(fieldID) target \(target) does not uniquely identify \(expected) among supplied packages")
         }
     }
 
-    private func parentFields(_ item: JSONObject, package: SDKPackage, visiting: Set<String>, warnings: inout Set<String>) -> [JSONObject] {
+    private func fieldLocation(package: SDKPackage, className: String, rootClass: String, fieldID: String) -> String {
+        if let root = packages.first, package.id == root.id, package.version == root.version, className == rootClass {
+            return "spec.classes.\(className).fields.\(fieldID)"
+        }
+        return "spec.classes.\(rootClass).extends"
+    }
+
+    private func parentFields(_ item: JSONObject, package: SDKPackage, rootClass: String, visiting: Set<String>, warnings: inout Set<String>) -> [JSONObject] {
         guard let base = item["extends"] as? String else { return [] }
         let parts = base.split(separator: ":", maxSplits: 1).map(String.init)
         guard parts.count == 2 else { return [] }
         let alias = parts[0]
         let name = parts[1]
         if alias == package.namespace {
-            return fields(of: name, in: package, visiting: visiting, warnings: &warnings)
+            return fields(of: name, in: package, rootClass: rootClass, visiting: visiting, warnings: &warnings)
         }
         guard let binding = package.imports.first(where: {
             ontologyImportNamespace(packageID: $0["id"] as? String, explicit: $0["namespace"] as? String) == alias
@@ -163,11 +196,11 @@ struct TypeScriptInheritance {
         guard let parent = packages.first(where: { $0.id == id && $0.version == version }) else {
             let message = "Unverified inherited fields from \(id)@\(version):\(name); supply its source with --import"
             if warnings.insert(message).inserted {
-                compiler.warn("sdk.inheritance.source_unavailable", "spec.classes", message)
+                compiler.warn("sdk.inheritance.source_unavailable", "spec.classes.\(rootClass).extends", message)
             }
             return []
         }
-        return fields(of: name, in: parent, visiting: visiting, warnings: &warnings)
+        return fields(of: name, in: parent, rootClass: rootClass, visiting: visiting, warnings: &warnings)
     }
 
     private func signature(_ field: JSONObject) -> InheritedFieldSignature {
@@ -183,6 +216,8 @@ struct SDKPackage {
     let imports: [JSONObject]
     let classes: [String: JSONObject]
     let protocolFields: [String: [String]]
+
+    var identity: DiagramPackageIdentity { DiagramPackageIdentity(id: id, version: version) }
 
     init(source: LoadedPackage, ir: JSONObject) {
         id = source.id

@@ -47,6 +47,18 @@ input returns 0. Consumers can use `code`, `severity` and the source field
 `spec.classes.Entry.extends`. Relative to a YAML document, dots select keys
 and bracketed integers select array elements.
 
+The same available-source inheritance checks run for `check`, `compile`,
+`diff`, `publish`, and staged advice. Cycles, incompatible inherited fields,
+and ambiguous reference targets are errors. A finding reached through an
+imported ancestor identifies the affected class's `extends` in the source
+being checked and names the ancestor; separately supplied sources are checked
+at their own declaration locations. Target identity considers only packages in
+the checked source's exact transitive import closure, not unrelated supplied
+versions. An unavailable ancestor source produces an
+`sdk.inheritance.source_unavailable` warning, not a claim that its fields were
+verified. Text-mode `check` prints these inheritance warnings as well as PASS.
+Imported protocol obligations can still be unverified; see ONT-088.
+
 ### Commit-time package advice
 
 Enable this once in a repository where people or agents author ontology packages. With `ontologyc` on PATH and Git 2.54 or newer, run:

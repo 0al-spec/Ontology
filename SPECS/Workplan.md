@@ -1435,7 +1435,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-087: Validate semantic inheritance before SDK generation
 
-- **Status:** Candidate; found in ONT-086 review.
+- **Status:** PASS locally; hosted CI and review remain separate.
 - **Problem:** `ontologyc check` and `advise-staged` accept cyclic class
   inheritance even though `compile` rejects it. Conflicting inherited fields
   likewise need a source-attributed check without requiring SDK generation.
@@ -1443,6 +1443,8 @@ This workplan tracks the specification work for the Ontology repository. The ini
   exact package identity and source attribution across imports, and cover
   strict CLI and index-bound advisory paths with positive and negative cases.
 - **Dependency:** ONT-086.
+
+- [Validation](ARCHIVE/ONT-087_Semantic_Inheritance_Validation/ONT-087_Validation_Report.md).
 
 ## ONT-088: Imported protocol obligations in the TypeScript SDK
 
