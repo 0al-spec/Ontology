@@ -1,7 +1,7 @@
-# Next Candidate: ONT-087 — Validate Semantic Inheritance
+# Selected: ONT-087 — Validate Semantic Inheritance
 
 **Priority:** P1
-**Status:** Not selected; ONT-086 review follow-up
+**Status:** In progress; stacked on ONT-086
 **Next step:** Move cycle and field-compatibility checks into source validation
 with correct imported-source attribution; exercise `check`, `checkSources`,
 and commit-time advice.
