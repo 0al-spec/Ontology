@@ -15,6 +15,12 @@
       "items": {"type": "string", "pattern": "\\S"},
       "default": []
     },
+    "foundationModels": {
+      "description": "Explicit local versioned foundation model catalogs, relative to this profile.",
+      "type": "array",
+      "items": {"type": "string", "pattern": "\\S"},
+      "default": []
+    },
     "expand": {
       "description": "Relations-only class selectors using repeated --expand syntax; omit for full import loading.",
       "type": "array",

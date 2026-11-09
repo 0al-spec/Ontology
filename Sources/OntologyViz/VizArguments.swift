@@ -28,7 +28,7 @@ struct VizArguments {
     let profileURL: URL?
 
     var sourceURLs: [URL] {
-        ([input] + diagram.imports).map(\.url) + (profileURL.map { [$0] } ?? [])
+        ([input] + diagram.imports + diagram.foundationModels).map(\.url) + (profileURL.map { [$0] } ?? [])
     }
 
     init(_ arguments: [String]) throws {
@@ -53,6 +53,10 @@ struct VizArguments {
         let direction = try parseDiagramDirection(options["--direction"]?.first ?? "LR")
         let view = try parseDiagramView(options["--view"]?.first ?? "full")
         let imports = options["--import"] ?? []
+        let foundationModels = options["--foundation-model"] ?? []
+        guard foundationModels.isEmpty || format == .json else {
+            throw VizFailure(description: "--foundation-model requires --format json")
+        }
         let expanded = (options["--expand"] ?? []).flatMap { $0.components(separatedBy: ",") }
         let decision = DiagramSelectionSpec().decide(DiagramSelectionContext(
             view: view.rawValue, hasImports: !imports.isEmpty, expandedTypes: expanded
@@ -65,7 +69,8 @@ struct VizArguments {
         self.format = format
         self.dotPath = options["--dot"]?.first
         self.diagram = OntologyDiagramOptions(direction: direction, view: view,
-                                              imports: imports.map(OntologySourcePath.init(path:)), expandedTypes: expanded)
+                                              imports: imports.map(OntologySourcePath.init(path:)), expandedTypes: expanded,
+                                              foundationModels: foundationModels.map(OntologySourcePath.init(path:)))
         self.profileURL = profileURL
     }
 
@@ -80,10 +85,10 @@ struct VizArguments {
                 break
             }
             if value.hasPrefix("--") {
-                guard ["--out", "--format", "--direction", "--dot", "--view", "--import", "--expand", "--profile"].contains(value) else {
+                guard ["--out", "--format", "--direction", "--dot", "--view", "--import", "--expand", "--profile", "--foundation-model"].contains(value) else {
                     throw VizFailure(description: "Unknown option \(value)")
                 }
-                guard options[value] == nil || ["--import", "--expand"].contains(value) else {
+                guard options[value] == nil || ["--import", "--expand", "--foundation-model"].contains(value) else {
                     throw VizFailure(description: "Duplicate option \(value)")
                 }
                 index += 1
@@ -110,6 +115,7 @@ struct VizArguments {
       --dot <executable>         Graphviz dot path; otherwise search PATH.
       --view full|relations      Default: full. Relations hides scaffolding.
       --import <package.yaml>    Explicit reachable local import (repeatable).
+      --foundation-model <model.json>  Explicit foundation catalog (repeatable; JSON format only).
       --expand <ns:Class,...>     Selected imported classes; relations view only.
       --profile <profile.json>   Saved package and selection; paths relative to profile.
       --help                     Show this help.
@@ -120,7 +126,7 @@ struct VizArguments {
     Full view loads all supplied reachable imports; relations view requires --expand.
     Each supplied import must match an exact declared id/version.
     Unselected external references remain unloaded placeholders.
-    Profile excludes positional package / --view / --import / --expand.
+    Profile excludes positional package / --view / --import / --expand / --foundation-model.
     CLI --direction overrides profile direction; --format / --out / --dot stay runtime options.
     Exit codes: 0 success, 1 package/render/I/O failure, 2 invalid arguments.
     """

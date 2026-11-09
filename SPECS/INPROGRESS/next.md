@@ -33,9 +33,15 @@ that port when adopting it. No paid inference or deployment is needed for this p
 
 ## Recently Archived
 
-- ONT-081 adds source-bound imports to compatibility and publication. [Validation](../ARCHIVE/ONT-081_Imported_Reference_Workflows/ONT-081_Validation_Report.md) passed locally; CI and review remain separate.
+- ONT-084 connects explicit foundation model catalogs to a source-attributed
+  Viewer projection. [Validation](../ARCHIVE/ONT-084_Foundation_Viewer/ONT-084_Validation_Report.md)
+  passed locally; SpecGraph and SpecSpace integration remains separate.
+
+- ONT-083 provides source-attributed foundation model catalogs. [Validation](../ARCHIVE/ONT-083_Foundation_Model_Catalogs/ONT-083_Validation_Report.md) passed locally; Viewer integration is separate.
 
 - ONT-082 connects imported typed references to exact loaded sources. [Validation](../ARCHIVE/ONT-082_Viewer_Imported_Ref_Bindings/ONT-082_Validation_Report.md) passed locally; CI and consumer integration are separate.
+
+- ONT-081 adds source-bound imports to compatibility and publication. [Validation](../ARCHIVE/ONT-081_Imported_Reference_Workflows/ONT-081_Validation_Report.md) passed locally; CI and review remain separate.
 
 - ONT-080 adds explicit index-bound imports to staged advice. [Validation](../ARCHIVE/ONT-080_Index_Bound_Import_Advice/ONT-080_Validation_Report.md) passed locally; hosted CI and review are separate.
 

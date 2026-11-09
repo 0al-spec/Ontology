@@ -16,7 +16,7 @@ struct VizProfile {
             }
             let view = try parseDiagramView(document.view)
             let direction = try parseDiagramDirection(document.direction)
-            let paths = [document.package] + document.imports
+            let paths = [document.package] + document.imports + document.foundationModels
             guard paths.allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else {
                 throw VizFailure(description: "Profile package and import paths must be nonempty")
             }
@@ -32,15 +32,16 @@ struct VizProfile {
     func applying(
         options: [String: [String]], positionals: [String]
     ) throws -> (options: [String: [String]], positionals: [String]) {
-        let conflicts = ["--view", "--import", "--expand"].filter { options[$0] != nil }
+        let conflicts = ["--view", "--import", "--expand", "--foundation-model"].filter { options[$0] != nil }
         guard positionals.isEmpty, conflicts.isEmpty else {
-            throw VizFailure(description: "--profile cannot be combined with a package path, --view, --import or --expand")
+            throw VizFailure(description: "--profile cannot be combined with a package path, --view, --import, --expand or --foundation-model")
         }
         var result = options
         result["--view"] = [view.rawValue]
         result["--direction"] = options["--direction"] ?? [direction.rawValue]
         result["--import"] = document.imports.map(resolve)
         result["--expand"] = document.expand
+        result["--foundation-model"] = document.foundationModels.map(resolve)
         return (result, [resolve(document.package)])
     }
 
@@ -56,9 +57,10 @@ private struct VizProfileDocument: Decodable {
     let direction: String
     let imports: [String]
     let expand: [String]
+    let foundationModels: [String]
 
     private enum Keys: String, CodingKey, CaseIterable {
-        case schemaVersion, package, view, direction, imports, expand
+        case schemaVersion, package, view, direction, imports, expand, foundationModels
         case schema = "$schema"
     }
 
@@ -75,6 +77,7 @@ private struct VizProfileDocument: Decodable {
         direction = values.contains(.direction) ? try values.decode(String.self, forKey: .direction) : "LR"
         imports = values.contains(.imports) ? try values.decode([String].self, forKey: .imports) : []
         expand = values.contains(.expand) ? try values.decode([String].self, forKey: .expand) : []
+        foundationModels = values.contains(.foundationModels) ? try values.decode([String].self, forKey: .foundationModels) : []
         if values.contains(.schema) { _ = try values.decode(String.self, forKey: .schema) }
     }
 }

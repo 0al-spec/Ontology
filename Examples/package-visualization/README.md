@@ -141,6 +141,7 @@ A minimal full-package profile needs two fields.
 | `view` | `full` by default, or `relations` |
 | `direction` | `LR` by default, or `TB` |
 | `imports` | Local package paths, default `[]` |
+| `foundationModels` | Local foundation model catalogs for JSON projection, default `[]` |
 | `expand` | Selectors with the same syntax as repeated `--expand`, default `[]` |
 | `$schema` | Optional editor hint, consumed as a string without fetching it |
 

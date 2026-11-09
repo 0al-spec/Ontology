@@ -13,23 +13,29 @@ public struct OntologyDiagramOptions: Sendable {
     public let view: OntologyDiagramView
     public let imports: [OntologySourcePath]
     public let expandedTypes: [String]
+    public let foundationModels: [OntologySourcePath]
 
     public init(
         direction: OntologyDiagramDirection = .leftToRight,
         view: OntologyDiagramView = .full,
         imports: [OntologySourcePath] = [],
-        expandedTypes: [String] = []
+        expandedTypes: [String] = [],
+        foundationModels: [OntologySourcePath] = []
     ) {
         self.direction = direction
         self.view = view
         self.imports = imports
         self.expandedTypes = expandedTypes
+        self.foundationModels = foundationModels
     }
 }
 
 extension OntologyCompiler {
     /// Projects a validated package and explicitly supplied reachable local imports.
     public func diagramDOT(path: OntologySourcePath, options: OntologyDiagramOptions) throws -> String {
+        guard options.foundationModels.isEmpty else {
+            throw OntologyCompilerError.invalidArgument("Foundation models are supported only in diagram JSON output")
+        }
         let projection = try diagramProjection(path: path, options: options)
         var diagram = PackageDiagram(ir: projection, view: options.view)
         return diagram.render(direction: options.direction)
@@ -59,6 +65,7 @@ extension OntologyCompiler {
         let root = records[0]
         let supplied = Array(records.dropFirst())
         let scope = try DiagramDependencyScope(root: root, supplied: supplied, digest: sha256)
+        let foundation = try DiagramFoundationModels(paths: options.foundationModels, imports: scope.foundationImports, digest: sha256)
         let imported = scope.imported
         var projection = try options.view == .relations
             ? DiagramRelationsProjection(root: root, imported: imported).select(options.expandedTypes)
@@ -74,6 +81,7 @@ extension OntologyCompiler {
         projection["sources"] = [diagramSource(root, alias: root["namespace"] as? String ?? "")]
             + imported.sorted { $0.namespace < $1.namespace }.map { diagramSource($0.ir, alias: $0.namespace) }
         if !scope.externalImports.isEmpty { projection["externalImports"] = scope.externalImports }
+        if !foundation.bindings.isEmpty { projection["foundationCatalogs"] = foundation.bindings }
         return projection
     }
 

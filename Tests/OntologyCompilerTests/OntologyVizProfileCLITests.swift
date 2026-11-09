@@ -58,8 +58,9 @@ extension OntologyVizCLITests {
                 base.merging(["view": "unknown"]) { _, new in new },
                 base.merging(["direction": "diagonal"]) { _, new in new },
                 base.merging(["imports": [7]]) { _, new in new },
-                base.merging(["expand": "ev:Example"]) { _, new in new }
-            ] + ["view", "direction", "imports", "expand", "$schema"].map { key in
+                base.merging(["expand": "ev:Example"]) { _, new in new },
+                base.merging(["foundationModels": [7]]) { _, new in new }
+            ] + ["view", "direction", "imports", "expand", "foundationModels", "$schema"].map { key in
                 base.merging([key: NSNull()]) { _, new in new }
             }
             for fields in invalid {
@@ -91,7 +92,7 @@ extension OntologyVizCLITests {
     func testProfileRejectsSelectionConflictsAndDuplicateProfileFlag() throws {
         try inTemporaryDirectory { temp in
             for extra in [[example.path], ["--view", "full"], ["--import", example.path],
-                          ["--expand", "ev:Example"], ["--profile", motivationProfile.path]] {
+                          ["--expand", "ev:Example"], ["--foundation-model", example.path], ["--profile", motivationProfile.path]] {
                 let output = temp.appendingPathComponent("output")
                 let result = try run(["--profile", motivationProfile.path, "--out", output.path] + extra)
                 XCTAssertEqual(result.status, 2, result.stderr)
@@ -126,6 +127,42 @@ extension OntologyVizCLITests {
             let graph = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: output.appendingPathComponent("ontology.graph.json"))) as? [String: Any])
             XCTAssertTrue((graph["policies"] as? [[String: Any]] ?? []).contains { ($0["fqid"] as? String ?? "").hasPrefix("eventcore:") })
             XCTAssertTrue((graph["stateMachines"] as? [[String: Any]] ?? []).contains { ($0["fqid"] as? String ?? "").hasPrefix("eventcore:") })
+        }
+    }
+
+    func testProfileLoadsRelativeFoundationModelAndProtectsCatalogBytes() throws {
+        try inTemporaryDirectory { temp in
+            let model = temp.appendingPathComponent("ontology.graph.json")
+            try FileManager.default.copyItem(at: root.appendingPathComponent("SPECS/ontology/foundation/0.1.0/model.json"), to: model)
+            let before = try Data(contentsOf: model)
+            let profile = temp.appendingPathComponent("profile.json")
+            try writeProfile(["schemaVersion": 1, "package": example.path, "foundationModels": ["ontology.graph.json"]], to: profile)
+            let blocked = try run(["--profile", profile.path, "--format", "json", "--out", temp.path])
+            XCTAssertEqual(blocked.status, 1)
+            XCTAssertTrue(blocked.stderr.contains("overwrite input"))
+            XCTAssertEqual(try Data(contentsOf: model), before)
+            let imageOutput = temp.appendingPathComponent("image")
+            let image = try run(["--profile", profile.path, "--format", "svg", "--out", imageOutput.path])
+            XCTAssertEqual(image.status, 2)
+            XCTAssertTrue(image.stderr.contains("requires --format json"))
+            XCTAssertFalse(FileManager.default.fileExists(atPath: imageOutput.path))
+            let output = temp.appendingPathComponent("out")
+            let result = try run(["--profile", profile.path, "--format", "json", "--out", output.path])
+            XCTAssertEqual(result.status, 0, result.stderr)
+            let graph = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: output.appendingPathComponent("ontology.graph.json"))) as? [String: Any])
+            XCTAssertEqual((graph["foundationCatalogs"] as? [[String: Any]])?.first?["id"] as? String, "specgraph.foundation")
+        }
+    }
+
+    func testOversizedFoundationModelFailsWithoutWritingOutput() throws {
+        try inTemporaryDirectory { temp in
+            let model = temp.appendingPathComponent("large.json")
+            let output = temp.appendingPathComponent("output")
+            try Data(repeating: 0x20, count: 1024 * 1024 + 1).write(to: model)
+            let result = try run([example.path, "--foundation-model", model.path, "--format", "json", "--out", output.path])
+            XCTAssertEqual(result.status, 1)
+            XCTAssertTrue(result.stderr.contains("Foundation model exceeds 1048576 bytes"), result.stderr)
+            XCTAssertFalse(FileManager.default.fileExists(atPath: output.path))
         }
     }
 

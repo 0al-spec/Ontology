@@ -47,7 +47,7 @@ export function nodeFilterType(node: ViewerNode): NodeFilterType {
 
 export function nodeOrigin(node: ViewerNode, packageId: string): OriginFilter {
   if (node.data.kind === 'external') return 'unresolved';
-  if (node.data.kind === 'imported' || (node.data.source && node.data.source.id !== packageId)) return 'imported';
+  if (node.data.kind === 'imported' || node.data.foundation || (node.data.source && node.data.source.id !== packageId)) return 'imported';
   return 'local';
 }
 
