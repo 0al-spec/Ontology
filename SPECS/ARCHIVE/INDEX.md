@@ -87,6 +87,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-09 | ONT-086 | Archived [self-review](ONT-086_TypeScript_SDK_Inheritance/REVIEW_ONT-086.md); follow-ups ONT-087 and ONT-088 recorded |
+| 2026-11-09 | ONT-086 | Archived TypeScript inheritance and validation (local PASS) |
 | 2026-11-09 | ONT-084 | Archived [self-review](ONT-084_Foundation_Viewer/REVIEW_ONT-084.md); follow-up ONT-085 recorded |
 | 2026-11-09 | ONT-084 | Archived foundation Viewer bindings and validation (local PASS) |
 | 2026-11-09 | ONT-082 | Archived [self-review](ONT-082_Viewer_Imported_Ref_Bindings/REVIEW_ONT-082.md); FOLLOW-UP skipped |
