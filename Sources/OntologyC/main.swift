@@ -74,6 +74,7 @@ case "compile":
             compiler.printDiagnostics(diagnostics)
             exit(1)
         }
+        compiler.printDiagnostics(diagnostics.filter { $0.code.hasPrefix("sdk.inheritance.") })
         print("ontologyc compile: PASS \(outDirectory)")
     } catch {
         writeDiagnostic("ontologyc compile: FAIL \(error)\n")

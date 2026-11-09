@@ -43,7 +43,9 @@ public final class OntologyCompiler {
         }
 
         let ir = normalize(package, suppliedImports: supplied)
-        try emit(ir: ir, to: outDirectory.path)
+        let sdkIR = TypeScriptInheritance(compiler: self, root: package, imports: supplied, rootIR: ir).project(ir)
+        if hasErrors(diagnostics) { return diagnostics }
+        try emit(ir: ir, to: outDirectory.path, sdkIR: sdkIR)
         return diagnostics
     }
 

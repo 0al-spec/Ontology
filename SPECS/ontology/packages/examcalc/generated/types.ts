@@ -4,69 +4,69 @@
 
 export type OntologyEntityId = string;
 
-export interface AuditLogEntry {
-  readonly $type: "examcalc:AuditLogEntry";
+export interface AuditLogEntry<$OntologyType extends string = "examcalc:AuditLogEntry"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface CalculatorFunction {
-  readonly $type: "examcalc:CalculatorFunction";
+export interface CalculatorFunction<$OntologyType extends string = "examcalc:CalculatorFunction"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface EndExamMode {
-  readonly $type: "examcalc:EndExamMode";
+export interface EndExamMode<$OntologyType extends string = "examcalc:EndExamMode"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Exam {
-  readonly $type: "examcalc:Exam";
+export interface Exam<$OntologyType extends string = "examcalc:Exam"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
   readonly durationMinutes?: number;
   readonly title: string;
 }
 
-export interface ExamModeSession {
-  readonly $type: "examcalc:ExamModeSession";
+export interface ExamModeSession<$OntologyType extends string = "examcalc:ExamModeSession"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface ExamPolicyProfile {
-  readonly $type: "examcalc:ExamPolicyProfile";
+export interface ExamPolicyProfile<$OntologyType extends string = "examcalc:ExamPolicyProfile"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface ExamSession {
-  readonly $type: "examcalc:ExamSession";
+export interface ExamSession<$OntologyType extends string = "examcalc:ExamSession"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface FunctionSet {
-  readonly $type: "examcalc:FunctionSet";
+export interface FunctionSet<$OntologyType extends string = "examcalc:FunctionSet"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface LockCalculator {
-  readonly $type: "examcalc:LockCalculator";
+export interface LockCalculator<$OntologyType extends string = "examcalc:LockCalculator"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface PolicyViolation {
-  readonly $type: "examcalc:PolicyViolation";
+export interface PolicyViolation<$OntologyType extends string = "examcalc:PolicyViolation"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface StartExamMode {
-  readonly $type: "examcalc:StartExamMode";
+export interface StartExamMode<$OntologyType extends string = "examcalc:StartExamMode"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface TabletDevice {
-  readonly $type: "examcalc:TabletDevice";
+export interface TabletDevice<$OntologyType extends string = "examcalc:TabletDevice"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface VerifyDeviceAndPolicy {
-  readonly $type: "examcalc:VerifyDeviceAndPolicy";
+export interface VerifyDeviceAndPolicy<$OntologyType extends string = "examcalc:VerifyDeviceAndPolicy"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }

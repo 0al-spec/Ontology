@@ -2,72 +2,72 @@
 
 export type OntologyEntityId = string;
 
-export interface AcceptanceCriterion {
-  readonly $type: "sgcore:AcceptanceCriterion";
+export interface AcceptanceCriterion<$OntologyType extends string = "sgcore:AcceptanceCriterion"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface CodeSurface {
-  readonly $type: "sgcore:CodeSurface";
+export interface CodeSurface<$OntologyType extends string = "sgcore:CodeSurface"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Constraint {
-  readonly $type: "sgcore:Constraint";
+export interface Constraint<$OntologyType extends string = "sgcore:Constraint"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Decision {
-  readonly $type: "sgcore:Decision";
+export interface Decision<$OntologyType extends string = "sgcore:Decision"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Edge {
-  readonly $type: "sgcore:Edge";
+export interface Edge<$OntologyType extends string = "sgcore:Edge"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Evidence {
-  readonly $type: "sgcore:Evidence";
+export interface Evidence<$OntologyType extends string = "sgcore:Evidence"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Intent {
-  readonly $type: "sgcore:Intent";
+export interface Intent<$OntologyType extends string = "sgcore:Intent"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Invariant {
-  readonly $type: "sgcore:Invariant";
+export interface Invariant<$OntologyType extends string = "sgcore:Invariant"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Node {
-  readonly $type: "sgcore:Node";
+export interface Node<$OntologyType extends string = "sgcore:Node"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Release {
-  readonly $type: "sgcore:Release";
+export interface Release<$OntologyType extends string = "sgcore:Release"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Requirement {
-  readonly $type: "sgcore:Requirement";
+export interface Requirement<$OntologyType extends string = "sgcore:Requirement"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Spec {
-  readonly $type: "sgcore:Spec";
+export interface Spec<$OntologyType extends string = "sgcore:Spec"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface SpecGraph {
-  readonly $type: "sgcore:SpecGraph";
+export interface SpecGraph<$OntologyType extends string = "sgcore:SpecGraph"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }
 
-export interface Test {
-  readonly $type: "sgcore:Test";
+export interface Test<$OntologyType extends string = "sgcore:Test"> {
+  readonly $type: $OntologyType;
   readonly id?: string;
 }

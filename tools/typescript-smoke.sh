@@ -45,4 +45,11 @@ if [[ -n "$compiler" ]]; then
     "$compiler" compile "$imported/model.yaml" --import "$imported/shared.yaml" \
         --target typescript --out "$work/imported-reference/generated"
     run_consumer "$work/imported-reference" "$imported/consumer.ts"
+
+    inheritance="$root/Examples/typescript-inheritance"
+    mkdir "$work/typescript-inheritance"
+    "$compiler" compile "$inheritance/shared.yaml" --target typescript --out "$work/typescript-inheritance/base-generated"
+    "$compiler" compile "$inheritance/model.yaml" --import "$inheritance/shared.yaml" \
+        --target typescript --out "$work/typescript-inheritance/generated"
+    run_consumer "$work/typescript-inheritance" "$inheritance/consumer.ts"
 fi

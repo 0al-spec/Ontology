@@ -1,0 +1,37 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: example.inheritance, namespace: sample, version: 1.0.0}
+spec:
+  imports:
+    - {id: ontology.foundation, version: 0.2.0}
+    - {id: example.shared-inheritance, namespace: shared, version: 1.0.0}
+  classes:
+    BaseAction:
+      extends: ont:Action
+      description: An action with a protocol and an optional field.
+      implements: [Tracked]
+      fields:
+        note: {type: string, required: false}
+    ChildAction:
+      extends: BaseAction
+      description: An action inheriting both obligations.
+    Parent:
+      extends: shared:Base
+      description: A specialized shared base.
+      fields:
+        count: {type: integer, required: false}
+    Child:
+      extends: Parent
+      description: A further specialization.
+    T:
+      extends: ont:DomainEntity
+      description: A name that must not collide with generated type parameters.
+    FromT:
+      extends: T
+      description: A specialization of T.
+  relations:
+    links: {domain: Parent, range: Child, description: Local relation.}
+    trace: {domain: BaseAction, range: Parent, description: Required protocol relation.}
+    acts: {subject: Parent, action: ChildAction, object: Child, description: Action relationship.}
+  protocols:
+    Tracked: {description: Requires a trace., requiredFields: [trace]}
