@@ -1,3 +1,8 @@
+# Active task: ONT-083 — Source-attributed foundation model catalogs
+
+Record exact published foundation model interfaces for downstream consumers.
+The NormLab candidate below remains queued.
+
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
