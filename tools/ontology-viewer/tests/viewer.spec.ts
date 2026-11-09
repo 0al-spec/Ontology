@@ -1,6 +1,20 @@
 import { expect, test } from '@playwright/test';
 
 const fixture = process.env.ONTOLOGY_GRAPH_FIXTURE;
+const foundationFixture = process.env.ONTOLOGY_FOUNDATION_GRAPH_FIXTURE;
+
+test('shows the supplied foundation model declaration and its provenance', async ({ page }) => {
+  if (!foundationFixture) throw new Error('Set ONTOLOGY_FOUNDATION_GRAPH_FIXTURE to a foundation-backed projection');
+  await page.goto('/');
+  await page.getByLabel('Open graph JSON').setInputFiles(foundationFixture);
+  await page.locator('[data-id="classes/sg:DomainEntity"]').click();
+  const inspector = page.getByLabel('Inspector');
+  await expect(inspector).toContainText('specgraph.foundation');
+  await expect(inspector).toContainText('/classes/DomainEntity');
+  await expect(inspector).toContainText('does not authenticate');
+  await inspector.getByText('Declaration data').click();
+  await expect(inspector).toContainText('export interface DomainEntity');
+});
 
 test('opens a real package projection, searches, inspects and retains the graph after invalid input', async ({ page }) => {
   if (!fixture) throw new Error('Set ONTOLOGY_GRAPH_FIXTURE to a generated motivation-relations ontology.graph.json');

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildGraph, parseProjection } from './graph';
+import { graphPackages, nodePackage } from './packages';
+import { nodeOrigin } from './filters';
 
 const digest = `sha256:${'a'.repeat(64)}`;
 const source = (pointer: string) => ({
@@ -22,6 +24,42 @@ const graph = {
 };
 
 describe('ontology graph projection adapter', () => {
+  it('binds supplied foundation declarations to exact imported identity and reports provenance', () => {
+    const catalog = {
+      schemaVersion: 'ontology.foundation-model/v1', id: 'ontology.foundation', version: '0.1.0', namespace: 'ont',
+      source: { path: 'model.md', revision: 'abc123', sha256: 'b'.repeat(64) },
+      classes: { DomainEntity: { declaration: 'export interface DomainEntity {}' }, Policy: { declaration: 'export interface Policy {}' } },
+      protocols: {},
+    };
+    const binding = { id: 'specgraph.foundation', version: '0.1.0', alias: 'base', catalogByteDigest: digest, policyBases: ['Policy'], catalog };
+    const input = { ...graph, imports: [{ id: 'specgraph.foundation', version: '0.1.0', namespace: 'base' }],
+      classes: [{ ...graph.classes[0], extends: 'base:DomainEntity' }],
+      policies: [{ ...graph.policies[0], extends: 'base:Policy' }], foundationCatalogs: [binding] };
+    const projection = parseProjection(input);
+    const flow = buildGraph(projection);
+    const entity = flow.nodes.find((node) => node.id === 'classes/base:DomainEntity');
+    expect(entity?.data).toMatchObject({ kind: 'imported', origin: 'specgraph.foundation@0.1.0',
+      foundation: { id: 'specgraph.foundation', version: '0.1.0', pointer: '/classes/DomainEntity', catalogByteDigest: digest } });
+    expect(entity && nodePackage(entity)).toBe('specgraph.foundation@0.1.0');
+    expect(entity && nodeOrigin(entity, input.id)).toBe('imported');
+    expect(flow.nodes.find((node) => node.id === 'policies/base:Policy')?.data.foundation?.pointer).toBe('/classes/Policy');
+    expect(graphPackages(flow, projection).find((item) => item.key === 'specgraph.foundation@0.1.0')?.loaded).toBe(true);
+    const without = buildGraph(parseProjection({ ...input, foundationCatalogs: undefined }));
+    expect(without.nodes.find((node) => node.id === 'external/classes/base:DomainEntity')?.data.kind).toBe('external');
+  });
+
+  it('rejects foundation catalogs that do not match their exact imported identity', () => {
+    const catalog = { schemaVersion: 'ontology.foundation-model/v1', id: 'ontology.foundation', version: '0.2.0', namespace: 'ont',
+      source: { path: 'model.md', revision: 'abc', sha256: 'b'.repeat(64) }, classes: {}, protocols: {} };
+    const binding = { id: 'ontology.foundation', version: '0.2.0', alias: 'ont', catalogByteDigest: digest, policyBases: [], catalog };
+    const input = { ...graph, imports: [{ id: 'ontology.foundation', version: '0.2.0', namespace: 'ont' }], foundationCatalogs: [binding] };
+    expect(() => parseProjection(input)).not.toThrow();
+    expect(() => parseProjection({ ...input, foundationCatalogs: [{ ...binding, alias: 'other' }] })).toThrow(/binding/);
+    expect(() => parseProjection({ ...input, foundationCatalogs: [{ ...binding, catalog: { ...catalog, version: '0.1.0' } }] })).toThrow(/identity/);
+    expect(() => parseProjection({ ...input, foundationCatalogs: [binding, binding] })).toThrow(/duplicate/);
+    expect(() => parseProjection({ ...input, foundationCatalogs: [{ ...binding, catalogByteDigest: 'sha256:bad' }] })).toThrow(/invalid/);
+  });
+
   it('labels an unloaded transitive dependency by exact package identity', () => {
     const missing = { id: 'example.transitive', version: '2.0.0', alias: 'dep-1234' };
     const input = {

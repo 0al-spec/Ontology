@@ -37,20 +37,25 @@ function optionsFromArgs(args) {
 async function resolveInputs(options) {
   if (options.package) {
     const rootPath = path.resolve(options.package);
-    return { rootPath, root: await fs.realpath(rootPath), importPaths: [], imports: [], profilePath: null, profile: null, profileDigest: null };
+    return { rootPath, root: await fs.realpath(rootPath), importPaths: [], imports: [], modelPaths: [], models: [],
+      profilePath: null, profile: null, profileDigest: null };
   }
   const profilePath = path.resolve(options.profile);
   const profile = await fs.realpath(profilePath);
   const bytes = await fs.readFile(profile);
   const doc = JSON.parse(decode(bytes));
-  if (typeof doc.package !== 'string' || !Array.isArray(doc.imports || []) || (doc.imports || []).some((item) => typeof item !== 'string')) {
-    throw new Error('Invalid profile package or imports');
+  const modelSelections = doc.foundationModels === undefined ? [] : doc.foundationModels;
+  if (typeof doc.package !== 'string' || !Array.isArray(doc.imports || []) || (doc.imports || []).some((item) => typeof item !== 'string') ||
+      !Array.isArray(modelSelections) || modelSelections.some((item) => typeof item !== 'string' || !item.trim())) {
+    throw new Error('Invalid profile package, imports or foundation models');
   }
   const rootPath = path.resolve(path.dirname(profile), doc.package);
   const importPaths = (doc.imports || []).map((item) => path.resolve(path.dirname(profile), item));
+  const modelPaths = modelSelections.map((item) => path.resolve(path.dirname(profile), item));
   const root = await fs.realpath(rootPath);
   const imports = await Promise.all(importPaths.map((item) => fs.realpath(item)));
-  return { rootPath, root, importPaths, imports, profilePath, profile, profileDigest: hash(bytes) };
+  const models = await Promise.all(modelPaths.map((item) => fs.realpath(item)));
+  return { rootPath, root, importPaths, imports, modelPaths, models, profilePath, profile, profileDigest: hash(bytes) };
 }
 
 async function readBody(request) {
@@ -81,7 +86,8 @@ export async function startWorkspace(options) {
   let saveQueue = Promise.resolve();
 
   async function readInputs() {
-    const paths = [[inputs.rootPath, inputs.root], ...inputs.importPaths.map((item, index) => [item, inputs.imports[index]])];
+    const paths = [[inputs.rootPath, inputs.root], ...inputs.importPaths.map((item, index) => [item, inputs.imports[index]]),
+      ...inputs.modelPaths.map((item, index) => [item, inputs.models[index]])];
     if (inputs.profile) paths.push([inputs.profilePath, inputs.profile]);
     for (const [selected, pinned] of paths) {
       let resolved;
@@ -89,9 +95,10 @@ export async function startWorkspace(options) {
       catch { throw new InputPathChanged('A selected input path is unavailable; restore it or restart the workspace'); }
       if (resolved !== pinned) throw new InputPathChanged('A selected input path now points elsewhere; restore it or restart the workspace');
     }
-    const [root, ...imports] = await Promise.all([inputs.root, ...inputs.imports].map((item) => fs.readFile(item)));
+    const [root, ...other] = await Promise.all([inputs.root, ...inputs.imports, ...inputs.models].map((item) => fs.readFile(item)));
+    const imports = other.slice(0, inputs.imports.length), models = other.slice(inputs.imports.length);
     if (inputs.profile && hash(await fs.readFile(inputs.profile)) !== inputs.profileDigest) throw new InputPathChanged('Profile changed; restart the workspace');
-    return { root, imports, key: [hash(root), ...imports.map(hash), inputs.profileDigest || ''].join('|') };
+    return { root, imports, models, key: [hash(root), ...imports.map(hash), ...models.map(hash), inputs.profileDigest || ''].join('|') };
   }
 
   async function refresh() {
@@ -118,8 +125,11 @@ export async function startWorkspace(options) {
     if (graph) {
       const expected = input.imports.map(hash).sort();
       const actual = Array.isArray(graph.sources) ? graph.sources.slice(1).map((item) => item?.sourceByteDigest).sort() : [];
+      const expectedModels = new Set(input.models.map(hash));
+      const actualModels = new Set(Array.isArray(graph.foundationCatalogs) ? graph.foundationCatalogs.map((item) => item?.catalogByteDigest) : []);
       if (graph.sourceByteDigest !== source.digest || !Array.isArray(graph.sources) || graph.sources[0]?.sourceByteDigest !== source.digest ||
-          actual.length !== expected.length || actual.some((digest, index) => digest !== expected[index])) {
+          actual.length !== expected.length || actual.some((digest, index) => digest !== expected[index]) ||
+          actualModels.size !== expectedModels.size || [...actualModels].some((digest) => !expectedModels.has(digest))) {
         graph = null;
         graphError = 'Visualizer output does not match the selected source bytes';
       }

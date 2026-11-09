@@ -25,6 +25,22 @@ not `DomainOntologyPackage` documents and have no synthetic `/spec/classes`
 locations. A viewer must explicitly consume this catalog format before it may
 claim to have loaded a definition.
 
+To include an existing version's declarations in a Viewer projection, supply its
+local catalog explicitly to `ontologyviz` (JSON format only):
+
+```bash
+ontologyviz Examples/package-visualization/domain-ontology-package.yaml \
+  --foundation-model SPECS/ontology/foundation/0.1.0/model.json \
+  --format json --out diagrams/review
+```
+
+Repeat `--foundation-model` for different imported versions, or list local
+paths in a profile's `foundationModels` array. Only known exact catalog bytes
+and reachable foundation identities are accepted. Unprovided definitions stay
+unresolved. DOT and image formats reject this option until they support it.
+The projection records the input-byte digest and original source revision; the
+Viewer shows these as reported provenance and does not authenticate them.
+
 Regenerate or verify the catalogs without network access:
 
 ```bash

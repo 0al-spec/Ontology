@@ -25,6 +25,44 @@ async function start(source: string, mode: '--package' | '--profile' = '--packag
   return { process: child, url };
 }
 
+test('tracks foundation catalog bytes and rejects a retargeted profile input', async () => {
+  const directory = await fs.mkdtemp(path.join(process.env.ONTOLOGY_VIEWER_TEST_TMP || os.tmpdir(), 'ontology-foundation-test-'));
+  const root = path.join(directory, 'package.yaml'), model = path.join(directory, 'model.json');
+  const alternate = path.join(directory, 'alternate.json'), link = path.join(directory, 'selected.json');
+  const profile = path.join(directory, 'view.json');
+  await fs.copyFile(process.env.ONTOLOGY_FOUNDATION_PACKAGE || path.resolve('../../Examples/package-visualization/domain-ontology-package.yaml'), root);
+  const bytes = await fs.readFile(process.env.ONTOLOGY_FOUNDATION_MODEL || path.resolve('../../SPECS/ontology/foundation/0.1.0/model.json'));
+  await fs.writeFile(model, bytes);
+  await fs.writeFile(alternate, bytes);
+  await fs.symlink(model, link);
+  await fs.writeFile(profile, JSON.stringify({ schemaVersion: 1, package: 'package.yaml', foundationModels: ['selected.json'] }));
+  const server = await start(profile, '--profile');
+  try {
+    const html = await (await fetch(server.url)).text();
+    const token = html.match(/name="ontology-session" content="([a-f0-9]+)"/)?.[1];
+    expect(token).toBeTruthy();
+    const session = async () => fetch(`${server.url}api/session`, { headers: { 'x-ontology-token': token! } });
+    const original = await (await session()).json();
+    expect(original.graph.foundationCatalogs[0].id).toBe('specgraph.foundation');
+    await fs.writeFile(model, Buffer.concat([bytes, Buffer.from(' ')]));
+    const changed = await (await session()).json();
+    expect(changed.graph).toBeNull();
+    expect(changed.graphError).toContain('modified foundation model');
+    expect(changed.graphKey).not.toBe(original.graphKey);
+    await fs.writeFile(model, bytes);
+    expect((await (await session()).json()).graph.foundationCatalogs).toHaveLength(1);
+    await fs.unlink(link);
+    await fs.symlink(alternate, link);
+    const retargeted = await session();
+    expect(retargeted.status).toBe(409);
+    expect((await retargeted.json()).code).toBe('input_changed');
+  } finally {
+    server.process.kill('SIGTERM');
+    await new Promise((resolve) => server.process.once('exit', resolve));
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+});
+
 test('edits shared YAML, keeps comments and line endings, refreshes external changes and protects drafts', async ({ page }) => {
   const directory = await fs.mkdtemp(path.join(process.env.ONTOLOGY_VIEWER_TEST_TMP || os.tmpdir(), 'ontology-workspace-test-'));
   const source = path.join(directory, 'package.yaml');

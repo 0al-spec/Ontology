@@ -20,6 +20,8 @@ provided. Missing catalogs remain visibly unresolved.
 - No implicit network fetch or local-path guessing. A missing model never becomes
   a loaded declaration; unsupported, modified, duplicate or unrelated inputs
   are rejected, with no output files written.
+- The catalog is supported by the JSON Viewer projection only; DOT and image
+  requests that supply it fail explicitly until their renderer supports it.
 - Both historical 0.1.0 identities remain distinguishable from 0.2.0, and
   transitive imports use their graph-local alias rather than name matching.
 - Existing diagrams without supplied catalogs remain valid and unchanged.

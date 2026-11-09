@@ -7,6 +7,9 @@ export { parseProjection } from './projection';
 
 export type NodeKind = 'class' | 'imported' | 'protocol' | 'policy' | 'machine' | 'state' | 'external' | 'relation';
 export type NodePort = { id: string; role: 'subject' | 'action' | 'object' | 'field'; label: string; title: string };
+export type FoundationLocation = {
+  id: string; version: string; pointer: string; catalogByteDigest: string; modelRevision: string; modelDigest: string;
+};
 export type ViewerNodeData = {
   label: string;
   kind: NodeKind;
@@ -16,6 +19,7 @@ export type ViewerNodeData = {
   isAction?: boolean;
   ports?: NodePort[];
   fieldTargets?: Record<string, string>;
+  foundation?: FoundationLocation;
 };
 export type ViewerEdgeData = { semanticId: string; kind: string; record: JsonObject; source?: SourceLocation };
 export type ViewerNode = Node<ViewerNodeData>;
@@ -138,8 +142,25 @@ export function buildGraph(projection: Projection): { nodes: ViewerNode[]; edges
   const reference = (section: string, ref: string): string => {
     const loaded = nodeId(section, ref);
     if (known.has(loaded)) return loaded;
-    const id = `external/${loaded}`;
     const namespace = ref.split(':', 1)[0];
+    const name = ref.slice(namespace.length + 1);
+    const binding = projection.foundationCatalogs?.find((item) => item.alias === namespace);
+    const catalogSection = section === 'policies' && binding?.policyBases.includes(name) ? 'classes' : section;
+    const table = binding?.catalog[catalogSection];
+    const record = typeof table === 'object' && table !== null && !Array.isArray(table)
+      ? (table as JsonObject)[name] : undefined;
+    if (binding && typeof record === 'object' && record !== null && !Array.isArray(record)) {
+      const modelSource = binding.catalog.source as JsonObject;
+      const pointer = `/${catalogSection}/${name.replaceAll('~', '~0').replaceAll('/', '~1')}`;
+      addNode(loaded, {
+        label: ref, kind: section === 'classes' ? 'imported' : section === 'protocols' ? 'protocol' : 'policy',
+        record: record as JsonObject, origin: `${binding.id}@${binding.version}`, isAction: isFoundationAction(ref),
+        foundation: { id: binding.id, version: binding.version, pointer, catalogByteDigest: binding.catalogByteDigest,
+          modelRevision: string(modelSource.revision), modelDigest: string(modelSource.sha256) },
+      });
+      return loaded;
+    }
+    const id = `external/${loaded}`;
     const imported = projection.imports.find((item) => importNamespace(item) === namespace) ||
       projection.externalImports?.find((item) => item.alias === namespace);
     const origin = imported ? `${string(imported.id)}@${string(imported.version)}` : undefined;
