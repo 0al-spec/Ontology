@@ -1408,3 +1408,13 @@ This workplan tracks the specification work for the Ontology repository. The ini
   package identity, alias and source provenance in the projection and Viewer.
   Missing catalogs stay unresolved; malformed or mismatched catalogs fail closed.
 - **Dependencies:** ONT-083.
+
+## ONT-085: Foundation model parity for static diagrams
+
+- **Status:** Candidate, identified in the ONT-084 review.
+- **Problem:** explicit source-attributed foundation models are visible in
+  JSON Viewer projections but are not rendered in DOT, SVG or PNG.
+- **Outcome:** provide a source-faithful static representation with exact
+  identity/version and test it against the interactive projection. Until then,
+  requests that combine these inputs and image formats fail explicitly.
+- **Dependency:** ONT-084.
