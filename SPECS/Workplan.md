@@ -1398,3 +1398,13 @@ This workplan tracks the specification work for the Ontology repository. The ini
   Do not represent these catalogs as DomainOntologyPackage files.
 - **Dependencies:** ONT-057 foundation exports; followed by visualizer and
   consumer integration.
+
+## ONT-084: Foundation definitions in the Viewer
+
+- **Status:** Selected.
+- **Problem:** diagrams show foundation types as unloaded references even when
+  their versioned model declarations are available offline.
+- **Outcome:** accept explicit, exact foundation model catalogs and preserve the
+  package identity, alias and source provenance in the projection and Viewer.
+  Missing catalogs stay unresolved; malformed or mismatched catalogs fail closed.
+- **Dependencies:** ONT-083.

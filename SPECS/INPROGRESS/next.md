@@ -1,5 +1,11 @@
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
+## Selected: ONT-084 — Foundation definitions in the Viewer
+
+Use the ONT-083 versioned source catalogs in explicit local diagram projections;
+retain exact package identity and namespace in the Viewer. Branches from ONT-083
+because the catalog is the required input for this dependent layer.
+
 **Priority:** P1
 **Phase:** Event and Responsibility Core
 **Dependencies:** ONT-043 and ONT-044 merged; ONT-047 is available for explicit provenance admission
