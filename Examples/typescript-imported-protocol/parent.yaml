@@ -1,0 +1,16 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: example.protocol-parent, namespace: parent, version: 1.0.0}
+spec:
+  imports:
+    - {id: ontology.foundation, version: 0.2.0}
+    - {id: example.protocol-contracts, namespace: p, version: 1.0.0}
+  classes:
+    Base:
+      extends: ont:DomainEntity
+      implements: ['p:Tracked']
+      description: A tracked entity from another package.
+      fields:
+        serial: {type: string, required: true}
+  relations:
+    auditLink: {domain: Base, range: Base, description: A declaration-level relation.}

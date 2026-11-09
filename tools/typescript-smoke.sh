@@ -52,4 +52,10 @@ if [[ -n "$compiler" ]]; then
     "$compiler" compile "$inheritance/model.yaml" --import "$inheritance/shared.yaml" \
         --target typescript --out "$work/typescript-inheritance/generated"
     run_consumer "$work/typescript-inheritance" "$inheritance/consumer.ts"
+
+    protocols="$root/Examples/typescript-imported-protocol"
+    mkdir "$work/typescript-imported-protocol"
+    "$compiler" compile "$protocols/model.yaml" --import "$protocols/parent.yaml" --import "$protocols/contracts.yaml" \
+        --target typescript --out "$work/typescript-imported-protocol/generated"
+    run_consumer "$work/typescript-imported-protocol" "$protocols/consumer.ts"
 fi

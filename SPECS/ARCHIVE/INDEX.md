@@ -1,11 +1,12 @@
 # Tasks Archive
 
-**Last Updated:** 2026-11-09
+**Last Updated:** 2026-11-10
 
 ## Archived Tasks
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-088 | [ONT-088_Imported_Protocol_Obligations/](ONT-088_Imported_Protocol_Obligations/) | 2026-11-10 | PASS (local; CI and review separate) |
 | ONT-087 | [ONT-087_Semantic_Inheritance_Validation/](ONT-087_Semantic_Inheritance_Validation/) | 2026-11-09 | PASS (local; CI and review separate) |
 | ONT-086 | [ONT-086_TypeScript_SDK_Inheritance/](ONT-086_TypeScript_SDK_Inheritance/) | 2026-11-09 | PASS (local; CI and review separate) |
 | ONT-084 | [ONT-084_Foundation_Viewer/](ONT-084_Foundation_Viewer/) | 2026-11-09 | PASS (local; CI and review separate) |
@@ -88,6 +89,8 @@
 
 | Date | Task ID | Action |
 |------|---------|--------|
+| 2026-11-10 | ONT-088 | Archived [self-review](ONT-088_Imported_Protocol_Obligations/REVIEW_ONT-088.md); follow-up ONT-089 recorded |
+| 2026-11-10 | ONT-088 | Archived imported protocol obligations and validation (local PASS) |
 | 2026-11-09 | ONT-087 | Archived semantic inheritance validation (local PASS) |
 | 2026-11-09 | ONT-086 | Archived [self-review](ONT-086_TypeScript_SDK_Inheritance/REVIEW_ONT-086.md); follow-ups ONT-087 and ONT-088 recorded |
 | 2026-11-09 | ONT-086 | Archived TypeScript inheritance and validation (local PASS) |

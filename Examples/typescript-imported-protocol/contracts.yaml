@@ -1,0 +1,15 @@
+apiVersion: ontology.specgraph.io/v1alpha1
+kind: DomainOntologyPackage
+metadata: {id: example.protocol-contracts, namespace: contracts, version: 1.0.0}
+spec:
+  imports:
+    - {id: ontology.foundation, version: 0.2.0}
+  classes:
+    Contract: {extends: 'ont:DomainEntity', description: A contract.}
+  relations:
+    links: {domain: Contract, range: Contract, description: A contract relation.}
+  protocols:
+    Tracked:
+      description: Requires identity and trace in the current SDK contract.
+      requiredFields: [id, trace]
+      requiredRelations: [auditLink]

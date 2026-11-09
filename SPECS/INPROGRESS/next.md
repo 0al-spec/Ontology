@@ -1,8 +1,9 @@
-# Next Candidate: ONT-088 — Imported Protocol Obligations
+# Next Candidate: ONT-089 — Source-Bound Protocol Conformance
 
 **Priority:** P1
-**Status:** Not selected; ONT-086 review follow-up
-**Next step:** Project protocol obligations only from exact supplied sources; retain warnings for missing sources.
+**Status:** Not selected; ONT-088 review follow-up
+**Next step:** Clarify `requiredFields` semantics, then validate imported and
+inherited protocol conformance from exact supplied sources.
 
 ## Deferred candidate
 

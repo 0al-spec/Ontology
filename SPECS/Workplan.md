@@ -1448,10 +1448,25 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-088: Imported protocol obligations in the TypeScript SDK
 
-- **Status:** Candidate; found in ONT-086 review.
+- **Status:** PASS locally; hosted CI and review remain separate.
 - **Problem:** explicitly supplied ancestors may implement imported protocols;
   their instance obligations are currently reported as unverified in SDK output.
 - **Outcome:** project verified, source-bound protocol obligations into types
   and schemas without guessing aliases or adding declaration metadata to
   instances. Preserve an explicit warning when the exact source is unavailable.
 - **Dependency:** ONT-086.
+- [Validation](ARCHIVE/ONT-088_Imported_Protocol_Obligations/ONT-088_Validation_Report.md).
+
+## ONT-089: Source-bound protocol conformance
+
+- **Status:** Candidate; found in ONT-088 review.
+- **Problem:** protocol conformance validation skips imported protocols and
+  their `requiredRelations`. Local `requiredFields` are checked against
+  relation names, while the SDK projects those names as required instance
+  strings; the intended contract needs explicit reconciliation.
+- **Outcome:** specify the declaration/instance boundary and verify local,
+  imported and inherited obligations from exact supplied sources with
+  source-attributed diagnostics and positive/negative controls. Treat missing
+  or declaration-only foundation sources as unverified; do not invent instance
+  fields or silently assert semantic conformance.
+- **Dependency:** ONT-088.

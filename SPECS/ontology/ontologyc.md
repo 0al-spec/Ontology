@@ -238,9 +238,20 @@ Pass the exact source for every non-foundation ancestor using `--import`.
 Aliases are resolved in the package that declares them, against the imported
 package ID and version. If an ancestor source is unavailable, the compiler
 reports `sdk.inheritance.source_unavailable` and marks the generated types and
-schemas as incomplete; it does not infer the missing fields. Imported protocol
-obligations are likewise reported as unverified. Cycles and incompatible
-inherited field definitions are errors and do not produce an SDK.
+schemas as incomplete; it does not infer the missing fields. A protocol
+implemented by a local or imported ancestor is resolved in the declaring
+package's own namespace against its exact imported package ID and version.
+Pass each protocol source with `--import` to project its `requiredFields`
+into the instance interface and schema using the existing required-string
+contract. When that exact source is unavailable, `sdk.inheritance.protocol_unavailable`
+marks the output incomplete; if it is supplied but lacks the named protocol,
+the compiler reports `protocol.unresolved`. Imported protocol interfaces are
+not separately emitted: their verified fields are projected structurally.
+
+The compiler does not turn protocol `requiredRelations` or foundation
+declaration metadata into instance fields. Supplying a protocol source does
+not by itself establish conformance to imported relation requirements. Cycles
+and incompatible inherited field definitions are errors and do not produce an SDK.
 
 This instance projection does not add inherited fields to normalized IR: the
 IR preserves the declarations and their semantic `extends` references.
