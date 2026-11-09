@@ -6,6 +6,7 @@
 
 | Task ID | Folder | Archived | Verdict |
 |---------|--------|----------|---------|
+| ONT-086 | [ONT-086_TypeScript_SDK_Inheritance/](ONT-086_TypeScript_SDK_Inheritance/) | 2026-11-09 | PASS (local; CI and review separate) |
 | ONT-084 | [ONT-084_Foundation_Viewer/](ONT-084_Foundation_Viewer/) | 2026-11-09 | PASS (local; CI and review separate) |
 | ONT-083 | [ONT-083_Foundation_Model_Catalogs/](ONT-083_Foundation_Model_Catalogs/) | 2026-11-09 | PASS (local; CI and review separate) |
 | ONT-082 | [ONT-082_Viewer_Imported_Ref_Bindings/](ONT-082_Viewer_Imported_Ref_Bindings/) | 2026-11-09 | PASS (local; CI and review separate) |

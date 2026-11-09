@@ -1,15 +1,3 @@
-# Selected: ONT-086 — TypeScript SDK Inheritance
-
-**Priority:** P1  
-**Status:** Selected  
-**Source:** SpecGraph GraphInvariant SDK inheritance defect, 2026-11-09.
-
-Restore the documented semantic-inheritance projection for generated instance
-types without confusing foundation declaration metadata with instance fields.
-Run the Ontology FLOW and validate a real generated SDK with TypeScript.
-
-## Deferred candidate
-
 # Next Candidate: ONT-045 — NormLab Offline Event Graph Pilot
 
 **Priority:** P1
@@ -44,6 +32,10 @@ the saved norm result or imply physical observations. ONT-046 delivers Linux sou
 that port when adopting it. No paid inference or deployment is needed for this pilot.
 
 ## Recently Archived
+
+- ONT-086 projects verified instance ancestry into the TypeScript SDK and
+  schemas. [Validation](../ARCHIVE/ONT-086_TypeScript_SDK_Inheritance/ONT-086_Validation_Report.md)
+  passed locally; hosted review and downstream release integration are separate.
 
 - ONT-084 connects explicit foundation model catalogs to a source-attributed
   Viewer projection. [Validation](../ARCHIVE/ONT-084_Foundation_Viewer/ONT-084_Validation_Report.md)

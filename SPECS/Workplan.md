@@ -1421,7 +1421,7 @@ This workplan tracks the specification work for the Ontology repository. The ini
 
 ## ONT-086: TypeScript SDK inheritance
 
-- **Status:** Selected.
+- **Status:** Complete locally; hosted review and downstream release integration are separate.
 - **Source:** SpecGraph's GraphInvariant defect record, 2026-11-09.
 - **Problem:** generated instance interfaces and schemas ignore semantic
   ancestry, while the foundation model contract describes a projection of it.
@@ -1431,3 +1431,4 @@ This workplan tracks the specification work for the Ontology repository. The ini
   fields or claim resolution for unavailable sources.
 - **Dependencies:** ONT-079 explicit imported sources; ONT-083 foundation
   declaration catalogs.
+- [Validation](ARCHIVE/ONT-086_TypeScript_SDK_Inheritance/ONT-086_Validation_Report.md).
